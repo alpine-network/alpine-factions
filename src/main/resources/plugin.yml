@@ -1,0 +1,8 @@
+main: co.crystaldev.factions.AlpineFactions
+name: ${pluginName}
+description: ${pluginDescription}
+version: ${pluginVersionRaw}
+authors: [ BestBearr ]
+api-version: 1.13
+depend:
+  - AlpineCore
