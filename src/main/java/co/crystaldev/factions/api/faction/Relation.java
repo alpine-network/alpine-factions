@@ -1,4 +1,4 @@
-package co.crystaldev.factions.api;
+package co.crystaldev.factions.api.faction;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package co.crystaldev.factions.api;
+package co.crystaldev.factions.api.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 12/12/2023
  */
 @AllArgsConstructor @Getter
-public enum MemberRank {
+public enum Rank {
     LEADER("***"),
     COLEADER("**"),
     MOD("*"),
@@ -19,7 +19,7 @@ public enum MemberRank {
     private final String prefix;
 
     @NotNull
-    public static MemberRank getDefault() {
+    public static Rank getDefault() {
         return RECRUIT;
     }
 }
