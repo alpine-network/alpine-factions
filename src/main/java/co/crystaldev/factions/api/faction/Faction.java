@@ -2,6 +2,7 @@ package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.factions.api.member.Member;
 import lombok.Data;
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -21,9 +22,15 @@ public final class Faction {
 
     private String name;
 
-    private String description;
+    private Component description;
+
+    private Component motd;
 
     private final long createdAt = System.currentTimeMillis();
+
+    private final ArrayList<UUID> invitees = new ArrayList<>();
+
+    private final ArrayList<Member> roster = new ArrayList<>();
 
     private final ArrayList<Member> members = new ArrayList<>();
 
@@ -36,12 +43,8 @@ public final class Faction {
         }
     }
 
-    public void addMember(@NotNull Member member) {
-        this.members.add(member);
-    }
-
-    public void removeMember(@NotNull Member member) {
-        this.members.remove(member);
+    public boolean hasMember(@NotNull UUID member) {
+        return this.members.stream().anyMatch(m -> m.getId().equals(member));
     }
 
     public boolean isNeutral(@NotNull Faction faction) {
