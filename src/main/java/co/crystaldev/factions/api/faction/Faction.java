@@ -2,8 +2,10 @@ package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.factions.api.member.Member;
 import lombok.Data;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,15 +38,40 @@ public final class Faction {
 
     private final ArrayList<Relation> relations = new ArrayList<>();
 
-    private final Map<FactionFlag, Boolean> flags = new HashMap<>();
+    private final ArrayList<Relation> relationRequests = new ArrayList<>();
+
+    private final Map<String, FactionFlagValue<?>> flags = new HashMap<>();
     {
-        for (FactionFlag flag : FactionFlags.VALUES) {
-            this.flags.put(flag, flag.isDefaultState());
+        for (FactionFlag<?> flag : FactionFlags.VALUES) {
+            this.flags.put(flag.getId(), flag.wrapDefaultValue());
         }
+    }
+
+    @Getter
+    private transient boolean dirty;
+
+    public void markDirty() {
+        this.dirty = true;
     }
 
     public boolean hasMember(@NotNull UUID member) {
         return this.members.stream().anyMatch(m -> m.getId().equals(member));
+    }
+
+    @Nullable @SuppressWarnings("unchecked")
+    public <T> T getFlagValue(@NotNull FactionFlag<T> flag) {
+        FactionFlagValue<T> flagValue = (FactionFlagValue<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
+            this.markDirty();
+            return flag.wrapDefaultValue();
+        });
+        return flagValue.getValue();
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void setFlagValue(@NotNull FactionFlag<T> flag, @NotNull T value) {
+        FactionFlagValue<T> flagValue = (FactionFlagValue<T>) this.flags.computeIfAbsent(flag.getId(), id -> flag.wrapDefaultValue());
+        flagValue.setValue(value);
+        this.markDirty();
     }
 
     public boolean isNeutral(@NotNull Faction faction) {

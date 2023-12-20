@@ -30,7 +30,7 @@ public final class FactionStore extends AlpineStore<UUID, Faction> {
 
     FactionStore(AlpinePlugin plugin) {
         super(plugin, FlatfileDriver.<UUID, Faction>builder()
-                .directory(new File(AlpineFactions.getInstance().getDataFolder(), ""))
+                .directory(new File(AlpineFactions.getInstance().getDataFolder(), "factions"))
                 .gson(Reference.GSON)
                 .dataType(Faction.class)
                 .build());

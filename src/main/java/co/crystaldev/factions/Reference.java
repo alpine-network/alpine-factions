@@ -1,6 +1,7 @@
 package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.util.UuidTypeAdapter;
+import co.crystaldev.factions.api.faction.FactionFlagValue;
 import co.crystaldev.factions.util.ComponentSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,6 +24,7 @@ public final class Reference {
     public static final MiniMessage STRICT_MINIMESSAGE = MiniMessage.builder().strict(true).build();
     public static final Logger LOGGER = LogManager.getLogger(NAME);
     public static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(FactionFlagValue.class, new FactionFlagValue.Adapter())
             .registerTypeAdapter(Component.class, new ComponentSerializer())
             .registerTypeAdapter(UUID.class, new UuidTypeAdapter())
             .disableHtmlEscaping()

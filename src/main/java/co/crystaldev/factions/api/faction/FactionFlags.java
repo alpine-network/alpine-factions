@@ -6,7 +6,7 @@ package co.crystaldev.factions.api.faction;
  */
 public final class FactionFlags {
 
-    public static final FactionFlag OPEN = FactionFlag.builder("open")
+    public static final FactionFlag<Boolean> OPEN = FactionFlag.builder("open", boolean.class)
             .name("Open")
             .description("Determines if the faction can be joined without an invite.")
             .stateDescription(
@@ -16,7 +16,7 @@ public final class FactionFlags {
             .defaultState(false)
             .build();
 
-    public static final FactionFlag EXPLOSIONS = FactionFlag.builder("explosions")
+    public static final FactionFlag<Boolean> EXPLOSIONS = FactionFlag.<Boolean>builder("explosions", boolean.class)
             .name("Explosions")
             .description("Controls whether explosions are allowed in the faction's territory.")
             .stateDescription(
@@ -27,7 +27,7 @@ public final class FactionFlags {
             .defaultState(true)
             .build();
 
-    public static final FactionFlag FIRE_SPREAD = FactionFlag.builder("fire_spread")
+    public static final FactionFlag<Boolean> FIRE_SPREAD = FactionFlag.<Boolean>builder("fire_spread", boolean.class)
             .name("Fire Spread")
             .description("Controls whether fire can spread within the faction's territory.")
             .stateDescription(
@@ -38,7 +38,7 @@ public final class FactionFlags {
             .defaultState(true)
             .build();
 
-    public static final FactionFlag MOB_GRIEFING = FactionFlag.builder("mob_griefing")
+    public static final FactionFlag<Boolean> MOB_GRIEFING = FactionFlag.<Boolean>builder("mob_griefing", boolean.class)
             .name("Mob Griefing")
             .description("Determines if mobs like Endermen and Zombies can cause damage in the territory.")
             .stateDescription(
@@ -49,7 +49,7 @@ public final class FactionFlags {
             .defaultState(true)
             .build();
 
-    public static final FactionFlag COMBAT = FactionFlag.builder("combat")
+    public static final FactionFlag<Boolean> COMBAT = FactionFlag.builder("combat", boolean.class)
             .name("Combat")
             .description("Determines if players can engage in PvP combat within the faction's territory.")
             .stateDescription(
@@ -60,7 +60,7 @@ public final class FactionFlags {
             .defaultState(true)
             .build();
 
-    public static final FactionFlag MOB_SPAWNING = FactionFlag.builder("mob_spawning")
+    public static final FactionFlag<Boolean> MOB_SPAWNING = FactionFlag.builder("mob_spawning", boolean.class)
             .name("Mob Spawning")
             .description("Controls the spawning of monsters within the faction's territory.")
             .stateDescription(
@@ -71,7 +71,7 @@ public final class FactionFlags {
             .defaultState(false)
             .build();
 
-    public static final FactionFlag ANIMAL_SPAWNING = FactionFlag.builder("animal_spawning")
+    public static final FactionFlag<Boolean> ANIMAL_SPAWNING = FactionFlag.builder("animal_spawning", boolean.class)
             .name("Animal Spawning")
             .description("Controls the spawning of animals within the faction's territory.")
             .stateDescription(
@@ -82,7 +82,7 @@ public final class FactionFlags {
             .defaultState(false)
             .build();
 
-    public static final FactionFlag POWER_LOSS = FactionFlag.builder("power_loss")
+    public static final FactionFlag<Boolean> POWER_LOSS = FactionFlag.builder("power_loss", boolean.class)
             .name("Power Loss")
             .description("Determines if faction members lose power upon death.")
             .stateDescription(
@@ -93,7 +93,7 @@ public final class FactionFlags {
             .defaultState(true)
             .build();
 
-    public static final FactionFlag POWER_GAIN = FactionFlag.builder("power_gain")
+    public static final FactionFlag<Boolean> POWER_GAIN = FactionFlag.builder("power_gain", boolean.class)
             .name("Power Gain")
             .description("Determines if faction members can gain power in the faction's territory.")
             .stateDescription(
@@ -104,7 +104,7 @@ public final class FactionFlags {
             .defaultState(true)
             .build();
 
-    public static final FactionFlag INFINITE_POWER = FactionFlag.builder("inf_power")
+    public static final FactionFlag<Boolean> INFINITE_POWER = FactionFlag.builder("inf_power", boolean.class)
             .name("Infinite Power")
             .description("Determines if the faction possesses infinite power.")
             .stateDescription(
@@ -115,7 +115,17 @@ public final class FactionFlags {
             .defaultState(false)
             .build();
 
-    public static final FactionFlag[] VALUES = {
+    public static final FactionFlag<Integer> POWER_MODIFIER = FactionFlag.builder("power_mod", int.class)
+            .name("Power Modifier")
+            .description("Defines the power modifier.")
+            .stateDescription(
+                    "Faction power level is modified by {0} points."
+            )
+            .permission("alpinefactions.faction.admin")
+            .defaultState(0)
+            .build();
+
+    public static final FactionFlag<?>[] VALUES = {
             OPEN,
             EXPLOSIONS,
             FIRE_SPREAD,
@@ -125,6 +135,7 @@ public final class FactionFlags {
             ANIMAL_SPAWNING,
             POWER_LOSS,
             POWER_GAIN,
-            INFINITE_POWER
+            INFINITE_POWER,
+            POWER_MODIFIER
     };
 }
