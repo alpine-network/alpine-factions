@@ -1,5 +1,7 @@
 package co.crystaldev.factions.api.faction.permission;
 
+import co.crystaldev.factions.PermissionNodes;
+import co.crystaldev.factions.api.faction.RelationType;
 import co.crystaldev.factions.api.member.Rank;
 
 /**
@@ -95,7 +97,7 @@ public final class Permissions {
     public static final Permission BANK_DEPOSIT = Permission.builder("bank_deposit")
             .name("Bank Deposit")
             .description("deposit to the faction")
-            .permit(Rank.LEADER, Rank.COLEADER)
+            .permit(Rank.values())
             .build();
 
     public static final Permission ACCESS_HOME = Permission.builder("access_home")
@@ -113,7 +115,9 @@ public final class Permissions {
     public static final Permission USE_CONTAINERS = Permission.builder("access_containers")
             .name("Access Containers")
             .description("access containers")
+            .permission(PermissionNodes.PERMISSION_CONTAINERS)
             .permit(Rank.values())
+            .permit(RelationType.values())
             .build();
 
     public static final Permission BUILD = Permission.builder("build")

@@ -1,5 +1,7 @@
 package co.crystaldev.factions.api.faction.flag;
 
+import co.crystaldev.factions.PermissionNodes;
+
 /**
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 12/15/2023
@@ -23,7 +25,7 @@ public final class FactionFlags {
                     "Explosions allowed: Explosions can occur in this territory.",
                     "Explosions prohibited: No explosions can occur in this territory."
             )
-            .permission("alpinefactions.faction.admin")
+            .permission(PermissionNodes.ADMIN)
             .defaultState(true)
             .build();
 
@@ -34,7 +36,7 @@ public final class FactionFlags {
                     "Fire spread enabled: Fire can spread in this territory.",
                     "Fire spread disabled: Fire cannot spread in this territory."
             )
-            .permission("alpinefactions.faction.admin")
+            .permission(PermissionNodes.ADMIN)
             .defaultState(true)
             .build();
 
@@ -45,7 +47,7 @@ public final class FactionFlags {
                     "Mob griefing enabled: Endermen and Zombies can cause damage.",
                     "Mob griefing disabled: Endermen and Zombies cannot cause damage."
             )
-            .permission("alpinefactions.faction.admin")
+            .permission(PermissionNodes.ADMIN)
             .defaultState(true)
             .build();
 
@@ -56,7 +58,7 @@ public final class FactionFlags {
                     "PvP enabled: Players can engage in combat.",
                     "PvP disabled: Combat between players is not allowed."
             )
-            .permission("alpinefactions.faction.admin")
+            .permission(PermissionNodes.ADMIN)
             .defaultState(true)
             .build();
 
@@ -67,7 +69,7 @@ public final class FactionFlags {
                     "Monsters can spawn: Monsters are allowed to spawn in this territory.",
                     "No monster spawning: Monsters are not allowed to spawn in this territory."
             )
-            .permission("alpinefactions.faction.admin")
+            .permission(PermissionNodes.ADMIN)
             .defaultState(false)
             .build();
 
@@ -78,7 +80,7 @@ public final class FactionFlags {
                     "Animals can spawn: Animals are allowed to spawn in this territory.",
                     "No animal spawning: Animals are not allowed to spawn in this territory."
             )
-            .permission("alpinefactions.faction.admin")
+            .permission(PermissionNodes.ADMIN)
             .defaultState(false)
             .build();
 
@@ -89,7 +91,7 @@ public final class FactionFlags {
                     "Power loss on death: Members lose power upon death.",
                     "No power loss on death: Members do not lose power upon death."
             )
-            .permission("alpinefactions.faction.admin")
+            .permission(PermissionNodes.ADMIN)
             .defaultState(true)
             .build();
 
@@ -100,7 +102,7 @@ public final class FactionFlags {
                     "Power gain enabled: Members can gain power in this territory.",
                     "No power gain: Members cannot gain power in this territory."
             )
-            .permission("alpinefactions.faction.admin")
+            .permission(PermissionNodes.ADMIN)
             .defaultState(true)
             .build();
 
@@ -111,7 +113,7 @@ public final class FactionFlags {
                     "Infinite power: The faction has an unlimited power supply.",
                     "Standard power: The faction's power operates as usual."
             )
-            .permission("alpinefactions.faction.admin")
+            .permission(PermissionNodes.ADMIN)
             .defaultState(false)
             .build();
 
@@ -121,7 +123,7 @@ public final class FactionFlags {
             .stateDescription(
                     "Faction power level is modified by %value% points."
             )
-            .permission("alpinefactions.faction.admin")
+            .permission(PermissionNodes.ADMIN)
             .defaultState(0)
             .build();
 

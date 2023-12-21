@@ -20,6 +20,7 @@ public final class Permission {
     private final String id;
     private final String name;
     private final String description;
+    private final String permission;
     private final Set<Rank> defaultRankPermits;
     private final Set<RelationType> defaultRelationPermits;
 
@@ -33,6 +34,7 @@ public final class Permission {
         private final String id;
         private String name;
         private String description;
+        private String permission;
         private Set<Rank> defaultRankPermits;
         private Set<RelationType> defaultRelationPermits;
 
@@ -45,6 +47,12 @@ public final class Permission {
         @NotNull
         public Builder description(@NotNull String description) {
             this.description = description;
+            return this;
+        }
+
+        @NotNull
+        public Builder permission(@NotNull String permission) {
+            this.permission = permission;
             return this;
         }
 
@@ -65,7 +73,7 @@ public final class Permission {
             Preconditions.checkNotNull(this.id, "id must not be null");
             Preconditions.checkNotNull(this.name, "name must not be null");
             Preconditions.checkNotNull(this.description, "description must not be null");
-            return new Permission(this.id, this.name, this.description,
+            return new Permission(this.id, this.name, this.description, this.permission,
                     this.defaultRankPermits == null ? Collections.emptySet() : this.defaultRankPermits,
                     this.defaultRelationPermits == null ? Collections.emptySet() : this.defaultRelationPermits);
         }
