@@ -7,6 +7,7 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.faction.Faction;
 import lombok.Getter;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,9 +59,9 @@ public final class FactionStore extends AlpineStore<UUID, Faction> {
     }
 
     @Nullable
-    public Faction findFaction(@NotNull String name) {
+    public Faction findFaction(@NotNull OfflinePlayer member) {
         for (Faction faction : this.registeredFactions) {
-            if (faction.getName().equalsIgnoreCase(name))
+            if (faction.hasMember(member))
                 return faction;
         }
         return null;

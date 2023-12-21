@@ -1,4 +1,4 @@
-package co.crystaldev.factions.api.faction;
+package co.crystaldev.factions.api.faction.flag;
 
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.util.ReflectionHelper;
@@ -16,7 +16,7 @@ import java.io.IOException;
  * @since 12/19/2023
  */
 @AllArgsConstructor @Getter @Setter
-public final class FactionFlagValue<T> {
+public final class FlagHolder<T> {
     private final Class<T> type;
     private T value;
 
@@ -25,20 +25,20 @@ public final class FactionFlagValue<T> {
         return "FactionFlagValue(type=" + this.type.getName() + ", value=" + this.value + ")";
     }
 
-    public static final class Adapter extends TypeAdapter<FactionFlagValue<?>> {
+    public static final class Adapter extends TypeAdapter<FlagHolder<?>> {
         @Override
-        public void write(JsonWriter jsonWriter, FactionFlagValue<?> factionFlagValue) throws IOException {
+        public void write(JsonWriter jsonWriter, FlagHolder<?> flagHolder) throws IOException {
             jsonWriter.beginObject();
-            jsonWriter.name("type").value(factionFlagValue.getType().getName());
+            jsonWriter.name("type").value(flagHolder.getType().getName());
 
             jsonWriter.name("value");
-            Reference.GSON.toJson(factionFlagValue.getValue(), factionFlagValue.getType(), jsonWriter);
+            Reference.GSON.toJson(flagHolder.getValue(), flagHolder.getType(), jsonWriter);
 
             jsonWriter.endObject();
         }
 
         @Override
-        public FactionFlagValue<?> read(JsonReader jsonReader) throws IOException {
+        public FlagHolder<?> read(JsonReader jsonReader) throws IOException {
             Class<?> type = null;
             Object value = null;
 
@@ -54,7 +54,7 @@ public final class FactionFlagValue<T> {
             }
             jsonReader.endObject();
 
-            return (type != null && value != null) ? new FactionFlagValue(type, value) : null;
+            return (type != null && value != null) ? new FlagHolder(type, value) : null;
         }
     }
 }

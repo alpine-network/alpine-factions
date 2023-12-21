@@ -1,4 +1,4 @@
-package co.crystaldev.factions.api.faction;
+package co.crystaldev.factions.api.faction.flag;
 
 import com.google.common.base.Preconditions;
 import lombok.AccessLevel;
@@ -22,8 +22,8 @@ public final class FactionFlag<T> {
     private final Class<T> type;
 
     @NotNull
-    public FactionFlagValue<T> wrapDefaultValue() {
-        return new FactionFlagValue<>(this.type, this.defaultState);
+    public FlagHolder<T> wrapDefaultValue() {
+        return new FlagHolder<>(this.type, this.defaultState);
     }
 
     @NotNull

@@ -1,4 +1,4 @@
-package co.crystaldev.factions.api.faction;
+package co.crystaldev.factions.api.faction.flag;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -119,7 +119,7 @@ public final class FactionFlags {
             .name("Power Modifier")
             .description("Defines the power modifier.")
             .stateDescription(
-                    "Faction power level is modified by {0} points."
+                    "Faction power level is modified by %value% points."
             )
             .permission("alpinefactions.faction.admin")
             .defaultState(0)

@@ -1,16 +1,22 @@
 package co.crystaldev.factions.api.faction;
 
+import co.crystaldev.factions.api.faction.flag.FactionFlag;
+import co.crystaldev.factions.api.faction.flag.FlagHolder;
+import co.crystaldev.factions.api.faction.flag.FactionFlags;
+import co.crystaldev.factions.api.faction.permission.Permission;
+import co.crystaldev.factions.api.faction.permission.PermissionHolder;
+import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.member.Member;
+import co.crystaldev.factions.api.member.Rank;
+import co.crystaldev.factions.store.FactionStore;
 import lombok.Data;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -32,18 +38,25 @@ public final class Faction {
 
     private final ArrayList<UUID> invitees = new ArrayList<>();
 
-    private final ArrayList<Member> roster = new ArrayList<>();
+    private final HashMap<UUID, Member> roster = new HashMap<>();
 
-    private final ArrayList<Member> members = new ArrayList<>();
+    private final HashMap<UUID, Member> members = new HashMap<>();
 
     private final ArrayList<Relation> relations = new ArrayList<>();
 
     private final ArrayList<Relation> relationRequests = new ArrayList<>();
 
-    private final Map<String, FactionFlagValue<?>> flags = new HashMap<>();
+    private final Map<String, FlagHolder<?>> flags = new HashMap<>();
     {
         for (FactionFlag<?> flag : FactionFlags.VALUES) {
             this.flags.put(flag.getId(), flag.wrapDefaultValue());
+        }
+    }
+
+    private final Map<String, PermissionHolder> permissions = new HashMap<>();
+    {
+        for (Permission perm : Permissions.VALUES) {
+            this.permissions.put(perm.getId(), new PermissionHolder(perm));
         }
     }
 
@@ -54,47 +67,89 @@ public final class Faction {
         this.dirty = true;
     }
 
-    public boolean hasMember(@NotNull UUID member) {
-        return this.members.stream().anyMatch(m -> m.getId().equals(member));
+    public boolean hasMember(@NotNull UUID player) {
+        return this.members.containsKey(player);
+    }
+
+    public boolean hasMember(@NotNull OfflinePlayer player) {
+        return this.members.containsKey(player.getUniqueId());
+    }
+
+    @NotNull
+    public Member getMember(@NotNull OfflinePlayer player) {
+        Member member = this.members.get(player.getUniqueId());
+        if (member == null) {
+            throw new NoSuchElementException(player.getName() + " is not a faction member");
+        }
+        else {
+            return member;
+        }
     }
 
     @Nullable @SuppressWarnings("unchecked")
     public <T> T getFlagValue(@NotNull FactionFlag<T> flag) {
-        FactionFlagValue<T> flagValue = (FactionFlagValue<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
+        FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
             this.markDirty();
             return flag.wrapDefaultValue();
         });
-        return flagValue.getValue();
+        return flagHolder.getValue();
     }
 
     @SuppressWarnings("unchecked")
     public <T> void setFlagValue(@NotNull FactionFlag<T> flag, @NotNull T value) {
-        FactionFlagValue<T> flagValue = (FactionFlagValue<T>) this.flags.computeIfAbsent(flag.getId(), id -> flag.wrapDefaultValue());
-        flagValue.setValue(value);
+        FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> flag.wrapDefaultValue());
+        flagHolder.setValue(value);
         this.markDirty();
     }
 
-    public boolean isNeutral(@NotNull Faction faction) {
-        return this.isRelation(faction, RelationType.NEUTRAL);
-    }
-
-    public boolean isEnemy(@NotNull Faction faction) {
-        return this.isRelation(faction, RelationType.ENEMY);
-    }
-
-    public boolean isTruce(@NotNull Faction faction) {
-        return this.isRelation(faction, RelationType.TRUCE);
-    }
-
-    public boolean isAlly(@NotNull Faction faction) {
-        return this.isRelation(faction, RelationType.ALLY);
-    }
-
-    private boolean isRelation(@NotNull Faction faction, @NotNull RelationType type) {
-        for (Relation relation : this.relations) {
-            if (relation.getFaction().equals(faction.getId()) && relation.getType() == type)
-                return true;
+    public boolean isPermitted(@NotNull OfflinePlayer player, @NotNull Permission permission) {
+        if (this.hasMember(player.getUniqueId())) {
+            return this.isPermitted(this.getMember(player).getRank(), permission);
         }
-        return false;
+        else {
+            Faction other = FactionStore.getInstance().findFaction(player);
+            return this.isPermitted(this.relationTo(other), permission);
+        }
+    }
+
+    public boolean isPermitted(@NotNull Rank rank, @NotNull Permission permission) {
+        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
+            this.markDirty();
+            return new PermissionHolder(permission);
+        });
+        return permValue.isPermitted(rank);
+    }
+
+    public boolean isPermitted(@NotNull RelationType relation, @NotNull Permission permission) {
+        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
+            this.markDirty();
+            return new PermissionHolder(permission);
+        });
+        return permValue.isPermitted(relation);
+    }
+
+    public void setPermission(@NotNull Rank rank, @NotNull Permission permission, boolean permitted) {
+        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> new PermissionHolder(permission));
+        permValue.set(rank, permitted);
+        this.markDirty();
+    }
+
+    public void setPermission(@NotNull RelationType relation, @NotNull Permission permission, boolean permitted) {
+        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> new PermissionHolder(permission));
+        permValue.set(relation, permitted);
+        this.markDirty();
+    }
+
+    @NotNull
+    public RelationType relationTo(@Nullable Faction faction) {
+        if (faction == null)
+            return RelationType.NEUTRAL;
+
+        for (Relation relation : this.relations) {
+            if (relation.getFaction().equals(faction.getId())) {
+                return relation.getType();
+            }
+        }
+        return RelationType.NEUTRAL;
     }
 }
