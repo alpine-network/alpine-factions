@@ -22,7 +22,7 @@ public final class FlagHolder<T> {
 
     @Override
     public String toString() {
-        return "FactionFlagValue(type=" + this.type.getName() + ", value=" + this.value + ")";
+        return "FlagHolder(type=" + this.type.getName() + ", value=" + this.value + ")";
     }
 
     public static final class Adapter extends TypeAdapter<FlagHolder<?>> {
