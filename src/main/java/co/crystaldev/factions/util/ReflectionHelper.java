@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -108,6 +109,30 @@ public final class ReflectionHelper {
             catch (Exception ignored) {
                 // NO OP
             }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static <R> R invokeMethod(@NotNull Method method, @Nullable Object source, @Nullable Object... parameters) {
+        try {
+            return (R) method.invoke(source, parameters);
+        }
+        catch (Exception ex) {
+            return null;
+        }
+    }
+
+    @Nullable
+    public static <R> R invokeMethod(@NotNull Class<R> returnType, @NotNull Method method, @Nullable Object source, @Nullable Object... parameters) {
+        try {
+            Object returnedValue = method.invoke(source, parameters);
+            if (returnedValue != null && returnedValue.getClass().isInstance(returnType)) {
+                return (R) returnedValue;
+            }
+        }
+        catch (Exception ex) {
+            // NO OP
         }
         return null;
     }

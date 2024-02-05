@@ -2,10 +2,8 @@ package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FlagHolder;
-import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.PermissionHolder;
-import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.member.Member;
 import co.crystaldev.factions.api.member.Rank;
 import co.crystaldev.factions.store.FactionStore;
@@ -47,18 +45,8 @@ public final class Faction {
     private final ArrayList<Relation> relationRequests = new ArrayList<>();
 
     private final Map<String, FlagHolder<?>> flags = new HashMap<>();
-    {
-        for (FactionFlag<?> flag : FactionFlags.VALUES) {
-            this.flags.put(flag.getId(), flag.wrapDefaultValue());
-        }
-    }
 
     private final Map<String, PermissionHolder> permissions = new HashMap<>();
-    {
-        for (Permission perm : Permissions.VALUES) {
-            this.permissions.put(perm.getId(), new PermissionHolder(perm));
-        }
-    }
 
     @Getter
     private transient boolean dirty;
