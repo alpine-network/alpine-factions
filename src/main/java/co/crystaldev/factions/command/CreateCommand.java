@@ -1,7 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.factions.command.argument.AlphaNumericArgumentResolver;
+import co.crystaldev.factions.command.argument.AlphanumericArgumentResolver;
 import co.crystaldev.factions.command.framework.BaseFactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
@@ -28,7 +28,7 @@ public final class CreateCommand extends BaseFactionsCommand {
     @Execute
     public void execute(
             @Context Player player,
-            @Arg("name") @Key(AlphaNumericArgumentResolver.KEY) String name
+            @Arg("name") @Key(AlphanumericArgumentResolver.KEY) String name
     ) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();

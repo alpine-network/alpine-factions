@@ -8,7 +8,7 @@ import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.AlphaNumericArgumentResolver;
+import co.crystaldev.factions.command.argument.AlphanumericArgumentResolver;
 import dev.rollczi.litecommands.LiteCommandsBuilder;
 import dev.rollczi.litecommands.argument.ArgumentKey;
 import dev.rollczi.litecommands.bukkit.LiteBukkitSettings;
@@ -53,7 +53,7 @@ public final class AlpineFactions extends AlpinePlugin {
     public void setupCommandManager(@NotNull LiteCommandsBuilder<CommandSender, LiteBukkitSettings, ?> builder) {
         super.setupCommandManager(builder);
 
-        builder.argument(String.class, ArgumentKey.of(AlphaNumericArgumentResolver.KEY), new AlphaNumericArgumentResolver());
+        builder.argument(String.class, ArgumentKey.of(AlphanumericArgumentResolver.KEY), new AlphanumericArgumentResolver());
     }
 
     @Override

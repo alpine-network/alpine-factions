@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/05/2024
  */
-public final class AlphaNumericArgumentResolver extends ArgumentResolver<CommandSender, String> {
+public final class AlphanumericArgumentResolver extends ArgumentResolver<CommandSender, String> {
 
     public static final String KEY = "alpinefactions:alphanumeric";
 
