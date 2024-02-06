@@ -27,10 +27,10 @@ public final class VersionCommand extends BaseFactionsCommand {
         String authors = String.join(", ", AlpineFactions.getInstance().getDescription().getAuthors());
         Messaging.send(sender, Reference.MINI_MESSAGE.deserialize(String.join("<br>",
                 "<info>.</info>",
-                        "<info>|</info> This server is running <b><gradient:#00aaaa:#78cccc:#00aaaa>AlpineFactions</gradient></b>",
-                        "<info>|</info> <emphasis>Version:</emphasis> <color:#b8f2f2>v" + Reference.VERSION,
-                        "<info>|</info> <emphasis>Authors:</emphasis> <color:#b8f2f2>" + authors,
-                        "<info>'</info>"
+                "<info>|</info> This server is running <b><gradient:#00aaaa:#78cccc:#00aaaa>AlpineFactions</gradient></b>",
+                "<info>|</info> <emphasis>Version:</emphasis> <color:#b8f2f2>v" + Reference.VERSION,
+                "<info>|</info> <emphasis>Authors:</emphasis> <color:#b8f2f2>" + authors,
+                "<info>'</info>"
         )));
     }
 }
