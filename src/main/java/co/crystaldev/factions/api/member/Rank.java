@@ -10,13 +10,25 @@ import org.jetbrains.annotations.NotNull;
  */
 @AllArgsConstructor @Getter
 public enum Rank {
-    LEADER("***"),
-    COLEADER("**"),
-    MOD("*"),
-    MEMBER("+"),
-    RECRUIT("-");
+    LEADER("***", "leader"),
+    COLEADER("**", "coleader"),
+    MOD("*", "moderator"),
+    MEMBER("+", "member"),
+    RECRUIT("-", "recruit");
 
     private final String prefix;
+
+    private final String id;
+
+    @NotNull
+    public Rank getNextRank() {
+        return values()[Math.max(0, this.ordinal() - 1)];
+    }
+
+    @NotNull
+    public Rank getPreviousRank() {
+        return values()[Math.min(4, this.ordinal() + 1)];
+    }
 
     @NotNull
     public static Rank getDefault() {

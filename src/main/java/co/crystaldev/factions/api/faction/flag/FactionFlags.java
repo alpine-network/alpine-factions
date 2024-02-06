@@ -117,11 +117,31 @@ public final class FactionFlags {
             .defaultState(false)
             .build();
 
-    public static final FactionFlag<Integer> POWER_MODIFIER = FactionFlag.builder("power_mod", int.class)
+    public static final FactionFlag<Long> POWER_MODIFIER = FactionFlag.builder("power_mod", long.class)
             .name("Power Modifier")
             .description("Defines the power modifier.")
             .stateDescription(
                     "Faction power level is modified by %value% points."
+            )
+            .permission(PermissionNodes.ADMIN)
+            .defaultState(0L)
+            .build();
+
+    public static final FactionFlag<Integer> MEMBER_LIMIT_MODIFIER = FactionFlag.builder("member_limit_mod", int.class)
+            .name("Member Limit Modifier")
+            .description("Defines the member limit modifier.")
+            .stateDescription(
+                    "Faction member limit is modified by %value% members."
+            )
+            .permission(PermissionNodes.ADMIN)
+            .defaultState(0)
+            .build();
+
+    public static final FactionFlag<Integer> ROSTER_LIMIT_MODIFIER = FactionFlag.builder("roster_limit_mod", int.class)
+            .name("Roster Limit Modifier")
+            .description("Defines the roster limit modifier.")
+            .stateDescription(
+                    "Faction roster limit is modified by %value% members."
             )
             .permission(PermissionNodes.ADMIN)
             .defaultState(0)
@@ -138,6 +158,8 @@ public final class FactionFlags {
             POWER_LOSS,
             POWER_GAIN,
             INFINITE_POWER,
-            POWER_MODIFIER
+            POWER_MODIFIER,
+            MEMBER_LIMIT_MODIFIER,
+            ROSTER_LIMIT_MODIFIER
     };
 }

@@ -9,12 +9,17 @@ import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.AlphanumericArgumentResolver;
+import co.crystaldev.factions.event.ServerTickEvent;
 import dev.rollczi.litecommands.LiteCommandsBuilder;
 import dev.rollczi.litecommands.argument.ArgumentKey;
 import dev.rollczi.litecommands.bukkit.LiteBukkitSettings;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -25,6 +30,8 @@ public final class AlpineFactions extends AlpinePlugin {
     @Getter
     private static AlpineFactions instance;
     { instance = this; }
+
+    private static final AtomicInteger TICK_COUNTER = new AtomicInteger();
 
     @Getter
     private final FlagRegistry flagRegistry = new FlagRegistry();
@@ -42,6 +49,14 @@ public final class AlpineFactions extends AlpinePlugin {
         for (Permission permission : Permissions.VALUES) {
             this.permissionRegistry.register(this, permission);
         }
+
+        // setup server tick event
+        ServerTickEvent event = new ServerTickEvent();
+        PluginManager pluginManager = this.getServer().getPluginManager();
+        Bukkit.getScheduler().runTaskTimer(this, () -> {
+            pluginManager.callEvent(event);
+            event.setTick(TICK_COUNTER.incrementAndGet());
+        }, 0L, 1L);
     }
 
     @Override

@@ -15,7 +15,9 @@ import java.util.UUID;
  */
 @Data
 public final class FactionPlayer {
+
     private final UUID id;
+
     private long power;
 
     @Nullable

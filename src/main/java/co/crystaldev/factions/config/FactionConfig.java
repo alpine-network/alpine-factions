@@ -29,4 +29,19 @@ public final class FactionConfig extends AlpineConfig {
 
     @Comment("The maximum length of a faction name.")
     public int maxNameLength = 10;
+
+    @Comment("The default maximum power per player.")
+    public int defaultMaxPlayerPower = 100;
+
+    @Comment("The amount of power a player starts with.")
+    public int initialPlayerPower = 50;
+
+    @Comment("The amount of power players should gain in one hour.")
+    public int powerGainPerHour = 10;
+
+    @Comment("The member limit for a faction. Faction flags can modify this value.")
+    public int factionMemberLimit = 30;
+
+    @Comment("The roster limit for a faction. Faction flags can modify this value.")
+    public int factionRosterLimit = 50;
 }

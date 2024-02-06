@@ -52,7 +52,7 @@ public final class FactionStore extends AlpineStore<UUID, Faction> {
     @Nullable
     public Faction findFaction(@NotNull UUID member) {
         for (Faction faction : this.registeredFactions) {
-            if (faction.hasMember(member))
+            if (faction.isMember(member))
                 return faction;
         }
         return null;
@@ -61,8 +61,18 @@ public final class FactionStore extends AlpineStore<UUID, Faction> {
     @Nullable
     public Faction findFaction(@NotNull OfflinePlayer member) {
         for (Faction faction : this.registeredFactions) {
-            if (faction.hasMember(member))
+            if (faction.isMember(member.getUniqueId()))
                 return faction;
+        }
+        return null;
+    }
+
+    @Nullable
+    public Faction findFaction(@NotNull String name) {
+        for (Faction faction : this.registeredFactions) {
+            if (name.equalsIgnoreCase(faction.getName())) {
+                return faction;
+            }
         }
         return null;
     }
@@ -89,5 +99,20 @@ public final class FactionStore extends AlpineStore<UUID, Faction> {
     public void unregisterFaction(@NotNull Faction faction) {
         this.remove(faction.getId());
         this.registeredFactions.remove(faction);
+    }
+
+    public void saveFactions() {
+        boolean updated = false;
+        for (Faction faction : this.registeredFactions) {
+            if (faction.isDirty()) {
+                this.saveFaction(faction);
+                faction.setDirty(false);
+                updated = true;
+            }
+        }
+
+        if (updated) {
+            this.flush();
+        }
     }
 }
