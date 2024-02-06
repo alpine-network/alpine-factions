@@ -1,5 +1,7 @@
 package co.crystaldev.factions.api.member;
 
+import co.crystaldev.factions.api.Relational;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -9,12 +11,12 @@ import org.jetbrains.annotations.NotNull;
  * @since 12/12/2023
  */
 @AllArgsConstructor @Getter
-public enum Rank {
-    LEADER("***", "leader"),
-    COLEADER("**", "coleader"),
-    MOD("*", "moderator"),
-    MEMBER("+", "member"),
-    RECRUIT("-", "recruit");
+public enum Rank implements Relational {
+    @SerializedName("leader") LEADER("***", "leader"),
+    @SerializedName("coleader") COLEADER("**", "coleader"),
+    @SerializedName("moderator") MOD("*", "moderator"),
+    @SerializedName("member") MEMBER("+", "member"),
+    @SerializedName("recruit") RECRUIT("-", "recruit");
 
     private final String prefix;
 
@@ -33,5 +35,10 @@ public enum Rank {
     @NotNull
     public static Rank getDefault() {
         return RECRUIT;
+    }
+
+    @Override
+    public boolean isRank() {
+        return true;
     }
 }

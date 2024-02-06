@@ -1,11 +1,13 @@
 package co.crystaldev.factions.api.faction.permission;
 
+import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.RelationType;
 import co.crystaldev.factions.api.member.Rank;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -21,29 +23,33 @@ public final class PermissionHolder {
         this.permittedRelations.addAll(permission.getDefaultRelationPermits());
     }
 
-    public boolean isPermitted(@NotNull Rank rank) {
-        return this.permittedRanks.contains(rank);
+    public boolean isPermitted(@NotNull Relational relation) {
+        return (relation instanceof Rank ? this.permittedRanks : this.permittedRelations).contains(relation);
     }
 
-    public boolean isPermitted(@NotNull RelationType relation) {
-        return this.permittedRelations.contains(relation);
-    }
-
-    public void set(@NotNull Rank rank, boolean permitted) {
+    public void set(@NotNull Relational relation, boolean permitted) {
+        Set<Relational> permits = (Set) (relation instanceof Rank ? this.permittedRanks : this.permittedRelations);
         if (permitted) {
-            this.permittedRanks.add(rank);
+            permits.add(relation);
         }
         else {
-            this.permittedRanks.remove(rank);
+            permits.remove(relation);
         }
     }
 
-    public void set(@NotNull RelationType relation, boolean permitted) {
+    public void set(boolean permitted, @NotNull Relational... relations) {
+        this.permittedRanks.clear();
+        this.permittedRelations.clear();
+
         if (permitted) {
-            this.permittedRelations.add(relation);
-        }
-        else {
-            this.permittedRelations.remove(relation);
+            for (Relational relational : relations) {
+                if (relational.isRank()) {
+                    this.permittedRanks.add((Rank) relational);
+                }
+                else {
+                    this.permittedRelations.add((RelationType) relational);
+                }
+            }
         }
     }
 }

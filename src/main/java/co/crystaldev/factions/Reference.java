@@ -2,8 +2,9 @@ package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.util.UuidTypeAdapter;
 import co.crystaldev.factions.api.faction.flag.FlagHolder;
-import co.crystaldev.factions.util.ComponentSerializer;
+import co.crystaldev.factions.util.ComponentTypeAdapter;
 import co.crystaldev.factions.util.tags.ColorwayTagResolver;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.kyori.adventure.text.Component;
@@ -27,8 +28,8 @@ public final class Reference {
     public static final MiniMessage STRICT_MINIMESSAGE = miniMessage().strict(true).build();
     public static final Logger LOGGER = LogManager.getLogger(NAME);
     public static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(FlagHolder.class, new FlagHolder.Adapter())
-            .registerTypeAdapter(Component.class, new ComponentSerializer())
+            .registerTypeAdapter(new TypeToken<FlagHolder<?>>(){}.getType(), new FlagHolder.Adapter())
+            .registerTypeAdapter(Component.class, new ComponentTypeAdapter())
             .registerTypeAdapter(UUID.class, new UuidTypeAdapter())
             .disableHtmlEscaping()
             .create();

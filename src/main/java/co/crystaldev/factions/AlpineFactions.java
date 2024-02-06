@@ -60,11 +60,6 @@ public final class AlpineFactions extends AlpinePlugin {
     }
 
     @Override
-    public void onStop() {
-
-    }
-
-    @Override
     public void setupCommandManager(@NotNull LiteCommandsBuilder<CommandSender, LiteBukkitSettings, ?> builder) {
         super.setupCommandManager(builder);
 

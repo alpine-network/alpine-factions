@@ -1,5 +1,6 @@
 package co.crystaldev.factions.api.faction;
 
+import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.flag.FlagHolder;
@@ -9,9 +10,9 @@ import co.crystaldev.factions.api.member.Member;
 import co.crystaldev.factions.api.member.Rank;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.store.FactionStore;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -25,11 +26,11 @@ import java.util.*;
  * @since 12/12/2023
  */
 @SuppressWarnings("unused")
-@Data @NoArgsConstructor
+@Getter @Setter @ToString
 public final class Faction {
 
     /** The unique ID of this faction */
-    private final UUID id = UUID.randomUUID();
+    private final String id;
 
     private String name;
 
@@ -45,9 +46,7 @@ public final class Faction {
 
     private final HashMap<UUID, Member> members = new HashMap<>();
 
-    private final ArrayList<Relation> relations = new ArrayList<>();
-
-    private final ArrayList<Relation> relationRequests = new ArrayList<>();
+    private final HashMap<String, RelationType> relationRequests = new HashMap<>();
 
     private final Map<String, FlagHolder<?>> flags = new HashMap<>();
 
@@ -56,13 +55,21 @@ public final class Faction {
     @Getter
     private transient boolean dirty;
 
-    public Faction(@NotNull String name, @NotNull Player owner) {
-        this.name = name;
+    public Faction() {
+        this.id = UUID.randomUUID().toString();
+    }
 
+    public Faction(@NotNull String id, @NotNull String name) {
+        this.id = id;
+        this.name = name;
+        this.markDirty();
+    }
+
+    public Faction(@NotNull String name, @NotNull Player owner) {
+        this(UUID.randomUUID().toString(), name);
         Member member = new Member(owner.getUniqueId(), Rank.LEADER);
         this.members.put(owner.getUniqueId(), member);
         this.roster.put(owner.getUniqueId(), member);
-        this.markDirty();
     }
 
     public void markDirty() {
@@ -163,15 +170,15 @@ public final class Faction {
     }
 
     public long getPowerLevel() {
+        if (this.getFlagValueOrDefault(FactionFlags.INFINITE_POWER)) {
+            return Integer.MAX_VALUE;
+        }
+
         long powerLevel = 0L;
         for (Member member : this.members.values()) {
             powerLevel += member.getUser().getPower();
         }
         return powerLevel + this.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER);
-    }
-
-    public boolean isOverClaimable() {
-        return this.getPowerLevel() < 0;
     }
 
     public void joinFaction(@NotNull UUID player) {
@@ -301,15 +308,15 @@ public final class Faction {
         return permValue.isPermitted(relation);
     }
 
-    public void setPermission(@NotNull Rank rank, @NotNull Permission permission, boolean permitted) {
+    public void setPermission(@NotNull Permission permission, boolean permitted, @NotNull Relational relation) {
         PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> new PermissionHolder(permission));
-        permValue.set(rank, permitted);
+        permValue.set(relation, permitted);
         this.markDirty();
     }
 
-    public void setPermission(@NotNull RelationType relation, @NotNull Permission permission, boolean permitted) {
+    public void setPermissionBulk(@NotNull Permission permission, boolean permitted, @NotNull Relational... relations) {
         PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> new PermissionHolder(permission));
-        permValue.set(relation, permitted);
+        permValue.set(permitted, relations);
         this.markDirty();
     }
 
@@ -317,12 +324,26 @@ public final class Faction {
     public RelationType relationTo(@Nullable Faction faction) {
         if (faction == null)
             return RelationType.NEUTRAL;
+        if (this.equals(faction))
+            return RelationType.SELF;
+        return this.relationRequests.getOrDefault(faction.getId(), RelationType.NEUTRAL);
+    }
 
-        for (Relation relation : this.relations) {
-            if (relation.getFaction().equals(faction.getId())) {
-                return relation.getType();
-            }
+    public boolean isRelation(@Nullable Faction faction, @NotNull RelationType relation) {
+        if (faction == null) {
+            return relation == RelationType.NEUTRAL;
         }
-        return RelationType.NEUTRAL;
+
+        RelationType relationToOther = this.relationTo(faction);
+        RelationType relationToSelf = faction.relationTo(this);
+        return relationToOther == relationToSelf && relationToOther == relation;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Faction))
+            return false;
+        Faction other = (Faction) obj;
+        return this.id.equals(other.getId());
     }
 }

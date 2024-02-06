@@ -1,7 +1,6 @@
 package co.crystaldev.factions.util;
 
 import co.crystaldev.factions.Reference;
-import com.google.gson.JsonNull;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -13,7 +12,7 @@ import java.io.IOException;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 12/17/2023
  */
-public final class ComponentSerializer extends TypeAdapter<Component> {
+public final class ComponentTypeAdapter extends TypeAdapter<Component> {
 
     @Override
     public void write(JsonWriter jsonWriter, Component component) throws IOException {

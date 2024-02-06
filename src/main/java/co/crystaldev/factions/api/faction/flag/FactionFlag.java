@@ -18,6 +18,7 @@ public final class FactionFlag<T> {
     private final String stateDescriptionA;
     private final String stateDescriptionB;
     private final String permission;
+    private final boolean visible;
     private final T defaultState;
     private final Class<T> type;
 
@@ -39,6 +40,7 @@ public final class FactionFlag<T> {
         private String stateDescriptionA;
         private String stateDescriptionB;
         private String permission;
+        private boolean visible = true;
         private T defaultState;
 
         public Builder(@NotNull String id, @NotNull Class<T> type) {
@@ -78,6 +80,12 @@ public final class FactionFlag<T> {
         }
 
         @NotNull
+        public Builder<T> visible(boolean visible) {
+            this.visible = visible;
+            return this;
+        }
+
+        @NotNull
         public Builder<T> defaultState(@NotNull T state) {
             this.defaultState = state;
             return this;
@@ -89,7 +97,7 @@ public final class FactionFlag<T> {
             Preconditions.checkNotNull(this.description, "description must not be null");
             Preconditions.checkNotNull(this.stateDescriptionA, "stateDescription must not be null");
             return new FactionFlag<>(this.id, this.name, this.description, this.stateDescriptionA, this.stateDescriptionB,
-                    this.permission, this.defaultState, this.type);
+                    this.permission, this.visible, this.defaultState, this.type);
         }
     }
 }

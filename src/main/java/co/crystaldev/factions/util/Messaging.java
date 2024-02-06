@@ -1,6 +1,8 @@
 package co.crystaldev.factions.util;
 
 import co.crystaldev.alpinecore.Reference;
+import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.member.Member;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -42,6 +44,15 @@ public final class Messaging {
         // selectively notify all players
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (playerPredicate.test(player)) {
+                send(player, component);
+            }
+        }
+    }
+
+    public static void broadcast(@NotNull Faction faction, @NotNull Component component) {
+        for (Member member : faction.getMembers().values()) {
+            Player player = member.getPlayer();
+            if (player != null) {
                 send(player, component);
             }
         }

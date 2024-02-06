@@ -46,7 +46,13 @@ public final class FlagHolder<T> {
             while (jsonReader.hasNext()) {
                 String name = jsonReader.nextName();
                 if ("type".equals(name)) {
-                    type = ReflectionHelper.getClass(ReflectionHelper.getContextClassLoader(), jsonReader.nextString());
+                    String className = jsonReader.nextString();
+                    type = ReflectionHelper.getClass(ReflectionHelper.getContextClassLoader(), className);
+
+                    // attempt to use the system classloader
+                    if (type == null) {
+                        type = ReflectionHelper.getClass(ClassLoader.getSystemClassLoader(), className);
+                    }
                 }
                 else if ("value".equals(name)) {
                     value = Reference.GSON.fromJson(jsonReader, type);

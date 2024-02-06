@@ -20,6 +20,8 @@ public final class FactionPlayer {
 
     private long power;
 
+    private boolean territorialTitles = true;
+
     @Nullable
     public Player getPlayer() {
         return Bukkit.getPlayer(this.id);

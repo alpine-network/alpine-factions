@@ -4,7 +4,10 @@ import co.crystaldev.factions.api.FactionPlayer;
 import co.crystaldev.factions.store.PlayerStore;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
@@ -26,6 +29,11 @@ public final class Member {
     public Member(@NotNull UUID id, @NotNull Rank rank) {
         this.id = id;
         this.rank = rank;
+    }
+
+    @Nullable
+    public Player getPlayer() {
+        return Bukkit.getPlayer(this.id);
     }
 
     @NotNull

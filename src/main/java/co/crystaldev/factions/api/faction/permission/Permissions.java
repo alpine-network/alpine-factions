@@ -3,11 +3,13 @@ package co.crystaldev.factions.api.faction.permission;
 import co.crystaldev.factions.PermissionNodes;
 import co.crystaldev.factions.api.faction.RelationType;
 import co.crystaldev.factions.api.member.Rank;
+import lombok.experimental.UtilityClass;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 12/20/2023
  */
+@UtilityClass
 public final class Permissions {
 
     public static final Permission MODIFY_NAME = Permission.builder("modify_name")
