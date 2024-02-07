@@ -239,6 +239,11 @@ public final class Faction {
         return this.isOnRoster(player) || this.isMember(player);
     }
 
+    @Nullable
+    public Member getMember(@NotNull UUID player) {
+        return this.members.get(player);
+    }
+
     @NotNull
     public Member getMember(@NotNull OfflinePlayer player) {
         Member member = this.members.get(player.getUniqueId());

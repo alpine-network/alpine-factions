@@ -4,11 +4,15 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.storage.SerializerRegistry;
 import co.crystaldev.factions.api.FlagRegistry;
 import co.crystaldev.factions.api.PermissionRegistry;
+import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.AlphanumericArgumentResolver;
+import co.crystaldev.factions.command.argument.ClaimTypeArgumentResolver;
+import co.crystaldev.factions.command.argument.FactionArgumentResolver;
+import co.crystaldev.factions.command.claiming.ClaimType;
 import co.crystaldev.factions.event.ServerTickEvent;
 import dev.rollczi.litecommands.LiteCommandsBuilder;
 import dev.rollczi.litecommands.argument.ArgumentKey;
@@ -64,6 +68,8 @@ public final class AlpineFactions extends AlpinePlugin {
         super.setupCommandManager(builder);
 
         builder.argument(String.class, ArgumentKey.of(AlphanumericArgumentResolver.KEY), new AlphanumericArgumentResolver());
+        builder.argument(ClaimType.class, ArgumentKey.of(ClaimTypeArgumentResolver.KEY), new ClaimTypeArgumentResolver());
+        builder.argument(Faction.class, ArgumentKey.of(FactionArgumentResolver.KEY), new FactionArgumentResolver());
     }
 
     @Override

@@ -33,7 +33,7 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText missingFactionPerm = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> does not allow you to <error_highlight>%action%</error_highlight>");
 
-    public ConfigText unknownFaction = ConfigText.of("%error_prefix% No faction was found with the name <error_highlight>%faction_name%</error_highlight>");
+    public ConfigText unknownFaction = ConfigText.of("%error_prefix% No faction or player was found with the name <error_highlight>%value%</error_highlight>");
 
     @Comment({
             "",

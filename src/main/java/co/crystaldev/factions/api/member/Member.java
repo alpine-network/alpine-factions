@@ -31,6 +31,15 @@ public final class Member {
         this.rank = rank;
     }
 
+    @NotNull
+    public Component getTitle() {
+        return this.title == null ? Component.empty() : this.title;
+    }
+
+    public boolean hasTitle() {
+        return this.title != null;
+    }
+
     @Nullable
     public Player getPlayer() {
         return Bukkit.getPlayer(this.id);

@@ -33,9 +33,9 @@ public final class FactionStore extends AlpineStore<String, Faction> {
     private static FactionStore instance;
     { instance = this; }
 
-    private static final String WILDERNESS_ID = "factions_wilderness";
-    private static final String SAFEZONE_ID = "factions_safezone";
-    private static final String WARZONE_ID = "factions_warzone";
+    public static final String WILDERNESS_ID = "factions_wilderness";
+    public static final String SAFEZONE_ID = "factions_safezone";
+    public static final String WARZONE_ID = "factions_warzone";
 
     private final Set<Faction> registeredFactions = new HashSet<>();
 

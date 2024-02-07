@@ -23,7 +23,6 @@ import org.bukkit.entity.Player;
 @Command(name = "factions create")
 @Description("Create a new faction.")
 public final class CreateCommand extends BaseFactionsCommand {
-
     public CreateCommand(AlpinePlugin plugin) {
         super(plugin);
     }

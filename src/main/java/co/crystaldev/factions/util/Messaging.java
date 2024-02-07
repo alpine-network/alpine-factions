@@ -10,7 +10,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -56,6 +58,26 @@ public final class Messaging {
                 send(player, component);
             }
         }
+    }
+
+    public static void broadcast(@NotNull Faction faction, @Nullable Player subject, @NotNull Function<Player, Component> playerFunction) {
+        for (Member member : faction.getMembers().values()) {
+            Player player = member.getPlayer();
+            if (player != null) {
+                if (player.equals(subject))
+                    subject = null;
+
+                send(player, playerFunction.apply(player));
+            }
+        }
+
+        if (subject != null) {
+            send(subject, playerFunction.apply(subject));
+        }
+    }
+
+    public static void broadcast(@NotNull Faction faction, @NotNull Function<Player, Component> playerFunction) {
+        broadcast(faction, null, playerFunction);
     }
 
     @NotNull

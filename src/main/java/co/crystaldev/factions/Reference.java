@@ -2,6 +2,7 @@ package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.util.UuidTypeAdapter;
 import co.crystaldev.factions.api.faction.flag.FlagHolder;
+import co.crystaldev.factions.store.claim.Claim;
 import co.crystaldev.factions.util.ComponentTypeAdapter;
 import co.crystaldev.factions.util.tags.ColorwayTagResolver;
 import com.google.common.reflect.TypeToken;
@@ -29,6 +30,7 @@ public final class Reference {
     public static final Logger LOGGER = LogManager.getLogger(NAME);
     public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(new TypeToken<FlagHolder<?>>(){}.getType(), new FlagHolder.Adapter())
+            .registerTypeAdapter(Claim.class, new Claim.Adapter())
             .registerTypeAdapter(Component.class, new ComponentTypeAdapter())
             .registerTypeAdapter(UUID.class, new UuidTypeAdapter())
             .disableHtmlEscaping()
