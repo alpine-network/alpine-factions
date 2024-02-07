@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -88,45 +87,7 @@ public final class ConfigText {
 
     @NotNull
     public static ConfigText of(@NotNull Component component) {
-        return builder().message(component).build();
-    }
-
-    @NotNull
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    public static final class Builder {
-
-        private String message;
-
-        @NotNull
-        public Builder message(@NotNull String message) {
-            this.message = message;
-            return this;
-        }
-
-        @NotNull
-        public Builder message(@NotNull Component component) {
-            this.message = Reference.MINI_MESSAGE.serialize(component.compact());
-            return this;
-        }
-
-        @NotNull
-        public Builder message(@NotNull Component... components) {
-            this.message = Reference.MINI_MESSAGE.serialize(Component.join(JoinConfiguration.noSeparators(), components).compact());
-            return this;
-        }
-
-        @NotNull
-        public Builder lines(@NotNull Component... components) {
-            this.message = Reference.MINI_MESSAGE.serialize(Component.join(JoinConfiguration.newlines(), components).compact());
-            return this;
-        }
-
-        @NotNull
-        public ConfigText build() {
-            return new ConfigText(Arrays.asList(this.message.replace("\r", "").split("(\n|<br>)")));
-        }
+        String message = Reference.MINI_MESSAGE.serialize(component);
+        return new ConfigText(Arrays.asList(message.replace("\r", "").split("(\n|<br>)")));
     }
 }

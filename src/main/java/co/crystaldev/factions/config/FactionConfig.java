@@ -27,21 +27,45 @@ public final class FactionConfig extends AlpineConfig {
     })
     public int minNameLength = 3;
 
-    @Comment("The maximum length of a faction name.")
+    @Comment({
+            "",
+            "The maximum length of a faction name."
+    })
     public int maxNameLength = 10;
 
-    @Comment("The default maximum power per player.")
-    public int defaultMaxPlayerPower = 100;
+    @Comment({
+            "",
+            "The member limit for a faction. Faction flags can modify this value."
+    })
+    public int memberLimit = 30;
 
-    @Comment("The amount of power a player starts with.")
+    @Comment({
+            "",
+            "The roster limit for a faction. Faction flags can modify this value."
+    })
+    public int rosterLimit = 50;
+
+    @Comment({
+            "",
+            "The maximum power per player."
+    })
+    public int maxPlayerPower = 100;
+
+    @Comment({
+            "",
+            "The amount of power a player starts with."
+    })
     public int initialPlayerPower = 50;
 
-    @Comment("The amount of power players should gain in one hour.")
+    @Comment({
+            "",
+            "The amount of power players should gain in one hour."
+    })
     public int powerGainPerHour = 10;
 
-    @Comment("The member limit for a faction. Faction flags can modify this value.")
-    public int factionMemberLimit = 30;
-
-    @Comment("The roster limit for a faction. Faction flags can modify this value.")
-    public int factionRosterLimit = 50;
+    @Comment({
+            "",
+            "The maximum amount of claims that can be filled via `/f claim fill`."
+    })
+    public int maxClaimFillVolume = 1000;
 }

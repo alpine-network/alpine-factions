@@ -146,11 +146,11 @@ public final class Faction {
     }
 
     public int getMemberLimit() {
-        return FactionConfig.getInstance().factionMemberLimit + this.getFlagValueOrDefault(FactionFlags.MEMBER_LIMIT_MODIFIER);
+        return FactionConfig.getInstance().memberLimit + this.getFlagValueOrDefault(FactionFlags.MEMBER_LIMIT_MODIFIER);
     }
 
     public int getRosterLimit() {
-        return FactionConfig.getInstance().factionRosterLimit + this.getFlagValueOrDefault(FactionFlags.ROSTER_LIMIT_MODIFIER);
+        return FactionConfig.getInstance().rosterLimit + this.getFlagValueOrDefault(FactionFlags.ROSTER_LIMIT_MODIFIER);
     }
 
     public int getMemberCount() {

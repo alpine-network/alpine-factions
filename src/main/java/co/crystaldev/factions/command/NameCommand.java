@@ -81,7 +81,8 @@ public final class NameCommand extends BaseFactionsCommand {
         faction.markDirty();
         Messaging.broadcast(faction, player, observer -> {
             return messageConfig.rename.build(
-                    "player_name", FactionHelper.formatRelational(observer, faction, player),
+                    "player_name", player.getName(),
+                    "player", FactionHelper.formatRelational(observer, faction, player),
                     "faction_name", name);
         });
     }

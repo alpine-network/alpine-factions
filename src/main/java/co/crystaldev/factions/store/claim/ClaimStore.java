@@ -70,6 +70,16 @@ public final class ClaimStore extends AlpineStore<String, RegionClaimStorage> {
     }
 
     @Nullable
+    public Faction getFaction(@NotNull Chunk chunk) {
+        Claim claim = this.getClaim(chunk);
+        if (claim == null) {
+            return null;
+        }
+
+        return FactionStore.getInstance().getFaction(claim.getFactionId());
+    }
+
+    @Nullable
     public Claim getClaim(@NotNull Chunk chunk) {
         RegionClaimStorage storage = this.get(getKey(chunk));
         if (storage == null) {

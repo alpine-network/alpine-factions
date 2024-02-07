@@ -14,7 +14,6 @@ import java.util.List;
 public enum ClaimType {
     SQUARE("s", "sq"),
     CIRCLE("c"),
-    FILL("f"),
     LINE("l");
 
     @Getter
