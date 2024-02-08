@@ -31,4 +31,17 @@ public final class LocationHelper {
             return BlockFace.EAST;
         }
     }
+
+    public static double distance(double x1, double z1, double x2, double z2) {
+        x1 = Math.abs(x2 - x1);
+        z1 = Math.abs(z2 - z1);
+        return Math.sqrt((x1 * x1) + (z1 * z1));
+    }
+
+    public static double distance(double x1, double y1, double z1, double x2, double y2, double z2) {
+        x1 = Math.abs(x2 - x1);
+        y1 = Math.abs(y2 - y1);
+        z1 = Math.abs(z2 - z1);
+        return Math.sqrt((x1 * x1) + (y1 * y1) + (z1 * z1));
+    }
 }

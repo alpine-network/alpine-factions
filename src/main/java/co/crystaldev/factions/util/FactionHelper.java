@@ -3,13 +3,15 @@ package co.crystaldev.factions.util;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.RelationType;
 import co.crystaldev.factions.api.member.Member;
-import co.crystaldev.factions.config.StyleConfig;
+import co.crystaldev.factions.StyleConfig;
 import co.crystaldev.factions.store.FactionStore;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -31,7 +33,7 @@ public final class FactionHelper {
         RelationType relationType = self.relationTo(faction);
 
         Component name = ComponentHelper.stylize(config.relationalStyles.get(relationType), component);
-        return ComponentHelper.stylize(config.factionNameStyles.get(faction.getName()), name);
+        return ComponentHelper.stylize(config.factionNameStyles.get(faction.getName()), name, true);
     }
 
     @NotNull
@@ -64,7 +66,9 @@ public final class FactionHelper {
     }
 
     @NotNull
-    public static Component formatRelationalFactionName(@NotNull Player viewer, @Nullable Faction faction) {
-        return formatRelational(viewer, faction, faction == null ? null : Component.text(faction.getName()));
+    public static Component formatRelational(@NotNull Player viewer, @Nullable Faction faction) {
+        Faction playerFaction = FactionStore.getInstance().findFaction(viewer);
+        String factionName = Objects.equals(faction, playerFaction) ? "Your faction" : (faction == null ? "< null >" : faction.getName());
+        return formatRelational(viewer, faction, factionName);
     }
 }

@@ -3,6 +3,7 @@ package co.crystaldev.factions.engine;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
 import co.crystaldev.factions.event.ServerTickEvent;
+import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
 import org.bukkit.event.EventHandler;
 
@@ -19,9 +20,10 @@ public final class FactionManagementEngine extends AlpineEngine {
 
     @EventHandler
     private void onServerTick(ServerTickEvent event) {
-        // only save every 10 seconds
-        if (!event.isTime(10, TimeUnit.SECONDS))
+        if (!event.isTime(30L, TimeUnit.SECONDS))
             return;
+
         FactionStore.getInstance().saveFactions();
+        ClaimStore.getInstance().saveClaims();
     }
 }

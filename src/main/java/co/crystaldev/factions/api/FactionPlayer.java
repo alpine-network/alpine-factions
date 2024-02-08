@@ -20,6 +20,8 @@ public final class FactionPlayer {
 
     private long power;
 
+    private long powerBoost;
+
     private boolean territorialTitles = true;
 
     @Nullable

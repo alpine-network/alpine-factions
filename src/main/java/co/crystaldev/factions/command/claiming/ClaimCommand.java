@@ -2,9 +2,15 @@ package co.crystaldev.factions.command.claiming;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.ClaimTypeArgumentResolver;
 import co.crystaldev.factions.command.argument.FactionArgumentResolver;
 import co.crystaldev.factions.command.framework.BaseFactionsCommand;
+import co.crystaldev.factions.config.FactionConfig;
+import co.crystaldev.factions.config.MessageConfig;
+import co.crystaldev.factions.store.FactionStore;
+import co.crystaldev.factions.store.ClaimStore;
+import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.LocationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
@@ -12,9 +18,12 @@ import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import org.bukkit.Chunk;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,33 +44,78 @@ public final class ClaimCommand extends BaseFactionsCommand {
             @Arg("radius") int radius,
             @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
     ) {
+        Chunk origin = player.getLocation().getChunk();
+        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
+        Faction claimingFaction = faction.orElse(FactionStore.getInstance().findFaction(player));
 
-        Chunk chunk = player.getLocation().getChunk();
+        // is the player able to claim this land?
+        if (shouldAbortClaiming(player, replacedFaction, claimingFaction)) {
+            return;
+        }
+
+        // discover chunks to claim
         Set<Chunk> chunks;
         switch (type) {
             case LINE: {
-                chunks = Claiming.line(chunk, radius, LocationHelper.getFacing(player.getLocation()));
+                chunks = Claiming.line(origin, radius, LocationHelper.getFacing(player.getLocation()));
                 break;
             }
             case CIRCLE: {
-                chunks = Claiming.circle(chunk, radius);
+                chunks = Claiming.circle(origin, radius);
+                break;
             }
             default: {
-                chunks = Claiming.square(chunk, radius);
+                chunks = Claiming.square(origin, radius);
             }
         }
 
-
+        // attempt the claim
+        Claiming.attemptClaim(player, type.toString(), replacedFaction, claimingFaction, chunks, origin);
     }
 
-    @Execute(name = "auto", aliases = "a")
-    public void auto(@Context Player player) {
+    @Execute(name = "fill", aliases = "f")
+    public void fill(
+            @Context Player player,
+            @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
+    ) {
+        MessageConfig config = MessageConfig.getInstance();
 
+        Chunk origin = player.getLocation().getChunk();
+        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
+        Faction claimingFaction = faction.orElse(FactionStore.getInstance().findFaction(player));
+
+        // is the player able to claim this land?
+        if (shouldAbortClaiming(player, replacedFaction, claimingFaction)) {
+            return;
+        }
+
+        // discover chunks to claim
+        Set<Chunk> chunks = Claiming.fill(origin);
+        if (chunks == null) {
+            config.fillLimit.send(player, "limit", FactionConfig.getInstance().maxClaimFillVolume);
+            return;
+        }
+
+        // attempt to claim
+        Claiming.attemptClaim(player, "fill", replacedFaction, claimingFaction, chunks, origin);
     }
 
     @Execute(name = "one", aliases = "o")
-    public void one(@Context Player player) {
+    public void one(
+            @Context Player player,
+            @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
+    ) {
+        Chunk origin = player.getLocation().getChunk();
+        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
+        Faction claimingFaction = faction.orElse(FactionStore.getInstance().findFaction(player));
 
+        // is the player able to claim this land?
+        if (shouldAbortClaiming(player, replacedFaction, claimingFaction)) {
+            return;
+        }
+
+        // attempt to claim
+        Claiming.attemptClaim(player, "square", replacedFaction, claimingFaction, new HashSet<>(Collections.singleton(origin)), origin);
     }
 
     @Execute(name = "near")
@@ -70,6 +124,45 @@ public final class ClaimCommand extends BaseFactionsCommand {
             @Arg("x") int chunkX,
             @Arg("z") int chunkZ
     ) {
+        Chunk chunk = player.getWorld().getChunkAt(chunkX, chunkZ);
+        Faction replacedFaction = ClaimStore.getInstance().getFaction(chunk);
+        Faction claimingFaction = FactionStore.getInstance().findFaction(player);
 
+        // is the player able to claim this land?
+        if (shouldAbortClaiming(player, replacedFaction, claimingFaction)) {
+            return;
+        }
+
+        // attempt to claim
+        Claiming.attemptClaim(player, "near", replacedFaction, claimingFaction, new HashSet<>(Collections.singleton(chunk)), chunk);
+    }
+
+    @Execute(name = "auto", aliases = "a")
+    public void auto(@Context Player player) {
+        // TODO
+    }
+
+    private static boolean shouldAbortClaiming(@NotNull Player player, @Nullable Faction replacedFaction, @Nullable Faction claimingFaction) {
+        MessageConfig config = MessageConfig.getInstance();
+
+        if (claimingFaction == null) {
+            Faction wilderness = FactionStore.getInstance().getWilderness();
+            config.landOwned.send(player,
+                    "faction", FactionHelper.formatRelational(player, wilderness),
+                    "faction_name", wilderness.getName()
+            );
+            return true;
+        }
+
+        if (replacedFaction != null && !replacedFaction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
+            config.missingFactionPerm.send(player,
+                    "action", "modify territory",
+                    "faction", FactionHelper.formatRelational(player, replacedFaction),
+                    "faction_name", replacedFaction.getName()
+            );
+            return true;
+        }
+
+        return false;
     }
 }

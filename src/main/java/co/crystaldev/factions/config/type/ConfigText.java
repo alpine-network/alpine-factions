@@ -86,6 +86,11 @@ public final class ConfigText {
     }
 
     @NotNull
+    public static ConfigText of(@NotNull String... components) {
+        return new ConfigText(Arrays.asList(components));
+    }
+
+    @NotNull
     public static ConfigText of(@NotNull Component component) {
         String message = Reference.MINI_MESSAGE.serialize(component);
         return new ConfigText(Arrays.asList(message.replace("\r", "").split("(\n|<br>)")));

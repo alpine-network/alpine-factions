@@ -1,15 +1,11 @@
 package co.crystaldev.factions.config;
 
 import co.crystaldev.alpinecore.framework.config.AlpineConfig;
-import co.crystaldev.factions.command.claiming.ClaimType;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.util.ComponentHelper;
 import de.exlll.configlib.Comment;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -31,9 +27,9 @@ public final class MessageConfig extends AlpineConfig {
             "Developed by Crystal Development, LLC.",
             ""
     })
-    public ConfigText prefix = ConfigText.of("<info>AlpineFactions</info> <separator>»</separator><text>");
+    public ConfigText prefix = ConfigText.of("<info>Factions</info> <separator>»</separator><text>");
 
-    public ConfigText errorPrefix = ConfigText.of("<error>AlpineFactions</error> <separator>»</separator><text>");
+    public ConfigText errorPrefix = ConfigText.of("<error>Factions</error> <separator>»</separator><text>");
 
     public ConfigText alphanumeric = ConfigText.of("%error_prefix% Your input must be alphanumeric");
 
@@ -71,26 +67,29 @@ public final class MessageConfig extends AlpineConfig {
             "",
             "| Land Claiming"
     })
-    public ConfigText landClaim = ConfigText.of(ComponentHelper.joinNewLines(
-            Component.text("%prefix% <highlight>%player%</highlight> claimed <highlight>%amount% chunks</highlight> near " +
-                    "<emphasis>%world%</emphasis> <highlight>%chunk_x% %chunk_z%</highlight> using %type%"),
-            Component.text("   %old_faction% <emphasis>-></emphasis> %new_faction%")
-    ));
+    public ConfigText landClaim = ConfigText.of(
+            "%prefix% <highlight>%player%</highlight> %claim_type% <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%",
+            "    <i>%old_faction% → %new_faction%</i>"
+    );
 
-    public ConfigText landClaimSingle = ConfigText.of(ComponentHelper.joinNewLines(
-            Component.text("%prefix% <highlight>%player%</highlight> claimed <highlight>%amount% chunk</highlight> near " +
-                    "<emphasis>%world%</emphasis> <highlight>%chunk_x% %chunk_z%</highlight> using %type%"),
-            Component.text("   %old_faction% <emphasis>-></emphasis> %new_faction%")
-    ));
+    public ConfigText landClaimSingle = ConfigText.of(
+            "%prefix% <highlight>%player%</highlight> %claim_type% <highlight>%amount% chunk</highlight> at <emphasis>(%world% %chunk_x%, %chunk_z%)</emphasis>",
+            "    <i>%old_faction% → %new_faction%</i>"
+    );
+
+    public ConfigText claimed = ConfigText.of("claimed");
+
+    public ConfigText pillaged = ConfigText.of("pillaged");
+
+    public ConfigText conquered = ConfigText.of("conquered");
+
+    public ConfigText conquerFail = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> owns this land and is strong enough to keep it");
 
     public ConfigText landOwned = ConfigText.of("%prefix% This land is already owned by <highlight>%faction%</highlight>");
 
+    public ConfigText notEnoughPower = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> does not have enough power to claim this land");
+
     public ConfigText fillLimit = ConfigText.of("%error_prefix% Reached the fill limit of <error_highlight>%limit% chunks</error_highlight>");
 
-    public Map<ClaimType, ConfigText> claimTypes = new HashMap<>();
-    {
-        this.claimTypes.put(ClaimType.SQUARE, ConfigText.of("square"));
-        this.claimTypes.put(ClaimType.CIRCLE, ConfigText.of("circle"));
-        this.claimTypes.put(ClaimType.LINE, ConfigText.of("line"));
-    }
+    public ConfigText claimTooFar = ConfigText.of("%error_prefix% Unable to claim land too far away.");
 }

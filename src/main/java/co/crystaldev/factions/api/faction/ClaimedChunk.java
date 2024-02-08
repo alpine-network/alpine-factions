@@ -1,4 +1,4 @@
-package co.crystaldev.factions.store.claim;
+package co.crystaldev.factions.api.faction;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

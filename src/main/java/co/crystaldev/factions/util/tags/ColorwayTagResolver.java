@@ -1,6 +1,6 @@
 package co.crystaldev.factions.util.tags;
 
-import co.crystaldev.factions.config.StyleConfig;
+import co.crystaldev.factions.StyleConfig;
 import net.kyori.adventure.text.format.StyleBuilderApplicable;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.ParsingException;

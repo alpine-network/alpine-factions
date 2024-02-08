@@ -26,6 +26,11 @@ public enum ClaimType {
                 .build();
     }
 
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
+
     @Nullable
     public static ClaimType get(@NotNull String type) {
         for (ClaimType value : values()) {

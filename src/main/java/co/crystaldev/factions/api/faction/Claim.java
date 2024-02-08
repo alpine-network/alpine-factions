@@ -1,4 +1,4 @@
-package co.crystaldev.factions.store.claim;
+package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.factions.Reference;
 import com.google.gson.TypeAdapter;
@@ -26,14 +26,14 @@ public final class Claim {
 
     private final HashSet<UUID> accessedPlayerIds;
 
-    private Claim(@Nullable String factionId, @NotNull HashSet<String> accessedFactionIds, @NotNull HashSet<UUID> accessedPlayerIds) {
-        this.factionId = factionId;
+    private Claim(@Nullable String faction, @NotNull HashSet<String> accessedFactionIds, @NotNull HashSet<UUID> accessedPlayerIds) {
+        this.factionId = faction;
         this.accessedFactionIds = accessedFactionIds;
         this.accessedPlayerIds = accessedPlayerIds;
     }
 
-    public Claim(@NotNull String factionId) {
-        this(factionId, new HashSet<>(), new HashSet<>());
+    public Claim(@NotNull String faction) {
+        this(faction, new HashSet<>(), new HashSet<>());
     }
 
     private Claim() {
@@ -41,12 +41,20 @@ public final class Claim {
         this(null, new HashSet<>(), new HashSet<>());
     }
 
-    public void setFaction(@NotNull String factionId) {
-        if (this.factionId.equals(factionId)) {
+    public void setFaction(@NotNull String faction) {
+        if (this.factionId.equals(faction)) {
             return;
         }
 
-        this.factionId = factionId;
+        this.factionId = faction;
+    }
+
+    public void setFaction(@NotNull Faction faction) {
+        this.setFaction(faction.getId());
+    }
+
+    public boolean isFaction(@NotNull Faction faction) {
+        return this.factionId.equals(faction.getId());
     }
 
     public boolean modifiesAccess() {

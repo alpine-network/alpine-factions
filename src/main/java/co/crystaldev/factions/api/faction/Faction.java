@@ -1,5 +1,6 @@
 package co.crystaldev.factions.api.faction;
 
+import co.crystaldev.factions.api.FactionPlayer;
 import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
@@ -10,11 +11,13 @@ import co.crystaldev.factions.api.member.Member;
 import co.crystaldev.factions.api.member.Rank;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.store.FactionStore;
+import co.crystaldev.factions.store.ClaimStore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,9 +75,186 @@ public final class Faction {
         this.roster.put(owner.getUniqueId(), member);
     }
 
-    public void markDirty() {
-        this.dirty = true;
+    // region Territory
+
+    public long getPowerLevel() {
+        if (this.getFlagValueOrDefault(FactionFlags.INFINITE_POWER)) {
+            return Integer.MAX_VALUE;
+        }
+
+        long powerLevel = 0L;
+        for (Member member : this.members.values()) {
+            FactionPlayer user = member.getUser();
+            powerLevel += user.getPower() + user.getPowerBoost();
+        }
+
+        return powerLevel;
     }
+
+    public long getMaxPowerLevel() {
+        if (this.getFlagValueOrDefault(FactionFlags.INFINITE_POWER)) {
+            return Integer.MAX_VALUE;
+        }
+
+        FactionConfig config = FactionConfig.getInstance();
+
+        long powerLevel = 0L;
+        for (Member member : this.members.values()) {
+            FactionPlayer user = member.getUser();
+            powerLevel += config.maxPlayerPower + user.getPowerBoost();
+        }
+
+        return powerLevel + this.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER);
+    }
+
+    public long getRemainingPower() {
+        if (this.getFlagValueOrDefault(FactionFlags.INFINITE_POWER)) {
+            return Integer.MAX_VALUE;
+        }
+
+        return this.getMaxPowerLevel() - this.getPowerLevel();
+    }
+
+    public int getClaimCount(@Nullable World world) {
+        return ClaimStore.getInstance().countClaims(this, world);
+    }
+
+    public int getClaimCount() {
+        return this.getClaimCount(null);
+    }
+
+    public boolean isConquerable() {
+        return this.getClaimCount() > this.getPowerLevel();
+    }
+
+    // endregion Territory
+
+    // region Relations
+
+    @NotNull
+    public RelationType relationTo(@Nullable Faction faction) {
+        if (faction == null)
+            return RelationType.NEUTRAL;
+        if (this.equals(faction))
+            return RelationType.SELF;
+        return this.relationRequests.getOrDefault(faction.getId(), RelationType.NEUTRAL);
+    }
+
+    public boolean isRelation(@Nullable Faction faction, @NotNull RelationType relation) {
+        if (faction == null) {
+            return relation == RelationType.NEUTRAL;
+        }
+
+        RelationType relationToOther = this.relationTo(faction);
+        RelationType relationToSelf = faction.relationTo(this);
+        return relationToOther == relationToSelf && relationToOther == relation;
+    }
+
+    // endregion Relations
+
+    // region Permissions & Flags
+
+    @Nullable @SuppressWarnings("unchecked")
+    public <T> T getFlagValue(@NotNull FactionFlag<T> flag) {
+        FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
+            this.markDirty();
+            return flag.wrapDefaultValue();
+        });
+        return flagHolder.getValue();
+    }
+
+    @NotNull @SuppressWarnings("unchecked")
+    public <T> T getFlagValueOrDefault(@NotNull FactionFlag<T> flag) {
+        FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
+            this.markDirty();
+            return flag.wrapDefaultValue();
+        });
+
+        T value = flagHolder.getValue();
+        if (value == null) {
+            flagHolder.setValue(value = flag.getDefaultState());
+            this.markDirty();
+        }
+
+        return value;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void setFlagValue(@NotNull FactionFlag<T> flag, @NotNull T value) {
+        FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> flag.wrapDefaultValue());
+        flagHolder.setValue(value);
+        this.markDirty();
+    }
+
+    public boolean isPermitted(@NotNull OfflinePlayer player, @NotNull Permission permission) {
+        if (this.isMember(player.getUniqueId())) {
+            return this.isPermitted(this.getMember(player).getRank(), permission);
+        }
+        else {
+            Faction other = FactionStore.getInstance().findFaction(player);
+            return this.isPermitted(this.relationTo(other), permission);
+        }
+    }
+
+    public boolean isPermitted(@NotNull Rank rank, @NotNull Permission permission) {
+        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
+            this.markDirty();
+            return new PermissionHolder(permission);
+        });
+        return permValue.isPermitted(rank);
+    }
+
+    public boolean isPermitted(@NotNull RelationType relation, @NotNull Permission permission) {
+        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
+            this.markDirty();
+            return new PermissionHolder(permission);
+        });
+        return permValue.isPermitted(relation);
+    }
+
+    public void setPermission(@NotNull Permission permission, boolean permitted, @NotNull Relational relation) {
+        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> new PermissionHolder(permission));
+        permValue.set(relation, permitted);
+        this.markDirty();
+    }
+
+    public void setPermissionBulk(@NotNull Permission permission, boolean permitted, @NotNull Relational... relations) {
+        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> new PermissionHolder(permission));
+        permValue.set(permitted, relations);
+        this.markDirty();
+    }
+
+    // endregion Permissions & Flags
+
+    // region Roster
+
+    public int getMemberLimit() {
+        return FactionConfig.getInstance().memberLimit + this.getFlagValueOrDefault(FactionFlags.MEMBER_LIMIT_MODIFIER);
+    }
+
+    public int getRosterLimit() {
+        return FactionConfig.getInstance().rosterLimit + this.getFlagValueOrDefault(FactionFlags.ROSTER_LIMIT_MODIFIER);
+    }
+
+    public int getMemberCount() {
+        return this.members.size();
+    }
+
+    public int getRosterCount() {
+        return this.roster.size();
+    }
+
+    public boolean isFull() {
+        return this.members.size() >= this.getMemberLimit();
+    }
+
+    public boolean isRosterFull() {
+        return this.roster.size() >= this.getRosterLimit();
+    }
+
+    // endregion Roster
+
+    // region Members
 
     public boolean hasOwner() {
         for (Member member : this.members.values()) {
@@ -145,43 +325,7 @@ public final class Faction {
         this.markDirty();
     }
 
-    public int getMemberLimit() {
-        return FactionConfig.getInstance().memberLimit + this.getFlagValueOrDefault(FactionFlags.MEMBER_LIMIT_MODIFIER);
-    }
-
-    public int getRosterLimit() {
-        return FactionConfig.getInstance().rosterLimit + this.getFlagValueOrDefault(FactionFlags.ROSTER_LIMIT_MODIFIER);
-    }
-
-    public int getMemberCount() {
-        return this.members.size();
-    }
-
-    public int getRosterCount() {
-        return this.roster.size();
-    }
-
-    public boolean isFull() {
-        return this.members.size() >= this.getMemberLimit();
-    }
-
-    public boolean isRosterFull() {
-        return this.roster.size() >= this.getRosterLimit();
-    }
-
-    public long getPowerLevel() {
-        if (this.getFlagValueOrDefault(FactionFlags.INFINITE_POWER)) {
-            return Integer.MAX_VALUE;
-        }
-
-        long powerLevel = 0L;
-        for (Member member : this.members.values()) {
-            powerLevel += member.getUser().getPower();
-        }
-        return powerLevel + this.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER);
-    }
-
-    public void joinFaction(@NotNull UUID player) {
+    public void memberJoined(@NotNull UUID player) {
         // remove the player's invitation
         this.invitees.remove(player);
 
@@ -255,93 +399,10 @@ public final class Faction {
         }
     }
 
-    @Nullable @SuppressWarnings("unchecked")
-    public <T> T getFlagValue(@NotNull FactionFlag<T> flag) {
-        FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
-            this.markDirty();
-            return flag.wrapDefaultValue();
-        });
-        return flagHolder.getValue();
-    }
+    // endregion Members
 
-    @NotNull @SuppressWarnings("unchecked")
-    public <T> T getFlagValueOrDefault(@NotNull FactionFlag<T> flag) {
-        FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
-            this.markDirty();
-            return flag.wrapDefaultValue();
-        });
-
-        T value = flagHolder.getValue();
-        if (value == null) {
-            flagHolder.setValue(value = flag.getDefaultState());
-            this.markDirty();
-        }
-
-        return value;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> void setFlagValue(@NotNull FactionFlag<T> flag, @NotNull T value) {
-        FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> flag.wrapDefaultValue());
-        flagHolder.setValue(value);
-        this.markDirty();
-    }
-
-    public boolean isPermitted(@NotNull OfflinePlayer player, @NotNull Permission permission) {
-        if (this.isMember(player.getUniqueId())) {
-            return this.isPermitted(this.getMember(player).getRank(), permission);
-        }
-        else {
-            Faction other = FactionStore.getInstance().findFaction(player);
-            return this.isPermitted(this.relationTo(other), permission);
-        }
-    }
-
-    public boolean isPermitted(@NotNull Rank rank, @NotNull Permission permission) {
-        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
-            this.markDirty();
-            return new PermissionHolder(permission);
-        });
-        return permValue.isPermitted(rank);
-    }
-
-    public boolean isPermitted(@NotNull RelationType relation, @NotNull Permission permission) {
-        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
-            this.markDirty();
-            return new PermissionHolder(permission);
-        });
-        return permValue.isPermitted(relation);
-    }
-
-    public void setPermission(@NotNull Permission permission, boolean permitted, @NotNull Relational relation) {
-        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> new PermissionHolder(permission));
-        permValue.set(relation, permitted);
-        this.markDirty();
-    }
-
-    public void setPermissionBulk(@NotNull Permission permission, boolean permitted, @NotNull Relational... relations) {
-        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> new PermissionHolder(permission));
-        permValue.set(permitted, relations);
-        this.markDirty();
-    }
-
-    @NotNull
-    public RelationType relationTo(@Nullable Faction faction) {
-        if (faction == null)
-            return RelationType.NEUTRAL;
-        if (this.equals(faction))
-            return RelationType.SELF;
-        return this.relationRequests.getOrDefault(faction.getId(), RelationType.NEUTRAL);
-    }
-
-    public boolean isRelation(@Nullable Faction faction, @NotNull RelationType relation) {
-        if (faction == null) {
-            return relation == RelationType.NEUTRAL;
-        }
-
-        RelationType relationToOther = this.relationTo(faction);
-        RelationType relationToSelf = faction.relationTo(this);
-        return relationToOther == relationToSelf && relationToOther == relation;
+    public void markDirty() {
+        this.dirty = true;
     }
 
     @Override

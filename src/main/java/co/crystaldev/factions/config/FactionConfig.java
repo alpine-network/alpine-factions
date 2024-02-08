@@ -68,4 +68,10 @@ public final class FactionConfig extends AlpineConfig {
             "The maximum amount of claims that can be filled via `/f claim fill`."
     })
     public int maxClaimFillVolume = 1000;
+
+    @Comment({
+            "",
+            "The maximum distance from the player (in chunks) where land can be claimed."
+    })
+    public int maxClaimDistance = 30;
 }

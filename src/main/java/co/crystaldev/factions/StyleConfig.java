@@ -1,4 +1,4 @@
-package co.crystaldev.factions.config;
+package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.framework.config.AlpineConfig;
 import co.crystaldev.factions.api.faction.RelationType;
@@ -20,6 +20,10 @@ import java.util.Map;
 /**
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 12/24/2023
+ * <br>
+ * TODO: introduce Activatable priority in AlpineCore
+ * This class needs to be loaded before the other configuration classes
+ * due to our Adventure MiniMessage tag resolvers.
  */
 public final class StyleConfig extends AlpineConfig {
 

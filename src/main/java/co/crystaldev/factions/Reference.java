@@ -2,7 +2,7 @@ package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.util.UuidTypeAdapter;
 import co.crystaldev.factions.api.faction.flag.FlagHolder;
-import co.crystaldev.factions.store.claim.Claim;
+import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.util.ComponentTypeAdapter;
 import co.crystaldev.factions.util.tags.ColorwayTagResolver;
 import com.google.common.reflect.TypeToken;

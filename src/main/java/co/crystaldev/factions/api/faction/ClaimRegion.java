@@ -1,4 +1,4 @@
-package co.crystaldev.factions.store.claim;
+package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.factions.store.FactionStore;
 import com.google.gson.annotations.SerializedName;
@@ -17,7 +17,7 @@ import java.util.List;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/06/2024
  */
-public final class RegionClaimStorage {
+public final class ClaimRegion {
 
     @Getter
     private final String key;
@@ -33,12 +33,12 @@ public final class RegionClaimStorage {
 
     private transient boolean dirty;
 
-    public RegionClaimStorage(@NotNull String key, @NotNull String worldName) {
+    public ClaimRegion(@NotNull String key, @NotNull String worldName) {
         this.key = key;
         this.worldName = worldName;
     }
 
-    private RegionClaimStorage() {
+    private ClaimRegion() {
         // should only get here via Gson
         this(null, null);
     }
@@ -65,7 +65,8 @@ public final class RegionClaimStorage {
     }
 
     @Nullable
-    public Claim putClaim(int chunkX, int chunkZ, @NotNull String factionId) {
+    public Claim putClaim(int chunkX, int chunkZ, @NotNull Faction faction) {
+        String factionId = faction.getId();
         if (factionId.equals(FactionStore.WILDERNESS_ID)) {
             return null;
         }
@@ -99,11 +100,14 @@ public final class RegionClaimStorage {
     }
 
     @NotNull
-    public List<ClaimedChunk> getClaims(@NotNull String factionId) {
+    public List<ClaimedChunk> getClaims(@NotNull Faction faction) {
         World world = Bukkit.getWorld(this.worldName);
         List<ClaimedChunk> chunks = new ArrayList<>();
 
         this.chunkToClaim.forEach((key, claim) -> {
+            if (!claim.getFactionId().equals(faction.getId()))
+                return;
+
             String[] split = key.split(",");
             int x = Integer.parseInt(split[0]);
             int z = Integer.parseInt(split[1]);
@@ -115,8 +119,12 @@ public final class RegionClaimStorage {
         return chunks;
     }
 
-    public boolean contains(@NotNull String factionId) {
-        return this.claimCount.containsKey(factionId);
+    public int countClaims(@NotNull Faction faction) {
+        return this.claimCount.getOrDefault(faction.getId(), 0);
+    }
+
+    public boolean contains(@NotNull Faction faction) {
+        return this.claimCount.containsKey(faction.getId());
     }
 
     public boolean isEmpty() {

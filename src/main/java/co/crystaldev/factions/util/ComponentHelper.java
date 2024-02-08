@@ -1,6 +1,6 @@
 package co.crystaldev.factions.util;
 
-import co.crystaldev.factions.config.StyleConfig;
+import co.crystaldev.factions.StyleConfig;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -107,6 +107,35 @@ public final class ComponentHelper {
     @NotNull
     public static Component joinNewLines(@NotNull Iterable<Component> components) {
         return Component.join(JoinConfiguration.newlines(), components);
+    }
+
+    /**
+     * Apply the given style to the given component.
+     *
+     * @param style     The style.
+     * @param component The component.
+     * @return The stylized component.
+     * @see StyleConfig
+     */
+    @NotNull
+    public static Component stylize(@Nullable String style, @NotNull Component component, boolean force) {
+        if (style == null) {
+            return component;
+        }
+
+        if (!force) {
+            return stylize(style, component);
+        }
+
+        for (StyleBuilderApplicable type : StyleConfig.parseStyle(style)) {
+            if (type instanceof TextColor) {
+                component = component.color((TextColor) type);
+            }
+            else {
+                component = component.decorate((TextDecoration) type);
+            }
+        }
+        return component;
     }
 
     /**
