@@ -10,6 +10,7 @@ import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.ClaimStore;
+import co.crystaldev.factions.util.ChunkCoordinate;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.LocationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
@@ -54,7 +55,7 @@ public final class ClaimCommand extends BaseFactionsCommand {
         }
 
         // discover chunks to claim
-        Set<Chunk> chunks;
+        Set<ChunkCoordinate> chunks;
         switch (type) {
             case LINE: {
                 chunks = Claiming.line(origin, radius, LocationHelper.getFacing(player.getLocation()));
@@ -90,7 +91,7 @@ public final class ClaimCommand extends BaseFactionsCommand {
         }
 
         // discover chunks to claim
-        Set<Chunk> chunks = Claiming.fill(origin);
+        Set<ChunkCoordinate> chunks = Claiming.fill(origin);
         if (chunks == null) {
             config.fillLimit.send(player, "limit", FactionConfig.getInstance().maxClaimFillVolume);
             return;
@@ -115,7 +116,8 @@ public final class ClaimCommand extends BaseFactionsCommand {
         }
 
         // attempt to claim
-        Claiming.attemptClaim(player, "square", replacedFaction, claimingFaction, new HashSet<>(Collections.singleton(origin)), origin);
+        Set<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(new ChunkCoordinate(origin.getX(), origin.getZ())));
+        Claiming.attemptClaim(player, "square", replacedFaction, claimingFaction, chunks, origin);
     }
 
     @Execute(name = "near")
@@ -134,7 +136,8 @@ public final class ClaimCommand extends BaseFactionsCommand {
         }
 
         // attempt to claim
-        Claiming.attemptClaim(player, "near", replacedFaction, claimingFaction, new HashSet<>(Collections.singleton(chunk)), chunk);
+        HashSet<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(new ChunkCoordinate(chunkX, chunkZ)));
+        Claiming.attemptClaim(player, "near", replacedFaction, claimingFaction, chunks, chunk);
     }
 
     @Execute(name = "auto", aliases = "a")

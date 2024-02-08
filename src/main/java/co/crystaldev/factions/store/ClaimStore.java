@@ -95,8 +95,8 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
     }
 
     @Nullable
-    public Faction getFaction(@NotNull Chunk chunk) {
-        Claim claim = this.getClaim(chunk);
+    public Faction getFaction(@NotNull String worldName, int chunkX, int chunkZ) {
+        Claim claim = this.getClaim(worldName, chunkX, chunkZ);
         if (claim == null) {
             return null;
         }
@@ -105,44 +105,79 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
     }
 
     @Nullable
-    public Claim getClaim(@NotNull Chunk chunk) {
-        String key = getKey(chunk);
+    public Faction getFaction(@NotNull Chunk chunk) {
+        return this.getFaction(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+    }
+
+    @NotNull
+    public Faction getFactionOrDefault(@NotNull String worldName, int chunkX, int chunkZ) {
+        FactionStore store = FactionStore.getInstance();
+        Claim claim = this.getClaim(worldName, chunkX, chunkZ);
+        if (claim == null) {
+            return store.getWilderness();
+        }
+
+        return store.getFaction(claim.getFactionId());
+    }
+
+    @NotNull
+    public Faction getFactionOrDefault(@NotNull Chunk chunk) {
+        return this.getFactionOrDefault(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+    }
+
+    @Nullable
+    public Claim getClaim(@NotNull String worldName, int chunkX, int chunkZ) {
+        String key = getKey(worldName, chunkX, chunkZ);
         if (!this.has(key)) {
             return null;
         }
 
-        return this.get(key).getClaim(chunk.getX(), chunk.getZ());
+        return this.get(key).getClaim(chunkX, chunkZ);
     }
 
-    public boolean isClaimed(@NotNull Chunk chunk) {
-        String key = getKey(chunk);
+    @Nullable
+    public Claim getClaim(@NotNull Chunk chunk) {
+        return this.getClaim(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+    }
+
+    public boolean isClaimed(@NotNull String worldName, int chunkX, int chunkZ) {
+        String key = getKey(worldName, chunkX, chunkZ);
         if (!this.has(key)) {
             return false;
         }
 
-        return this.get(key).isClaimed(chunk.getX(), chunk.getZ());
+        return this.get(key).isClaimed(chunkX, chunkZ);
+    }
+
+    public boolean isClaimed(@NotNull Chunk chunk) {
+        return this.isClaimed(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+    }
+
+    @Nullable
+    public Claim putClaim(@NotNull String worldName, int chunkX, int chunkZ, @NotNull Faction faction) {
+        String key = getKey(worldName, chunkX, chunkZ);
+        ClaimRegion storage = this.getOrCreate(key, () -> {
+            ClaimRegion newStorage = new ClaimRegion(key, worldName);
+            this.claimStorage.put(key, newStorage);
+            return newStorage;
+        });
+        return storage.putClaim(chunkX, chunkZ, faction);
     }
 
     @Nullable
     public Claim putClaim(@NotNull Chunk chunk, @NotNull Faction faction) {
-        String key = getKey(chunk);
-        ClaimRegion storage = this.getOrCreate(key, () -> {
-            ClaimRegion newStorage = new ClaimRegion(key, chunk.getWorld().getName());
-            this.claimStorage.put(key, newStorage);
-            return newStorage;
-        });
-        return storage.putClaim(chunk.getX(), chunk.getZ(), faction);
+        return this.putClaim(chunk.getWorld().getName(), chunk.getX(), chunk.getZ(), faction);
     }
 
     @Nullable
-    public Claim removeClaim(@NotNull Chunk chunk) {
-        String key = getKey(chunk);
+    public Claim removeClaim(@NotNull String worldName, int chunkX, int chunkZ) {
+        String key = getKey(worldName, chunkX, chunkZ);
         if (!this.has(key)) {
             return null;
         }
 
         ClaimRegion storage = this.get(key);
-        Claim removed = storage.removeClaim(chunk.getX(), chunk.getZ());
+        Claim removed = storage.removeClaim(chunkX, chunkZ);
         if (storage.isEmpty()) {
             this.claimStorage.remove(key);
             this.remove(key);
@@ -151,11 +186,9 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
         return removed;
     }
 
-    public void updateChunk(@NotNull Chunk chunk) {
-        String key = getKey(chunk);
-        if (this.has(key)) {
-            this.get(key).markDirty();
-        }
+    @Nullable
+    public Claim removeClaim(@NotNull Chunk chunk) {
+        return this.removeClaim(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 
     public void saveClaims() {
@@ -173,9 +206,9 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
     }
 
     @NotNull
-    private static String getKey(@NotNull Chunk chunk) {
-        int x = chunk.getX() >> 4;
-        int z = chunk.getZ() >> 4;
-        return chunk.getWorld().getName() + "_" + (x + "_" + z).hashCode();
+    private static String getKey(@NotNull String worldName, int x, int z) {
+        x >>= 4;
+        z >>= 4;
+        return worldName + "_" + (x + "_" + z).hashCode();
     }
 }

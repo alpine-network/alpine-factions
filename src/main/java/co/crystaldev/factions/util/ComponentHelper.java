@@ -1,6 +1,6 @@
 package co.crystaldev.factions.util;
 
-import co.crystaldev.factions.StyleConfig;
+import co.crystaldev.factions.config.StyleConfig;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
@@ -8,6 +8,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.StyleBuilderApplicable;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.apache.commons.lang.WordUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +24,20 @@ import java.util.stream.Stream;
 public final class ComponentHelper {
 
     /**
+     * Get the length of the given component.
+     *
+     * @param component The component.
+     * @return The length.
+     */
+    public static int length(@Nullable Component component) {
+        if (component == null) {
+            return 0;
+        }
+
+        return PlainTextComponentSerializer.plainText().serialize(component).length();
+    }
+
+    /**
      * Wraps text based on its length.
      *
      * @param text      The text to wrap.
@@ -30,7 +45,7 @@ public final class ComponentHelper {
      * @return The wrapped text.
      */
     @NotNull
-    public Component wrap(@NotNull String text, int maxLength) {
+    public static Component wrap(@NotNull String text, int maxLength) {
         return ComponentHelper.joinNewLines(Stream.of(WordUtils.wrap(text, maxLength, "\n", true))
                 .map(Component::text)
                 .collect(Collectors.toList()));

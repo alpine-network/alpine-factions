@@ -3,7 +3,7 @@ package co.crystaldev.factions.util;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.RelationType;
 import co.crystaldev.factions.api.member.Member;
-import co.crystaldev.factions.StyleConfig;
+import co.crystaldev.factions.config.StyleConfig;
 import co.crystaldev.factions.store.FactionStore;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
@@ -19,6 +19,10 @@ import java.util.Objects;
  */
 @UtilityClass
 public final class FactionHelper {
+
+    public static boolean equals(@Nullable Faction a, @Nullable Faction b) {
+        return (a == b) || (a != null && a.equals(b)) || (b != null && b.equals(a));
+    }
 
     @NotNull
     public static Component formatRelational(@NotNull Player viewer, @Nullable Faction faction, @NotNull Component component) {

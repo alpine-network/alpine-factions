@@ -2,8 +2,10 @@ package co.crystaldev.factions.util;
 
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.config.MessageConfig;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +19,8 @@ import java.text.DecimalFormat;
 public final class Formatting {
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
+
+    private static final int TITLE_LENGTH = 54;
 
     @NotNull
     public static String formatPlaceholders(@Nullable String string, @NotNull Object... placeholders) {
@@ -45,5 +49,27 @@ public final class Formatting {
         }
 
         return string;
+    }
+
+    @NotNull
+    public static Component title(@NotNull Component component) {
+        MessageConfig config = MessageConfig.getInstance();
+
+        Component center = config.titleFormat.build("content", component);
+
+        if (config.titleUsesPadding) {
+            int paddingLength = Math.max(4, (TITLE_LENGTH - ComponentHelper.length(center)) / 2);
+            String paddingString = StringHelper.repeat(config.paddingCharacter, paddingLength);
+            Component padding = ComponentHelper.stylize(config.paddingStyle, Component.text(paddingString));
+            return ComponentHelper.join(padding, center, padding);
+        }
+        else {
+            return center;
+        }
+    }
+
+    @NotNull
+    public static Component title(@NotNull String component) {
+        return title(Component.text(component));
     }
 }

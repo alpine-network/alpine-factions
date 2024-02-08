@@ -7,9 +7,7 @@ import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.LocationHelper;
-import co.crystaldev.factions.util.Messaging;
+import co.crystaldev.factions.util.*;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Chunk;
@@ -31,7 +29,7 @@ final class Claiming {
 
     public static void attemptClaim(@NotNull Player player, @NotNull String action,
                                     @Nullable Faction replacedFaction, @Nullable Faction claimingFaction,
-                                    @NotNull Set<Chunk> chunks, @NotNull Chunk origin) {
+                                    @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
 
@@ -60,18 +58,18 @@ final class Claiming {
 
         // iterate and validate chunks
         int conqueredChunkCount = 0;
-        Map<Faction, List<Chunk>> conqueredFactions = new HashMap<>();
+        Map<Faction, List<ChunkCoordinate>> conqueredFactions = new HashMap<>();
         ClaimStore store = ClaimStore.getInstance();
-        Iterator<Chunk> iterator = chunks.iterator();
+        Iterator<ChunkCoordinate> iterator = chunks.iterator();
         while (iterator.hasNext()) {
-            Chunk next = iterator.next();
+            ChunkCoordinate next = iterator.next();
 
             if (LocationHelper.distance(next.getX(), next.getZ(), cx, cz) > factionConfig.maxClaimDistance) {
                 messageConfig.claimTooFar.send(player);
                 return;
             }
 
-            Faction faction = store.getFaction(next);
+            Faction faction = store.getFaction(origin.getWorld().getName(), next.getX(), next.getZ());
             if (faction != null) {
                 // this chunk is claimed
 
@@ -107,12 +105,12 @@ final class Claiming {
         }
 
         // claim/unclaim the land
-        for (Chunk chunk : chunks) {
+        for (ChunkCoordinate chunk : chunks) {
             if (claimingFaction == null) {
-                store.removeClaim(chunk);
+                store.removeClaim(origin.getWorld().getName(), chunk.getX(), chunk.getZ());
             }
             else {
-                store.putClaim(chunk, claimingFaction);
+                store.putClaim(origin.getWorld().getName(), chunk.getX(), chunk.getZ(), claimingFaction);
             }
         }
 
@@ -139,15 +137,17 @@ final class Claiming {
             conqueredFactions.forEach((faction, conquered) -> {
                 ConfigText message = conquered.size() == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
 
+                Chunk chunk = origin.getWorld().getChunkAt(conquered.get(0).getX(), conquered.get(0).getZ());
+
                 // notify the conquered faction
                 Messaging.broadcast(faction, pl -> {
-                    return buildClaimMessage(pl, player, message, conquered.get(0), action,
+                    return buildClaimMessage(pl, player, message, chunk, action,
                             claimType, conquered.size(), faction, newFaction);
                 });
 
                 // notify the new faction
                 Messaging.broadcast(claimingFaction == null ? replacedFaction : claimingFaction, pl -> {
-                    return buildClaimMessage(pl, player, message, conquered.get(0), action,
+                    return buildClaimMessage(pl, player, message, chunk, action,
                             claimType, conquered.size(), faction, newFaction);
                 });
             });
@@ -178,17 +178,16 @@ final class Claiming {
     }
 
     @NotNull
-    public static Set<Chunk> square(@NotNull Chunk origin, int radius) {
+    public static Set<ChunkCoordinate> square(@NotNull Chunk origin, int radius) {
         radius--;
 
-        World world = origin.getWorld();
         int chunkX = origin.getX();
         int chunkZ = origin.getZ();
 
-        Set<Chunk> chunks = new HashSet<>();
+        Set<ChunkCoordinate> chunks = new HashSet<>();
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
-                chunks.add(world.getChunkAt(chunkX + x, chunkZ + z));
+                chunks.add(new ChunkCoordinate(chunkX + x, chunkZ + z));
             }
         }
 
@@ -196,14 +195,13 @@ final class Claiming {
     }
 
     @NotNull
-    public static Set<Chunk> line(@NotNull Chunk origin, int length, @NotNull BlockFace facing) {
-        World world = origin.getWorld();
+    public static Set<ChunkCoordinate> line(@NotNull Chunk origin, int length, @NotNull BlockFace facing) {
         int chunkX = origin.getX();
         int chunkZ = origin.getZ();
 
-        Set<Chunk> chunks = new HashSet<>();
+        Set<ChunkCoordinate> chunks = new HashSet<>();
         for (int i = 0; i < length; i++) {
-            chunks.add(world.getChunkAt(chunkX, chunkZ));
+            chunks.add(new ChunkCoordinate(chunkX, chunkZ));
             chunkX += facing.getModX();
             chunkZ += facing.getModZ();
         }
@@ -212,21 +210,20 @@ final class Claiming {
     }
 
     @NotNull
-    public static Set<Chunk> circle(@NotNull Chunk origin, int radius) {
+    public static Set<ChunkCoordinate> circle(@NotNull Chunk origin, int radius) {
         radius--;
 
-        World world = origin.getWorld();
         int chunkX = origin.getX();
         int chunkZ = origin.getZ();
         int radiusSquared = radius * radius;
 
-        Set<Chunk> chunks = new HashSet<>();
+        Set<ChunkCoordinate> chunks = new HashSet<>();
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
                 if (x * x + z * z > radiusSquared)
                     continue;
 
-                chunks.add(world.getChunkAt(chunkX + x, chunkZ + z));
+                chunks.add(new ChunkCoordinate(chunkX + x, chunkZ + z));
             }
         }
 
@@ -234,35 +231,37 @@ final class Claiming {
     }
 
     @Nullable
-    public static Set<Chunk> fill(@NotNull Chunk origin) {
+    public static Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
         int max = FactionConfig.getInstance().maxClaimFillVolume;
+        World world = origin.getWorld();
         ClaimStore store = ClaimStore.getInstance();
-        Set<Chunk> chunks = new HashSet<>();
+        Set<ChunkCoordinate> chunks = new HashSet<>();
 
         // discover chunks to fill
-        chunks.add(origin);
-        recurse(chunks, store.getFaction(origin), store, max);
+        chunks.add(new ChunkCoordinate(origin.getX(), origin.getZ()));
+        recurse(chunks, world.getName(), store.getFaction(origin), store, max);
 
         // limit was reached, disregard
         if (chunks.size() >= max) {
             return null;
         }
 
+        // convert to chunks
         return chunks;
     }
 
-    private static void recurse(@NotNull Set<Chunk> chunks, @Nullable Faction faction, @NotNull ClaimStore store, int max) {
-        Set<Chunk> nearby = new HashSet<>();
-        for (Chunk chunk : chunks) {
+    private static void recurse(@NotNull Set<ChunkCoordinate> chunks, @NotNull String world,
+                                @Nullable Faction faction, @NotNull ClaimStore store, int max) {
+        Set<ChunkCoordinate> nearby = new HashSet<>();
+        for (ChunkCoordinate chunk : chunks) {
             int x = chunk.getX();
             int z = chunk.getZ();
-            World world = chunk.getWorld();
 
             // check surrounding chunks
-            check(nearby, chunks, world.getChunkAt(x + 1, z), faction, store);
-            check(nearby, chunks, world.getChunkAt(x - 1, z), faction, store);
-            check(nearby, chunks, world.getChunkAt(x, z + 1), faction, store);
-            check(nearby, chunks, world.getChunkAt(x, z - 1), faction, store);
+            check(nearby, chunks, world, x + 1, z, faction, store);
+            check(nearby, chunks, world, x - 1, z, faction, store);
+            check(nearby, chunks, world, x, z + 1, faction, store);
+            check(nearby, chunks, world, x, z - 1, faction, store);
         }
 
         // no nearby chunks were found, fill complete
@@ -270,25 +269,29 @@ final class Claiming {
             return;
         }
 
+        // add the new chunks
+        chunks.addAll(nearby);
+
         // keep searching
         if (nearby.size() < max) {
-            recurse(chunks, faction, store, max);
+            recurse(chunks, world, faction, store, max);
         }
     }
 
-    private static void check(@NotNull Set<Chunk> nearby, @NotNull Set<Chunk> filled, @NotNull Chunk chunk,
-                              @Nullable Faction faction, @NotNull ClaimStore store) {
-        if (filled.contains(chunk)) {
+    private static void check(@NotNull Set<ChunkCoordinate> nearby, @NotNull Set<ChunkCoordinate> filled,
+                              @NotNull String world, int x, int z, @Nullable Faction faction, @NotNull ClaimStore store) {
+        ChunkCoordinate coord = new ChunkCoordinate(x, z);
+        if (filled.contains(coord)) {
             return;
         }
 
         // ensure claim is the same as the origin claim
-        Faction claimOwner = store.getFaction(chunk);
-        if (!Objects.equals(faction, claimOwner)) {
+        Faction claimOwner = store.getFaction(world, x, z);
+        if (!FactionHelper.equals(faction, claimOwner)) {
             return;
         }
 
         // able to claim
-        nearby.add(chunk);
+        nearby.add(coord);
     }
 }

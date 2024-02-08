@@ -2,10 +2,8 @@ package co.crystaldev.factions.config;
 
 import co.crystaldev.alpinecore.framework.config.AlpineConfig;
 import co.crystaldev.factions.config.type.ConfigText;
-import co.crystaldev.factions.util.ComponentHelper;
 import de.exlll.configlib.Comment;
 import lombok.Getter;
-import net.kyori.adventure.text.Component;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -36,6 +34,18 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText missingFactionPerm = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> does not allow you to <error_highlight>%action%</error_highlight>");
 
     public ConfigText unknownFaction = ConfigText.of("%error_prefix% No faction or player was found with the name <error_highlight>%value%</error_highlight>");
+
+    @Comment({
+            "",
+            "| Formatting"
+    })
+    public ConfigText titleFormat = ConfigText.of("<dark_gray><</dark_gray> %content% <dark_gray>></dark_gray>");
+
+    public boolean titleUsesPadding = true;
+
+    public String paddingCharacter = "-";
+
+    public String paddingStyle = "dark_gray strikethrough";
 
     @Comment({
             "",
@@ -92,4 +102,20 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText fillLimit = ConfigText.of("%error_prefix% Reached the fill limit of <error_highlight>%limit% chunks</error_highlight>");
 
     public ConfigText claimTooFar = ConfigText.of("%error_prefix% Unable to claim land too far away.");
+
+    @Comment({
+            "",
+            "| Map"
+    })
+    public ConfigText mapTitle = ConfigText.of("<emphasis>%world% %chunk_x%, %chunk_z%</emphasis> <separator>|</separator> %faction%");
+
+    public ConfigText mapLegendFormat = ConfigText.of("%character%: %faction%");
+
+    public ConfigText mapLegendOverflowFormat = ConfigText.of("%character%: <error_highlight>Unable to represent all factions on this map.</error_highlight>");
+
+    public ConfigText mapCenter = ConfigText.of("<aqua>+</aqua>");
+
+    public String mapCompassStyle = "dark_gray";
+
+    public String mapCompassDirectionStyle = "white";
 }
