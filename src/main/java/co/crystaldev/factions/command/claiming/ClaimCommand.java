@@ -126,8 +126,7 @@ public final class ClaimCommand extends BaseFactionsCommand {
             @Arg("x") int chunkX,
             @Arg("z") int chunkZ
     ) {
-        Chunk chunk = player.getWorld().getChunkAt(chunkX, chunkZ);
-        Faction replacedFaction = ClaimStore.getInstance().getFaction(chunk);
+        Faction replacedFaction = ClaimStore.getInstance().getFaction(player.getWorld().getName(), chunkX, chunkZ);
         Faction claimingFaction = FactionStore.getInstance().findFaction(player);
 
         // is the player able to claim this land?
@@ -136,6 +135,7 @@ public final class ClaimCommand extends BaseFactionsCommand {
         }
 
         // attempt to claim
+        Chunk chunk = player.getWorld().getChunkAt(chunkX, chunkZ);
         HashSet<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(new ChunkCoordinate(chunkX, chunkZ)));
         Claiming.attemptClaim(player, "near", replacedFaction, claimingFaction, chunks, chunk);
     }
