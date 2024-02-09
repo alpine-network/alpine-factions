@@ -21,6 +21,7 @@ import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.optional.OptionalArg;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 
@@ -44,9 +45,11 @@ public final class ClaimCommand extends BaseFactionsCommand {
     public void execute(
             @Context Player player,
             @Arg("type") @Key(ClaimTypeArgumentResolver.KEY) ClaimType type,
-            @Arg("radius") int radius,
+            @Arg("radius") Optional<Integer> rad,
             @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
     ) {
+        int radius = Math.max(rad.orElse(1), 1);
+
         Chunk origin = player.getLocation().getChunk();
         Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
         Faction claimingFaction = faction.orElse(FactionStore.getInstance().findFaction(player));

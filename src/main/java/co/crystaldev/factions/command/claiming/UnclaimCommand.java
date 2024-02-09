@@ -1,7 +1,6 @@
 package co.crystaldev.factions.command.claiming;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
@@ -27,6 +26,7 @@ import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.optional.OptionalArg;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
@@ -49,8 +49,10 @@ public final class UnclaimCommand extends BaseFactionsCommand {
     public void execute(
             @Context Player player,
             @Arg("type") @Key(ClaimTypeArgumentResolver.KEY) ClaimType type,
-            @Arg("radius") int radius
+            @OptionalArg("radius") Optional<Integer> rad
     ) {
+        int radius = Math.max(rad.orElse(1), 1);
+
         Chunk origin = player.getLocation().getChunk();
         Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
 
