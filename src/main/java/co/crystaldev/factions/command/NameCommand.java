@@ -45,9 +45,7 @@ public final class NameCommand extends BaseFactionsCommand {
 
         // ensure the user has permission
         if (!faction.isPermitted(player, Permissions.MODIFY_NAME)) {
-            messageConfig.missingFactionPerm.send(player,
-                    "faction_name", faction.getName(),
-                    "faction", FactionHelper.formatRelational(player, faction));
+            FactionHelper.missingPermission(player, faction, "modify name");
             return;
         }
 

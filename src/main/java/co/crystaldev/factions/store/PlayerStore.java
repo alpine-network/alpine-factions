@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -33,5 +34,13 @@ public final class PlayerStore extends AlpineStore<UUID, FactionPlayer> {
     @NotNull
     public FactionPlayer getPlayer(@NotNull UUID id) {
         return this.getOrCreate(id, () -> new FactionPlayer(id));
+    }
+
+    @NotNull
+    public FactionPlayer wrapPlayer(@NotNull UUID id, @NotNull Consumer<FactionPlayer> playerConsumer) {
+        FactionPlayer player = this.getPlayer(id);
+        playerConsumer.accept(player);
+        this.put(id, player);
+        return player;
     }
 }

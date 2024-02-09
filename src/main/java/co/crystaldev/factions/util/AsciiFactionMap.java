@@ -1,12 +1,8 @@
-package co.crystaldev.factions.util.map;
+package co.crystaldev.factions.util;
 
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.ClaimStore;
-import co.crystaldev.factions.util.ComponentHelper;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Formatting;
-import co.crystaldev.factions.util.LocationHelper;
 import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;

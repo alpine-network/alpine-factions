@@ -12,8 +12,10 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.AlphanumericArgumentResolver;
 import co.crystaldev.factions.command.argument.ClaimTypeArgumentResolver;
 import co.crystaldev.factions.command.argument.FactionArgumentResolver;
+import co.crystaldev.factions.command.argument.WorldClaimArgumentResolver;
 import co.crystaldev.factions.command.claiming.ClaimType;
 import co.crystaldev.factions.event.ServerTickEvent;
+import co.crystaldev.factions.handler.PlayerHandler;
 import dev.rollczi.litecommands.LiteCommandsBuilder;
 import dev.rollczi.litecommands.argument.ArgumentKey;
 import dev.rollczi.litecommands.bukkit.LiteBukkitSettings;
@@ -36,6 +38,9 @@ public final class AlpineFactions extends AlpinePlugin {
     { instance = this; }
 
     private static final AtomicInteger TICK_COUNTER = new AtomicInteger();
+
+    @Getter
+    private final PlayerHandler playerHandler = new PlayerHandler();
 
     @Getter
     private final FlagRegistry flagRegistry = new FlagRegistry();
@@ -68,6 +73,7 @@ public final class AlpineFactions extends AlpinePlugin {
         super.setupCommandManager(builder);
 
         builder.argument(String.class, ArgumentKey.of(AlphanumericArgumentResolver.KEY), new AlphanumericArgumentResolver());
+        builder.argument(String.class, ArgumentKey.of(WorldClaimArgumentResolver.KEY), new WorldClaimArgumentResolver());
         builder.argument(ClaimType.class, ArgumentKey.of(ClaimTypeArgumentResolver.KEY), new ClaimTypeArgumentResolver());
         builder.argument(Faction.class, ArgumentKey.of(FactionArgumentResolver.KEY), new FactionArgumentResolver());
     }

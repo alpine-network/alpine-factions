@@ -157,11 +157,14 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
     public Claim putClaim(@NotNull String worldName, int chunkX, int chunkZ, @NotNull Faction faction) {
         String key = getKey(worldName, chunkX, chunkZ);
         ClaimRegion storage = this.getOrCreate(key, () -> {
-            ClaimRegion newStorage = new ClaimRegion(key, worldName);
-            this.claimStorage.put(key, newStorage);
-            return newStorage;
+            ClaimRegion region = new ClaimRegion(key, worldName);
+            this.claimStorage.put(key, region);
+            return region;
         });
-        return storage.putClaim(chunkX, chunkZ, faction);
+
+        Claim claim = storage.putClaim(chunkX, chunkZ, faction);
+        this.put(key, storage);
+        return claim;
     }
 
     @Nullable
@@ -183,6 +186,7 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
             this.remove(key);
         }
 
+        this.put(key, storage);
         return removed;
     }
 

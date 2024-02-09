@@ -4,7 +4,6 @@ import co.crystaldev.factions.store.FactionStore;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -111,9 +110,7 @@ public final class ClaimRegion {
             String[] split = key.split(",");
             int x = Integer.parseInt(split[0]);
             int z = Integer.parseInt(split[1]);
-
-            Chunk chunk = world.getChunkAt(x, z);
-            chunks.add(new ClaimedChunk(chunk, claim));
+            chunks.add(new ClaimedChunk(claim, world.getName(), x, z));
         });
 
         return chunks;
@@ -139,6 +136,7 @@ public final class ClaimRegion {
         else {
             this.claimCount.put(factionId, count);
         }
+        this.markDirty();
     }
 
     @NotNull

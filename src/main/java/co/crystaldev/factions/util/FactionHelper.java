@@ -3,6 +3,7 @@ package co.crystaldev.factions.util;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.RelationType;
 import co.crystaldev.factions.api.member.Member;
+import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.StyleConfig;
 import co.crystaldev.factions.store.FactionStore;
 import lombok.experimental.UtilityClass;
@@ -74,5 +75,13 @@ public final class FactionHelper {
         Faction playerFaction = FactionStore.getInstance().findFaction(viewer);
         String factionName = Objects.equals(faction, playerFaction) ? "Your faction" : (faction == null ? "< null >" : faction.getName());
         return formatRelational(viewer, faction, factionName);
+    }
+
+    public static void missingPermission(@NotNull Player player, @NotNull Faction faction, @NotNull String action) {
+        MessageConfig.getInstance().missingFactionPerm.send(player,
+                "action", action,
+                "faction", FactionHelper.formatRelational(player, faction),
+                "faction_name", faction.getName()
+        );
     }
 }

@@ -32,6 +32,7 @@ final class Claiming {
                                     @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
+        FactionStore factionStore = FactionStore.getInstance();
 
         Chunk playerChunk = player.getLocation().getChunk();
         int cx = playerChunk.getX();
@@ -42,9 +43,14 @@ final class Claiming {
             return;
         }
 
+        // ensure wilderness is always null
+        if (claimingFaction != null && claimingFaction.getId().equals(FactionStore.WILDERNESS_ID)) {
+            claimingFaction = null;
+        }
+
         // ensure the claiming faction has enough power to claim this land
         if (claimingFaction != null && claimingFaction.getRemainingPower() < chunks.size()) {
-            messageConfig.notEnoughPower.send(player,
+            messageConfig.insufficientPower.send(player,
                     "faction", FactionHelper.formatRelational(player, claimingFaction),
                     "faction_name", claimingFaction.getName());
             return;
@@ -57,9 +63,10 @@ final class Claiming {
         }
 
         // iterate and validate chunks
+        Faction playerFaction = factionStore.findFactionOrDefault(player);
+        ClaimStore store = ClaimStore.getInstance();
         int conqueredChunkCount = 0;
         Map<Faction, List<ChunkCoordinate>> conqueredFactions = new HashMap<>();
-        ClaimStore store = ClaimStore.getInstance();
         Iterator<ChunkCoordinate> iterator = chunks.iterator();
         while (iterator.hasNext()) {
             ChunkCoordinate next = iterator.next();
@@ -86,7 +93,7 @@ final class Claiming {
                             "faction_name", faction.getName());
                     return;
                 }
-                else {
+                else if (!faction.equals(playerFaction)) {
                     // conquer the chunk
                     conqueredFactions.computeIfAbsent(faction, f -> new ArrayList<>()).add(next);
                     conqueredChunkCount++;
@@ -113,19 +120,21 @@ final class Claiming {
                 store.putClaim(origin.getWorld().getName(), chunk.getX(), chunk.getZ(), claimingFaction);
             }
         }
+        store.saveClaims();
 
         // notify the claiming faction
-        Faction wilderness = FactionStore.getInstance().getWilderness();
+        Faction wilderness = factionStore.getWilderness();
         int claimedChunks = chunks.size() - conqueredChunkCount;
         if (claimedChunks > 0) {
             Faction faction = claimingFaction == null ? replacedFaction : claimingFaction;
             Faction oldFaction = replacedFaction == null ? wilderness : replacedFaction;
             Faction newFaction = claimingFaction == null ? wilderness : claimingFaction;
 
-            Messaging.broadcast(faction, pl -> {
+            Component claimType = (claimingFaction == null ? messageConfig.unclaimed : messageConfig.claimed).build();
+            Messaging.broadcast(faction, player, pl -> {
                 ConfigText message = claimedChunks == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
-                return buildClaimMessage(pl, player, message, origin, action, messageConfig.claimed.build(),
-                        claimedChunks, oldFaction, newFaction);
+                return buildClaimMessage(pl, player, message, origin, action, claimType, claimedChunks, oldFaction,
+                        newFaction, playerFaction);
             });
         }
 
@@ -134,6 +143,7 @@ final class Claiming {
             Component claimType = (claimingFaction == null ? messageConfig.pillaged : messageConfig.conquered).build();
             Faction newFaction = claimingFaction == null ? wilderness : claimingFaction;
 
+            Faction finalClaimingFaction = claimingFaction;
             conqueredFactions.forEach((faction, conquered) -> {
                 ConfigText message = conquered.size() == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
 
@@ -141,40 +151,38 @@ final class Claiming {
 
                 // notify the conquered faction
                 Messaging.broadcast(faction, pl -> {
-                    return buildClaimMessage(pl, player, message, chunk, action,
-                            claimType, conquered.size(), faction, newFaction);
+                    return buildClaimMessage(pl, player, message, chunk, action, claimType, conquered.size(),
+                            faction, newFaction, playerFaction);
                 });
 
                 // notify the new faction
-                Messaging.broadcast(claimingFaction == null ? replacedFaction : claimingFaction, pl -> {
-                    return buildClaimMessage(pl, player, message, chunk, action,
-                            claimType, conquered.size(), faction, newFaction);
+                Messaging.broadcast(finalClaimingFaction == null ? replacedFaction : finalClaimingFaction, player, pl -> {
+                    return buildClaimMessage(pl, player, message, chunk, action, claimType, conquered.size(), faction,
+                            newFaction, playerFaction);
                 });
             });
         }
     }
 
-    @NotNull
-    private static Component buildClaimMessage(@NotNull Player recipient, @NotNull Player actor, @NotNull ConfigText message,
-                                               @NotNull Chunk origin, @NotNull String action, @NotNull Component claimType,
-                                               int amount, @NotNull Faction oldFaction, @NotNull Faction newFaction) {
-        return message.build(
-                "world", origin.getWorld().getName(),
-                "amount", amount,
-                "chunk_x", origin.getX(),
-                "chunk_z", origin.getZ(),
-                "type", action,
+    public static boolean shouldCancelClaim(@NotNull Player player, @Nullable Faction replacedFaction,
+                                            @Nullable Faction claimingFaction, boolean claiming) {
+        MessageConfig config = MessageConfig.getInstance();
 
-                "claim_type", claimType,
+        if (claiming && claimingFaction == null) {
+            Faction wilderness = FactionStore.getInstance().getWilderness();
+            config.landOwned.send(player,
+                    "faction", FactionHelper.formatRelational(player, wilderness),
+                    "faction_name", wilderness.getName()
+            );
+            return true;
+        }
 
-                "player", FactionHelper.formatRelational(recipient, newFaction, actor),
-                "player_name", actor.getName(),
+        if (replacedFaction != null && !replacedFaction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
+            FactionHelper.missingPermission(player, replacedFaction, "modify territory");
+            return true;
+        }
 
-                "old_faction", FactionHelper.formatRelational(recipient, oldFaction),
-                "old_faction_name", oldFaction.getName(),
-                "new_faction", FactionHelper.formatRelational(recipient, newFaction),
-                "new_faction_name", newFaction.getName()
-        );
+        return false;
     }
 
     @NotNull
@@ -293,5 +301,29 @@ final class Claiming {
 
         // able to claim
         nearby.add(coord);
+    }
+
+    @NotNull
+    private static Component buildClaimMessage(@NotNull Player recipient, @NotNull Player actor, @NotNull ConfigText message,
+                                               @NotNull Chunk origin, @NotNull String action, @NotNull Component claimType,
+                                               int amount, @NotNull Faction oldFaction, @NotNull Faction newFaction,
+                                               @NotNull Faction playerFaction) {
+        return message.build(
+                "world", origin.getWorld().getName(),
+                "amount", amount,
+                "chunk_x", origin.getX(),
+                "chunk_z", origin.getZ(),
+                "type", action,
+
+                "claim_type", claimType,
+
+                "player", FactionHelper.formatRelational(recipient, playerFaction, actor),
+                "player_name", actor.getName(),
+
+                "old_faction", FactionHelper.formatRelational(recipient, oldFaction),
+                "old_faction_name", oldFaction.getName(),
+                "new_faction", FactionHelper.formatRelational(recipient, newFaction),
+                "new_faction_name", newFaction.getName()
+        );
     }
 }

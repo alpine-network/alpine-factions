@@ -87,7 +87,19 @@ public final class MessageConfig extends AlpineConfig {
             "    <i>%old_faction% → %new_faction%</i>"
     );
 
+    public ConfigText landClaimWorld = ConfigText.of(
+            "%prefix% <highlight>%player%</highlight> %claim_type% <highlight>%amount% chunks</highlight> in <emphasis>%world%</emphasis>",
+            "    <i>%old_faction% → %new_faction%</i>"
+    );
+
+    public ConfigText landClaimAll = ConfigText.of(
+            "%prefix% <highlight>%player%</highlight> %claim_type% <highlight>%amount% chunks</highlight> in <emphasis>all worlds</emphasis>",
+            "    <i>%old_faction% → %new_faction%</i>"
+    );
+
     public ConfigText claimed = ConfigText.of("claimed");
+
+    public ConfigText unclaimed = ConfigText.of("unclaimed");
 
     public ConfigText pillaged = ConfigText.of("pillaged");
 
@@ -97,11 +109,17 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText landOwned = ConfigText.of("%prefix% This land is already owned by <highlight>%faction%</highlight>");
 
-    public ConfigText notEnoughPower = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> does not have enough power to claim this land");
+    public ConfigText insufficientPower = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> does not have enough power to claim this land");
 
     public ConfigText fillLimit = ConfigText.of("%error_prefix% Reached the fill limit of <error_highlight>%limit% chunks</error_highlight>");
 
     public ConfigText claimTooFar = ConfigText.of("%error_prefix% Unable to claim land too far away.");
+
+    public ConfigText disableAutoSetting = ConfigText.of("%prefix% Disabled auto-claim.");
+
+    public ConfigText enableAutoClaim = ConfigText.of("%prefix% Enabled auto-claim for <highlight>%faction%</highlight>");
+
+    public ConfigText enableAutoUnclaim = ConfigText.of("%prefix% Enabled auto-unclaim for <highlight>%faction%</highlight>");
 
     @Comment({
             "",
