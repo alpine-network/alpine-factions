@@ -21,10 +21,6 @@ public final class PlayerHandler {
 
     private final Map<UUID, PlayerState> playerStateMap = new HashMap<>();
 
-    public void tick() {
-        this.playerStateMap.values().forEach(PlayerState::tick);
-    }
-
     public void loggedOut(@NotNull Player player) {
         this.playerStateMap.remove(player.getUniqueId());
     }

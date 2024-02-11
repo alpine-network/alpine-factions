@@ -25,11 +25,25 @@ import java.util.List;
  * @since 02/07/2024
  */
 @UtilityClass
-final class Claiming {
+public final class Claiming {
 
-    public static void attemptClaim(@NotNull Player player, @NotNull String action,
-                                    @Nullable Faction replacedFaction, @Nullable Faction claimingFaction,
-                                    @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin) {
+    public static void one(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
+        Chunk origin = actor.getLocation().getChunk();
+        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
+
+        // is the player able to claim this land?
+        if (Claiming.shouldCancelClaim(actor, replacedFaction, claimingFaction, claimingFaction != null)) {
+            return;
+        }
+
+        // attempt to claim
+        Set<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(new ChunkCoordinate(origin.getX(), origin.getZ())));
+        Claiming.attemptClaim(actor, "square", actingFaction, claimingFaction, chunks, origin);
+    }
+
+    static void attemptClaim(@NotNull Player player, @NotNull String action,
+                             @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
+                             @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
         FactionStore factionStore = FactionStore.getInstance();
@@ -126,12 +140,11 @@ final class Claiming {
         Faction wilderness = factionStore.getWilderness();
         int claimedChunks = chunks.size() - conqueredChunkCount;
         if (claimedChunks > 0) {
-            Faction faction = claimingFaction == null ? replacedFaction : claimingFaction;
-            Faction oldFaction = replacedFaction == null ? wilderness : replacedFaction;
-            Faction newFaction = claimingFaction == null ? wilderness : claimingFaction;
+            Faction oldFaction = claimingFaction == null ? actingFaction : wilderness;
+            Faction newFaction = claimingFaction == null ? wilderness : actingFaction;
 
             Component claimType = (claimingFaction == null ? messageConfig.unclaimed : messageConfig.claimed).build();
-            Messaging.broadcast(faction, player, pl -> {
+            Messaging.broadcast(actingFaction, player, pl -> {
                 ConfigText message = claimedChunks == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
                 return buildClaimMessage(pl, player, message, origin, action, claimType, claimedChunks, oldFaction,
                         newFaction, playerFaction);
@@ -143,7 +156,6 @@ final class Claiming {
             Component claimType = (claimingFaction == null ? messageConfig.pillaged : messageConfig.conquered).build();
             Faction newFaction = claimingFaction == null ? wilderness : claimingFaction;
 
-            Faction finalClaimingFaction = claimingFaction;
             conqueredFactions.forEach((faction, conquered) -> {
                 ConfigText message = conquered.size() == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
 
@@ -156,7 +168,7 @@ final class Claiming {
                 });
 
                 // notify the new faction
-                Messaging.broadcast(finalClaimingFaction == null ? replacedFaction : finalClaimingFaction, player, pl -> {
+                Messaging.broadcast(actingFaction, player, pl -> {
                     return buildClaimMessage(pl, player, message, chunk, action, claimType, conquered.size(), faction,
                             newFaction, playerFaction);
                 });
@@ -164,7 +176,7 @@ final class Claiming {
         }
     }
 
-    public static boolean shouldCancelClaim(@NotNull Player player, @Nullable Faction replacedFaction,
+    static boolean shouldCancelClaim(@NotNull Player player, @Nullable Faction replacedFaction,
                                             @Nullable Faction claimingFaction, boolean claiming) {
         MessageConfig config = MessageConfig.getInstance();
 
@@ -186,7 +198,7 @@ final class Claiming {
     }
 
     @NotNull
-    public static Set<ChunkCoordinate> square(@NotNull Chunk origin, int radius) {
+    static Set<ChunkCoordinate> square(@NotNull Chunk origin, int radius) {
         radius--;
 
         int chunkX = origin.getX();
@@ -203,7 +215,7 @@ final class Claiming {
     }
 
     @NotNull
-    public static Set<ChunkCoordinate> line(@NotNull Chunk origin, int length, @NotNull BlockFace facing) {
+    static Set<ChunkCoordinate> line(@NotNull Chunk origin, int length, @NotNull BlockFace facing) {
         int chunkX = origin.getX();
         int chunkZ = origin.getZ();
 
@@ -218,7 +230,7 @@ final class Claiming {
     }
 
     @NotNull
-    public static Set<ChunkCoordinate> circle(@NotNull Chunk origin, int radius) {
+    static Set<ChunkCoordinate> circle(@NotNull Chunk origin, int radius) {
         radius--;
 
         int chunkX = origin.getX();
@@ -239,7 +251,7 @@ final class Claiming {
     }
 
     @Nullable
-    public static Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
+    static Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
         int max = FactionConfig.getInstance().maxClaimFillVolume;
         World world = origin.getWorld();
         ClaimStore store = ClaimStore.getInstance();

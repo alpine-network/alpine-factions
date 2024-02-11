@@ -2,7 +2,7 @@ package co.crystaldev.factions.util;
 
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.RelationType;
-import co.crystaldev.factions.api.member.Member;
+import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.StyleConfig;
 import co.crystaldev.factions.store.FactionStore;

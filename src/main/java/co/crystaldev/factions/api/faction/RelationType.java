@@ -11,11 +11,11 @@ import lombok.Getter;
  */
 @AllArgsConstructor @Getter
 public enum RelationType implements Relational {
-    @SerializedName("self") SELF(false),
+    @SerializedName("self")    SELF(false),
     @SerializedName("neutral") NEUTRAL(true),
-    @SerializedName("enemy") ENEMY(true),
-    @SerializedName("truce") TRUCE(true),
-    @SerializedName("ally") ALLY(true);
+    @SerializedName("enemy")   ENEMY(true),
+    @SerializedName("truce")   TRUCE(true),
+    @SerializedName("ally")    ALLY(true);
 
     private final boolean applicable;
 

@@ -1,17 +1,18 @@
 package co.crystaldev.factions.api.faction;
 
-import co.crystaldev.factions.api.FactionPlayer;
+import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.flag.FlagHolder;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.PermissionHolder;
-import co.crystaldev.factions.api.member.Member;
-import co.crystaldev.factions.api.member.Rank;
+import co.crystaldev.factions.api.faction.member.Member;
+import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.ClaimStore;
+import co.crystaldev.factions.util.ComponentHelper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -31,6 +32,10 @@ import java.util.*;
 @SuppressWarnings("unused")
 @Getter @Setter @ToString
 public final class Faction {
+
+    public static final Component DEFAULT_DESCRIPTION = ComponentHelper.mini("<gray>No description set");
+
+    public static final Component DEFAULT_MOTD = ComponentHelper.mini("<gray>No message of the day set");
 
     /** The unique ID of this faction */
     private final String id;
@@ -84,7 +89,7 @@ public final class Faction {
 
         long powerLevel = 0L;
         for (Member member : this.members.values()) {
-            FactionPlayer user = member.getUser();
+            FPlayer user = member.getUser();
             powerLevel += user.getPower() + user.getPowerBoost();
         }
 
@@ -100,7 +105,7 @@ public final class Faction {
 
         long powerLevel = 0L;
         for (Member member : this.members.values()) {
-            FactionPlayer user = member.getUser();
+            FPlayer user = member.getUser();
             powerLevel += config.maxPlayerPower + user.getPowerBoost();
         }
 

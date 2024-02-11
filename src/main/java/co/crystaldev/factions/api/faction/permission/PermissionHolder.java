@@ -2,7 +2,7 @@ package co.crystaldev.factions.api.faction.permission;
 
 import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.RelationType;
-import co.crystaldev.factions.api.member.Rank;
+import co.crystaldev.factions.api.faction.member.Rank;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 

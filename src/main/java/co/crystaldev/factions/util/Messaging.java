@@ -2,10 +2,11 @@ package co.crystaldev.factions.util;
 
 import co.crystaldev.alpinecore.Reference;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.api.member.Member;
+import co.crystaldev.factions.api.faction.member.Member;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,6 +30,14 @@ public final class Messaging {
         else {
             wrap(sender).sendMessage(component);
         }
+    }
+
+    public static void title(@NotNull CommandSender sender, @NotNull Component title, @NotNull Component subtitle) {
+        wrap(sender).showTitle(Title.title(title, subtitle));
+    }
+
+    public static void actionBar(@NotNull CommandSender sender, @NotNull Component component) {
+        wrap(sender).sendActionBar(component);
     }
 
     public static void broadcast(@NotNull Component component) {
@@ -82,6 +91,9 @@ public final class Messaging {
 
     @NotNull
     public static Audience wrap(@NotNull CommandSender sender) {
+        if (sender instanceof Audience) {
+            return (Audience) sender;
+        }
         return sender instanceof Player ? Reference.AUDIENCES.player((Player) sender) : Reference.AUDIENCES.sender(sender);
     }
 }

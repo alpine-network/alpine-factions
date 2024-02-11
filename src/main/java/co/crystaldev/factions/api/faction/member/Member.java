@@ -1,6 +1,6 @@
-package co.crystaldev.factions.api.member;
+package co.crystaldev.factions.api.faction.member;
 
-import co.crystaldev.factions.api.FactionPlayer;
+import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.store.PlayerStore;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
@@ -46,7 +46,7 @@ public final class Member {
     }
 
     @NotNull
-    public FactionPlayer getUser() {
+    public FPlayer getUser() {
         return PlayerStore.getInstance().getPlayer(this.id);
     }
 }

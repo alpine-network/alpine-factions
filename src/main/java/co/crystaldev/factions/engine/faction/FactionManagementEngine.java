@@ -1,4 +1,4 @@
-package co.crystaldev.factions.engine;
+package co.crystaldev.factions.engine.faction;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;

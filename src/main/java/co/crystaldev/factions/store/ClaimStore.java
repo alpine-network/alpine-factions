@@ -12,6 +12,7 @@ import co.crystaldev.factions.api.faction.Faction;
 import lombok.Getter;
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -109,6 +110,11 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
         return this.getFaction(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 
+    @Nullable
+    public Faction getFaction(@NotNull Entity entity) {
+        return this.getFaction(entity.getLocation().getChunk());
+    }
+
     @NotNull
     public Faction getFactionOrDefault(@NotNull String worldName, int chunkX, int chunkZ) {
         FactionStore store = FactionStore.getInstance();
@@ -117,12 +123,17 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
             return store.getWilderness();
         }
 
-        return store.getFaction(claim.getFactionId());
+        return Optional.ofNullable(store.getFaction(claim.getFactionId())).orElseGet(store::getWilderness);
     }
 
     @NotNull
     public Faction getFactionOrDefault(@NotNull Chunk chunk) {
         return this.getFactionOrDefault(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+    }
+
+    @NotNull
+    public Faction getFactionOrDefault(@NotNull Entity entity) {
+        return this.getFactionOrDefault(entity.getLocation().getChunk());
     }
 
     @Nullable
@@ -153,17 +164,21 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
         return this.isClaimed(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 
+    public boolean isSameClaim(@NotNull Chunk a, @NotNull Chunk b) {
+        return this.getFactionOrDefault(a).equals(this.getFactionOrDefault(b));
+    }
+
     @Nullable
     public Claim putClaim(@NotNull String worldName, int chunkX, int chunkZ, @NotNull Faction faction) {
         String key = getKey(worldName, chunkX, chunkZ);
-        ClaimRegion storage = this.getOrCreate(key, () -> {
-            ClaimRegion region = new ClaimRegion(key, worldName);
-            this.claimStorage.put(key, region);
-            return region;
+        ClaimRegion region = this.getOrCreate(key, () -> {
+            ClaimRegion newRegion = new ClaimRegion(key, worldName);
+            this.claimStorage.put(key, newRegion);
+            return newRegion;
         });
 
-        Claim claim = storage.putClaim(chunkX, chunkZ, faction);
-        this.put(key, storage);
+        Claim claim = region.putClaim(chunkX, chunkZ, faction);
+        this.put(key, region);
         return claim;
     }
 
@@ -179,14 +194,14 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
             return null;
         }
 
-        ClaimRegion storage = this.get(key);
-        Claim removed = storage.removeClaim(chunkX, chunkZ);
-        if (storage.isEmpty()) {
+        ClaimRegion region = this.get(key);
+        Claim removed = region.removeClaim(chunkX, chunkZ);
+        if (region.isEmpty()) {
             this.claimStorage.remove(key);
             this.remove(key);
         }
 
-        this.put(key, storage);
+        this.put(key, region);
         return removed;
     }
 
@@ -211,8 +226,6 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
 
     @NotNull
     private static String getKey(@NotNull String worldName, int x, int z) {
-        x >>= 4;
-        z >>= 4;
-        return worldName + "_" + (x + "_" + z).hashCode();
+        return worldName + "_" + ((x >> 5) + "_" + (z >> 5)).hashCode();
     }
 }

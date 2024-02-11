@@ -1,5 +1,6 @@
 package co.crystaldev.factions.util;
 
+import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.config.StyleConfig;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
@@ -24,6 +25,39 @@ import java.util.stream.Stream;
 public final class ComponentHelper {
 
     /**
+     * Deserialize a component from a MiniMessage string.
+     *
+     * @param serializedComponent The serialized component.
+     * @return The component.
+     */
+    @NotNull
+    public static Component mini(@NotNull String serializedComponent) {
+        return Reference.MINI_MESSAGE.deserialize(serializedComponent);
+    }
+
+    /**
+     * Serialize a component into a MiniMessage string.
+     *
+     * @param toSerialize The component to serialize.
+     * @return The serialized component.
+     */
+    @NotNull
+    public static String mini(@NotNull Component toSerialize) {
+        return Reference.MINI_MESSAGE.serialize(toSerialize);
+    }
+
+    /**
+     * Get the plain text held in a component.
+     *
+     * @param component The component.
+     * @return The text.
+     */
+    @NotNull
+    public static String plain(@NotNull Component component) {
+        return PlainTextComponentSerializer.plainText().serialize(component);
+    }
+
+    /**
      * Get the length of the given component.
      *
      * @param component The component.
@@ -34,7 +68,7 @@ public final class ComponentHelper {
             return 0;
         }
 
-        return PlainTextComponentSerializer.plainText().serialize(component).length();
+        return plain(component).length();
     }
 
     /**

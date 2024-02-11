@@ -1,4 +1,4 @@
-package co.crystaldev.factions.api.member;
+package co.crystaldev.factions.api.faction.member;
 
 import co.crystaldev.factions.api.Relational;
 import com.google.gson.annotations.SerializedName;
@@ -12,11 +12,11 @@ import org.jetbrains.annotations.NotNull;
  */
 @AllArgsConstructor @Getter
 public enum Rank implements Relational {
-    @SerializedName("leader") LEADER("***", "leader"),
-    @SerializedName("coleader") COLEADER("**", "coleader"),
+    @SerializedName("leader")    LEADER("***", "leader"),
+    @SerializedName("coleader")  COLEADER("**", "coleader"),
     @SerializedName("moderator") MOD("*", "moderator"),
-    @SerializedName("member") MEMBER("+", "member"),
-    @SerializedName("recruit") RECRUIT("-", "recruit");
+    @SerializedName("member")    MEMBER("+", "member"),
+    @SerializedName("recruit")   RECRUIT("-", "recruit");
 
     private final String prefix;
 

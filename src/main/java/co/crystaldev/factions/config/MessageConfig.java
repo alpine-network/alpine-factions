@@ -75,6 +75,12 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
+            "| Player/Member State"
+    })
+    public ConfigText stateChange = ConfigText.of("%prefix% <highlight>%subject%:</highlight> <emphasis>%state%</emphasis>");
+
+    @Comment({
+            "",
             "| Land Claiming"
     })
     public ConfigText landClaim = ConfigText.of(

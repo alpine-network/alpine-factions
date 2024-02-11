@@ -84,4 +84,12 @@ public final class AlpineFactions extends AlpinePlugin {
 
         serializerRegistry.setMiniMessage(Reference.MINI_MESSAGE);
     }
+
+    public static void schedule(@NotNull Runnable runnable) {
+        Bukkit.getScheduler().runTask(instance, runnable);
+    }
+
+    public static void schedule(@NotNull Runnable runnable, long wait) {
+        Bukkit.getScheduler().runTaskLater(instance, runnable, wait);
+    }
 }

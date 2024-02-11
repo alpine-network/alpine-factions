@@ -2,7 +2,7 @@ package co.crystaldev.factions.api.faction.permission;
 
 import co.crystaldev.factions.PermissionNodes;
 import co.crystaldev.factions.api.faction.RelationType;
-import co.crystaldev.factions.api.member.Rank;
+import co.crystaldev.factions.api.faction.member.Rank;
 import lombok.experimental.UtilityClass;
 
 /**

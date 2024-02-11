@@ -55,6 +55,7 @@ public final class UnclaimCommand extends BaseFactionsCommand {
 
         Chunk origin = player.getLocation().getChunk();
         Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
+        Faction actingFaction = FactionStore.getInstance().findFactionOrDefault(player);
 
         // is the player able to claim this land?
         if (Claiming.shouldCancelClaim(player, replacedFaction, null, false)) {
@@ -78,7 +79,7 @@ public final class UnclaimCommand extends BaseFactionsCommand {
         }
 
         // attempt the claim
-        Claiming.attemptClaim(player, type.toString(), replacedFaction, null, chunks, origin);
+        Claiming.attemptClaim(player, type.toString(), actingFaction, null, chunks, origin);
     }
 
     @Execute(name = "fill", aliases = "f")
@@ -87,6 +88,7 @@ public final class UnclaimCommand extends BaseFactionsCommand {
 
         Chunk origin = player.getLocation().getChunk();
         Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
+        Faction actingFaction = FactionStore.getInstance().findFactionOrDefault(player);
 
         // is the player able to claim this land?
         if (Claiming.shouldCancelClaim(player, replacedFaction, null, false)) {
@@ -101,7 +103,7 @@ public final class UnclaimCommand extends BaseFactionsCommand {
         }
 
         // attempt to claim
-        Claiming.attemptClaim(player, "fill", replacedFaction, null, chunks, origin);
+        Claiming.attemptClaim(player, "fill", actingFaction, null, chunks, origin);
     }
 
     @Execute(name = "all")
@@ -166,36 +168,8 @@ public final class UnclaimCommand extends BaseFactionsCommand {
 
     @Execute(name = "one", aliases = "o")
     public void one(@Context Player player) {
-        Chunk origin = player.getLocation().getChunk();
-        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
-
-        // is the player able to claim this land?
-        if (Claiming.shouldCancelClaim(player, replacedFaction, null, false)) {
-            return;
-        }
-
-        // attempt to claim
-        Set<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(new ChunkCoordinate(origin.getX(), origin.getZ())));
-        Claiming.attemptClaim(player, "square", replacedFaction, null, chunks, origin);
-    }
-
-    @Execute(name = "near")
-    public void claimNear(
-            @Context Player player,
-            @Arg("x") int chunkX,
-            @Arg("z") int chunkZ
-    ) {
-        Faction replacedFaction = ClaimStore.getInstance().getFaction(player.getWorld().getName(), chunkX, chunkZ);
-
-        // is the player able to claim this land?
-        if (Claiming.shouldCancelClaim(player, replacedFaction, null, false)) {
-            return;
-        }
-
-        // attempt to claim
-        Chunk chunk = player.getWorld().getChunkAt(chunkX, chunkZ);
-        HashSet<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(new ChunkCoordinate(chunkX, chunkZ)));
-        Claiming.attemptClaim(player, "near", replacedFaction, null, chunks, chunk);
+        FactionStore store = FactionStore.getInstance();
+        Claiming.one(player, store.findFactionOrDefault(player), null);
     }
 
     @Execute(name = "auto", aliases = "a")
@@ -204,9 +178,9 @@ public final class UnclaimCommand extends BaseFactionsCommand {
 
         PlayerState state = PlayerHandler.getInstance().getPlayer(player);
         AutoClaimState autoClaim = state.getAutoClaimState();
-        autoClaim.toggleAutoUnclaim();
+        autoClaim.toggle(null);
 
-        if (autoClaim.isAutoUnclaim()) {
+        if (autoClaim.isEnabled()) {
             Faction wilderness = FactionStore.getInstance().getWilderness();
             config.enableAutoUnclaim.send(player,
                     "faction", FactionHelper.formatRelational(player, wilderness),

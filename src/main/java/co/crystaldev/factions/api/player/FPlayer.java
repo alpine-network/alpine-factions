@@ -1,4 +1,4 @@
-package co.crystaldev.factions.api;
+package co.crystaldev.factions.api.player;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -16,7 +17,7 @@ import java.util.UUID;
  * @since 12/19/2023
  */
 @RequiredArgsConstructor @Getter
-public final class FactionPlayer {
+public final class FPlayer {
 
     private final UUID id;
 
@@ -26,11 +27,8 @@ public final class FactionPlayer {
     @Setter
     private long powerBoost;
 
-    private boolean territorialTitles = true;
-
-    public void toggleTerritorialTitles() {
-        this.territorialTitles = !this.territorialTitles;
-    }
+    @Setter
+    private TerritorialTitleMode territorialTitleMode = TerritorialTitleMode.TITLE;
 
     @Nullable
     public Player getPlayer() {
@@ -40,5 +38,10 @@ public final class FactionPlayer {
     @NotNull
     public OfflinePlayer getOfflinePlayer() {
         return Bukkit.getOfflinePlayer(this.id);
+    }
+
+    @NotNull
+    public TerritorialTitleMode getTerritorialTitleMode() {
+        return Optional.ofNullable(this.territorialTitleMode).orElse(TerritorialTitleMode.TITLE);
     }
 }
