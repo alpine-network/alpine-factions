@@ -8,11 +8,13 @@ import co.crystaldev.factions.command.claiming.Claiming;
 import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.PlayerStore;
+import co.crystaldev.factions.util.AsciiFactionMap;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Chunk;
@@ -32,6 +34,9 @@ public final class PlayerState {
 
     private final AutoClaimState autoClaimState = new AutoClaimState();
 
+    @Setter
+    private boolean autoFactionMap;
+
     public void movedChunk(@NotNull Chunk oldChunk, @NotNull Chunk newChunk) {
         FPlayer state = PlayerStore.getInstance().getPlayer(this.player.getUniqueId());
 
@@ -44,6 +49,11 @@ public final class PlayerState {
         if (this.autoClaimState.isEnabled()) {
             Faction actingFaction = FactionStore.getInstance().findFactionOrDefault(this.player);
             AlpineFactions.schedule(() -> Claiming.one(this.player, actingFaction, this.autoClaimState.getFaction()));
+        }
+
+        // now send the minimized faction map
+        if (this.autoFactionMap) {
+            AlpineFactions.schedule(() -> Messaging.send(this.player, AsciiFactionMap.create(this.player, true)));
         }
     }
 

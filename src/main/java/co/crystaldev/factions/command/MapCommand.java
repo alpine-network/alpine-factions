@@ -2,6 +2,9 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.command.framework.BaseFactionsCommand;
+import co.crystaldev.factions.config.MessageConfig;
+import co.crystaldev.factions.handler.PlayerHandler;
+import co.crystaldev.factions.handler.player.PlayerState;
 import co.crystaldev.factions.util.Messaging;
 import co.crystaldev.factions.util.AsciiFactionMap;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -28,11 +31,22 @@ public final class MapCommand extends BaseFactionsCommand {
 
     @Execute(name = "on")
     public void on(@Context Player player) {
+        PlayerState state = PlayerHandler.getInstance().getPlayer(player);
+        state.setAutoFactionMap(true);
 
+        // send the status message
+        MessageConfig.getInstance().stateChange.send(player, "subject", "Faction Map", "state", true);
+
+        // send the map to the player
+        Messaging.send(player, AsciiFactionMap.create(player, true));
     }
 
     @Execute(name = "off")
     public void off(@Context Player player) {
+        PlayerState state = PlayerHandler.getInstance().getPlayer(player);
+        state.setAutoFactionMap(false);
 
+        // send the status message
+        MessageConfig.getInstance().stateChange.send(player, "subject", "Faction Map", "state", false);
     }
 }
