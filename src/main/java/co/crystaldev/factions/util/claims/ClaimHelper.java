@@ -1,4 +1,4 @@
-package co.crystaldev.factions.command.claiming;
+package co.crystaldev.factions.util.claims;
 
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
@@ -7,43 +7,31 @@ import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
-import co.crystaldev.factions.util.*;
+import co.crystaldev.factions.util.ChunkCoordinate;
+import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.LocationHelper;
+import co.crystaldev.factions.util.Messaging;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.List;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/07/2024
+ * @since 02/11/2024
  */
-@UtilityClass
-public final class Claiming {
-
-    public static void one(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
-        Chunk origin = actor.getLocation().getChunk();
-        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
-
-        // is the player able to claim this land?
-        if (Claiming.shouldCancelClaim(actor, replacedFaction, claimingFaction, claimingFaction != null)) {
-            return;
-        }
-
-        // attempt to claim
-        Set<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(new ChunkCoordinate(origin.getX(), origin.getZ())));
-        Claiming.attemptClaim(actor, "square", actingFaction, claimingFaction, chunks, origin);
-    }
-
-    static void attemptClaim(@NotNull Player player, @NotNull String action,
-                             @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
-                             @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin) {
+@UtilityClass @ApiStatus.Internal
+public final class ClaimHelper {
+    public static void attemptClaim(@NotNull Player player, @NotNull String action,
+                                    @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
+                                    @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
         FactionStore factionStore = FactionStore.getInstance();
@@ -176,7 +164,7 @@ public final class Claiming {
         }
     }
 
-    static boolean shouldCancelClaim(@NotNull Player player, @Nullable Faction replacedFaction,
+    public static boolean shouldCancelClaim(@NotNull Player player, @Nullable Faction replacedFaction,
                                             @Nullable Faction claimingFaction, boolean claiming) {
         MessageConfig config = MessageConfig.getInstance();
 
@@ -198,7 +186,7 @@ public final class Claiming {
     }
 
     @NotNull
-    static Set<ChunkCoordinate> square(@NotNull Chunk origin, int radius) {
+    public static Set<ChunkCoordinate> square(@NotNull Chunk origin, int radius) {
         radius--;
 
         int chunkX = origin.getX();
@@ -215,7 +203,7 @@ public final class Claiming {
     }
 
     @NotNull
-    static Set<ChunkCoordinate> line(@NotNull Chunk origin, int length, @NotNull BlockFace facing) {
+    public static Set<ChunkCoordinate> line(@NotNull Chunk origin, int length, @NotNull BlockFace facing) {
         int chunkX = origin.getX();
         int chunkZ = origin.getZ();
 
@@ -230,7 +218,7 @@ public final class Claiming {
     }
 
     @NotNull
-    static Set<ChunkCoordinate> circle(@NotNull Chunk origin, int radius) {
+    public static Set<ChunkCoordinate> circle(@NotNull Chunk origin, int radius) {
         radius--;
 
         int chunkX = origin.getX();
@@ -251,7 +239,7 @@ public final class Claiming {
     }
 
     @Nullable
-    static Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
+    public static Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
         int max = FactionConfig.getInstance().maxClaimFillVolume;
         World world = origin.getWorld();
         ClaimStore store = ClaimStore.getInstance();

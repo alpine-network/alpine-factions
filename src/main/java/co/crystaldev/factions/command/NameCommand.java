@@ -5,7 +5,7 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.AlphanumericArgumentResolver;
 import co.crystaldev.factions.command.argument.FactionArgumentResolver;
-import co.crystaldev.factions.command.framework.BaseFactionsCommand;
+import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.FactionStore;
@@ -27,7 +27,7 @@ import java.util.Optional;
  */
 @Command(name = "factions name")
 @Description("Rename your faction.")
-public final class NameCommand extends BaseFactionsCommand {
+public final class NameCommand extends FactionsCommand {
     public NameCommand(AlpinePlugin plugin) {
         super(plugin);
     }

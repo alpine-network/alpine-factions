@@ -4,7 +4,7 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.player.TerritorialTitleMode;
-import co.crystaldev.factions.command.claiming.Claiming;
+import co.crystaldev.factions.util.claims.Claiming;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;

@@ -1,6 +1,6 @@
 package co.crystaldev.factions.command.argument;
 
-import co.crystaldev.factions.command.claiming.ClaimType;
+import co.crystaldev.factions.util.claims.ClaimType;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
 import dev.rollczi.litecommands.argument.resolver.ArgumentResolver;

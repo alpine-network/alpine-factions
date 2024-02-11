@@ -3,11 +3,10 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.argument.AlphanumericArgumentResolver;
-import co.crystaldev.factions.command.framework.BaseFactionsCommand;
+import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.FactionStore;
-import co.crystaldev.factions.store.PlayerStore;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -22,7 +21,7 @@ import org.bukkit.entity.Player;
  */
 @Command(name = "factions create")
 @Description("Create a new faction.")
-public final class CreateCommand extends BaseFactionsCommand {
+public final class CreateCommand extends FactionsCommand {
     public CreateCommand(AlpinePlugin plugin) {
         super(plugin);
     }

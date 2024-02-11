@@ -13,7 +13,7 @@ import co.crystaldev.factions.command.argument.AlphanumericArgumentResolver;
 import co.crystaldev.factions.command.argument.ClaimTypeArgumentResolver;
 import co.crystaldev.factions.command.argument.FactionArgumentResolver;
 import co.crystaldev.factions.command.argument.WorldClaimArgumentResolver;
-import co.crystaldev.factions.command.claiming.ClaimType;
+import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.event.ServerTickEvent;
 import co.crystaldev.factions.handler.PlayerHandler;
 import dev.rollczi.litecommands.LiteCommandsBuilder;

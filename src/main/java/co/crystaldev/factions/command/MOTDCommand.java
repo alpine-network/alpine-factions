@@ -1,10 +1,9 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.BaseFactionsCommand;
+import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.ComponentHelper;
@@ -27,7 +26,7 @@ import java.util.Optional;
  */
 @Command(name = "factions motd")
 @Description("Modify your faction's message of the day.")
-public final class MOTDCommand extends BaseFactionsCommand {
+public final class MOTDCommand extends FactionsCommand {
     public MOTDCommand(AlpinePlugin plugin) {
         super(plugin);
     }

@@ -1,4 +1,4 @@
-package co.crystaldev.factions.command.claiming;
+package co.crystaldev.factions.util.claims;
 
 import com.google.common.collect.ImmutableList;
 import lombok.Getter;

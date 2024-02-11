@@ -1,7 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.factions.command.framework.BaseFactionsCommand;
+import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.PlayerState;
@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
  */
 @Command(name = "factions map", aliases = "factions ma")
 @Description("Display the factions map.")
-public final class MapCommand extends BaseFactionsCommand {
+public final class MapCommand extends FactionsCommand {
     public MapCommand(AlpinePlugin plugin) {
         super(plugin);
     }

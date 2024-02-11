@@ -1,31 +1,27 @@
-package co.crystaldev.factions.command.claiming;
+package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.argument.ClaimTypeArgumentResolver;
 import co.crystaldev.factions.command.argument.FactionArgumentResolver;
-import co.crystaldev.factions.command.framework.BaseFactionsCommand;
-import co.crystaldev.factions.config.FactionConfig;
+import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.AutoClaimState;
 import co.crystaldev.factions.handler.player.PlayerState;
 import co.crystaldev.factions.store.FactionStore;
-import co.crystaldev.factions.store.ClaimStore;
-import co.crystaldev.factions.util.ChunkCoordinate;
 import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.LocationHelper;
+import co.crystaldev.factions.util.claims.ClaimType;
+import co.crystaldev.factions.util.claims.Claiming;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
-import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -33,7 +29,7 @@ import java.util.Set;
  */
 @Command(name = "factions claim")
 @Description("Claim faction territory.")
-public final class ClaimCommand extends BaseFactionsCommand {
+public final class ClaimCommand extends FactionsCommand {
     public ClaimCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -45,37 +41,10 @@ public final class ClaimCommand extends BaseFactionsCommand {
             @Arg("radius") Optional<Integer> rad,
             @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
     ) {
-        int radius = Math.max(rad.orElse(1), 1);
-
-        Chunk origin = player.getLocation().getChunk();
         FactionStore store = FactionStore.getInstance();
-        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
         Faction claimingFaction = faction.orElse(store.findFaction(player));
         Faction actingFaction = faction.orElse(store.findFactionOrDefault(player));
-
-        // is the player able to claim this land?
-        if (Claiming.shouldCancelClaim(player, replacedFaction, claimingFaction, true)) {
-            return;
-        }
-
-        // discover chunks to claim
-        Set<ChunkCoordinate> chunks;
-        switch (type) {
-            case LINE: {
-                chunks = Claiming.line(origin, radius, LocationHelper.getFacing(player.getLocation()));
-                break;
-            }
-            case CIRCLE: {
-                chunks = Claiming.circle(origin, radius);
-                break;
-            }
-            default: {
-                chunks = Claiming.square(origin, radius);
-            }
-        }
-
-        // attempt the claim
-        Claiming.attemptClaim(player, type.toString(), actingFaction, claimingFaction, chunks, origin);
+        Claiming.mode(player, actingFaction, claimingFaction, type, Math.max(rad.orElse(1), 1));
     }
 
     @Execute(name = "fill", aliases = "f")
@@ -83,28 +52,10 @@ public final class ClaimCommand extends BaseFactionsCommand {
             @Context Player player,
             @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
-
-        Chunk origin = player.getLocation().getChunk();
         FactionStore store = FactionStore.getInstance();
-        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
         Faction claimingFaction = faction.orElse(store.findFaction(player));
         Faction actingFaction = faction.orElse(store.findFactionOrDefault(player));
-
-        // is the player able to claim this land?
-        if (Claiming.shouldCancelClaim(player, replacedFaction, claimingFaction, true)) {
-            return;
-        }
-
-        // discover chunks to claim
-        Set<ChunkCoordinate> chunks = Claiming.fill(origin);
-        if (chunks == null) {
-            config.fillLimit.send(player, "limit", FactionConfig.getInstance().maxClaimFillVolume);
-            return;
-        }
-
-        // attempt to claim
-        Claiming.attemptClaim(player, "fill", actingFaction, claimingFaction, chunks, origin);
+        Claiming.fill(player, actingFaction, claimingFaction);
     }
 
     @Execute(name = "one", aliases = "o")

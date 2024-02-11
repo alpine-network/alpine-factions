@@ -3,7 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.player.TerritorialTitleMode;
-import co.crystaldev.factions.command.framework.BaseFactionsCommand;
+import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.PlayerStore;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @Command(name = "factions territorialtitles", aliases = { "factions territorialtitle", "factions tt" })
 @Description("Switch between territorial title modes.")
-public final class TerritorialTitlesCommand extends BaseFactionsCommand {
+public final class TerritorialTitlesCommand extends FactionsCommand {
     public TerritorialTitlesCommand(AlpinePlugin plugin) {
         super(plugin);
     }

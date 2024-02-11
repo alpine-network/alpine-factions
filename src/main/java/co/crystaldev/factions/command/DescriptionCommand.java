@@ -3,7 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.BaseFactionsCommand;
+import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.FactionHelper;
@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
  */
 @Command(name = "factions description", aliases = "factions desc")
 @Description("Modify your faction's description.")
-public final class DescriptionCommand extends BaseFactionsCommand {
+public final class DescriptionCommand extends FactionsCommand {
     public DescriptionCommand(AlpinePlugin plugin) {
         super(plugin);
     }
