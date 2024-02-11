@@ -21,6 +21,10 @@ public final class PlayerHandler {
 
     private final Map<UUID, PlayerState> playerStateMap = new HashMap<>();
 
+    public void loggedIn(@NotNull Player player) {
+        this.getPlayer(player).onLogin();
+    }
+
     public void loggedOut(@NotNull Player player) {
         this.playerStateMap.remove(player.getUniqueId());
     }

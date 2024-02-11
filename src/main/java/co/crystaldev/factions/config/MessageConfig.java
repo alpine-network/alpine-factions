@@ -49,7 +49,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Name"
+            "| Faction Metadata"
     })
     public ConfigText rename = ConfigText.of("%prefix% %player% set the faction name to <highlight>%faction_name%</highlight>");
 
@@ -60,6 +60,12 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText nameTooShort = ConfigText.of("%error_prefix% Your faction name can't be shorter than <error_highlight>%length% characters</error_highlight>");
 
     public ConfigText nameTooLong = ConfigText.of("%error_prefix% Your faction name can't be longer than <error_highlight>%length% characters</error_highlight>");
+
+    public ConfigText description = ConfigText.of("%prefix% %player% set the faction's description to:<br>%description%");
+
+    public ConfigText motd = ConfigText.of("%prefix% %player% set the faction's message of the day to:<br>%motd%");
+
+    public ConfigText motdTitle = ConfigText.of("%faction% <separator>|</separator> Message of the Day");
 
     @Comment({
             "",

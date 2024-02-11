@@ -9,6 +9,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.StyleBuilderApplicable;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.apache.commons.lang.WordUtils;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +45,28 @@ public final class ComponentHelper {
     @NotNull
     public static String mini(@NotNull Component toSerialize) {
         return Reference.MINI_MESSAGE.serialize(toSerialize);
+    }
+
+    /**
+     * Deserialize a component from a legacy component string.
+     *
+     * @param serializedComponent The serialized component.
+     * @return The component.
+     */
+    @NotNull
+    public static Component legacy(@NotNull String serializedComponent) {
+        char ch = serializedComponent.contains("§") ? '§' : '&';
+        return LegacyComponentSerializer.legacy(ch).deserialize(serializedComponent);
+    }
+
+    /**
+     * Serialize a component into a legacy component string.
+     *
+     * @param toSerialize The component to serialize.
+     * @return The serialized component.
+     */
+    public static String legacy(@NotNull Component toSerialize) {
+        return LegacyComponentSerializer.legacySection().serialize(toSerialize);
     }
 
     /**

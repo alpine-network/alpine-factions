@@ -6,6 +6,7 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.PlayerState;
 import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -16,6 +17,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public final class PlayerEngine extends AlpineEngine {
     PlayerEngine(AlpinePlugin plugin) {
         super(plugin);
+    }
+
+    @EventHandler
+    public void onPlayerLogin(PlayerLoginEvent event) {
+        PlayerHandler.getInstance().loggedIn(event.getPlayer());
     }
 
     @EventHandler
@@ -34,6 +40,6 @@ public final class PlayerEngine extends AlpineEngine {
         }
 
         PlayerState state = PlayerHandler.getInstance().getPlayer(event.getPlayer());
-        state.movedChunk(from, to);
+        state.onMoveChunk(from, to);
     }
 }

@@ -77,6 +77,8 @@ public final class NameCommand extends BaseFactionsCommand {
         // rename the faction
         faction.setName(name);
         faction.markDirty();
+
+        // notify the faction
         Messaging.broadcast(faction, player, observer -> {
             return messageConfig.rename.build(
                     "player_name", player.getName(),

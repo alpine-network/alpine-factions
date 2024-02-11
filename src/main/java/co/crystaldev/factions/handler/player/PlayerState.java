@@ -5,13 +5,11 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.player.TerritorialTitleMode;
 import co.crystaldev.factions.command.claiming.Claiming;
+import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.PlayerStore;
-import co.crystaldev.factions.util.AsciiFactionMap;
-import co.crystaldev.factions.util.ComponentHelper;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Messaging;
+import co.crystaldev.factions.util.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -37,7 +35,21 @@ public final class PlayerState {
     @Setter
     private boolean autoFactionMap;
 
-    public void movedChunk(@NotNull Chunk oldChunk, @NotNull Chunk newChunk) {
+    public void onLogin() {
+        Faction faction = FactionStore.getInstance().findFactionOrDefault(this.player);
+        Component motd = faction.getMotd();
+
+        if (motd != null) {
+            MessageConfig config = MessageConfig.getInstance();
+            Component title = config.motdTitle.build(
+                    "faction", FactionHelper.formatRelational(this.player, faction, faction.getName()),
+                    "faction_name", faction.getName());
+
+            AlpineFactions.schedule(() -> Messaging.send(this.player, ComponentHelper.joinNewLines(Formatting.title(title), motd)));
+        }
+    }
+
+    public void onMoveChunk(@NotNull Chunk oldChunk, @NotNull Chunk newChunk) {
         FPlayer state = PlayerStore.getInstance().getPlayer(this.player.getUniqueId());
 
         // player has entered into a new faction claim
