@@ -94,7 +94,7 @@ public final class Faction {
         long powerLevel = 0L;
         for (Member member : this.members.values()) {
             FPlayer user = member.getUser();
-            powerLevel += user.getPower() + user.getPowerBoost();
+            powerLevel += Math.round(user.getPowerLevel()) + user.getPowerBoost();
         }
 
         return powerLevel;

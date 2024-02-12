@@ -22,7 +22,7 @@ public final class FPlayer {
     private final UUID id;
 
     @Setter
-    private long power;
+    private double powerLevel;
 
     @Setter
     private long powerBoost;
