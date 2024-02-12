@@ -6,6 +6,8 @@ import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.StyleBuilderApplicable;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -78,6 +80,43 @@ public final class ComponentHelper {
     @NotNull
     public static String plain(@NotNull Component component) {
         return PlainTextComponentSerializer.plainText().serialize(component);
+    }
+
+    /**
+     * Add events to the given component.
+     *
+     * @param component The component to add hover and click events to.
+     * @param hover   The text to display while hovering.
+     * @param command The command to execute when the component is clicked.
+     * @return The component.
+     */
+    @NotNull
+    public static Component events(@NotNull Component component, @NotNull Component hover, @NotNull String command) {
+        return component.hoverEvent(HoverEvent.showText(hover)).clickEvent(ClickEvent.runCommand(command));
+    }
+
+    /**
+     * Add events to the given component.
+     *
+     * @param component The component to add hover and click events to.
+     * @param both The text to display while hovering and command to execute when clicked.
+     * @return The component.
+     */
+    @NotNull
+    public static Component events(@NotNull Component component, @NotNull Component both) {
+        return events(component, both, plain(both));
+    }
+
+    /**
+     * Add events to the given component.
+     *
+     * @param component The component to add hover and click events to.
+     * @param both The text to display while hovering and command to execute when clicked.
+     * @return The component.
+     */
+    @NotNull
+    public static Component events(@NotNull Component component, @NotNull String both) {
+        return events(component, Component.text(both), both);
     }
 
     /**

@@ -171,11 +171,8 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
     @Nullable
     public Claim putClaim(@NotNull String worldName, int chunkX, int chunkZ, @NotNull Faction faction) {
         String key = getKey(worldName, chunkX, chunkZ);
-        ClaimRegion region = this.getOrCreate(key, () -> {
-            ClaimRegion newRegion = new ClaimRegion(key, worldName);
-            this.claimStorage.put(key, newRegion);
-            return newRegion;
-        });
+        ClaimRegion region = this.getOrCreate(key, () -> new ClaimRegion(key, worldName));
+        this.claimStorage.put(key, region);
 
         Claim claim = region.putClaim(chunkX, chunkZ, faction);
         this.put(key, region);
@@ -199,6 +196,9 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
         if (region.isEmpty()) {
             this.claimStorage.remove(key);
             this.remove(key);
+        }
+        else {
+            this.claimStorage.put(key, region);
         }
 
         this.put(key, region);

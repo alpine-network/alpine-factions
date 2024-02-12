@@ -5,11 +5,15 @@ import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.config.MessageConfig;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.ComponentLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -52,24 +56,101 @@ public final class Formatting {
     }
 
     @NotNull
-    public static Component title(@NotNull Component component) {
+    private static Component appendTitlePadding(@NotNull Component component) {
         MessageConfig config = MessageConfig.getInstance();
-
-        Component center = config.titleFormat.build("content", component);
-
         if (config.titleUsesPadding) {
-            int paddingLength = Math.max(4, (TITLE_LENGTH - ComponentHelper.length(center)) / 2);
+            int paddingLength = Math.max(4, (TITLE_LENGTH - ComponentHelper.length(component)) / 2);
             String paddingString = StringHelper.repeat(config.paddingCharacter, paddingLength);
             Component padding = ComponentHelper.stylize(config.paddingStyle, Component.text(paddingString));
-            return ComponentHelper.join(padding, center, padding);
+            return ComponentHelper.join(padding, component, padding);
         }
         else {
-            return center;
+            return component;
         }
+    }
+
+    @NotNull
+    public static Component title(@NotNull Component component) {
+        MessageConfig config = MessageConfig.getInstance();
+        return appendTitlePadding(config.titleFormat.build("content", component));
     }
 
     @NotNull
     public static Component title(@NotNull String component) {
         return title(Component.text(component));
+    }
+
+    @NotNull
+    public static <T> Component page(@NotNull Component title, @NotNull Collection<T> elements,
+                                     @NotNull String command, int currentPage, int elementsPerPage,
+                                     @NotNull Function<@Nullable T, Component> toComponentFn) {
+        MessageConfig config = MessageConfig.getInstance();
+        List<Component> pageElements = new LinkedList<>();
+        int totalPages = (int) Math.ceil(elementsPerPage / (double) elementsPerPage);
+
+        // needs to be non-zero based
+        int humanPage = currentPage;
+        currentPage--;
+
+        // collect page elements
+        int index = 0;
+        for (T element : elements) {
+            if (pageElements.size() >= elementsPerPage) {
+                break;
+            }
+
+            if (index >= currentPage * elementsPerPage) {
+                pageElements.add(toComponentFn.apply(element));
+            }
+
+            index++;
+        }
+
+        // ensure there is data to display
+        if (pageElements.isEmpty()) {
+            return config.noPages.build();
+        }
+
+        // create the title
+        Component previous = currentPage == 0
+                ? config.previousDisabled.build()
+                : ComponentHelper.events(config.previous.build(), Formatting.formatPlaceholders(command, humanPage - 1));
+        Component next = currentPage == totalPages - 1
+                ? config.nextDisabled.build()
+                : ComponentHelper.events(config.next.build(), Formatting.formatPlaceholders(command, humanPage + 1));
+
+        // build the title
+        Component center = config.paginatorTitleFormat.build(
+                "content", title,
+                "page", humanPage,
+                "max_pages", totalPages,
+                "previous", previous,
+                "next", next
+        );
+
+        // build the component
+        return ComponentHelper.joinNewLines(
+                appendTitlePadding(center),
+                ComponentHelper.joinNewLines(pageElements)
+        );
+    }
+
+    @NotNull
+    public static <T> Component page(@NotNull Component title, @NotNull Collection<T> elements,
+                                     @NotNull String command, int currentPage, int elementsPerPage) {
+        return page(title, elements, command, currentPage, elementsPerPage, Formatting::asComponent);
+    }
+
+    @NotNull
+    private static Component asComponent(@Nullable Object obj) {
+        if (obj == null) {
+            return Component.text("< null >");
+        }
+
+        if (obj instanceof ComponentLike) {
+            return ((ComponentLike) obj).asComponent();
+        }
+
+        return Component.text(obj.toString());
     }
 }

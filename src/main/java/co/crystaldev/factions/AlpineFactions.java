@@ -92,4 +92,8 @@ public final class AlpineFactions extends AlpinePlugin {
     public static void schedule(@NotNull Runnable runnable, long wait) {
         Bukkit.getScheduler().runTaskLater(instance, runnable, wait);
     }
+
+    public static void scheduleAsync(@NotNull Runnable runnable) {
+        Bukkit.getScheduler().runTaskAsynchronously(instance, runnable);
+    }
 }

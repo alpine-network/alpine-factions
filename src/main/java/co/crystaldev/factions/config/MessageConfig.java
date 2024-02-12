@@ -39,7 +39,19 @@ public final class MessageConfig extends AlpineConfig {
             "",
             "| Formatting"
     })
+    public ConfigText noPages = ConfigText.of("%error_prefix% No pages available to display");
+
     public ConfigText titleFormat = ConfigText.of("<dark_gray><</dark_gray> %content% <dark_gray>></dark_gray>");
+
+    public ConfigText paginatorTitleFormat = ConfigText.of("<dark_gray><</dark_gray> %content% <separator>|</separator> %previous% %page%/%max_pages% %next% <dark_gray>></dark_gray>");
+
+    public ConfigText previous = ConfigText.of("<bracket>[</bracket><emphasis><</emphasis><bracket>]</bracket>");
+
+    public ConfigText next = ConfigText.of("<bracket>[</bracket><emphasis>></emphasis><bracket>]</bracket>");
+
+    public ConfigText previousDisabled = ConfigText.of("<emphasis>[<]</emphasis>");
+
+    public ConfigText nextDisabled = ConfigText.of("<emphasis>[>]</emphasis>");
 
     public boolean titleUsesPadding = true;
 
@@ -78,6 +90,14 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText memberJoin = ConfigText.of("%prefix% %player% joined the faction");
 
     public ConfigText alreadyInFaction = ConfigText.of("%error_prefix% You must leave your current faction to create a new faction");
+
+    @Comment({
+            "",
+            "| Faction State"
+    })
+    public ConfigText listTitle = ConfigText.of("Factions List");
+
+    public ConfigText listEntry = ConfigText.of("%faction% <separator>»</separator> %online%/%members% online, <emphasis>%land%/%power%/%max_power%</emphasis>");
 
     @Comment({
             "",

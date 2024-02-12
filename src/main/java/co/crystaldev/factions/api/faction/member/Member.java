@@ -40,6 +40,10 @@ public final class Member {
         return this.title != null;
     }
 
+    public boolean isOnline() {
+        return this.getPlayer() != null;
+    }
+
     @Nullable
     public Player getPlayer() {
         return Bukkit.getPlayer(this.id);

@@ -12,10 +12,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -61,7 +58,7 @@ public final class StyleConfig extends AlpineConfig {
             "Developed by Crystal Development, LLC.",
             ""
     })
-    public HashMap<String, String> styles = new HashMap<>();
+    public HashMap<String, String> styles = new LinkedHashMap<>();
     {
         this.styles.put("info", "dark_aqua bold");
         this.styles.put("highlight", "aqua");
@@ -73,12 +70,13 @@ public final class StyleConfig extends AlpineConfig {
         this.styles.put("success_highlight", "green");
 
         this.styles.put("emphasis", "gray");
+        this.styles.put("bracket", "dark_gray");
         this.styles.put("separator", "dark_gray bold");
         this.styles.put("text", "white");
         this.styles.put("error_text", "white");
     }
 
-    public HashMap<RelationType, String> relationalStyles = new HashMap<>();
+    public HashMap<RelationType, String> relationalStyles = new LinkedHashMap<>();
     {
         this.relationalStyles.put(RelationType.SELF, "green");
         this.relationalStyles.put(RelationType.NEUTRAL, "aqua");
@@ -87,7 +85,7 @@ public final class StyleConfig extends AlpineConfig {
         this.relationalStyles.put(RelationType.TRUCE, "light_purple");
     }
 
-    public HashMap<String, String> factionNameStyles = new HashMap<>();
+    public HashMap<String, String> factionNameStyles = new LinkedHashMap<>();
     {
         this.factionNameStyles.put("Wilderness", "dark_green");
         this.factionNameStyles.put("SafeZone", "gold");

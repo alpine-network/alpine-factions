@@ -8,6 +8,7 @@ import co.crystaldev.factions.config.StyleConfig;
 import co.crystaldev.factions.store.FactionStore;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,14 +27,13 @@ public final class FactionHelper {
     }
 
     @NotNull
-    public static Component formatRelational(@NotNull Player viewer, @Nullable Faction faction, @NotNull Component component) {
+    public static Component formatRelational(@NotNull CommandSender viewer, @Nullable Faction faction, @NotNull Component component) {
         if (faction == null) {
             return Component.text("< null >");
         }
 
         StyleConfig config = StyleConfig.getInstance();
-        FactionStore store = FactionStore.getInstance();
-        Faction self = store.findFactionOrDefault(viewer);
+        Faction self = findFactionOrDefault(viewer);
 
         RelationType relationType = self.relationTo(faction);
 
@@ -42,12 +42,12 @@ public final class FactionHelper {
     }
 
     @NotNull
-    public static Component formatRelational(@NotNull Player viewer, @Nullable Faction faction, @NotNull String component) {
+    public static Component formatRelational(@NotNull CommandSender viewer, @Nullable Faction faction, @NotNull String component) {
         return formatRelational(viewer, faction, Component.text(component));
     }
 
     @NotNull
-    public static Component formatRelational(@NotNull Player viewer, @Nullable Faction faction, @NotNull Player player) {
+    public static Component formatRelational(@NotNull CommandSender viewer, @Nullable Faction faction, @NotNull Player player) {
         if (faction == null) {
             return Component.text("< null >");
         }
@@ -71,8 +71,8 @@ public final class FactionHelper {
     }
 
     @NotNull
-    public static Component formatRelational(@NotNull Player viewer, @Nullable Faction faction) {
-        Faction playerFaction = FactionStore.getInstance().findFaction(viewer);
+    public static Component formatRelational(@NotNull CommandSender viewer, @Nullable Faction faction) {
+        Faction playerFaction = findFaction(viewer);
         String factionName = Objects.equals(faction, playerFaction) ? "Your faction" : (faction == null ? "< null >" : faction.getName());
         return formatRelational(viewer, faction, factionName);
     }
@@ -83,5 +83,17 @@ public final class FactionHelper {
                 "faction", FactionHelper.formatRelational(player, faction),
                 "faction_name", faction.getName()
         );
+    }
+
+    @Nullable
+    private static Faction findFaction(@NotNull CommandSender sender) {
+        FactionStore store = FactionStore.getInstance();
+        return sender instanceof Player ? store.findFaction((Player) sender) : store.getWilderness();
+    }
+
+    @NotNull
+    private static Faction findFactionOrDefault(@NotNull CommandSender sender) {
+        FactionStore store = FactionStore.getInstance();
+        return sender instanceof Player ? store.findFactionOrDefault((Player) sender) : store.getWilderness();
     }
 }

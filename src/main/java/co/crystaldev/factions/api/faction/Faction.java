@@ -82,8 +82,12 @@ public final class Faction {
 
     // region Territory
 
+    public boolean hasInfinitePower() {
+        return this.getFlagValueOrDefault(FactionFlags.INFINITE_POWER);
+    }
+
     public long getPowerLevel() {
-        if (this.getFlagValueOrDefault(FactionFlags.INFINITE_POWER)) {
+        if (this.hasInfinitePower()) {
             return Integer.MAX_VALUE;
         }
 
@@ -97,7 +101,7 @@ public final class Faction {
     }
 
     public long getMaxPowerLevel() {
-        if (this.getFlagValueOrDefault(FactionFlags.INFINITE_POWER)) {
+        if (this.hasInfinitePower()) {
             return Integer.MAX_VALUE;
         }
 
@@ -113,7 +117,7 @@ public final class Faction {
     }
 
     public long getRemainingPower() {
-        if (this.getFlagValueOrDefault(FactionFlags.INFINITE_POWER)) {
+        if (this.hasInfinitePower()) {
             return Integer.MAX_VALUE;
         }
 
@@ -260,6 +264,26 @@ public final class Faction {
     // endregion Roster
 
     // region Members
+
+    public int countOnlineMembers() {
+        int members = 0;
+
+        for (Member member : this.members.values()) {
+            if (member.isOnline()) {
+                members++;
+            }
+        }
+
+        return members;
+    }
+
+    public int countMembers() {
+        return this.members.size();
+    }
+
+    public int countTotalMembers() {
+        return this.members.size() + this.roster.size();
+    }
 
     public boolean hasOwner() {
         for (Member member : this.members.values()) {
