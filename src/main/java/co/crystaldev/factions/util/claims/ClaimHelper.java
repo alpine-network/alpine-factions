@@ -64,6 +64,12 @@ public final class ClaimHelper {
             return;
         }
 
+        // ensure that the player has permission to claim the land
+        if (claimingFaction != null && !claimingFaction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
+            FactionHelper.missingPermission(player, claimingFaction, "modify territory");
+            return;
+        }
+
         // iterate and validate chunks
         Faction playerFaction = factionStore.findFactionOrDefault(player);
         ClaimStore store = ClaimStore.getInstance();
