@@ -119,6 +119,12 @@ public final class ClaimHelper {
             return;
         }
 
+        // ensure that the claims can be conquered
+        if (conqueredChunkCount > 0 && canConquer(conqueredFactions, origin.getWorld().getName(), store)) {
+            messageConfig.conquerFromEdge.send(player);
+            return;
+        }
+
         // claim/unclaim the land
         for (ChunkCoordinate chunk : chunks) {
             if (claimingFaction == null) {
@@ -307,6 +313,32 @@ public final class ClaimHelper {
 
         // able to claim
         nearby.add(coord);
+    }
+
+    private static boolean canConquer(@NotNull Map<Faction, List<ChunkCoordinate>> conqueredFactions,
+                                      @NotNull String world, @NotNull ClaimStore store) {
+
+        boolean canConquer = true;
+
+        for (Map.Entry<Faction, List<ChunkCoordinate>> entry : conqueredFactions.entrySet()) {
+            Faction faction = entry.getKey();
+            boolean foundEdge = false;
+            for (ChunkCoordinate coordinate : entry.getValue()) {
+                boolean isEdge = !FactionHelper.equals(faction, store.getFaction(world, coordinate.getX() - 1, coordinate.getZ()))
+                        || !FactionHelper.equals(faction, store.getFaction(world, coordinate.getX() + 1, coordinate.getZ()))
+                        || !FactionHelper.equals(faction, store.getFaction(world, coordinate.getX(), coordinate.getZ() - 1))
+                        || !FactionHelper.equals(faction, store.getFaction(world, coordinate.getX(), coordinate.getZ() + 1));
+                if (isEdge) {
+                    foundEdge = true;
+                }
+            }
+
+            if (!foundEdge) {
+                canConquer = false;
+            }
+        }
+
+        return canConquer;
     }
 
     @NotNull

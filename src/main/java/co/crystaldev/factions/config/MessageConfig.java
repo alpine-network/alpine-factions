@@ -139,6 +139,8 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText conquerFail = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> owns this land and is strong enough to keep it");
 
+    public ConfigText conquerFromEdge = ConfigText.of("%error_prefix% You must begin conquering at the edge of this territory");
+
     public ConfigText landOwned = ConfigText.of("%prefix% This land is already owned by <highlight>%faction%</highlight>");
 
     public ConfigText insufficientPower = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> does not have enough power to claim this land");
