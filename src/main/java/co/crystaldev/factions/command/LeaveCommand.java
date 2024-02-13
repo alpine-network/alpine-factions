@@ -36,19 +36,24 @@ public final class LeaveCommand extends FactionsCommand {
             return;
         }
 
-        // notify the faction before the player is removed
-        Messaging.broadcast(faction, pl -> config.memberLeave.build(
-                "player", FactionHelper.formatRelational(pl, faction, player),
-                "player_name", player.getName()
-        ));
+        // notify the faction
+        Messaging.broadcast(faction, pl -> {
+            if (pl.equals(player)) {
+                return null;
+            }
 
-        // remove the member
-        faction.removeMember(player.getUniqueId());
+            return config.memberLeave.build(
+                    "player", FactionHelper.formatRelational(pl, faction, player),
+                    "player_name", player.getName());
+        });
 
         // notify the player
         Messaging.send(player, config.leave.build(
                 "faction", FactionHelper.formatRelational(player, faction),
                 "faction_name", faction.getName()
         ));
+
+        // remove the member
+        faction.removeMember(player.getUniqueId());
     }
 }

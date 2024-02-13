@@ -2,6 +2,8 @@ package co.crystaldev.factions.handler;
 
 import co.crystaldev.factions.handler.player.PlayerState;
 import lombok.Getter;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +36,13 @@ public final class PlayerHandler {
         return this.playerStateMap.computeIfAbsent(player.getUniqueId(), id -> new PlayerState(player));
     }
 
-    public boolean isOverriding(@NotNull Player player) {
-        return this.getPlayer(player).isOverriding();
+    public boolean isOverriding(@NotNull CommandSender sender) {
+        if (sender instanceof ConsoleCommandSender) {
+            return true;
+        }
+        if (!(sender instanceof Player)) {
+            return false;
+        }
+        return this.getPlayer((Player) sender).isOverriding();
     }
 }

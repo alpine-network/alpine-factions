@@ -357,8 +357,8 @@ public final class ClaimHelper {
 
                 "claim_type", claimType,
 
-                "player", FactionHelper.formatRelational(recipient, playerFaction, actor),
-                "player_name", actor.getName(),
+                "actor", FactionHelper.formatRelational(recipient, playerFaction, actor),
+                "actor_name", actor.getName(),
 
                 "old_faction", FactionHelper.formatRelational(recipient, oldFaction),
                 "old_faction_name", oldFaction.getName(),

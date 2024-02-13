@@ -129,8 +129,8 @@ public final class UnclaimCommand extends FactionsCommand {
         Faction playerFaction = FactionStore.getInstance().findFactionOrDefault(player);
         Messaging.broadcast(faction, player, pl -> {
             return message.build(
-                    "player", FactionHelper.formatRelational(pl, playerFaction, player),
-                    "player_name", player.getName(),
+                    "actor", FactionHelper.formatRelational(pl, playerFaction, player),
+                    "actor_name", player.getName(),
 
                     "faction", FactionHelper.formatRelational(pl, faction),
                     "faction_name", faction.getName(),

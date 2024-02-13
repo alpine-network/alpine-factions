@@ -1,0 +1,103 @@
+package co.crystaldev.factions.command;
+
+import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.faction.member.Member;
+import co.crystaldev.factions.api.faction.member.Rank;
+import co.crystaldev.factions.api.faction.permission.Permissions;
+import co.crystaldev.factions.command.argument.OfflinePlayerArgumentResolver;
+import co.crystaldev.factions.command.framework.FactionsCommand;
+import co.crystaldev.factions.config.MessageConfig;
+import co.crystaldev.factions.handler.PlayerHandler;
+import co.crystaldev.factions.store.FactionStore;
+import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.Messaging;
+import dev.rollczi.litecommands.annotations.argument.Arg;
+import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.description.Description;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+/**
+ * @author BestBearr <crumbygames12@gmail.com>
+ * @since 02/12/2024
+ */
+@Command(name = "factions kick")
+@Description("Remove a member from the faction.")
+public final class KickCommand extends FactionsCommand {
+    public KickCommand(AlpinePlugin plugin) {
+        super(plugin);
+    }
+
+    @Execute
+    public void execute(
+            @Context CommandSender sender,
+            @Arg("player") @Key(OfflinePlayerArgumentResolver.KEY) OfflinePlayer other
+    ) {
+        MessageConfig config = MessageConfig.getInstance();
+        FactionStore store = FactionStore.getInstance();
+        Faction faction = store.findFactionOrDefault(other);
+        Faction actingFaction = store.findFactionOrDefault(sender);
+        boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
+
+        // ensure player is in a faction
+        if (faction.isWilderness()) {
+            config.playerNotInFaction.send(sender,
+                    "player", FactionHelper.formatRelational(sender, store.getWilderness(), other),
+                    "player_name", other.getName());
+            return;
+        }
+
+        // ensure the sender has permission to kick the player
+        if (!overriding && !faction.isPermitted(sender, Permissions.KICK_MEMBERS)) {
+            FactionHelper.missingPermission(sender, faction, "kick members");
+            return;
+        }
+
+        // ensure the player is not superior
+        if (!overriding && sender instanceof Player) {
+            Player player = (Player) sender;
+            Rank senderRank = faction.getMemberRank(player.getUniqueId(), Rank.LEADER);
+            Rank memberRank = faction.getMemberRank(other.getUniqueId());
+
+            if (senderRank.ordinal() > memberRank.ordinal()) {
+                config.cantKick.send(sender,
+                        "player", FactionHelper.formatRelational(sender, faction, other),
+                        "player_name", other.getName());
+                return;
+            }
+        }
+
+        // notify the faction
+        boolean console = !(sender instanceof Player);
+        Messaging.broadcast(faction, sender, pl -> {
+            if (pl.getUniqueId().equals(other.getUniqueId())) {
+                return null;
+            }
+
+            return config.kick.build(
+                    "actor", console ? "@console" : FactionHelper.formatRelational(pl, actingFaction, (Player) sender),
+                    "actor_name", console ? "@console" : sender.getName(),
+
+                    "player", FactionHelper.formatRelational(pl, faction, other),
+                    "player_name", other.getName()
+            );
+        });
+
+        // kick the member
+        faction.removeMember(other.getUniqueId());
+
+        // notify the player
+        Messaging.attemptSend(other, config.kicked.build(
+                "actor", console ? "@console" : FactionHelper.formatRelational(other, actingFaction, (Player) sender),
+                "actor_name", console ? "@console" : sender.getName(),
+
+                "faction", FactionHelper.formatRelational(other, faction),
+                "faction_name", faction.getName()
+        ));
+    }
+}

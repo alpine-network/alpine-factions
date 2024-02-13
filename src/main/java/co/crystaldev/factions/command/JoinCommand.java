@@ -76,9 +76,15 @@ public final class JoinCommand extends FactionsCommand {
         faction.addMember(player.getUniqueId());
 
         // notify the faction
-        Messaging.broadcast(faction, pl -> config.memberJoin.build(
-                "player", FactionHelper.formatRelational(pl, faction, player),
-                "player_name", player.getName()));
+        Messaging.broadcast(faction, pl -> {
+            if (pl.equals(player)) {
+                return null;
+            }
+
+            return config.memberJoin.build(
+                    "player", FactionHelper.formatRelational(pl, faction, player),
+                    "player_name", player.getName());
+        });
 
         // notify the new member
         Messaging.send(player, config.join.build(
@@ -134,17 +140,23 @@ public final class JoinCommand extends FactionsCommand {
         faction.addMember(player.getUniqueId());
 
         // notify the faction
-        Messaging.broadcast(faction, player, pl -> config.memberForceJoin.build(
-                "inviter", FactionHelper.formatRelational(pl, actingFaction, player),
-                "inviter_name", player.getName(),
+        Messaging.broadcast(faction, player, pl -> {
+            if (pl.getUniqueId().equals(joiningPlayer.getUniqueId())) {
+                return null;
+            }
 
-                "player", FactionHelper.formatRelational(pl, wilderness, joiningPlayer),
-                "player_name", joiningPlayer.getName()));
+            return config.memberForceJoin.build(
+                    "inviter", FactionHelper.formatRelational(pl, actingFaction, player),
+                    "inviter_name", player.getName(),
+
+                    "player", FactionHelper.formatRelational(pl, wilderness, joiningPlayer),
+                    "player_name", joiningPlayer.getName());
+        });
 
         // notify the new member
         Messaging.attemptSend(joiningPlayer, config.forceJoin.build(
-                "inviter", FactionHelper.formatRelational(joiningPlayer, actingFaction, player),
-                "inviter_name", player.getName(),
+                "actor", FactionHelper.formatRelational(joiningPlayer, actingFaction, player),
+                "actor_name", player.getName(),
 
                 "faction", FactionHelper.formatRelational(joiningPlayer, faction, false),
                 "faction_name", faction.getName()

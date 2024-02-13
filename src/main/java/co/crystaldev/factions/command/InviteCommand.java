@@ -60,12 +60,14 @@ public final class InviteCommand extends FactionsCommand {
         // notify the faction
         Messaging.broadcast(faction, pl -> {
             if (previouslyInvited && !player.equals(pl)) {
+                // if the member was already invited, do not send broadcast to the
+                // rest of the faction, only to the sender
                 return null;
             }
 
             return config.invite.build(
-                    "player", FactionHelper.formatRelational(pl, faction, player),
-                    "player_name", player.getName(),
+                    "actor", FactionHelper.formatRelational(pl, faction, player),
+                    "actor_name", player.getName(),
 
                     "invitee", FactionHelper.formatRelational(pl, inviteeFaction, invitee),
                     "invitee_name", invitee.getName()
@@ -74,8 +76,8 @@ public final class InviteCommand extends FactionsCommand {
 
         // notify the invitee
         Messaging.attemptSend(invitee, config.invited.build(
-                "player", FactionHelper.formatRelational(invitee, faction, player),
-                "player_name", player.getName(),
+                "actor", FactionHelper.formatRelational(invitee, faction, player),
+                "actor_name", player.getName(),
 
                 "faction", FactionHelper.formatRelational(invitee, faction, false),
                 "faction_name", faction.getName()
@@ -103,8 +105,8 @@ public final class InviteCommand extends FactionsCommand {
         // notify the faction
         Messaging.broadcast(faction, pl -> {
             return config.inviteRevoke.build(
-                    "player", FactionHelper.formatRelational(pl, faction, player),
-                    "player_name", player.getName(),
+                    "actor", FactionHelper.formatRelational(pl, faction, player),
+                    "actor_name", player.getName(),
 
                     "invitee", FactionHelper.formatRelational(pl, inviteeFaction, invitee),
                     "invitee_name", invitee.getName()

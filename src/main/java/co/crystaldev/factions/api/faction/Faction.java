@@ -403,9 +403,12 @@ public final class Faction {
         this.invitees.remove(player);
 
         // add the member to the member list
-        Member member = this.roster.computeIfAbsent(player, pl -> new Member(player, rank));
+        Member member = this.roster.getOrDefault(player, new Member(player, rank));
         member.setRank(rank);
         this.members.put(player, member);
+        if (this.isOnRoster(player)) {
+            this.roster.put(player, member);
+        }
 
         // mark this faction for update
         this.markDirty();
@@ -413,6 +416,7 @@ public final class Faction {
 
     public void removeMember(@NotNull UUID player) {
         this.members.remove(player);
+        this.invitees.remove(player);
         this.markDirty();
     }
 
@@ -455,6 +459,21 @@ public final class Faction {
         else {
             return member;
         }
+    }
+
+    @Nullable
+    public Rank getMemberRank(@NotNull UUID player) {
+        Member member = this.getMember(player);
+        if (member == null) {
+            member = this.roster.get(player);
+        }
+        return member == null ? null : member.getRank();
+    }
+
+    @NotNull
+    public Rank getMemberRank(@NotNull UUID player, @NotNull Rank defaultRank) {
+        Rank rank = this.getMemberRank(player);
+        return rank == null ? defaultRank : rank;
     }
 
     // endregion Members

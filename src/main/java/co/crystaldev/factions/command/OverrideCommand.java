@@ -4,7 +4,6 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.PermissionNodes;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.PlayerState;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -20,13 +19,13 @@ import org.bukkit.entity.Player;
  */
 @Command(name = "factions override")
 @Description("Override factions permission checks.")
-@Permission(PermissionNodes.ADMIN)
 public final class OverrideCommand extends FactionsCommand {
     public OverrideCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Permission(PermissionNodes.ADMIN)
     public void execute(@Context Player player) {
         PlayerState state = PlayerHandler.getInstance().getPlayer(player);
         state.setOverriding(!state.isOverriding());

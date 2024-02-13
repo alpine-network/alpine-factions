@@ -35,6 +35,8 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText notInFaction = ConfigText.of("%error_prefix% You are not in a faction");
 
+    public ConfigText playerNotInFaction = ConfigText.of("%error_prefix% %player% is not in a faction");
+
     public ConfigText unknownFaction = ConfigText.of("%error_prefix% No faction or player was found with the name <error_highlight>%value%</error_highlight>");
 
     public ConfigText unknownPlayer = ConfigText.of("%error_prefix% No player was found with the name <error_highlight>%player_name%</error_highlight>");
@@ -85,17 +87,11 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Create/Join/Leave"
+            "| Join"
     })
-    public ConfigText create = ConfigText.of("%prefix% You created a new faction named <highlight>%faction_name%</highlight>");
-
-    public ConfigText leave = ConfigText.of("%prefix% You left <highlight>%faction_name%</highlight>");
-
-    public ConfigText memberLeave = ConfigText.of("%prefix% %player% left the faction");
-
     public ConfigText join = ConfigText.of("%prefix% You joined <highlight>%faction_name%</highlight>");
 
-    public ConfigText forceJoin = ConfigText.of("%prefix% %inviter% added you to %faction%");
+    public ConfigText forceJoin = ConfigText.of("%prefix% %actor% added you to %faction%");
 
     public ConfigText memberJoin = ConfigText.of("%prefix% %player% joined the faction");
 
@@ -109,15 +105,33 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText playerAlreadyInFaction = ConfigText.of("%error_prefix% %player% is already in a faction");
 
-    public ConfigText notInvited = ConfigText.of("%error_prefix% You were not invited to %faction%");
+    @Comment({
+            "",
+            "| Leave"
+    })
+    public ConfigText leave = ConfigText.of("%prefix% You left <highlight>%faction_name%</highlight>");
+
+    public ConfigText memberLeave = ConfigText.of("%prefix% %player% left the faction");
+
+    public ConfigText kick = ConfigText.of("%prefix% %actor% kicked %player% from the faction");
+
+    public ConfigText kicked = ConfigText.of("%prefix% %actor% kicked you from %faction%");
+
+    public ConfigText cantKick = ConfigText.of("%error_prefix% You can't kick %player% from the faction");
+
+    @Comment({
+            "",
+            "| Invite"
+    })
+    public ConfigText notInvited = ConfigText.of("%error_prefix% You are not invited to %faction%");
 
     public ConfigText playerNotInvited = ConfigText.of("%error_prefix% %player% is not invited to %faction%");
 
-    public ConfigText invite = ConfigText.of("%prefix% %player% invited %invitee% to your faction");
+    public ConfigText invite = ConfigText.of("%prefix% %actor% invited %invitee% to your faction");
 
-    public ConfigText invited = ConfigText.of("%prefix% %player% invited you to %faction%");
+    public ConfigText invited = ConfigText.of("%prefix% %actor% invited you to %faction%");
 
-    public ConfigText inviteRevoke = ConfigText.of("%prefix% %player% revoked the invitation of %invitee%");
+    public ConfigText inviteRevoke = ConfigText.of("%prefix% %actor% revoked the invitation of %invitee%");
 
     public ConfigText inviteListTitle = ConfigText.of("%faction% <separator>|</separator> Invitations");
 
@@ -127,6 +141,8 @@ public final class MessageConfig extends AlpineConfig {
             "",
             "| Faction State"
     })
+    public ConfigText create = ConfigText.of("%prefix% You created a new faction named <highlight>%faction_name%</highlight>");
+
     public ConfigText listTitle = ConfigText.of("Factions List");
 
     public ConfigText listEntry = ConfigText.of("%faction% <separator>»</separator> %online%/%members% online, <emphasis>%land%/%power%/%max_power%</emphasis>");
@@ -142,22 +158,22 @@ public final class MessageConfig extends AlpineConfig {
             "| Land Claiming"
     })
     public ConfigText landClaim = ConfigText.of(
-            "%prefix% %player% %claim_type% <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%",
+            "%prefix% %actor% %claim_type% <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%",
             "    <i>%old_faction% → %new_faction%</i>"
     );
 
     public ConfigText landClaimSingle = ConfigText.of(
-            "%prefix% %player% %claim_type% <highlight>%amount% chunk</highlight> at <emphasis>(%world% %chunk_x%, %chunk_z%)</emphasis>",
+            "%prefix% %actor% %claim_type% <highlight>%amount% chunk</highlight> at <emphasis>(%world% %chunk_x%, %chunk_z%)</emphasis>",
             "    <i>%old_faction% → %new_faction%</i>"
     );
 
     public ConfigText landClaimWorld = ConfigText.of(
-            "%prefix% %player% %claim_type% <highlight>%amount% chunks</highlight> in <emphasis>%world%</emphasis>",
+            "%prefix% %actor% %claim_type% <highlight>%amount% chunks</highlight> in <emphasis>%world%</emphasis>",
             "    <i>%old_faction% → %new_faction%</i>"
     );
 
     public ConfigText landClaimAll = ConfigText.of(
-            "%prefix% %player% %claim_type% <highlight>%amount% chunks</highlight> in <emphasis>all worlds</emphasis>",
+            "%prefix% %actor% %claim_type% <highlight>%amount% chunks</highlight> in <emphasis>all worlds</emphasis>",
             "    <i>%old_faction% → %new_faction%</i>"
     );
 

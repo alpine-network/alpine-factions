@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -87,19 +88,20 @@ public final class Messaging {
         }
     }
 
-    public static void broadcast(@NotNull Faction faction, @Nullable Player subject, @NotNull Function<Player, @Nullable Component> playerFunction) {
+    public static void broadcast(@NotNull Faction faction, @Nullable ServerOperator subject, @NotNull Function<Player, @Nullable Component> playerFunction) {
         for (Member member : faction.getMembers().values()) {
             Player player = member.getPlayer();
             if (player != null) {
-                if (player.equals(subject))
+                if (player.equals(subject)) {
                     subject = null;
+                }
 
                 send(player, playerFunction.apply(player));
             }
         }
 
-        if (subject != null) {
-            send(subject, playerFunction.apply(subject));
+        if (subject instanceof Player) {
+            send((Player) subject, playerFunction.apply((Player) subject));
         }
     }
 
