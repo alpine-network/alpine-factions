@@ -4,7 +4,6 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.ClaimStore;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.*;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Chunk;

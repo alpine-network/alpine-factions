@@ -1,5 +1,6 @@
 package co.crystaldev.factions.api.faction;
 
+import co.crystaldev.factions.api.faction.member.MemberInvitation;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
@@ -10,6 +11,7 @@ import co.crystaldev.factions.api.faction.permission.PermissionHolder;
 import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.config.FactionConfig;
+import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.util.ComponentHelper;
@@ -20,6 +22,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +51,7 @@ public final class Faction {
 
     private final long createdAt = System.currentTimeMillis();
 
-    private final ArrayList<UUID> invitees = new ArrayList<>();
+    private final HashMap<UUID, MemberInvitation> invitees = new HashMap<>();
 
     private final HashMap<UUID, Member> roster = new HashMap<>();
 
@@ -195,9 +198,21 @@ public final class Faction {
         this.markDirty();
     }
 
-    public boolean isPermitted(@NotNull OfflinePlayer player, @NotNull Permission permission) {
-        if (this.isMember(player.getUniqueId())) {
-            return this.isPermitted(this.getMember(player).getRank(), permission);
+    public boolean isPermitted(@NotNull ServerOperator player, @NotNull Permission permission) {
+        if (!(player instanceof OfflinePlayer)) {
+            // allow console
+            return true;
+        }
+
+        if (player instanceof Player && PlayerHandler.getInstance().isOverriding((Player) player)) {
+            // allow players with admin access
+            return true;
+        }
+
+        OfflinePlayer offlinePlayer = (OfflinePlayer) player;
+
+        if (this.isMember(offlinePlayer.getUniqueId())) {
+            return this.isPermitted(this.getMember(offlinePlayer).getRank(), permission);
         }
         else {
             Faction other = FactionStore.getInstance().findFaction(player);
@@ -354,20 +369,13 @@ public final class Faction {
         this.markDirty();
     }
 
-    public void memberJoined(@NotNull UUID player) {
-        // remove the player's invitation
-        this.invitees.remove(player);
-
-        // add the member to the member list
-        Member member = this.roster.getOrDefault(player, new Member(player, Rank.getDefault()));
-        this.members.put(player, member);
-
-        // mark this faction for update
-        this.markDirty();
+    @NotNull
+    public Set<MemberInvitation> getInvitations() {
+        return new HashSet<>(this.invitees.values());
     }
 
-    public void inviteMember(@NotNull UUID player) {
-        this.invitees.add(player);
+    public void addInvitation(@NotNull UUID player, @NotNull UUID inviter) {
+        this.invitees.put(player, new MemberInvitation(player, inviter));
         this.markDirty();
     }
 
@@ -386,8 +394,20 @@ public final class Faction {
         this.markDirty();
     }
 
+    public void addMember(@NotNull UUID player) {
+        this.addMember(player, Rank.getDefault());
+    }
+
     public void addMember(@NotNull UUID player, @NotNull Rank rank) {
-        this.members.put(player, new Member(player, rank));
+        // remove the player's invitation
+        this.invitees.remove(player);
+
+        // add the member to the member list
+        Member member = this.roster.computeIfAbsent(player, pl -> new Member(player, rank));
+        member.setRank(rank);
+        this.members.put(player, member);
+
+        // mark this faction for update
         this.markDirty();
     }
 
@@ -397,7 +417,7 @@ public final class Faction {
     }
 
     public boolean isInvited(@NotNull UUID player) {
-        return this.invitees.contains(player);
+        return this.invitees.containsKey(player);
     }
 
     public boolean isOnRoster(@NotNull UUID player) {
@@ -413,12 +433,21 @@ public final class Faction {
     }
 
     @Nullable
+    public MemberInvitation getInvite(@NotNull UUID player) {
+        return this.invitees.get(player);
+    }
+
+    @Nullable
     public Member getMember(@NotNull UUID player) {
         return this.members.get(player);
     }
 
     @NotNull
     public Member getMember(@NotNull OfflinePlayer player) {
+        if (this.isWilderness()) {
+            return new Member(player.getUniqueId(), Rank.getDefault());
+        }
+
         Member member = this.members.get(player.getUniqueId());
         if (member == null) {
             throw new NoSuchElementException(player.getName() + " is not a faction member");
@@ -429,6 +458,10 @@ public final class Faction {
     }
 
     // endregion Members
+
+    public boolean isWilderness() {
+        return this.id.equals(FactionStore.WILDERNESS_ID);
+    }
 
     public void markDirty() {
         this.dirty = true;

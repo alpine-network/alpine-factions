@@ -33,4 +33,8 @@ public final class PlayerHandler {
     public PlayerState getPlayer(@NotNull Player player) {
         return this.playerStateMap.computeIfAbsent(player.getUniqueId(), id -> new PlayerState(player));
     }
+
+    public boolean isOverriding(@NotNull Player player) {
+        return this.getPlayer(player).isOverriding();
+    }
 }

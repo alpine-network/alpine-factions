@@ -56,7 +56,7 @@ public final class NameCommand extends FactionsCommand {
         }
 
         // ensure there is no other faction with the same name
-        Faction other = store.findFaction(name);
+        Faction other = store.findFactionByName(name);
         if (other != null) {
             messageConfig.factionWithName.send(player, "faction_name", name);
             return;

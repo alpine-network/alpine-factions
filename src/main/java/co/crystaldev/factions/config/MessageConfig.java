@@ -35,6 +35,8 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText unknownFaction = ConfigText.of("%error_prefix% No faction or player was found with the name <error_highlight>%value%</error_highlight>");
 
+    public ConfigText unknownPlayer = ConfigText.of("%error_prefix% No player was found with the name <error_highlight>%player_name%</error_highlight>");
+
     @Comment({
             "",
             "| Formatting"
@@ -87,9 +89,23 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText join = ConfigText.of("%prefix% You joined <highlight>%faction_name%</highlight>");
 
+    public ConfigText alreadyInFaction = ConfigText.of("%error_prefix% You must leave your current faction first");
+
     public ConfigText memberJoin = ConfigText.of("%prefix% %player% joined the faction");
 
-    public ConfigText alreadyInFaction = ConfigText.of("%error_prefix% You must leave your current faction to create a new faction");
+    public ConfigText attemptedMemberJoin = ConfigText.of("%prefix% %player% attempted to join the faction");
+
+    public ConfigText failedJoin = ConfigText.of("%error_prefix% You are not invited to this faction");
+
+    public ConfigText invite = ConfigText.of("%prefix% %player% invited <highlight>%invitee%</highlight> to your faction");
+
+    public ConfigText invited = ConfigText.of("%prefix% %player% invited you to <highlight>%faction%</highlight>");
+
+    public ConfigText inviteRevoke = ConfigText.of("%prefix% %player% revoked the invitation of <highlight>%invitee%</highlight>");
+
+    public ConfigText inviteListTitle = ConfigText.of("%faction% <separator>|</separator> Invitations");
+
+    public ConfigText inviteListEntry = ConfigText.of("%player% <separator>»</separator> Invited by %inviter%");
 
     @Comment({
             "",

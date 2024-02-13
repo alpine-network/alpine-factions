@@ -1,7 +1,6 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
@@ -48,7 +47,7 @@ public final class ListCommand extends FactionsCommand {
                 return Component.text("< null >");
             }
 
-            boolean wilderness = faction.getId().equals(FactionStore.WILDERNESS_ID);
+            boolean wilderness = faction.isWilderness();
             String factionName = wilderness ? "Factionless" : faction.getName();
             Component formattedFactionName = wilderness
                     ? ComponentHelper.mini("<gray>Factionless</gray>")

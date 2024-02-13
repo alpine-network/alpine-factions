@@ -14,6 +14,8 @@ import co.crystaldev.factions.api.faction.member.Rank;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,15 +77,6 @@ public final class FactionStore extends AlpineStore<String, Faction> {
         return null;
     }
 
-    @NotNull
-    public Faction findFactionOrDefault(@NotNull UUID member) {
-        for (Faction faction : this.registeredFactions) {
-            if (faction.isMember(member))
-                return faction;
-        }
-        return this.getWilderness();
-    }
-
     @Nullable
     public Faction findFaction(@NotNull OfflinePlayer member) {
         for (Faction faction : this.registeredFactions) {
@@ -91,6 +84,23 @@ public final class FactionStore extends AlpineStore<String, Faction> {
                 return faction;
         }
         return null;
+    }
+
+    @Nullable
+    public Faction findFaction(@NotNull ServerOperator member) {
+        if (member instanceof OfflinePlayer) {
+            return this.findFaction((OfflinePlayer) member);
+        }
+        return null;
+    }
+
+    @NotNull
+    public Faction findFactionOrDefault(@NotNull UUID member) {
+        for (Faction faction : this.registeredFactions) {
+            if (faction.isMember(member))
+                return faction;
+        }
+        return this.getWilderness();
     }
 
     @NotNull
@@ -102,10 +112,18 @@ public final class FactionStore extends AlpineStore<String, Faction> {
         return this.getWilderness();
     }
 
+    @NotNull
+    public Faction findFactionOrDefault(@NotNull ServerOperator member) {
+        if (member instanceof CommandSender) {
+            return findFactionOrDefault((OfflinePlayer) member);
+        }
+        return this.getWilderness();
+    }
+
     @Nullable
-    public Faction findFaction(@NotNull String name) {
+    public Faction findFactionByName(@NotNull String factionName) {
         for (Faction faction : this.registeredFactions) {
-            if (name.equalsIgnoreCase(faction.getName())) {
+            if (factionName.equalsIgnoreCase(faction.getName())) {
                 return faction;
             }
         }
@@ -113,7 +131,7 @@ public final class FactionStore extends AlpineStore<String, Faction> {
     }
 
     @Nullable
-    public Faction getFaction(@NotNull String id) {
+    public Faction getFactionById(@NotNull String id) {
         for (Faction faction : this.registeredFactions) {
             if (faction.getId().equals(id)) {
                 return faction;
@@ -153,7 +171,7 @@ public final class FactionStore extends AlpineStore<String, Faction> {
 
     @NotNull
     public Faction getWilderness() {
-        Faction faction = this.getFaction(WILDERNESS_ID);
+        Faction faction = this.getFactionById(WILDERNESS_ID);
         if (faction != null) {
             return faction;
         }
@@ -188,7 +206,7 @@ public final class FactionStore extends AlpineStore<String, Faction> {
 
     @NotNull
     public Faction getSafeZone() {
-        Faction faction = this.getFaction(SAFEZONE_ID);
+        Faction faction = this.getFactionById(SAFEZONE_ID);
         if (faction != null) {
             return faction;
         }
@@ -224,7 +242,7 @@ public final class FactionStore extends AlpineStore<String, Faction> {
 
     @NotNull
     public Faction getWarZone() {
-        Faction faction = this.getFaction(WARZONE_ID);
+        Faction faction = this.getFactionById(WARZONE_ID);
         if (faction != null) {
             return faction;
         }

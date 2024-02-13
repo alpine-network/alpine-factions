@@ -49,7 +49,7 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
 
     @NotNull
     public List<ClaimedChunk> getClaims(@Nullable Faction faction, @Nullable World world) {
-        if (faction == null || faction.getId().equals(FactionStore.WILDERNESS_ID)) {
+        if (faction == null || faction.isWilderness()) {
             return Collections.emptyList();
         }
 
@@ -73,7 +73,7 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
     }
 
     public int countClaims(@Nullable Faction faction, @Nullable World world) {
-        if (faction == null || faction.getId().equals(FactionStore.WILDERNESS_ID)) {
+        if (faction == null || faction.isWilderness()) {
             return 0;
         }
 
@@ -102,7 +102,7 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
             return null;
         }
 
-        return FactionStore.getInstance().getFaction(claim.getFactionId());
+        return FactionStore.getInstance().getFactionById(claim.getFactionId());
     }
 
     @Nullable
@@ -123,7 +123,7 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
             return store.getWilderness();
         }
 
-        return Optional.ofNullable(store.getFaction(claim.getFactionId())).orElseGet(store::getWilderness);
+        return Optional.ofNullable(store.getFactionById(claim.getFactionId())).orElseGet(store::getWilderness);
     }
 
     @NotNull

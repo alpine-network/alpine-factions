@@ -35,6 +35,9 @@ public final class PlayerState {
     @Setter
     private boolean autoFactionMap;
 
+    @Setter
+    private boolean overriding;
+
     public void onLogin() {
         Faction faction = FactionStore.getInstance().findFactionOrDefault(this.player);
         Component motd = faction.getMotd();

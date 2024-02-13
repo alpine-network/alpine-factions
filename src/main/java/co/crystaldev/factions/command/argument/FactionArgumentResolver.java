@@ -28,7 +28,7 @@ public final class FactionArgumentResolver extends ArgumentResolver<CommandSende
         FactionStore store = FactionStore.getInstance();
 
         // attempt to find faction by its name
-        Faction faction = store.findFaction(argument);
+        Faction faction = store.findFactionByName(argument);
 
         // faction was not found, attempt to find a fac with the given player
         if (faction == null) {

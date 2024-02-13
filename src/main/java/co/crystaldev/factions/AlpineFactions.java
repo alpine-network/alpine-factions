@@ -9,10 +9,7 @@ import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.AlphanumericArgumentResolver;
-import co.crystaldev.factions.command.argument.ClaimTypeArgumentResolver;
-import co.crystaldev.factions.command.argument.FactionArgumentResolver;
-import co.crystaldev.factions.command.argument.WorldClaimArgumentResolver;
+import co.crystaldev.factions.command.argument.*;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.event.ServerTickEvent;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -21,6 +18,7 @@ import dev.rollczi.litecommands.argument.ArgumentKey;
 import dev.rollczi.litecommands.bukkit.LiteBukkitSettings;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
 import org.jetbrains.annotations.NotNull;
@@ -72,10 +70,11 @@ public final class AlpineFactions extends AlpinePlugin {
     public void setupCommandManager(@NotNull LiteCommandsBuilder<CommandSender, LiteBukkitSettings, ?> builder) {
         super.setupCommandManager(builder);
 
-        builder.argument(String.class, ArgumentKey.of(AlphanumericArgumentResolver.KEY), new AlphanumericArgumentResolver());
-        builder.argument(String.class, ArgumentKey.of(WorldClaimArgumentResolver.KEY), new WorldClaimArgumentResolver());
         builder.argument(ClaimType.class, ArgumentKey.of(ClaimTypeArgumentResolver.KEY), new ClaimTypeArgumentResolver());
         builder.argument(Faction.class, ArgumentKey.of(FactionArgumentResolver.KEY), new FactionArgumentResolver());
+        builder.argument(String.class, ArgumentKey.of(WorldClaimArgumentResolver.KEY), new WorldClaimArgumentResolver());
+        builder.argument(String.class, ArgumentKey.of(AlphanumericArgumentResolver.KEY), new AlphanumericArgumentResolver());
+        builder.argument(OfflinePlayer.class, ArgumentKey.of(OfflinePlayerArgumentResolver.KEY), new OfflinePlayerArgumentResolver());
     }
 
     @Override

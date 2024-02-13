@@ -8,6 +8,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -23,12 +24,29 @@ import java.util.function.Predicate;
 @UtilityClass
 public final class Messaging {
 
-    public static void send(@NotNull CommandSender sender, @NotNull Component component) {
+    public static void send(@NotNull CommandSender sender, @Nullable Component component) {
+        if (component == null) {
+            return;
+        }
+
         if (sender instanceof Audience) {
             ((Audience) sender).sendMessage(component);
         }
         else {
             wrap(sender).sendMessage(component);
+        }
+    }
+
+    public static void attemptSend(@NotNull OfflinePlayer sender, @Nullable Component component) {
+        if (component == null || !sender.isOnline()) {
+            return;
+        }
+
+        if (sender instanceof Audience) {
+            ((Audience) sender).sendMessage(component);
+        }
+        else if (sender instanceof CommandSender) {
+            wrap((CommandSender) sender).sendMessage(component);
         }
     }
 
@@ -69,7 +87,7 @@ public final class Messaging {
         }
     }
 
-    public static void broadcast(@NotNull Faction faction, @Nullable Player subject, @NotNull Function<Player, Component> playerFunction) {
+    public static void broadcast(@NotNull Faction faction, @Nullable Player subject, @NotNull Function<Player, @Nullable Component> playerFunction) {
         for (Member member : faction.getMembers().values()) {
             Player player = member.getPlayer();
             if (player != null) {

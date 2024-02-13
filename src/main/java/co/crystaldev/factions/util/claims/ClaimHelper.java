@@ -5,6 +5,7 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
+import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.ChunkCoordinate;
@@ -36,6 +37,7 @@ public final class ClaimHelper {
         FactionConfig factionConfig = FactionConfig.getInstance();
         FactionStore factionStore = FactionStore.getInstance();
 
+        boolean overriding = PlayerHandler.getInstance().isOverriding(player);
         Chunk playerChunk = player.getLocation().getChunk();
         int cx = playerChunk.getX();
         int cz = playerChunk.getZ();
@@ -46,12 +48,12 @@ public final class ClaimHelper {
         }
 
         // ensure wilderness is always null
-        if (claimingFaction != null && claimingFaction.getId().equals(FactionStore.WILDERNESS_ID)) {
+        if (claimingFaction != null && claimingFaction.isWilderness()) {
             claimingFaction = null;
         }
 
         // ensure the claiming faction has enough power to claim this land
-        if (claimingFaction != null && claimingFaction.getRemainingPower() < chunks.size()) {
+        if (!overriding && claimingFaction != null && claimingFaction.getRemainingPower() < chunks.size()) {
             messageConfig.insufficientPower.send(player,
                     "faction", FactionHelper.formatRelational(player, claimingFaction),
                     "faction_name", claimingFaction.getName());
@@ -59,13 +61,13 @@ public final class ClaimHelper {
         }
 
         // ensure that the claim limit hasn't been reached
-        if (chunks.size() > factionConfig.maxClaimFillVolume) {
+        if (!overriding && chunks.size() > factionConfig.maxClaimFillVolume) {
             messageConfig.fillLimit.send(player, "limit", factionConfig.maxClaimFillVolume);
             return;
         }
 
         // ensure that the player has permission to claim the land
-        if (claimingFaction != null && !claimingFaction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
+        if (!overriding && claimingFaction != null && !claimingFaction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
             FactionHelper.missingPermission(player, claimingFaction, "modify territory");
             return;
         }
@@ -93,7 +95,7 @@ public final class ClaimHelper {
 
                     iterator.remove();
                 }
-                else if (!faction.isConquerable() && !faction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
+                else if (!overriding && !faction.isConquerable() && !faction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
                     // owning faction is strong enough to keep this claim
 
                     messageConfig.conquerFail.send(player,
