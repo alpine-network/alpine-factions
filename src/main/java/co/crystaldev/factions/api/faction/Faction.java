@@ -417,7 +417,7 @@ public final class Faction {
     }
 
     public boolean isInvited(@NotNull UUID player) {
-        return this.invitees.containsKey(player);
+        return this.isOnRoster(player) || this.invitees.containsKey(player);
     }
 
     public boolean isOnRoster(@NotNull UUID player) {

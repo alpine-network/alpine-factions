@@ -33,6 +33,8 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText missingFactionPerm = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> does not allow you to <error_highlight>%action%</error_highlight>");
 
+    public ConfigText notInFaction = ConfigText.of("%error_prefix% You are not in a faction");
+
     public ConfigText unknownFaction = ConfigText.of("%error_prefix% No faction or player was found with the name <error_highlight>%value%</error_highlight>");
 
     public ConfigText unknownPlayer = ConfigText.of("%error_prefix% No player was found with the name <error_highlight>%player_name%</error_highlight>");
@@ -83,25 +85,39 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Create/Join"
+            "| Create/Join/Leave"
     })
     public ConfigText create = ConfigText.of("%prefix% You created a new faction named <highlight>%faction_name%</highlight>");
 
+    public ConfigText leave = ConfigText.of("%prefix% You left <highlight>%faction_name%</highlight>");
+
+    public ConfigText memberLeave = ConfigText.of("%prefix% %player% left the faction");
+
     public ConfigText join = ConfigText.of("%prefix% You joined <highlight>%faction_name%</highlight>");
 
-    public ConfigText alreadyInFaction = ConfigText.of("%error_prefix% You must leave your current faction first");
+    public ConfigText forceJoin = ConfigText.of("%prefix% %inviter% added you to %faction%");
 
     public ConfigText memberJoin = ConfigText.of("%prefix% %player% joined the faction");
 
+    public ConfigText memberForceJoin = ConfigText.of("%prefix% %inviter% added %player% to the faction");
+
     public ConfigText attemptedMemberJoin = ConfigText.of("%prefix% %player% attempted to join the faction");
 
-    public ConfigText failedJoin = ConfigText.of("%error_prefix% You are not invited to this faction");
+    public ConfigText fullFaction = ConfigText.of("%error_prefix% %faction% has reached its member limit of <error_highlight>%limit% members</error_highlight>");
 
-    public ConfigText invite = ConfigText.of("%prefix% %player% invited <highlight>%invitee%</highlight> to your faction");
+    public ConfigText alreadyInFaction = ConfigText.of("%error_prefix% You must leave your current faction first");
 
-    public ConfigText invited = ConfigText.of("%prefix% %player% invited you to <highlight>%faction%</highlight>");
+    public ConfigText playerAlreadyInFaction = ConfigText.of("%error_prefix% %player% is already in a faction");
 
-    public ConfigText inviteRevoke = ConfigText.of("%prefix% %player% revoked the invitation of <highlight>%invitee%</highlight>");
+    public ConfigText notInvited = ConfigText.of("%error_prefix% You were not invited to %faction%");
+
+    public ConfigText playerNotInvited = ConfigText.of("%error_prefix% %player% is not invited to %faction%");
+
+    public ConfigText invite = ConfigText.of("%prefix% %player% invited %invitee% to your faction");
+
+    public ConfigText invited = ConfigText.of("%prefix% %player% invited you to %faction%");
+
+    public ConfigText inviteRevoke = ConfigText.of("%prefix% %player% revoked the invitation of %invitee%");
 
     public ConfigText inviteListTitle = ConfigText.of("%faction% <separator>|</separator> Invitations");
 
@@ -126,22 +142,22 @@ public final class MessageConfig extends AlpineConfig {
             "| Land Claiming"
     })
     public ConfigText landClaim = ConfigText.of(
-            "%prefix% <highlight>%player%</highlight> %claim_type% <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%",
+            "%prefix% %player% %claim_type% <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%",
             "    <i>%old_faction% → %new_faction%</i>"
     );
 
     public ConfigText landClaimSingle = ConfigText.of(
-            "%prefix% <highlight>%player%</highlight> %claim_type% <highlight>%amount% chunk</highlight> at <emphasis>(%world% %chunk_x%, %chunk_z%)</emphasis>",
+            "%prefix% %player% %claim_type% <highlight>%amount% chunk</highlight> at <emphasis>(%world% %chunk_x%, %chunk_z%)</emphasis>",
             "    <i>%old_faction% → %new_faction%</i>"
     );
 
     public ConfigText landClaimWorld = ConfigText.of(
-            "%prefix% <highlight>%player%</highlight> %claim_type% <highlight>%amount% chunks</highlight> in <emphasis>%world%</emphasis>",
+            "%prefix% %player% %claim_type% <highlight>%amount% chunks</highlight> in <emphasis>%world%</emphasis>",
             "    <i>%old_faction% → %new_faction%</i>"
     );
 
     public ConfigText landClaimAll = ConfigText.of(
-            "%prefix% <highlight>%player%</highlight> %claim_type% <highlight>%amount% chunks</highlight> in <emphasis>all worlds</emphasis>",
+            "%prefix% %player% %claim_type% <highlight>%amount% chunks</highlight> in <emphasis>all worlds</emphasis>",
             "    <i>%old_faction% → %new_faction%</i>"
     );
 
@@ -153,13 +169,13 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText conquered = ConfigText.of("conquered");
 
-    public ConfigText conquerFail = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> owns this land and is strong enough to keep it");
+    public ConfigText conquerFail = ConfigText.of("%error_prefix% %faction% owns this land and is strong enough to keep it");
 
     public ConfigText conquerFromEdge = ConfigText.of("%error_prefix% You must begin conquering at the edge of this territory");
 
-    public ConfigText landOwned = ConfigText.of("%prefix% This land is already owned by <highlight>%faction%</highlight>");
+    public ConfigText landOwned = ConfigText.of("%prefix% This land is already owned by %faction%");
 
-    public ConfigText insufficientPower = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> does not have enough power to claim this land");
+    public ConfigText insufficientPower = ConfigText.of("%error_prefix% %faction% does not have enough power to claim this land");
 
     public ConfigText fillLimit = ConfigText.of("%error_prefix% Reached the fill limit of <error_highlight>%limit% chunks</error_highlight>");
 
@@ -167,9 +183,9 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText disableAutoSetting = ConfigText.of("%prefix% Disabled auto-claim.");
 
-    public ConfigText enableAutoClaim = ConfigText.of("%prefix% Enabled auto-claim for <highlight>%faction%</highlight>");
+    public ConfigText enableAutoClaim = ConfigText.of("%prefix% Enabled auto-claim for %faction%");
 
-    public ConfigText enableAutoUnclaim = ConfigText.of("%prefix% Enabled auto-unclaim for <highlight>%faction%</highlight>");
+    public ConfigText enableAutoUnclaim = ConfigText.of("%prefix% Enabled auto-unclaim for %faction%");
 
     @Comment({
             "",
