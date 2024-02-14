@@ -73,16 +73,16 @@ public final class KickCommand extends FactionsCommand {
 
         // notify the faction
         boolean console = !(sender instanceof Player);
-        Messaging.broadcast(faction, sender, pl -> {
-            if (pl.getUniqueId().equals(other.getUniqueId())) {
+        Messaging.broadcast(faction, sender, observer -> {
+            if (observer.getUniqueId().equals(other.getUniqueId())) {
                 return null;
             }
 
             return config.kick.build(
-                    "actor", console ? "@console" : FactionHelper.formatRelational(pl, actingFaction, (Player) sender),
+                    "actor", console ? "@console" : FactionHelper.formatRelational(observer, actingFaction, (Player) sender),
                     "actor_name", console ? "@console" : sender.getName(),
 
-                    "player", FactionHelper.formatRelational(pl, faction, other),
+                    "player", FactionHelper.formatRelational(observer, faction, other),
                     "player_name", other.getName()
             );
         });

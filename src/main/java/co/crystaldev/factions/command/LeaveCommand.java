@@ -37,13 +37,13 @@ public final class LeaveCommand extends FactionsCommand {
         }
 
         // notify the faction
-        Messaging.broadcast(faction, pl -> {
-            if (pl.equals(player)) {
+        Messaging.broadcast(faction, observer -> {
+            if (observer.equals(player)) {
                 return null;
             }
 
             return config.memberLeave.build(
-                    "player", FactionHelper.formatRelational(pl, faction, player),
+                    "player", FactionHelper.formatRelational(observer, faction, player),
                     "player_name", player.getName());
         });
 

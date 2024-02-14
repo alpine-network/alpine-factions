@@ -56,8 +56,8 @@ public final class JoinCommand extends FactionsCommand {
                     "faction_name", faction.getName());
 
             // notify the faction of this attempt
-            Messaging.broadcast(faction, pl -> config.attemptedMemberJoin.build(
-                    "player", FactionHelper.formatRelational(pl, store.getWilderness(), player),
+            Messaging.broadcast(faction, observer -> config.attemptedMemberJoin.build(
+                    "player", FactionHelper.formatRelational(observer, store.getWilderness(), player),
                     "player_name", player.getName()
             ));
             return;
@@ -76,13 +76,13 @@ public final class JoinCommand extends FactionsCommand {
         faction.addMember(player.getUniqueId());
 
         // notify the faction
-        Messaging.broadcast(faction, pl -> {
-            if (pl.equals(player)) {
+        Messaging.broadcast(faction, observer -> {
+            if (observer.equals(player)) {
                 return null;
             }
 
             return config.memberJoin.build(
-                    "player", FactionHelper.formatRelational(pl, faction, player),
+                    "player", FactionHelper.formatRelational(observer, faction, player),
                     "player_name", player.getName());
         });
 
@@ -140,16 +140,16 @@ public final class JoinCommand extends FactionsCommand {
         faction.addMember(player.getUniqueId());
 
         // notify the faction
-        Messaging.broadcast(faction, player, pl -> {
-            if (pl.getUniqueId().equals(joiningPlayer.getUniqueId())) {
+        Messaging.broadcast(faction, player, observer -> {
+            if (observer.getUniqueId().equals(joiningPlayer.getUniqueId())) {
                 return null;
             }
 
             return config.memberForceJoin.build(
-                    "inviter", FactionHelper.formatRelational(pl, actingFaction, player),
+                    "inviter", FactionHelper.formatRelational(observer, actingFaction, player),
                     "inviter_name", player.getName(),
 
-                    "player", FactionHelper.formatRelational(pl, wilderness, joiningPlayer),
+                    "player", FactionHelper.formatRelational(observer, wilderness, joiningPlayer),
                     "player_name", joiningPlayer.getName());
         });
 

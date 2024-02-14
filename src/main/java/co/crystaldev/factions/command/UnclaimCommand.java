@@ -127,21 +127,21 @@ public final class UnclaimCommand extends FactionsCommand {
         // notify
         Faction wilderness = FactionStore.getInstance().getWilderness();
         Faction playerFaction = FactionStore.getInstance().findFactionOrDefault(player);
-        Messaging.broadcast(faction, player, pl -> {
+        Messaging.broadcast(faction, player, observer -> {
             return message.build(
-                    "actor", FactionHelper.formatRelational(pl, playerFaction, player),
+                    "actor", FactionHelper.formatRelational(observer, playerFaction, player),
                     "actor_name", player.getName(),
 
-                    "faction", FactionHelper.formatRelational(pl, faction),
+                    "faction", FactionHelper.formatRelational(observer, faction),
                     "faction_name", faction.getName(),
                     "amount", claims.size(),
                     "claim_type", config.unclaimed.build(),
                     "world", worldName,
 
-                    "old_faction", FactionHelper.formatRelational(pl, faction),
+                    "old_faction", FactionHelper.formatRelational(observer, faction),
                     "old_faction_name", faction.getName(),
 
-                    "new_faction", FactionHelper.formatRelational(pl, wilderness),
+                    "new_faction", FactionHelper.formatRelational(observer, wilderness),
                     "new_faction_name", wilderness.getName()
             );
         });

@@ -58,18 +58,18 @@ public final class InviteCommand extends FactionsCommand {
         faction.addInvitation(invitee.getUniqueId(), player.getUniqueId());
 
         // notify the faction
-        Messaging.broadcast(faction, pl -> {
-            if (previouslyInvited && !player.equals(pl)) {
+        Messaging.broadcast(faction, observer -> {
+            if (previouslyInvited && !player.equals(observer)) {
                 // if the member was already invited, do not send broadcast to the
                 // rest of the faction, only to the sender
                 return null;
             }
 
             return config.invite.build(
-                    "actor", FactionHelper.formatRelational(pl, faction, player),
+                    "actor", FactionHelper.formatRelational(observer, faction, player),
                     "actor_name", player.getName(),
 
-                    "invitee", FactionHelper.formatRelational(pl, inviteeFaction, invitee),
+                    "invitee", FactionHelper.formatRelational(observer, inviteeFaction, invitee),
                     "invitee_name", invitee.getName()
             );
         });
@@ -103,12 +103,12 @@ public final class InviteCommand extends FactionsCommand {
         faction.removeInvitation(invitee.getUniqueId());
 
         // notify the faction
-        Messaging.broadcast(faction, pl -> {
+        Messaging.broadcast(faction, observer -> {
             return config.inviteRevoke.build(
-                    "actor", FactionHelper.formatRelational(pl, faction, player),
+                    "actor", FactionHelper.formatRelational(observer, faction, player),
                     "actor_name", player.getName(),
 
-                    "invitee", FactionHelper.formatRelational(pl, inviteeFaction, invitee),
+                    "invitee", FactionHelper.formatRelational(observer, inviteeFaction, invitee),
                     "invitee_name", invitee.getName()
             );
         });

@@ -146,9 +146,9 @@ public final class ClaimHelper {
             Faction newFaction = claimingFaction == null ? wilderness : actingFaction;
 
             Component claimType = (claimingFaction == null ? messageConfig.unclaimed : messageConfig.claimed).build();
-            Messaging.broadcast(actingFaction, player, pl -> {
+            Messaging.broadcast(actingFaction, player, observer -> {
                 ConfigText message = claimedChunks == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
-                return buildClaimMessage(pl, player, message, origin, action, claimType, claimedChunks, oldFaction,
+                return buildClaimMessage(observer, player, message, origin, action, claimType, claimedChunks, oldFaction,
                         newFaction, playerFaction);
             });
         }
@@ -164,14 +164,14 @@ public final class ClaimHelper {
                 Chunk chunk = origin.getWorld().getChunkAt(conquered.get(0).getX(), conquered.get(0).getZ());
 
                 // notify the conquered faction
-                Messaging.broadcast(faction, pl -> {
-                    return buildClaimMessage(pl, player, message, chunk, action, claimType, conquered.size(),
+                Messaging.broadcast(faction, observer -> {
+                    return buildClaimMessage(observer, player, message, chunk, action, claimType, conquered.size(),
                             faction, newFaction, playerFaction);
                 });
 
                 // notify the new faction
-                Messaging.broadcast(actingFaction, player, pl -> {
-                    return buildClaimMessage(pl, player, message, chunk, action, claimType, conquered.size(), faction,
+                Messaging.broadcast(actingFaction, player, observer -> {
+                    return buildClaimMessage(observer, player, message, chunk, action, claimType, conquered.size(), faction,
                             newFaction, playerFaction);
                 });
             });
