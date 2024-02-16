@@ -74,4 +74,16 @@ public final class FactionConfig extends AlpineConfig {
             "The maximum distance from the player (in chunks) where land can be claimed."
     })
     public int maxClaimDistance = 30;
+
+    @Comment({
+            "",
+            "The maximum number of faction alliances for a faction."
+    })
+    public int maxAlliances = 5;
+
+    @Comment({
+            "",
+            "The maximum number of faction truces for a faction."
+    })
+    public int maxTruces = 999;
 }

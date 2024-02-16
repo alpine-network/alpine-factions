@@ -10,6 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,28 +61,63 @@ public final class Formatting {
     }
 
     @NotNull
-    private static Component appendTitlePadding(@NotNull Component component) {
+    public static String formatMillis(long millis) {
+        LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
+        LocalDateTime now = LocalDateTime.now();
+        long days = ChronoUnit.DAYS.between(date, now);
+        long hours = ChronoUnit.HOURS.between(date, now);
+        long minutes = ChronoUnit.MINUTES.between(date, now);
+        long seconds = ChronoUnit.SECONDS.between(date, now);
+
+        if (seconds < 60)
+            return "A few seconds ago";
+        else if (minutes < 60)
+            return "A few minutes ago";
+        else if (hours < 24)
+            return StringHelper.pluralize(hours, "%d hour%s ago");
+        else if (days <= 3)
+            return StringHelper.pluralize(days, "%d day%s ago");
+
+        return DateTimeFormatter.ofPattern(String.format("MMMM d'%s', yyyy", getDayOfMonthSuffix(date.getDayOfMonth()))).format(date);
+    }
+
+    @NotNull
+    private static String getDayOfMonthSuffix(int dayOfMonth) {
+        if (dayOfMonth >= 11 && dayOfMonth <= 13) {
+            return "th";
+        }
+
+        switch (dayOfMonth % 10) {
+            case 1:
+                return "st";
+            case 2:
+                return "nd";
+            case 3:
+                return "rd";
+            default:
+                return "th";
+        }
+    }
+
+    @NotNull
+    public static Component appendTitlePadding(@NotNull Component component) {
         MessageConfig config = MessageConfig.getInstance();
-        if (config.titleUsesPadding) {
-            int paddingLength = Math.max(4, (TITLE_LENGTH - ComponentHelper.length(component)) / 2);
-            String paddingString = StringHelper.repeat(config.paddingCharacter, paddingLength);
-            Component padding = ComponentHelper.stylize(config.paddingStyle, Component.text(paddingString));
-            return ComponentHelper.join(padding, component, padding);
-        }
-        else {
-            return component;
-        }
+        int paddingLength = Math.max(4, (TITLE_LENGTH - ComponentHelper.length(component)) / 2);
+        String paddingString = StringHelper.repeat(config.paddingCharacter, paddingLength);
+        Component padding = ComponentHelper.stylize(config.paddingStyle, Component.text(paddingString));
+        return ComponentHelper.join(padding, component, padding);
+    }
+
+    @NotNull
+    public static Component title(@NotNull Component component, boolean pad) {
+        MessageConfig config = MessageConfig.getInstance();
+        component = config.titleFormat.build("content", component);
+        return config.titleUsesPadding ? appendTitlePadding(component) : component;
     }
 
     @NotNull
     public static Component title(@NotNull Component component) {
-        MessageConfig config = MessageConfig.getInstance();
-        return appendTitlePadding(config.titleFormat.build("content", component));
-    }
-
-    @NotNull
-    public static Component title(@NotNull String component) {
-        return title(Component.text(component));
+        return title(component, MessageConfig.getInstance().titleUsesPadding);
     }
 
     @NotNull

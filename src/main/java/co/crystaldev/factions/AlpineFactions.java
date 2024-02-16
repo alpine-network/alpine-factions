@@ -9,6 +9,8 @@ import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
+import co.crystaldev.factions.api.show.ShowFormatter;
+import co.crystaldev.factions.api.show.component.DefaultShowComponents;
 import co.crystaldev.factions.command.argument.*;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.event.ServerTickEvent;
@@ -46,6 +48,9 @@ public final class AlpineFactions extends AlpinePlugin {
     @Getter
     private final PermissionRegistry permissionRegistry = new PermissionRegistry();
 
+    @Getter
+    private final ShowFormatter showFormatter = new ShowFormatter();
+
     @Override
     public void onStart() {
 
@@ -56,6 +61,9 @@ public final class AlpineFactions extends AlpinePlugin {
         for (Permission permission : Permissions.VALUES) {
             this.permissionRegistry.register(this, permission);
         }
+
+        // register f show elements
+        showFormatter.register(DefaultShowComponents.VALUES);
 
         // setup server tick event
         ServerTickEvent event = new ServerTickEvent();

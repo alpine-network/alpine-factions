@@ -5,6 +5,7 @@ import co.crystaldev.factions.store.PlayerStore;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +48,11 @@ public final class Member {
     @Nullable
     public Player getPlayer() {
         return Bukkit.getPlayer(this.id);
+    }
+
+    @NotNull
+    public OfflinePlayer getOfflinePlayer() {
+        return Bukkit.getOfflinePlayer(this.id);
     }
 
     @NotNull

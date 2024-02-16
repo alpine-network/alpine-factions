@@ -195,6 +195,29 @@ public final class ComponentHelper {
         return Component.join(JoinConfiguration.separator(Component.space()), components);
     }
 
+    /**
+     * Joins a variable number of components together
+     * with a single comma as a joiner.
+     *
+     * @param components The components to join
+     * @return The joined component
+     */
+    @NotNull
+    public static Component joinCommas(@NotNull Component... components) {
+        return Component.join(JoinConfiguration.commas(true), components);
+    }
+
+    /**
+     * Joins a variable number of components together
+     * with a single comma as a joiner.
+     *
+     * @param components The components to join
+     * @return The joined component
+     */
+    @NotNull
+    public static Component joinCommas(@NotNull Iterable<Component> components) {
+        return Component.join(JoinConfiguration.commas(true), components);
+    }
 
     /**
      * Joins a variable number of components together

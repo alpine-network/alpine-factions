@@ -41,6 +41,10 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText unknownPlayer = ConfigText.of("%error_prefix% No player was found with the name <error_highlight>%player_name%</error_highlight>");
 
+    public ConfigText none = ConfigText.of("<gray>None</gray>");
+
+    public ConfigText hidden = ConfigText.of("<gray>Hidden</gray>");
+
     @Comment({
             "",
             "| Formatting"
@@ -136,6 +140,40 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText inviteListTitle = ConfigText.of("%faction% <separator>|</separator> Invitations");
 
     public ConfigText inviteListEntry = ConfigText.of("%player% <separator>»</separator> Invited by %inviter%");
+
+    @Comment({
+            "",
+            "| Show"
+    })
+    public ConfigText showTitle = ConfigText.of("%faction% <separator>|</separator> Faction Info");
+
+    public boolean showTitleUsesPadding = true;
+
+    public ConfigText showDesc = ConfigText.of("<emphasis>Description: \"%description%\"");
+
+    public ConfigText showId = ConfigText.of("<hover:show_text:Copy To Clipboard><click:copy_to_clipboard:%id%><emphasis>Faction ID: <highlight>%id%</highlight>");
+
+    public ConfigText showCreated = ConfigText.of("<emphasis>Created:</emphasis> <highlight>%created%");
+
+    public ConfigText showJoinState = ConfigText.of("<emphasis>Joining:</emphasis> %joining%");
+
+    public ConfigText showLandPower = ConfigText.of("<emphasis>Land<bracket>/</bracket>Power<bracket>/</bracket>Max Power:</emphasis> <highlight>%land%/%power%/%max_power%");
+
+    public ConfigText showAllies = ConfigText.of("<emphasis>Allies <bracket>[<dark_purple>%ally_count%/%max_allies%</dark_purple>]</bracket>:</emphasis> <highlight>%allies%");
+
+    public ConfigText showTruces = ConfigText.of("<emphasis>Truces <bracket>[<light_purple>%truce_count%/%max_truces%</light_purple>]</bracket>:</emphasis> <highlight>%truces%");
+
+    public ConfigText showOnlineMembers = ConfigText.of("<emphasis>Online Members <bracket>[%count%]</bracket>:</emphasis> %members%");
+
+    public ConfigText showOfflineMembers = ConfigText.of("<emphasis>Offline Members <bracket>[%count%]</bracket>:</emphasis> %members%");
+
+    public ConfigText memberCountOnline = ConfigText.of("<green>%online%/%offline%");
+
+    public ConfigText memberCountOffline = ConfigText.of("<red>%online%/%offline%");
+
+    public ConfigText joinable = ConfigText.of("<green>True</green> <bracket>[<emphasis>Can Join</emphasis>]</bracket>");
+
+    public ConfigText notJoinable = ConfigText.of("<red>False</red> <bracket>[<emphasis>Invite Only</emphasis>]</bracket>");
 
     @Comment({
             "",

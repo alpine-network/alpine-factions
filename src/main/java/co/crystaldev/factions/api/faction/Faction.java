@@ -15,6 +15,7 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.util.ComponentHelper;
+import com.google.common.collect.ImmutableSet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -162,6 +163,25 @@ public final class Faction {
         return relationToOther == relationToSelf && relationToOther == relation;
     }
 
+    @NotNull
+    public Set<Faction> getRelatedFactions(@NotNull RelationType relationType) {
+        Set<Faction> related = new HashSet<>();
+        FactionStore store = FactionStore.getInstance();
+
+        this.relationRequests.forEach((factionId, type) -> {
+            if (type != relationType) {
+                return;
+            }
+
+            Faction other = store.getFactionById(factionId);
+            if (other != null) {
+                related.add(other);
+            }
+        });
+
+        return ImmutableSet.copyOf(related);
+    }
+
     // endregion Relations
 
     // region Permissions & Flags
@@ -279,6 +299,32 @@ public final class Faction {
     // endregion Roster
 
     // region Members
+
+    @NotNull
+    public Collection<Member> getOnlineMembers() {
+        List<Member> members = new ArrayList<>();
+
+        for (Member member : this.members.values()) {
+            if (member.isOnline()) {
+                members.add(member);
+            }
+        }
+
+        return ImmutableSet.copyOf(members);
+    }
+
+    @NotNull
+    public Collection<Member> getOfflineMembers() {
+        List<Member> members = new ArrayList<>();
+
+        for (Member member : this.members.values()) {
+            if (!member.isOnline()) {
+                members.add(member);
+            }
+        }
+
+        return ImmutableSet.copyOf(members);
+    }
 
     public int countOnlineMembers() {
         int members = 0;

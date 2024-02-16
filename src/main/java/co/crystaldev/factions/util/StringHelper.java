@@ -17,4 +17,14 @@ public final class StringHelper {
         }
         return stringBuilder.toString();
     }
+
+    @NotNull
+    public static String pluralize(@NotNull Number num, @NotNull String word) {
+        String pluralized = num.intValue() == 1 ? "" : "s";
+        String str = word.contains("%s") ? word.replace("%s", pluralized) : word + pluralized;
+        if (str.contains("%d")) {
+            str = String.format(str, num);
+        }
+        return str;
+    }
 }
