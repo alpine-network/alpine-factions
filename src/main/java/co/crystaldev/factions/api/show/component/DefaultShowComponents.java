@@ -3,6 +3,7 @@ package co.crystaldev.factions.api.show.component;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.RelationType;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
+import co.crystaldev.factions.api.show.ShowContext;
 import co.crystaldev.factions.api.show.order.ShowOrder;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -27,6 +29,10 @@ import java.util.stream.Collectors;
 @UtilityClass
 public final class DefaultShowComponents {
 
+    public static final Predicate<ShowContext> MINIMAL_VISIBILITY_PREDICATE = ctx -> {
+        return PlayerHandler.getInstance().isOverriding(ctx.getSender()) || !ctx.getFaction().isMinimal();
+    };
+
     public static final ShowComponent DESCRIPTION = ShowComponent.create(
             ShowOrder.inserting(),
             ctx -> conf().showDesc.build("description", Optional.ofNullable(ctx.getFaction().getDescription()).orElse(Faction.DEFAULT_DESCRIPTION))
@@ -35,13 +41,13 @@ public final class DefaultShowComponents {
     public static final ShowComponent ID = ShowComponent.create(
             ShowOrder.inserting(),
             ctx -> conf().showId.build("id", ctx.getFaction().getId()),
-            ctx -> PlayerHandler.getInstance().isOverriding(ctx.getSender())
+            MINIMAL_VISIBILITY_PREDICATE
     );
 
     public static final ShowComponent CREATED = ShowComponent.create(
             ShowOrder.inserting(),
             ctx -> conf().showCreated.build("created", Formatting.formatMillis(ctx.getFaction().getCreatedAt())),
-            ctx -> !ctx.getFaction().isMinimal()
+            MINIMAL_VISIBILITY_PREDICATE
     );
 
     public static final ShowComponent JOINING = ShowComponent.create(
@@ -54,7 +60,7 @@ public final class DefaultShowComponents {
                         || sender instanceof OfflinePlayer && faction.isInvited(((OfflinePlayer) sender).getUniqueId());
                 return config.showJoinState.build("joining", (canJoin ? config.joinable : config.notJoinable).build());
             },
-            ctx -> !ctx.getFaction().isMinimal()
+            MINIMAL_VISIBILITY_PREDICATE
     );
 
     public static final ShowComponent LAND_AND_POWER = ShowComponent.create(
@@ -68,7 +74,7 @@ public final class DefaultShowComponents {
                         "power", infinitePower ? land + 1 : faction.getPowerLevel(),
                         "max_power", infinitePower ? land + 1 : faction.getMaxPowerLevel());
             },
-            ctx -> !ctx.getFaction().isMinimal()
+            MINIMAL_VISIBILITY_PREDICATE
     );
 
     public static final ShowComponent ALLIES = ShowComponent.create(
@@ -82,7 +88,7 @@ public final class DefaultShowComponents {
 
                 return config.showAllies.build("allies", joined, "ally_count", factions.size(), "max_allies", FactionConfig.getInstance().maxAlliances);
             },
-            ctx -> !ctx.getFaction().isMinimal()
+            MINIMAL_VISIBILITY_PREDICATE
     );
 
     public static final ShowComponent TRUCES = ShowComponent.create(
@@ -96,7 +102,7 @@ public final class DefaultShowComponents {
 
                 return config.showTruces.build("truces", joined, "truce_count", factions.size(), "max_truces", FactionConfig.getInstance().maxTruces);
             },
-            ctx -> !ctx.getFaction().isMinimal()
+            MINIMAL_VISIBILITY_PREDICATE
     );
 
     public static final ShowComponent ONLINE_MEMBERS = ShowComponent.create(
@@ -124,7 +130,8 @@ public final class DefaultShowComponents {
                 Component joined = members.isEmpty() ? config.none.build() : ComponentHelper.joinCommas(members);
                 Component count = config.memberCountOffline.build(members.size());
                 return config.showOfflineMembers.build("members", joined, "count", count);
-            }
+            },
+            MINIMAL_VISIBILITY_PREDICATE
     );
 
     public static final ShowComponent[] VALUES = {

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -27,10 +28,10 @@ public interface ShowComponent {
     @NotNull
     static ShowComponent create(
             @NotNull ShowOrder order,
-            @NotNull Function<ShowContext, @NotNull Component> componentPredicate,
-            @Nullable Function<ShowContext, Boolean> visibilityPredicate
+            @NotNull Function<ShowContext, @NotNull Component> componentFunction,
+            @Nullable Predicate<ShowContext> visibilityPredicate
     ) {
-        return new FunctionalShowComponent(order, componentPredicate, visibilityPredicate);
+        return new FunctionalShowComponent(order, componentFunction, visibilityPredicate);
     }
 
     @NotNull

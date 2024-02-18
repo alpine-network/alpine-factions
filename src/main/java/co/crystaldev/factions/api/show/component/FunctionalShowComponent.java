@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -14,19 +15,19 @@ import java.util.function.Function;
  */
 final class FunctionalShowComponent implements ShowComponent {
 
-    private static final Function<ShowContext, Boolean> DEFAULT_VISIBILITY_PREDICATE = ctx -> true;
+    private static final Predicate<ShowContext> DEFAULT_VISIBILITY_PREDICATE = ctx -> true;
 
     private final ShowOrder order;
 
     private final Function<ShowContext, @NotNull Component> componentPredicate;
 
-    private final Function<ShowContext, Boolean> visibilityPredicate;
+    private final Predicate<ShowContext> visibilityPredicate;
 
     public FunctionalShowComponent(@NotNull ShowOrder order,
-                                   @NotNull Function<ShowContext, @NotNull Component> componentPredicate,
-                                   @Nullable Function<ShowContext, Boolean> visibilityPredicate) {
+                                   @NotNull Function<ShowContext, @NotNull Component> componentFunction,
+                                   @Nullable Predicate<ShowContext> visibilityPredicate) {
         this.order = order;
-        this.componentPredicate = componentPredicate;
+        this.componentPredicate = componentFunction;
         this.visibilityPredicate = visibilityPredicate == null ? DEFAULT_VISIBILITY_PREDICATE : visibilityPredicate;
     }
 
@@ -42,6 +43,6 @@ final class FunctionalShowComponent implements ShowComponent {
 
     @Override
     public boolean isVisible(@NotNull ShowContext ctx) {
-        return this.visibilityPredicate.apply(ctx);
+        return this.visibilityPredicate.test(ctx);
     }
 }
