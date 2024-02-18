@@ -53,16 +53,12 @@ public final class AsciiFactionMap {
 
     @NotNull
     public Component build() {
-        // populate the map with factions
         this.populateMap();
-
-        // build the map
-        List<Component> lines = new LinkedList<>();
-        this.buildTitle(lines);
-        this.buildMap(lines);
-        this.buildLegend(lines);
-
-        return ComponentHelper.joinNewLines(lines);
+        return ComponentHelper.joinNewLines(
+            this.buildTitle(lines);
+            this.buildMap(lines);
+            this.buildLegend(lines);
+        );
     }
 
     private void buildTitle(@NotNull List<Component> components) {
