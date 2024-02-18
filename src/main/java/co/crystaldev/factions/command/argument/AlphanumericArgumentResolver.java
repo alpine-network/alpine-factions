@@ -12,9 +12,6 @@ import org.bukkit.command.CommandSender;
  * @since 02/05/2024
  */
 public final class AlphanumericArgumentResolver extends ArgumentResolver<CommandSender, String> {
-
-    public static final String KEY = "alpinefactions:alphanumeric";
-
     @Override
     protected ParseResult<String> parse(Invocation<CommandSender> invocation, Argument<String> context, String argument) {
         if (argument.matches("^[a-zA-Z0-9]+$"))

@@ -12,6 +12,7 @@ import co.crystaldev.factions.util.Messaging;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
@@ -23,7 +24,7 @@ import java.util.*;
  * @since 02/11/2024
  */
 @Command(name = "factions list")
-
+@Description("List all factions.")
 public final class ListCommand extends FactionsCommand {
     public ListCommand(AlpinePlugin plugin) {
         super(plugin);
@@ -44,7 +45,7 @@ public final class ListCommand extends FactionsCommand {
         // build the page
         Component compiledPage = Formatting.page(config.listTitle.build(), factions, "/f list %page%", page, 10, faction -> {
             if (faction == null) {
-                return Component.text("< null >");
+                return ComponentHelper.nil();
             }
 
             boolean wilderness = faction.isWilderness();

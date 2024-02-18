@@ -184,7 +184,7 @@ public final class Formatting {
     @NotNull
     private static Component asComponent(@Nullable Object obj) {
         if (obj == null) {
-            return Component.text("< null >");
+            return ComponentHelper.nil();
         }
 
         if (obj instanceof ComponentLike) {

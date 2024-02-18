@@ -3,8 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.PermissionNodes;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.command.argument.FactionArgumentResolver;
-import co.crystaldev.factions.command.argument.OfflinePlayerArgumentResolver;
+import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -35,7 +34,7 @@ public final class JoinCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context Player player,
-            @Arg("faction") @Key(FactionArgumentResolver.KEY) Faction faction
+            @Arg("faction") @Key(Args.FACTION) Faction faction
     ) {
         MessageConfig config = MessageConfig.getInstance();
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
@@ -97,8 +96,8 @@ public final class JoinCommand extends FactionsCommand {
     @Permission({PermissionNodes.ADMIN})
     public void execute(
             @Context Player player,
-            @Arg("faction") @Key(FactionArgumentResolver.KEY) Faction faction,
-            @Arg("player") @Key(OfflinePlayerArgumentResolver.KEY) OfflinePlayer joiningPlayer
+            @Arg("faction") @Key(Args.FACTION) Faction faction,
+            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer joiningPlayer
     ) {
         MessageConfig config = MessageConfig.getInstance();
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);

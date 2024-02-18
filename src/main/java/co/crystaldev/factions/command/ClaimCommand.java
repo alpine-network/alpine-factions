@@ -2,8 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.command.argument.ClaimTypeArgumentResolver;
-import co.crystaldev.factions.command.argument.FactionArgumentResolver;
+import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -37,9 +36,9 @@ public final class ClaimCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context Player player,
-            @Arg("type") @Key(ClaimTypeArgumentResolver.KEY) ClaimType type,
+            @Arg("type") @Key(Args.CLAIM_TYPE) ClaimType type,
             @Arg("radius") Optional<Integer> rad,
-            @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
+            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         FactionStore store = FactionStore.getInstance();
         Faction claimingFaction = faction.orElse(store.findFaction(player));
@@ -50,7 +49,7 @@ public final class ClaimCommand extends FactionsCommand {
     @Execute(name = "fill", aliases = "f")
     public void fill(
             @Context Player player,
-            @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
+            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         FactionStore store = FactionStore.getInstance();
         Faction claimingFaction = faction.orElse(store.findFaction(player));
@@ -61,7 +60,7 @@ public final class ClaimCommand extends FactionsCommand {
     @Execute(name = "one", aliases = "o")
     public void one(
             @Context Player player,
-            @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
+            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         FactionStore store = FactionStore.getInstance();
         Faction claimingFaction = faction.orElse(store.findFaction(player));
@@ -72,7 +71,7 @@ public final class ClaimCommand extends FactionsCommand {
     @Execute(name = "auto", aliases = "a")
     public void auto(
             @Context Player player,
-            @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
+            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         MessageConfig config = MessageConfig.getInstance();
         Faction claimingFaction = faction.orElse(FactionStore.getInstance().findFactionOrDefault(player));

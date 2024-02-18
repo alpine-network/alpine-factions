@@ -4,11 +4,11 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.MemberInvitation;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.FactionArgumentResolver;
-import co.crystaldev.factions.command.argument.OfflinePlayerArgumentResolver;
+import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.FactionStore;
+import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import co.crystaldev.factions.util.Messaging;
@@ -41,7 +41,7 @@ public final class InviteCommand extends FactionsCommand {
     @Execute(name = "add")
     public void add(
             @Context Player player,
-            @Arg("player") @Key(OfflinePlayerArgumentResolver.KEY) OfflinePlayer invitee
+            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer invitee
     ) {
         MessageConfig config = MessageConfig.getInstance();
         FactionStore store = FactionStore.getInstance();
@@ -87,7 +87,7 @@ public final class InviteCommand extends FactionsCommand {
     @Execute(name = "remove")
     public void remove(
             @Context Player player,
-            @Arg("player") @Key(OfflinePlayerArgumentResolver.KEY) OfflinePlayer invitee
+            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer invitee
     ) {
         MessageConfig config = MessageConfig.getInstance();
         FactionStore store = FactionStore.getInstance();
@@ -118,7 +118,7 @@ public final class InviteCommand extends FactionsCommand {
     public void list(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page,
-            @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
+            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         MessageConfig config = MessageConfig.getInstance();
         FactionStore store = FactionStore.getInstance();
@@ -137,7 +137,7 @@ public final class InviteCommand extends FactionsCommand {
         String command = "/f invite list %page% " + resolvedFaction.getName();
         Messaging.send(sender, Formatting.page(title, invitations, command, page.orElse(1), 10, invite -> {
             if (invite == null) {
-                return Component.text("< null >");
+                return ComponentHelper.nil();
             }
 
             OfflinePlayer invitee = Bukkit.getOfflinePlayer(invite.getPlayerId());

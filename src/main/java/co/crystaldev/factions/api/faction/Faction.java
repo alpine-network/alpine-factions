@@ -524,6 +524,10 @@ public final class Faction {
 
     // endregion Members
 
+    public boolean isMinimal() {
+        return this.getFlagValueOrDefault(FactionFlags.MINIMAL_VISIBILITY);
+    }
+
     public boolean isWilderness() {
         return this.id.equals(FactionStore.WILDERNESS_ID);
     }

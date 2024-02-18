@@ -62,6 +62,7 @@ public final class StyleConfig extends AlpineConfig {
     {
         this.styles.put("info", "dark_aqua bold");
         this.styles.put("highlight", "aqua");
+        this.styles.put("notice", "dark_aqua");
 
         this.styles.put("error", "dark_red bold");
         this.styles.put("error_highlight", "red");

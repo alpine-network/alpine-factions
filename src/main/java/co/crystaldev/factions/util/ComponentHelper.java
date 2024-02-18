@@ -28,6 +28,16 @@ import java.util.stream.Stream;
 public final class ComponentHelper {
 
     /**
+     * Create a component representing a null element.
+     *
+     * @return The 'null' component.
+     */
+    @NotNull
+    public static Component nil() {
+        return Component.text("< null >");
+    }
+
+    /**
      * Deserialize a component from a MiniMessage string.
      *
      * @param serializedComponent The serialized component.

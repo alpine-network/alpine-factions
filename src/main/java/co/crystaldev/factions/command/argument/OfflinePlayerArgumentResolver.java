@@ -20,9 +20,6 @@ import java.util.stream.Collectors;
  * @since 02/12/2024
  */
 public final class OfflinePlayerArgumentResolver extends ArgumentResolver<CommandSender, OfflinePlayer> {
-
-    public static final String KEY = "alpinefactions:offlineplayer";
-
     @Override
     protected ParseResult<OfflinePlayer> parse(Invocation<CommandSender> invocation, Argument<OfflinePlayer> context, String argument) {
         MessageConfig config = MessageConfig.getInstance();

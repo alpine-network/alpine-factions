@@ -3,7 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.command.argument.FactionArgumentResolver;
+import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.Messaging;
@@ -31,7 +31,7 @@ public final class ShowCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context CommandSender sender,
-            @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> faction
+            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         Faction senderFaction = FactionStore.getInstance().findFactionOrDefault(sender);
         Faction resolvedFaction = faction.orElse(senderFaction);

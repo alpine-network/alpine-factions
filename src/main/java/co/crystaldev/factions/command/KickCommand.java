@@ -4,7 +4,7 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.OfflinePlayerArgumentResolver;
+import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -35,7 +35,7 @@ public final class KickCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context CommandSender sender,
-            @Arg("player") @Key(OfflinePlayerArgumentResolver.KEY) OfflinePlayer other
+            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
     ) {
         MessageConfig config = MessageConfig.getInstance();
         FactionStore store = FactionStore.getInstance();

@@ -4,9 +4,7 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.ClaimTypeArgumentResolver;
-import co.crystaldev.factions.command.argument.FactionArgumentResolver;
-import co.crystaldev.factions.command.argument.WorldClaimArgumentResolver;
+import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
@@ -19,6 +17,7 @@ import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.util.claims.Claiming;
+import co.crystaldev.factions.util.claims.WorldClaimType;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -46,7 +45,7 @@ public final class UnclaimCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context Player player,
-            @Arg("type") @Key(ClaimTypeArgumentResolver.KEY) ClaimType type,
+            @Arg("type") @Key(Args.CLAIM_TYPE) ClaimType type,
             @OptionalArg("radius") Optional<Integer> rad
     ) {
         Faction actingFaction = FactionStore.getInstance().findFactionOrDefault(player);
@@ -90,8 +89,8 @@ public final class UnclaimCommand extends FactionsCommand {
     @Execute(name = "all")
     public void all(
             @Context Player player,
-            @Arg("world") @Key(WorldClaimArgumentResolver.KEY) String world,
-            @Arg("faction") @Key(FactionArgumentResolver.KEY) Faction faction
+            @Arg("world") @Key(Args.WORLD_CLAIM_TYPE) WorldClaimType world,
+            @Arg("faction") @Key(Args.FACTION) Faction faction
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
@@ -105,7 +104,7 @@ public final class UnclaimCommand extends FactionsCommand {
         List<ClaimedChunk> claims;
         ConfigText message;
         String worldName;
-        if (world.equals("all")) {
+        if (world == WorldClaimType.WORLD) {
             claims = new ArrayList<>();
             for (World w : Bukkit.getWorlds()) {
                 claims.addAll(store.getClaims(faction, w));

@@ -3,8 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.AlphanumericArgumentResolver;
-import co.crystaldev.factions.command.argument.FactionArgumentResolver;
+import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
@@ -35,8 +34,8 @@ public final class NameCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context Player player,
-            @Arg("name") @Key(AlphanumericArgumentResolver.KEY) String name,
-            @Arg("faction") @Key(FactionArgumentResolver.KEY) Optional<Faction> targetFaction
+            @Arg("name") @Key(Args.ALPHANUMERIC) String name,
+            @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();

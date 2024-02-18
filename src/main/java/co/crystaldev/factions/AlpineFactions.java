@@ -15,6 +15,7 @@ import co.crystaldev.factions.command.argument.*;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.event.ServerTickEvent;
 import co.crystaldev.factions.handler.PlayerHandler;
+import co.crystaldev.factions.util.claims.WorldClaimType;
 import dev.rollczi.litecommands.LiteCommandsBuilder;
 import dev.rollczi.litecommands.argument.ArgumentKey;
 import dev.rollczi.litecommands.bukkit.LiteBukkitSettings;
@@ -63,7 +64,7 @@ public final class AlpineFactions extends AlpinePlugin {
         }
 
         // register f show elements
-        showFormatter.register(DefaultShowComponents.VALUES);
+        this.showFormatter.register(DefaultShowComponents.VALUES);
 
         // setup server tick event
         ServerTickEvent event = new ServerTickEvent();
@@ -78,11 +79,12 @@ public final class AlpineFactions extends AlpinePlugin {
     public void setupCommandManager(@NotNull LiteCommandsBuilder<CommandSender, LiteBukkitSettings, ?> builder) {
         super.setupCommandManager(builder);
 
-        builder.argument(ClaimType.class, ArgumentKey.of(ClaimTypeArgumentResolver.KEY), new ClaimTypeArgumentResolver());
-        builder.argument(Faction.class, ArgumentKey.of(FactionArgumentResolver.KEY), new FactionArgumentResolver());
-        builder.argument(String.class, ArgumentKey.of(WorldClaimArgumentResolver.KEY), new WorldClaimArgumentResolver());
-        builder.argument(String.class, ArgumentKey.of(AlphanumericArgumentResolver.KEY), new AlphanumericArgumentResolver());
-        builder.argument(OfflinePlayer.class, ArgumentKey.of(OfflinePlayerArgumentResolver.KEY), new OfflinePlayerArgumentResolver());
+        builder.argument(String.class, ArgumentKey.of(Args.ALPHANUMERIC), new AlphanumericArgumentResolver());
+        builder.argument(OfflinePlayer.class, ArgumentKey.of(Args.OFFLINE_PLAYER), new OfflinePlayerArgumentResolver());
+        builder.argument(Faction.class, ArgumentKey.of(Args.FACTION), new FactionArgumentResolver());
+        builder.argument(FactionFlag.class, ArgumentKey.of(Args.FACTION_FLAG), new FactionFlagArgumentResolver());
+        builder.argument(ClaimType.class, ArgumentKey.of(Args.CLAIM_TYPE), new ClaimTypeArgumentResolver());
+        builder.argument(WorldClaimType.class, ArgumentKey.of(Args.WORLD_CLAIM_TYPE), new WorldClaimArgumentResolver());
     }
 
     @Override

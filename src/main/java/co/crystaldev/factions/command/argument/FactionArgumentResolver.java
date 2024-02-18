@@ -20,9 +20,6 @@ import java.util.stream.Collectors;
  * @since 02/07/2024
  */
 public final class FactionArgumentResolver extends ArgumentResolver<CommandSender, Faction> {
-
-    public static final String KEY = "alpinefactions:faction";
-
     @Override
     protected ParseResult<Faction> parse(Invocation<CommandSender> invocation, Argument<Faction> context, String argument) {
         FactionStore store = FactionStore.getInstance();

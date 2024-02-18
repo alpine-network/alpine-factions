@@ -1,5 +1,6 @@
 package co.crystaldev.factions.command.argument;
 
+import co.crystaldev.factions.util.claims.WorldClaimType;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
 import dev.rollczi.litecommands.argument.resolver.ArgumentResolver;
@@ -15,17 +16,14 @@ import java.util.stream.Stream;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/06/2024
  */
-public final class WorldClaimArgumentResolver extends ArgumentResolver<CommandSender, String> {
-
-    public static final String KEY = "alpinefactions:worldclaim";
-
+public final class WorldClaimArgumentResolver extends ArgumentResolver<CommandSender, WorldClaimType> {
     @Override
-    protected ParseResult<String> parse(Invocation<CommandSender> invocation, Argument<String> context, String argument) {
-        return ParseResult.success(argument.equalsIgnoreCase("all") ? "all" : "map");
+    protected ParseResult<WorldClaimType> parse(Invocation<CommandSender> invocation, Argument<WorldClaimType> context, String argument) {
+        return ParseResult.success(argument.equalsIgnoreCase("all") ? WorldClaimType.ALL : WorldClaimType.WORLD);
     }
 
     @Override
-    public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<String> argument, SuggestionContext context) {
+    public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<WorldClaimType> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel();
         return SuggestionResult.of(Stream.of("all", "map")
                 .filter(v -> v.startsWith(current.toLowerCase()))

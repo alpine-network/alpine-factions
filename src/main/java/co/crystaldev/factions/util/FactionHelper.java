@@ -30,7 +30,7 @@ public final class FactionHelper {
     @NotNull
     public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull Component component) {
         if (faction == null) {
-            return Component.text("< null >");
+            return ComponentHelper.nil();
         }
 
         StyleConfig config = StyleConfig.getInstance();
@@ -50,7 +50,7 @@ public final class FactionHelper {
     @NotNull
     public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull OfflinePlayer player, boolean checkEquals) {
         if (faction == null) {
-            return Component.text("< null >");
+            return ComponentHelper.nil();
         }
 
         if (!faction.isWilderness() && !faction.isMember(player.getUniqueId())) {

@@ -41,7 +41,7 @@ public final class DefaultShowComponents {
     public static final ShowComponent CREATED = ShowComponent.create(
             ShowOrder.inserting(),
             ctx -> conf().showCreated.build("created", Formatting.formatMillis(ctx.getFaction().getCreatedAt())),
-            ctx -> !ctx.getFaction().isWilderness()
+            ctx -> !ctx.getFaction().isMinimal()
     );
 
     public static final ShowComponent JOINING = ShowComponent.create(
@@ -54,7 +54,7 @@ public final class DefaultShowComponents {
                         || sender instanceof OfflinePlayer && faction.isInvited(((OfflinePlayer) sender).getUniqueId());
                 return config.showJoinState.build("joining", (canJoin ? config.joinable : config.notJoinable).build());
             },
-            ctx -> !ctx.getFaction().isWilderness()
+            ctx -> !ctx.getFaction().isMinimal()
     );
 
     public static final ShowComponent LAND_AND_POWER = ShowComponent.create(
@@ -68,7 +68,7 @@ public final class DefaultShowComponents {
                         "power", infinitePower ? land + 1 : faction.getPowerLevel(),
                         "max_power", infinitePower ? land + 1 : faction.getMaxPowerLevel());
             },
-            ctx -> !ctx.getFaction().isWilderness()
+            ctx -> !ctx.getFaction().isMinimal()
     );
 
     public static final ShowComponent ALLIES = ShowComponent.create(
@@ -82,7 +82,7 @@ public final class DefaultShowComponents {
 
                 return config.showAllies.build("allies", joined, "ally_count", factions.size(), "max_allies", FactionConfig.getInstance().maxAlliances);
             },
-            ctx -> !ctx.getFaction().isWilderness()
+            ctx -> !ctx.getFaction().isMinimal()
     );
 
     public static final ShowComponent TRUCES = ShowComponent.create(
@@ -96,7 +96,7 @@ public final class DefaultShowComponents {
 
                 return config.showTruces.build("truces", joined, "truce_count", factions.size(), "max_truces", FactionConfig.getInstance().maxTruces);
             },
-            ctx -> !ctx.getFaction().isWilderness()
+            ctx -> !ctx.getFaction().isMinimal()
     );
 
     public static final ShowComponent ONLINE_MEMBERS = ShowComponent.create(

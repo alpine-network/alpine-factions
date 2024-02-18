@@ -17,9 +17,6 @@ import java.util.stream.Stream;
  * @since 02/06/2024
  */
 public final class ClaimTypeArgumentResolver extends ArgumentResolver<CommandSender, ClaimType> {
-
-    public static final String KEY = "alpinefactions:claimtype";
-
     @Override
     protected ParseResult<ClaimType> parse(Invocation<CommandSender> invocation, Argument<ClaimType> context, String argument) {
         ClaimType type = ClaimType.get(argument);

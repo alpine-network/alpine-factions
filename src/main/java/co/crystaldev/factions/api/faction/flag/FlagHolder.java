@@ -17,6 +17,7 @@ import java.io.IOException;
  */
 @AllArgsConstructor @Getter @Setter
 public final class FlagHolder<T> {
+
     private final Class<T> type;
     private T value;
 
