@@ -54,11 +54,13 @@ public final class AsciiFactionMap {
     @NotNull
     public Component build() {
         this.populateMap();
-        return ComponentHelper.joinNewLines(
-            this.buildTitle(lines);
-            this.buildMap(lines);
-            this.buildLegend(lines);
-        );
+
+        List<Component> lines = new LinkedList<>();
+        this.buildTitle(lines);
+        this.buildMap(lines);
+        this.buildLegend(lines);
+
+        return ComponentHelper.joinNewLines(lines);
     }
 
     private void buildTitle(@NotNull List<Component> components) {
