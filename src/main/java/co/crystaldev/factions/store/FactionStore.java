@@ -114,7 +114,7 @@ public final class FactionStore extends AlpineStore<String, Faction> {
 
     @NotNull
     public Faction findFactionOrDefault(@NotNull ServerOperator member) {
-        if (member instanceof CommandSender) {
+        if (member instanceof OfflinePlayer) {
             return findFactionOrDefault((OfflinePlayer) member);
         }
         return this.getWilderness();
@@ -145,13 +145,19 @@ public final class FactionStore extends AlpineStore<String, Faction> {
     }
 
     public void registerFaction(@NotNull Faction faction) {
+        Reference.LOGGER.info("Registering faction (name={}, id={})", faction.getName(), faction.getId());
+
         this.put(faction.getId(), faction);
         this.registeredFactions.add(faction);
+        this.flush(faction.getId());
     }
 
     public void unregisterFaction(@NotNull Faction faction) {
+        Reference.LOGGER.info("Unregistering faction (name={}, id={})", faction.getName(), faction.getId());
+
         this.remove(faction.getId());
         this.registeredFactions.remove(faction);
+        this.flush(faction.getId());
     }
 
     public void saveFactions() {

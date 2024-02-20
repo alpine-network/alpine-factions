@@ -175,6 +175,19 @@ public final class FactionFlags {
                     .visible(false)
                     .build();
 
+    public static final FactionFlag<Boolean> PERMANENT =
+            FactionFlag.builder("permanent", Boolean.class, FlagAdapters.BOOLEAN)
+                    .name("Permanent")
+                    .description("Is this faction permanent?")
+                    .stateDescription(
+                            "This faction cannot be disbanded.",
+                            "This faction can be disbanded."
+                    )
+                    .permission(PermissionNodes.ADMIN)
+                    .defaultState(false)
+                    .visible(false)
+                    .build();
+
     public static final FactionFlag<?>[] VALUES = {
             OPEN,
             EXPLOSIONS,
@@ -189,6 +202,7 @@ public final class FactionFlags {
             POWER_MODIFIER,
             MEMBER_LIMIT_MODIFIER,
             ROSTER_LIMIT_MODIFIER,
-            MINIMAL_VISIBILITY
+            MINIMAL_VISIBILITY,
+            PERMANENT
     };
 }

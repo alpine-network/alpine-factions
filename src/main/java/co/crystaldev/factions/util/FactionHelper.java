@@ -8,8 +8,10 @@ import co.crystaldev.factions.config.StyleConfig;
 import co.crystaldev.factions.store.FactionStore;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -48,11 +50,24 @@ public final class FactionHelper {
     }
 
     @NotNull
-    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull OfflinePlayer player, boolean checkEquals) {
+    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull ServerOperator other, boolean checkEquals) {
         if (faction == null) {
             return ComponentHelper.nil();
         }
 
+        // if player is console, do not bother parsing
+        if (other instanceof ConsoleCommandSender) {
+            return Component.text("@console").color(NamedTextColor.YELLOW);
+        }
+
+        // if it was a non-player object, do not bother parsing
+        if (!(other instanceof OfflinePlayer)) {
+            return Component.text(other.toString());
+        }
+
+        OfflinePlayer player = (OfflinePlayer) other;
+
+        // player is not a member of this faction, just colorize their name without a rank or title
         if (!faction.isWilderness() && !faction.isMember(player.getUniqueId())) {
             return formatRelational(viewer, faction, player.getName());
         }
@@ -89,8 +104,8 @@ public final class FactionHelper {
     }
 
     @NotNull
-    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull OfflinePlayer player) {
-        return formatRelational(viewer, faction, player, true);
+    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull ServerOperator other) {
+        return formatRelational(viewer, faction, other, true);
     }
 
     @NotNull

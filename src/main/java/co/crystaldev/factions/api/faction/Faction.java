@@ -11,10 +11,14 @@ import co.crystaldev.factions.api.faction.permission.PermissionHolder;
 import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.config.FactionConfig;
+import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.util.ComponentHelper;
+import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.Messaging;
+import co.crystaldev.factions.util.PlayerHelper;
 import com.google.common.collect.ImmutableSet;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,12 +26,14 @@ import lombok.ToString;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -82,6 +88,37 @@ public final class Faction {
         Member member = new Member(owner.getUniqueId(), Rank.LEADER);
         this.members.put(owner.getUniqueId(), member);
         this.roster.put(owner.getUniqueId(), member);
+    }
+
+    public boolean isMinimal() {
+        return this.getFlagValueOrDefault(FactionFlags.MINIMAL_VISIBILITY);
+    }
+
+    public boolean isWilderness() {
+        return this.id.equals(FactionStore.WILDERNESS_ID);
+    }
+
+    public boolean canDisband() {
+        return !this.getFlagValueOrDefault(FactionFlags.PERMANENT);
+    }
+
+    public void disband(@NotNull CommandSender actor) {
+        MessageConfig config = MessageConfig.getInstance();
+        FactionStore store = FactionStore.getInstance();
+        Faction actingFaction = store.findFactionOrDefault(actor);
+
+        // notify the faction
+        Messaging.broadcast(this, actor, observer -> {
+            return config.disband.build(
+                    "actor", FactionHelper.formatRelational(observer, actingFaction, actor),
+                    "actor_name", PlayerHelper.getName(actor),
+                    "faction", FactionHelper.formatRelational(observer, this),
+                    "faction_name", this.getName()
+            );
+        });
+
+        // remove the faction from the registry
+        store.unregisterFaction(this);
     }
 
     // region Territory
@@ -300,6 +337,22 @@ public final class Faction {
 
     // region Members
 
+    public void wrapMember(@NotNull UUID member, @NotNull Consumer<@NotNull Member> consumer) {
+        Member found = this.getMember(member);
+        if (found == null) {
+            return;
+        }
+
+        consumer.accept(found);
+
+        this.members.put(member, found);
+        if (this.isOnRoster(member)) {
+            this.roster.put(member, found);
+        }
+
+        this.markDirty();
+    }
+
     @NotNull
     public Collection<Member> getOnlineMembers() {
         List<Member> members = new ArrayList<>();
@@ -466,8 +519,15 @@ public final class Faction {
         this.markDirty();
     }
 
+    public boolean canJoin(@NotNull UUID player) {
+        if (this.isMember(player)) {
+            return false;
+        }
+        return this.getFlagValueOrDefault(FactionFlags.OPEN) || this.isOnRoster(player) || this.isInvited(player);
+    }
+
     public boolean isInvited(@NotNull UUID player) {
-        return this.isOnRoster(player) || this.invitees.containsKey(player);
+        return this.invitees.containsKey(player);
     }
 
     public boolean isOnRoster(@NotNull UUID player) {
@@ -523,14 +583,6 @@ public final class Faction {
     }
 
     // endregion Members
-
-    public boolean isMinimal() {
-        return this.getFlagValueOrDefault(FactionFlags.MINIMAL_VISIBILITY);
-    }
-
-    public boolean isWilderness() {
-        return this.id.equals(FactionStore.WILDERNESS_ID);
-    }
 
     public void markDirty() {
         this.dirty = true;

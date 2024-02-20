@@ -49,7 +49,7 @@ public final class JoinCommand extends FactionsCommand {
         }
 
         // ensure the player is even invited
-        if (!overriding && !faction.isInvited(player.getUniqueId())) {
+        if (!overriding && !faction.canJoin(player.getUniqueId())) {
             config.notInvited.send(player,
                     "faction", FactionHelper.formatRelational(player, faction),
                     "faction_name", faction.getName());
@@ -116,7 +116,7 @@ public final class JoinCommand extends FactionsCommand {
         }
 
         // ensure the player is even invited
-        if (!overriding && !faction.isInvited(joiningPlayer.getUniqueId())) {
+        if (!overriding && !faction.canJoin(joiningPlayer.getUniqueId())) {
             config.playerNotInvited.send(player,
                     "player", FactionHelper.formatRelational(player, wilderness, joiningPlayer),
                     "player_name", joiningPlayer.getName(),

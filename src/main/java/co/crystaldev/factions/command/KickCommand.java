@@ -11,6 +11,7 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
+import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -72,15 +73,14 @@ public final class KickCommand extends FactionsCommand {
         }
 
         // notify the faction
-        boolean console = !(sender instanceof Player);
         Messaging.broadcast(faction, sender, observer -> {
             if (observer.getUniqueId().equals(other.getUniqueId())) {
                 return null;
             }
 
             return config.kick.build(
-                    "actor", console ? "@console" : FactionHelper.formatRelational(observer, actingFaction, (Player) sender),
-                    "actor_name", console ? "@console" : sender.getName(),
+                    "actor", FactionHelper.formatRelational(observer, actingFaction, sender),
+                    "actor_name", PlayerHelper.getName(sender),
 
                     "player", FactionHelper.formatRelational(observer, faction, other),
                     "player_name", other.getName()
@@ -92,8 +92,8 @@ public final class KickCommand extends FactionsCommand {
 
         // notify the player
         Messaging.attemptSend(other, config.kicked.build(
-                "actor", console ? "@console" : FactionHelper.formatRelational(other, actingFaction, (Player) sender),
-                "actor_name", console ? "@console" : sender.getName(),
+                "actor", FactionHelper.formatRelational(other, actingFaction, sender),
+                "actor_name", PlayerHelper.getName(sender),
 
                 "faction", FactionHelper.formatRelational(other, faction),
                 "faction_name", faction.getName()

@@ -117,6 +117,8 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText memberLeave = ConfigText.of("%prefix% %player% left the faction");
 
+    public ConfigText promoteLeader = ConfigText.of("%error_prefix% You must promote a new leader first");
+
     public ConfigText kick = ConfigText.of("%prefix% %actor% kicked %player% from the faction");
 
     public ConfigText kicked = ConfigText.of("%prefix% %actor% kicked you from %faction%");
@@ -181,6 +183,12 @@ public final class MessageConfig extends AlpineConfig {
     })
     public ConfigText create = ConfigText.of("%prefix% You created a new faction named <highlight>%faction_name%</highlight>");
 
+    public ConfigText disband = ConfigText.of("%prefix% %actor% disbanded %faction%");
+
+    public ConfigText disbandConfirm = ConfigText.of("%prefix% Please confirm by sending this command again");
+
+    public ConfigText unableToDisband = ConfigText.of("%error_prefix% This faction cannot be disbanded");
+
     public ConfigText listTitle = ConfigText.of("Factions List");
 
     public ConfigText listEntry = ConfigText.of("%faction% <separator>»</separator> %online%/%members% online, <emphasis>%land%/%power%/%max_power%</emphasis>");
@@ -211,6 +219,8 @@ public final class MessageConfig extends AlpineConfig {
             "| Player/Member State"
     })
     public ConfigText stateChange = ConfigText.of("%prefix% <highlight>%subject%:</highlight> <emphasis>%state%</emphasis>");
+
+    public ConfigText titleChange = ConfigText.of("%prefix% %actor% modified the title for %player%");
 
     @Comment({
             "",

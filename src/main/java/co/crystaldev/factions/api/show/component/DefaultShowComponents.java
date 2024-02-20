@@ -33,6 +33,10 @@ public final class DefaultShowComponents {
         return PlayerHandler.getInstance().isOverriding(ctx.getSender()) || !ctx.getFaction().isMinimal();
     };
 
+    public static final Predicate<ShowContext> REQUIRES_OVERRIDE = ctx -> {
+        return PlayerHandler.getInstance().isOverriding(ctx.getSender());
+    };
+
     public static final ShowComponent DESCRIPTION = ShowComponent.create(
             ShowOrder.inserting(),
             ctx -> conf().showDesc.build("description", Optional.ofNullable(ctx.getFaction().getDescription()).orElse(Faction.DEFAULT_DESCRIPTION))
@@ -41,7 +45,7 @@ public final class DefaultShowComponents {
     public static final ShowComponent ID = ShowComponent.create(
             ShowOrder.inserting(),
             ctx -> conf().showId.build("id", ctx.getFaction().getId()),
-            MINIMAL_VISIBILITY_PREDICATE
+            REQUIRES_OVERRIDE
     );
 
     public static final ShowComponent CREATED = ShowComponent.create(
@@ -56,8 +60,7 @@ public final class DefaultShowComponents {
                 MessageConfig config = conf();
                 CommandSender sender = ctx.getSender();
                 Faction faction = ctx.getFaction();
-                boolean canJoin = faction.getFlagValueOrDefault(FactionFlags.OPEN)
-                        || sender instanceof OfflinePlayer && faction.isInvited(((OfflinePlayer) sender).getUniqueId());
+                boolean canJoin = sender instanceof OfflinePlayer && faction.canJoin(((OfflinePlayer) sender).getUniqueId());
                 return config.showJoinState.build("joining", (canJoin ? config.joinable : config.notJoinable).build());
             },
             MINIMAL_VISIBILITY_PREDICATE

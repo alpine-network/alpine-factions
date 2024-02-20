@@ -11,10 +11,7 @@ import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.FactionStore;
-import co.crystaldev.factions.util.ComponentHelper;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Formatting;
-import co.crystaldev.factions.util.Messaging;
+import co.crystaldev.factions.util.*;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -22,9 +19,7 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import net.kyori.adventure.text.Component;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 
 import java.util.List;
 import java.util.Optional;
@@ -68,14 +63,9 @@ public final class FlagCommand extends FactionsCommand {
                 ? flag.getStateDescription((Boolean) resolvedState)
                 : flag.getStateDescription();
         Messaging.broadcast(resolvedFaction, sender, observer -> {
-
-            Component actor = sender instanceof ConsoleCommandSender
-                    ? Component.text("@console")
-                    : FactionHelper.formatRelational(observer, resolvedFaction, (OfflinePlayer) sender);
-
             return config.updatedFlagValue.build(
-                    "actor", actor,
-                    "actor_name", actor instanceof ConsoleCommandSender ? "@console" : ((OfflinePlayer) sender).getName(),
+                    "actor", FactionHelper.formatRelational(observer, resolvedFaction, sender),
+                    "actor_name", PlayerHelper.getName(sender),
 
                     "flag_id", flag.getId(),
                     "flag_name", flag.getName(),

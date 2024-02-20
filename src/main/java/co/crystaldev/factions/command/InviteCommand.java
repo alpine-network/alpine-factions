@@ -54,7 +54,7 @@ public final class InviteCommand extends FactionsCommand {
         }
 
         // invite the member
-        boolean previouslyInvited = faction.isInvited(invitee.getUniqueId()) && !faction.isOnRoster(invitee.getUniqueId());
+        boolean previouslyInvited = faction.isInvited(invitee.getUniqueId());
         faction.addInvitation(invitee.getUniqueId(), player.getUniqueId());
 
         // notify the faction

@@ -2,6 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.store.FactionStore;
@@ -33,6 +34,18 @@ public final class LeaveCommand extends FactionsCommand {
         // ensure the player is in a faction
         if (faction == null) {
             config.notInFaction.send(player);
+            return;
+        }
+
+        // ensure that the player can leave
+        if (faction.getMemberCount() > 1 && faction.getMemberRank(player.getUniqueId()) == Rank.LEADER) {
+            // the leader can't just leave the faction!
+            config.promoteLeader.send(player);
+            return;
+        }
+        else if (faction.getMemberCount() == 1 && faction.canDisband()) {
+            // the leader was the only member, disband
+            faction.disband(player);
             return;
         }
 
