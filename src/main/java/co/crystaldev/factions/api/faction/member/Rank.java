@@ -36,9 +36,4 @@ public enum Rank implements Relational {
     public static Rank getDefault() {
         return RECRUIT;
     }
-
-    @Override
-    public boolean isRank() {
-        return true;
-    }
 }

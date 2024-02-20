@@ -7,14 +7,13 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.api.faction.RelationType;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.faction.member.Rank;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -195,7 +194,7 @@ public final class FactionStore extends AlpineStore<String, Faction> {
 
         // update default perms
         Relational[] relations = {
-                RelationType.ALLY, RelationType.TRUCE, RelationType.NEUTRAL, RelationType.ENEMY,
+                FactionRelation.ALLY, FactionRelation.TRUCE, FactionRelation.NEUTRAL, FactionRelation.ENEMY,
                 Rank.LEADER, Rank.COLEADER, Rank.MOD, Rank.MEMBER, Rank.RECRUIT
         };
         faction.setPermissionBulk(Permissions.BUILD, true, relations);

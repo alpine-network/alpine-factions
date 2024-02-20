@@ -10,7 +10,7 @@ import lombok.Getter;
  * @since 12/13/2023
  */
 @AllArgsConstructor @Getter
-public enum RelationType implements Relational {
+public enum FactionRelation implements Relational {
     @SerializedName("self")    SELF(false),
     @SerializedName("neutral") NEUTRAL(true),
     @SerializedName("enemy")   ENEMY(true),
@@ -18,9 +18,4 @@ public enum RelationType implements Relational {
     @SerializedName("ally")    ALLY(true);
 
     private final boolean applicable;
-
-    @Override
-    public boolean isRank() {
-        return false;
-    }
 }

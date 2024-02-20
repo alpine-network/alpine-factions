@@ -151,6 +151,9 @@ public final class MessageConfig extends AlpineConfig {
 
     public boolean showTitleUsesPadding = true;
 
+    @SuppressWarnings("unused")
+    public ConfigText genericShowEntry = ConfigText.of("<emphasis>%name%:</emphasis> <highlight>%value%</highlight>");
+
     public ConfigText showDesc = ConfigText.of("<emphasis>Description: \"%description%\"");
 
     public ConfigText showId = ConfigText.of("<hover:show_text:Copy To Clipboard><click:copy_to_clipboard:%id%><emphasis>Faction ID: <highlight>%id%</highlight>");

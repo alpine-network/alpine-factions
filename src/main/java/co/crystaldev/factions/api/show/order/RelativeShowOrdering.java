@@ -17,10 +17,10 @@ final class RelativeShowOrdering implements ShowOrder {
 
     @Override
     public int computeIndex(@NotNull Iterable<ShowComponent> components, int length) {
-        int index = 0;
+        int index = 1;
         for (ShowComponent component : components) {
             if (component.equals(this.relative)) {
-                return Math.max(0, Math.min(length - 1, this.before ? index - 1 : index + 1));
+                return Math.max(0, Math.min(length, this.before ? index - 1 : index + 1));
             }
 
             index++;

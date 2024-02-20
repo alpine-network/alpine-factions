@@ -1,7 +1,7 @@
 package co.crystaldev.factions.api.faction.permission;
 
 import co.crystaldev.factions.api.Relational;
-import co.crystaldev.factions.api.faction.RelationType;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Rank;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 public final class PermissionHolder {
     private final HashSet<Rank> permittedRanks = new HashSet<>();
-    private final HashSet<RelationType> permittedRelations = new HashSet<>();
+    private final HashSet<FactionRelation> permittedRelations = new HashSet<>();
 
     public PermissionHolder(@NotNull Permission permission) {
         this.permittedRanks.addAll(permission.getDefaultRankPermits());
@@ -43,11 +43,11 @@ public final class PermissionHolder {
 
         if (permitted) {
             for (Relational relational : relations) {
-                if (relational.isRank()) {
+                if (relational instanceof Rank) {
                     this.permittedRanks.add((Rank) relational);
                 }
                 else {
-                    this.permittedRelations.add((RelationType) relational);
+                    this.permittedRelations.add((FactionRelation) relational);
                 }
             }
         }

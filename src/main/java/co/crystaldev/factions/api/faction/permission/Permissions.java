@@ -1,7 +1,7 @@
 package co.crystaldev.factions.api.faction.permission;
 
 import co.crystaldev.factions.PermissionNodes;
-import co.crystaldev.factions.api.faction.RelationType;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Rank;
 import lombok.experimental.UtilityClass;
 
@@ -119,7 +119,7 @@ public final class Permissions {
             .description("access containers")
             .permission(PermissionNodes.PERMISSION_CONTAINERS)
             .permit(Rank.values())
-            .permit(RelationType.values())
+            .permit(FactionRelation.values())
             .build();
 
     public static final Permission BUILD = Permission.builder("build")

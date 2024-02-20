@@ -1,7 +1,7 @@
 package co.crystaldev.factions.util;
 
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.api.faction.RelationType;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.StyleConfig;
@@ -38,9 +38,9 @@ public final class FactionHelper {
         StyleConfig config = StyleConfig.getInstance();
         Faction self = findFactionOrDefault(viewer);
 
-        RelationType relationType = self.relationTo(faction);
+        FactionRelation relation = self.relationTo(faction);
 
-        Component name = ComponentHelper.stylize(config.relationalStyles.get(relationType), component);
+        Component name = ComponentHelper.stylize(config.relationalStyles.get(relation), component);
         return ComponentHelper.stylize(config.factionNameStyles.get(faction.getName()), name, true);
     }
 

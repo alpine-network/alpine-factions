@@ -1,8 +1,7 @@
 package co.crystaldev.factions.api.show.component;
 
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.api.faction.RelationType;
-import co.crystaldev.factions.api.faction.flag.FactionFlags;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.show.ShowContext;
 import co.crystaldev.factions.api.show.order.ShowOrder;
 import co.crystaldev.factions.config.FactionConfig;
@@ -33,7 +32,7 @@ public final class DefaultShowComponents {
         return PlayerHandler.getInstance().isOverriding(ctx.getSender()) || !ctx.getFaction().isMinimal();
     };
 
-    public static final Predicate<ShowContext> REQUIRES_OVERRIDE = ctx -> {
+    public static final Predicate<ShowContext> REQUIRES_OVERRIDE_PREDICATE = ctx -> {
         return PlayerHandler.getInstance().isOverriding(ctx.getSender());
     };
 
@@ -45,7 +44,7 @@ public final class DefaultShowComponents {
     public static final ShowComponent ID = ShowComponent.create(
             ShowOrder.inserting(),
             ctx -> conf().showId.build("id", ctx.getFaction().getId()),
-            REQUIRES_OVERRIDE
+            REQUIRES_OVERRIDE_PREDICATE
     );
 
     public static final ShowComponent CREATED = ShowComponent.create(
@@ -84,7 +83,7 @@ public final class DefaultShowComponents {
             ShowOrder.inserting(),
             ctx -> {
                 MessageConfig config = conf();
-                Collection<Faction> factions = ctx.getFaction().getRelatedFactions(RelationType.ALLY);
+                Collection<Faction> factions = ctx.getFaction().getRelatedFactions(FactionRelation.ALLY);
                 Component joined = factions.isEmpty()
                         ? config.none.build()
                         : Component.text(factions.stream().map(Faction::getName).collect(Collectors.joining(", ")));
@@ -98,7 +97,7 @@ public final class DefaultShowComponents {
             ShowOrder.inserting(),
             ctx -> {
                 MessageConfig config = conf();
-                Collection<Faction> factions = ctx.getFaction().getRelatedFactions(RelationType.TRUCE);
+                Collection<Faction> factions = ctx.getFaction().getRelatedFactions(FactionRelation.TRUCE);
                 Component joined = factions.isEmpty()
                         ? config.none.build()
                         : Component.text(factions.stream().map(Faction::getName).collect(Collectors.joining(", ")));

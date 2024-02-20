@@ -64,7 +64,7 @@ public final class Faction {
 
     private final HashMap<UUID, Member> members = new HashMap<>();
 
-    private final HashMap<String, RelationType> relationRequests = new HashMap<>();
+    private final HashMap<String, FactionRelation> relationRequests = new HashMap<>();
 
     private final Map<String, FlagHolder<?>> flags = new HashMap<>();
 
@@ -189,31 +189,31 @@ public final class Faction {
     // region Relations
 
     @NotNull
-    public RelationType relationTo(@Nullable Faction faction) {
+    public FactionRelation relationTo(@Nullable Faction faction) {
         if (faction == null)
-            return RelationType.NEUTRAL;
+            return FactionRelation.NEUTRAL;
         if (this.equals(faction))
-            return RelationType.SELF;
-        return this.relationRequests.getOrDefault(faction.getId(), RelationType.NEUTRAL);
+            return FactionRelation.SELF;
+        return this.relationRequests.getOrDefault(faction.getId(), FactionRelation.NEUTRAL);
     }
 
-    public boolean isRelation(@Nullable Faction faction, @NotNull RelationType relation) {
+    public boolean isRelation(@Nullable Faction faction, @NotNull FactionRelation relation) {
         if (faction == null) {
-            return relation == RelationType.NEUTRAL;
+            return relation == FactionRelation.NEUTRAL;
         }
 
-        RelationType relationToOther = this.relationTo(faction);
-        RelationType relationToSelf = faction.relationTo(this);
+        FactionRelation relationToOther = this.relationTo(faction);
+        FactionRelation relationToSelf = faction.relationTo(this);
         return relationToOther == relationToSelf && relationToOther == relation;
     }
 
     @NotNull
-    public Set<Faction> getRelatedFactions(@NotNull RelationType relationType) {
+    public Set<Faction> getRelatedFactions(@NotNull FactionRelation relation) {
         Set<Faction> related = new HashSet<>();
         FactionStore store = FactionStore.getInstance();
 
         this.relationRequests.forEach((factionId, type) -> {
-            if (type != relationType) {
+            if (type != relation) {
                 return;
             }
 
@@ -292,7 +292,7 @@ public final class Faction {
         return permValue.isPermitted(rank);
     }
 
-    public boolean isPermitted(@NotNull RelationType relation, @NotNull Permission permission) {
+    public boolean isPermitted(@NotNull FactionRelation relation, @NotNull Permission permission) {
         PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
             this.markDirty();
             return new PermissionHolder(permission);

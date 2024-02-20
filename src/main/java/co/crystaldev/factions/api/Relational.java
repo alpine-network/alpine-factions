@@ -5,5 +5,4 @@ package co.crystaldev.factions.api;
  * @since 02/05/2024
  */
 public interface Relational {
-    boolean isRank();
 }

@@ -1,6 +1,6 @@
 package co.crystaldev.factions.api.faction.permission;
 
-import co.crystaldev.factions.api.faction.RelationType;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Rank;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
@@ -22,7 +22,7 @@ public final class Permission {
     private final String description;
     private final String permission;
     private final Set<Rank> defaultRankPermits;
-    private final Set<RelationType> defaultRelationPermits;
+    private final Set<FactionRelation> defaultRelationPermits;
 
     @NotNull
     public static Builder builder(@NotNull String id) {
@@ -36,7 +36,7 @@ public final class Permission {
         private String description;
         private String permission;
         private Set<Rank> defaultRankPermits;
-        private Set<RelationType> defaultRelationPermits;
+        private Set<FactionRelation> defaultRelationPermits;
 
         @NotNull
         public Builder name(@NotNull String name) {
@@ -63,7 +63,7 @@ public final class Permission {
         }
 
         @NotNull
-        public Builder permit(@NotNull RelationType... permittedRelations) {
+        public Builder permit(@NotNull FactionRelation... permittedRelations) {
             this.defaultRelationPermits = ImmutableSet.copyOf(permittedRelations);
             return this;
         }

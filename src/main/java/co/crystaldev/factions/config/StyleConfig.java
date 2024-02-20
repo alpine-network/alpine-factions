@@ -1,7 +1,7 @@
 package co.crystaldev.factions.config;
 
 import co.crystaldev.alpinecore.framework.config.AlpineConfig;
-import co.crystaldev.factions.api.faction.RelationType;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import de.exlll.configlib.Comment;
@@ -77,13 +77,13 @@ public final class StyleConfig extends AlpineConfig {
         this.styles.put("error_text", "white");
     }
 
-    public HashMap<RelationType, String> relationalStyles = new LinkedHashMap<>();
+    public HashMap<FactionRelation, String> relationalStyles = new LinkedHashMap<>();
     {
-        this.relationalStyles.put(RelationType.SELF, "green");
-        this.relationalStyles.put(RelationType.NEUTRAL, "aqua");
-        this.relationalStyles.put(RelationType.ENEMY, "red");
-        this.relationalStyles.put(RelationType.ALLY, "dark_purple");
-        this.relationalStyles.put(RelationType.TRUCE, "light_purple");
+        this.relationalStyles.put(FactionRelation.SELF, "green");
+        this.relationalStyles.put(FactionRelation.NEUTRAL, "aqua");
+        this.relationalStyles.put(FactionRelation.ENEMY, "red");
+        this.relationalStyles.put(FactionRelation.ALLY, "dark_purple");
+        this.relationalStyles.put(FactionRelation.TRUCE, "light_purple");
     }
 
     public HashMap<String, String> factionNameStyles = new LinkedHashMap<>();
