@@ -104,8 +104,9 @@ public final class Faction {
 
     public void disband(@NotNull CommandSender actor) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionStore store = FactionStore.getInstance();
-        Faction actingFaction = store.findFactionOrDefault(actor);
+        FactionStore factionStore = FactionStore.getInstance();
+        ClaimStore claimStore = ClaimStore.getInstance();
+        Faction actingFaction = factionStore.findFactionOrDefault(actor);
 
         // notify the faction
         Messaging.broadcast(this, actor, observer -> {
@@ -117,8 +118,14 @@ public final class Faction {
             );
         });
 
+        // remove all claims
+        List<ClaimedChunk> claims = claimStore.getClaims(this);
+        for (ClaimedChunk claim : claims) {
+            claimStore.removeClaim(claim.getWorld(), claim.getChunkX(), claim.getChunkZ());
+        }
+
         // remove the faction from the registry
-        store.unregisterFaction(this);
+        factionStore.unregisterFaction(this);
     }
 
     // region Territory
