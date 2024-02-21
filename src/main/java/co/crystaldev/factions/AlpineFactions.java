@@ -5,6 +5,7 @@ import co.crystaldev.alpinecore.framework.storage.SerializerRegistry;
 import co.crystaldev.factions.api.FlagRegistry;
 import co.crystaldev.factions.api.PermissionRegistry;
 import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
@@ -12,6 +13,7 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.show.ShowFormatter;
 import co.crystaldev.factions.api.show.component.DefaultShowComponents;
 import co.crystaldev.factions.command.argument.*;
+import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.event.ServerTickEvent;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -76,13 +78,21 @@ public final class AlpineFactions extends AlpinePlugin {
     }
 
     @Override
+    public void onStop() {
+        // flush all dirty factions
+        FactionStore.getInstance().saveFactions();
+    }
+
+    @Override
     public void setupCommandManager(@NotNull LiteCommandsBuilder<CommandSender, LiteBukkitSettings, ?> builder) {
         super.setupCommandManager(builder);
 
         builder.argument(String.class, ArgumentKey.of(Args.ALPHANUMERIC), new AlphanumericArgumentResolver());
+        builder.argument(Enum.class, ArgumentKey.of(Args.LC_ENUM), new LowercaseEnumArgumentResolver());
         builder.argument(OfflinePlayer.class, ArgumentKey.of(Args.OFFLINE_PLAYER), new OfflinePlayerArgumentResolver());
         builder.argument(Faction.class, ArgumentKey.of(Args.FACTION), new FactionArgumentResolver());
         builder.argument(FactionFlag.class, ArgumentKey.of(Args.FACTION_FLAG), new FactionFlagArgumentResolver());
+        builder.argument(FactionRelation.class, ArgumentKey.of(Args.FACTION_RELATION), new FactionRelationArgumentResolver());
         builder.argument(ClaimType.class, ArgumentKey.of(Args.CLAIM_TYPE), new ClaimTypeArgumentResolver());
         builder.argument(WorldClaimType.class, ArgumentKey.of(Args.WORLD_CLAIM_TYPE), new WorldClaimArgumentResolver());
     }

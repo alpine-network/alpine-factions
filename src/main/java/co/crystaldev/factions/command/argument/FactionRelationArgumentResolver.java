@@ -1,0 +1,40 @@
+package co.crystaldev.factions.command.argument;
+
+import co.crystaldev.factions.api.faction.FactionRelation;
+import dev.rollczi.litecommands.argument.Argument;
+import dev.rollczi.litecommands.argument.parser.ParseResult;
+import dev.rollczi.litecommands.argument.resolver.ArgumentResolver;
+import dev.rollczi.litecommands.invalidusage.InvalidUsage;
+import dev.rollczi.litecommands.invocation.Invocation;
+import dev.rollczi.litecommands.suggestion.SuggestionContext;
+import dev.rollczi.litecommands.suggestion.SuggestionResult;
+import org.bukkit.command.CommandSender;
+
+import java.util.stream.Stream;
+
+/**
+ * @author BestBearr <crumbygames12@gmail.com>
+ * @since 02/20/2024
+ */
+public final class FactionRelationArgumentResolver extends ArgumentResolver<CommandSender, FactionRelation> {
+
+    @Override
+    protected ParseResult<FactionRelation> parse(Invocation<CommandSender> invocation, Argument<FactionRelation> context, String argument) {
+        try {
+            return ParseResult.success(FactionRelation.valueOf(argument.toUpperCase()));
+        }
+        catch (IllegalArgumentException ignored) {
+            return ParseResult.failure(InvalidUsage.Cause.INVALID_ARGUMENT);
+        }
+    }
+
+    @Override
+    public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<FactionRelation> argument, SuggestionContext context) {
+        String current = context.getCurrent().lastLevel();
+        return Stream.of(FactionRelation.values())
+                .filter(v -> v != FactionRelation.SELF)
+                .map(v -> v.name().toLowerCase())
+                .filter(v -> v.startsWith(current))
+                .collect(SuggestionResult.collector());
+    }
+}

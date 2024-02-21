@@ -1,9 +1,12 @@
 package co.crystaldev.factions.config;
 
 import co.crystaldev.alpinecore.framework.config.AlpineConfig;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.config.type.ConfigText;
 import de.exlll.configlib.Comment;
 import lombok.Getter;
+
+import java.util.LinkedHashMap;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -133,6 +136,8 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText playerNotInvited = ConfigText.of("%error_prefix% %player% is not invited to %faction%");
 
+    public ConfigText inviteFail = ConfigText.of("%error_prefix% %player% is already a member of %faction%");
+
     public ConfigText invite = ConfigText.of("%prefix% %actor% invited %invitee% to your faction");
 
     public ConfigText invited = ConfigText.of("%prefix% %actor% invited you to %faction%");
@@ -216,6 +221,52 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText flagListEntry = ConfigText.of(
             "<hover:show_text:\"%flag_description%\"><notice>%flag_name%</notice></hover> <separator>»</separator> Set to <emphasis>%default_state%</emphasis> by default"
     );
+
+    @Comment({
+            "",
+            "| Relations"
+    })
+    public ConfigText alreadyRelation = ConfigText.of("%error_prefix% This relation is already set with %faction%");
+
+    public ConfigText relationSelf = ConfigText.of("%error_prefix% Unable to declare a relation with %faction%");
+
+    public ConfigText relationWishListTitle = ConfigText.of("Relation Requests");
+
+    public ConfigText relationListTitle = ConfigText.of("Relations");
+
+    public ConfigText relationListEntry = ConfigText.of("%faction% <separator>»</separator> %relation%");
+
+    public LinkedHashMap<FactionRelation, ConfigText> relationDeclarations = new LinkedHashMap<>();
+    {
+        this.relationDeclarations.put(FactionRelation.NEUTRAL, ConfigText.of(
+                "%prefix% %faction% is now a <aqua>neutral faction"));
+        this.relationDeclarations.put(FactionRelation.TRUCE, ConfigText.of(
+                "%prefix% %faction% is now a <light_purple>faction in truce"));
+        this.relationDeclarations.put(FactionRelation.ALLY, ConfigText.of(
+                "%prefix% %faction% is now an <dark_purple>allied faction"));
+        this.relationDeclarations.put(FactionRelation.ENEMY, ConfigText.of(
+                "%prefix% %faction% is now an <red>enemy faction"));
+    }
+
+    public LinkedHashMap<FactionRelation, ConfigText> relationRequest = new LinkedHashMap<>();
+    {
+        this.relationRequest.put(FactionRelation.NEUTRAL, ConfigText.of(
+                "%prefix% %faction% were informed that you wish to be a <aqua>neutral faction"));
+        this.relationRequest.put(FactionRelation.TRUCE, ConfigText.of(
+                "%prefix% %faction% were informed that you wish to be a <light_purple>faction in truce"));
+        this.relationRequest.put(FactionRelation.ALLY, ConfigText.of(
+                "%prefix% %faction% were informed that you wish to be an <dark_purple>allied faction"));
+    }
+
+    public LinkedHashMap<FactionRelation, ConfigText> relationWishes = new LinkedHashMap<>();
+    {
+        this.relationWishes.put(FactionRelation.NEUTRAL, ConfigText.of(
+                "%prefix% %faction% wishes to be a <aqua>neutral faction</aqua>. <aqua><b><click:run_command:\"/f neutral %faction_name%\">[Accept]"));
+        this.relationWishes.put(FactionRelation.TRUCE, ConfigText.of(
+                "%prefix% %faction% wishes to be a <light_purple>faction in truce</light_purple>. <light_purple><b><click:run_command:\"/f truce %faction_name%\">[Accept]"));
+        this.relationWishes.put(FactionRelation.ALLY, ConfigText.of(
+                "%prefix% %faction% wishes to be an <dark_purple>allied faction</dark_purple>. <dark_purple><b><click:run_command:\"/f ally %faction_name%\">[Accept]"));
+    }
 
     @Comment({
             "",

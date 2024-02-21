@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -23,24 +24,26 @@ public final class FactionArgumentResolver extends ArgumentResolver<CommandSende
     @Override
     protected ParseResult<Faction> parse(Invocation<CommandSender> invocation, Argument<Faction> context, String argument) {
         FactionStore store = FactionStore.getInstance();
+        boolean foundPlayer = false;
 
         // attempt to find faction by its name
         Faction faction = store.findFactionByName(argument);
 
         // faction was not found, attempt to find a fac with the given player
-        if (faction == null) {
+        if (faction == null && argument.matches("^[a-zA-Z0-9_]{2,16}$")) {
             OfflinePlayer player = Bukkit.getOfflinePlayer(argument);
             if (player != null) {
+                foundPlayer = player.hasPlayedBefore();
                 faction = store.findFaction(player);
             }
         }
 
         // faction was not found
-        if (faction == null) {
+        if (faction == null && !foundPlayer) {
             return ParseResult.failure(MessageConfig.getInstance().unknownFaction.buildString("value", argument));
         }
 
-        return ParseResult.success(faction);
+        return ParseResult.success(Optional.ofNullable(faction).orElse(store.getWilderness()));
     }
 
     @Override

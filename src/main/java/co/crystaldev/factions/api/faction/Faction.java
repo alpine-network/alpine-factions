@@ -190,10 +190,14 @@ public final class Faction {
 
     @NotNull
     public FactionRelation relationTo(@Nullable Faction faction) {
-        if (faction == null)
+        if (faction == null) {
             return FactionRelation.NEUTRAL;
-        if (this.equals(faction))
+        }
+
+        if (this.equals(faction)) {
             return FactionRelation.SELF;
+        }
+
         return this.relationRequests.getOrDefault(faction.getId(), FactionRelation.NEUTRAL);
     }
 
@@ -205,6 +209,47 @@ public final class Faction {
         FactionRelation relationToOther = this.relationTo(faction);
         FactionRelation relationToSelf = faction.relationTo(this);
         return relationToOther == relationToSelf && relationToOther == relation;
+    }
+
+    public void setRelation(@NotNull Faction faction, @NotNull FactionRelation relation) {
+        this.markDirty();
+
+        if (relation == FactionRelation.NEUTRAL) {
+            this.relationRequests.remove(faction.getId());
+            return;
+        }
+
+        this.relationRequests.put(faction.getId(), relation);
+    }
+
+    @NotNull
+    public Set<RelatedFaction> getRelatedFactions() {
+        Set<RelatedFaction> related = new HashSet<>();
+        FactionStore store = FactionStore.getInstance();
+
+        this.relationRequests.forEach((factionId, type) -> {
+            Faction other = store.getFactionById(factionId);
+            if (other != null && other.relationTo(this) == type) {
+                related.add(new RelatedFaction(other, type));
+            }
+        });
+
+        return related;
+    }
+
+    @NotNull
+    public Set<RelatedFaction> getRelationWishes() {
+        Set<RelatedFaction> related = new HashSet<>();
+        FactionStore store = FactionStore.getInstance();
+
+        this.relationRequests.forEach((factionId, type) -> {
+            Faction other = store.getFactionById(factionId);
+            if (other != null && other.relationTo(this) != type) {
+                related.add(new RelatedFaction(other, type));
+            }
+        });
+
+        return related;
     }
 
     @NotNull

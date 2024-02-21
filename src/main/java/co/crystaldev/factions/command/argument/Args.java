@@ -16,6 +16,13 @@ public final class Args {
     public static final String ALPHANUMERIC = "factions:alphanumeric_argument_resolver";
 
     /**
+     * Represents a lowercase {@link Enum} argument.
+     * @see dev.rollczi.litecommands.argument.resolver.standard.EnumArgumentResolver
+     * @see LowercaseEnumArgumentResolver
+     */
+    public static final String LC_ENUM = "factions:lowercase_enum";
+
+    /**
      * Represents a {@link co.crystaldev.factions.util.claims.ClaimType ClaimType} argument.
      * @see ClaimTypeArgumentResolver
      */
@@ -44,4 +51,10 @@ public final class Args {
      * @see OfflinePlayerArgumentResolver
      */
     public static final String OFFLINE_PLAYER = "factions:offline_player_argument_resolver";
+
+    /**
+     * Represents a {@link co.crystaldev.factions.api.faction.FactionRelation FactionRelation} argument.
+     * @see FactionRelationArgumentResolver
+     */
+    public static final String FACTION_RELATION = "factions:relation";
 }

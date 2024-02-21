@@ -5,6 +5,8 @@ import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.Formatting;
 import co.crystaldev.factions.util.Messaging;
 import de.exlll.configlib.Configuration;
+import de.exlll.configlib.SerializeWith;
+import de.exlll.configlib.Serializer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +24,10 @@ import java.util.List;
  * @since 11/14/2023
  */
 @Getter @AllArgsConstructor @NoArgsConstructor
-@Configuration
+@Configuration @SerializeWith(serializer = ConfigText.ConfigTextSerializer.class)
 public final class ConfigText {
 
-    public List<String> message;
+    private List<String> message;
 
     @NotNull
     public Component build() {
@@ -94,5 +96,17 @@ public final class ConfigText {
     public static ConfigText of(@NotNull Component component) {
         String message = Reference.MINI_MESSAGE.serialize(component);
         return new ConfigText(Arrays.asList(message.replace("\r", "").split("(\n|<br>)")));
+    }
+
+    public static final class ConfigTextSerializer implements Serializer<ConfigText, String> {
+        @Override
+        public String serialize(ConfigText element) {
+            return String.join("\n", element.message);
+        }
+
+        @Override
+        public ConfigText deserialize(String element) {
+            return new ConfigText(Arrays.asList(element.split("(<br>|\n|\r)")));
+        }
     }
 }

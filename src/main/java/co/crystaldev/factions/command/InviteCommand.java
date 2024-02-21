@@ -53,6 +53,16 @@ public final class InviteCommand extends FactionsCommand {
             return;
         }
 
+        // you can't invite an existing member!
+        if (faction.isMember(invitee.getUniqueId())) {
+            config.inviteFail.send(player,
+                    "player", FactionHelper.formatRelational(player, faction, invitee),
+                    "player_name", invitee.getName(),
+                    "faction", FactionHelper.formatRelational(player, faction),
+                    "faction_name", faction.getName());
+            return;
+        }
+
         // invite the member
         boolean previouslyInvited = faction.isInvited(invitee.getUniqueId());
         faction.addInvitation(invitee.getUniqueId(), player.getUniqueId());

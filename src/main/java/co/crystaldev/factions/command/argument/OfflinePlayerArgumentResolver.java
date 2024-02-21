@@ -24,13 +24,12 @@ public final class OfflinePlayerArgumentResolver extends ArgumentResolver<Comman
     protected ParseResult<OfflinePlayer> parse(Invocation<CommandSender> invocation, Argument<OfflinePlayer> context, String argument) {
         MessageConfig config = MessageConfig.getInstance();
 
-        for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-            if (player.getName().toLowerCase().startsWith(argument.toLowerCase())) {
-                return ParseResult.success(player);
-            }
+        OfflinePlayer player = Bukkit.getOfflinePlayer(argument);
+        if (player == null || !player.hasPlayedBefore()) {
+            return ParseResult.failure(config.unknownPlayer.buildString("player_name", argument));
         }
 
-        return ParseResult.failure(config.unknownPlayer.buildString("player_name", argument));
+        return ParseResult.success(player);
     }
 
     @Override
