@@ -187,43 +187,6 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Faction State"
-    })
-    public ConfigText create = ConfigText.of("%prefix% You created a new faction named <highlight>%faction_name%</highlight>");
-
-    public ConfigText disband = ConfigText.of("%prefix% %actor% disbanded %faction%");
-
-    public ConfigText disbandConfirm = ConfigText.of("%prefix% Please confirm by sending this command again");
-
-    public ConfigText unableToDisband = ConfigText.of("%error_prefix% This faction cannot be disbanded");
-
-    public ConfigText listTitle = ConfigText.of("Factions List");
-
-    public ConfigText listEntry = ConfigText.of("%faction% <separator>»</separator> %online%/%members% online, <emphasis>%land%/%power%/%max_power%</emphasis>");
-
-    public ConfigText unknownFlag = ConfigText.of("%error_prefix% No flag was found with the ID <error_highlight>%value%</error_highlight>");
-
-    public ConfigText invalidFlagValue = ConfigText.of("%error_prefix% Invalid flag input for flag %flag%");
-
-    public ConfigText updatedFlagValue = ConfigText.of(
-            "%prefix% %actor% set the faction flag <highlight>%flag_name%</highlight> to <highlight>%state%</highlight>",
-            "    <emphasis><i>%flag_state_description%"
-    );
-
-    public ConfigText flagStateListTitle = ConfigText.of("%faction% | Faction Flags");
-
-    public ConfigText flagStateListEntry = ConfigText.of(
-            "<hover:show_text:\"%flag_state_description%\"><notice>%flag_name%</notice></hover> <separator>»</separator> Set to <emphasis>%state%</emphasis>"
-    );
-
-    public ConfigText flagListTitle = ConfigText.of("Available Flags");
-
-    public ConfigText flagListEntry = ConfigText.of(
-            "<hover:show_text:\"%flag_description%\"><notice>%flag_name%</notice></hover> <separator>»</separator> Set to <emphasis>%default_state%</emphasis> by default"
-    );
-
-    @Comment({
-            "",
             "| Relations"
     })
     public ConfigText alreadyRelation = ConfigText.of("%error_prefix% This relation is already set with %faction%");
@@ -267,6 +230,43 @@ public final class MessageConfig extends AlpineConfig {
         this.relationWishes.put(FactionRelation.ALLY, ConfigText.of(
                 "%prefix% %faction% wishes to be an <dark_purple>allied faction</dark_purple>. <dark_purple><b><click:run_command:\"/f ally %faction_name%\">[Accept]"));
     }
+
+    @Comment({
+            "",
+            "| Faction State"
+    })
+    public ConfigText create = ConfigText.of("%prefix% You created a new faction named <highlight>%faction_name%</highlight>");
+
+    public ConfigText disband = ConfigText.of("%prefix% %actor% disbanded %faction%");
+
+    public ConfigText disbandConfirm = ConfigText.of("%prefix% Please confirm by sending this command again");
+
+    public ConfigText unableToDisband = ConfigText.of("%error_prefix% This faction cannot be disbanded");
+
+    public ConfigText listTitle = ConfigText.of("Factions List");
+
+    public ConfigText listEntry = ConfigText.of("%faction% <separator>»</separator> %online%/%members% online, <emphasis>%land%/%power%/%max_power%</emphasis>");
+
+    public ConfigText unknownFlag = ConfigText.of("%error_prefix% No flag was found with the ID <error_highlight>%value%</error_highlight>");
+
+    public ConfigText invalidFlagValue = ConfigText.of("%error_prefix% Invalid flag input for flag %flag%");
+
+    public ConfigText updatedFlagValue = ConfigText.of(
+            "%prefix% %actor% set the faction flag <highlight>%flag_name%</highlight> to <highlight>%state%</highlight>",
+            "    <emphasis><i>%flag_state_description%"
+    );
+
+    public ConfigText flagStateListTitle = ConfigText.of("%faction% | Faction Flags");
+
+    public ConfigText flagStateListEntry = ConfigText.of(
+            "<hover:show_text:\"%flag_state_description%\"><notice>%flag_name%</notice></hover> <separator>»</separator> Set to <emphasis>%state%</emphasis>"
+    );
+
+    public ConfigText flagListTitle = ConfigText.of("Available Flags");
+
+    public ConfigText flagListEntry = ConfigText.of(
+            "<hover:show_text:\"%flag_description%\"><notice>%flag_name%</notice></hover> <separator>»</separator> Set to <emphasis>%default_state%</emphasis> by default"
+    );
 
     @Comment({
             "",
@@ -325,6 +325,21 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText enableAutoClaim = ConfigText.of("%prefix% Enabled auto-claim for %faction%");
 
     public ConfigText enableAutoUnclaim = ConfigText.of("%prefix% Enabled auto-unclaim for %faction%");
+
+    @Comment({
+            "",
+            "| Alert"
+    })
+    public ConfigText alertTitle = ConfigText.of("<info>Faction Alert</info>");
+
+    public ConfigText alertSubtitle = ConfigText.of("<emphasis>%actor_name%: %alert%</emphasis>");
+
+    public ConfigText alertMessage = ConfigText.of(
+            "<b></b>",
+            "<info>Faction Alert</info>",
+            "<emphasis>%actor%: %alert%",
+            "<b></b>"
+    );
 
     @Comment({
             "",
