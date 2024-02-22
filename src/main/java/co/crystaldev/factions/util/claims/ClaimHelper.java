@@ -1,5 +1,8 @@
 package co.crystaldev.factions.util.claims;
 
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.ClaimAccessor;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.FactionConfig;
@@ -35,7 +38,7 @@ public final class ClaimHelper {
                                     @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
-        FactionStore factionStore = FactionStore.getInstance();
+        FactionAccessor factions = Accessors.factions();
 
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
         Chunk playerChunk = player.getLocation().getChunk();
@@ -73,8 +76,8 @@ public final class ClaimHelper {
         }
 
         // iterate and validate chunks
-        Faction playerFaction = factionStore.findFactionOrDefault(player);
-        ClaimStore store = ClaimStore.getInstance();
+        Faction playerFaction = factions.findOrDefault(player);
+        ClaimAccessor claims = Accessors.claims();
         int conqueredChunkCount = 0;
         Map<Faction, List<ChunkCoordinate>> conqueredFactions = new HashMap<>();
         Iterator<ChunkCoordinate> iterator = chunks.iterator();
@@ -86,7 +89,7 @@ public final class ClaimHelper {
                 return;
             }
 
-            Faction faction = store.getFaction(origin.getWorld().getName(), next.getX(), next.getZ());
+            Faction faction = claims.getFaction(origin.getWorld().getName(), next.getX(), next.getZ());
             if (faction != null) {
                 // this chunk is claimed
 
@@ -122,7 +125,7 @@ public final class ClaimHelper {
         }
 
         // ensure that the claims can be conquered
-        if (conqueredChunkCount > 0 && canConquer(conqueredFactions, origin.getWorld().getName(), store)) {
+        if (conqueredChunkCount > 0 && canConquer(conqueredFactions, origin.getWorld().getName(), claims)) {
             messageConfig.conquerFromEdge.send(player);
             return;
         }
@@ -130,16 +133,15 @@ public final class ClaimHelper {
         // claim/unclaim the land
         for (ChunkCoordinate chunk : chunks) {
             if (claimingFaction == null) {
-                store.removeClaim(origin.getWorld().getName(), chunk.getX(), chunk.getZ());
+                claims.remove(origin.getWorld().getName(), chunk.getX(), chunk.getZ());
             }
             else {
-                store.putClaim(origin.getWorld().getName(), chunk.getX(), chunk.getZ(), claimingFaction);
+                claims.put(origin.getWorld().getName(), chunk.getX(), chunk.getZ(), claimingFaction);
             }
         }
-        store.saveClaims();
 
         // notify the claiming faction
-        Faction wilderness = factionStore.getWilderness();
+        Faction wilderness = factions.getWilderness();
         int claimedChunks = chunks.size() - conqueredChunkCount;
         if (claimedChunks > 0) {
             Faction oldFaction = claimingFaction == null ? actingFaction : wilderness;
@@ -183,7 +185,7 @@ public final class ClaimHelper {
         MessageConfig config = MessageConfig.getInstance();
 
         if (claiming && claimingFaction == null) {
-            Faction wilderness = FactionStore.getInstance().getWilderness();
+            Faction wilderness = Accessors.factions().getWilderness();
             config.landOwned.send(player,
                     "faction", FactionHelper.formatRelational(player, wilderness),
                     "faction_name", wilderness.getName()
@@ -256,12 +258,12 @@ public final class ClaimHelper {
     public static Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
         int max = FactionConfig.getInstance().maxClaimFillVolume;
         World world = origin.getWorld();
-        ClaimStore store = ClaimStore.getInstance();
+        ClaimAccessor claims = Accessors.claims();
         Set<ChunkCoordinate> chunks = new HashSet<>();
 
         // discover chunks to fill
         chunks.add(new ChunkCoordinate(origin.getX(), origin.getZ()));
-        recurse(chunks, world.getName(), store.getFaction(origin), store, max);
+        recurse(chunks, world.getName(), claims.getFaction(origin), claims, max);
 
         // limit was reached, disregard
         if (chunks.size() >= max) {
@@ -273,17 +275,17 @@ public final class ClaimHelper {
     }
 
     private static void recurse(@NotNull Set<ChunkCoordinate> chunks, @NotNull String world,
-                                @Nullable Faction faction, @NotNull ClaimStore store, int max) {
+                                @Nullable Faction faction, @NotNull ClaimAccessor claims, int max) {
         Set<ChunkCoordinate> nearby = new HashSet<>();
         for (ChunkCoordinate chunk : chunks) {
             int x = chunk.getX();
             int z = chunk.getZ();
 
             // check surrounding chunks
-            check(nearby, chunks, world, x + 1, z, faction, store);
-            check(nearby, chunks, world, x - 1, z, faction, store);
-            check(nearby, chunks, world, x, z + 1, faction, store);
-            check(nearby, chunks, world, x, z - 1, faction, store);
+            check(nearby, chunks, world, x + 1, z, faction, claims);
+            check(nearby, chunks, world, x - 1, z, faction, claims);
+            check(nearby, chunks, world, x, z + 1, faction, claims);
+            check(nearby, chunks, world, x, z - 1, faction, claims);
         }
 
         // no nearby chunks were found, fill complete
@@ -296,19 +298,19 @@ public final class ClaimHelper {
 
         // keep searching
         if (nearby.size() < max) {
-            recurse(chunks, world, faction, store, max);
+            recurse(chunks, world, faction, claims, max);
         }
     }
 
     private static void check(@NotNull Set<ChunkCoordinate> nearby, @NotNull Set<ChunkCoordinate> filled,
-                              @NotNull String world, int x, int z, @Nullable Faction faction, @NotNull ClaimStore store) {
+                              @NotNull String world, int x, int z, @Nullable Faction faction, @NotNull ClaimAccessor claims) {
         ChunkCoordinate coord = new ChunkCoordinate(x, z);
         if (filled.contains(coord)) {
             return;
         }
 
         // ensure claim is the same as the origin claim
-        Faction claimOwner = store.getFaction(world, x, z);
+        Faction claimOwner = claims.getFaction(world, x, z);
         if (!FactionHelper.equals(faction, claimOwner)) {
             return;
         }
@@ -318,7 +320,7 @@ public final class ClaimHelper {
     }
 
     private static boolean canConquer(@NotNull Map<Faction, List<ChunkCoordinate>> conqueredFactions,
-                                      @NotNull String world, @NotNull ClaimStore store) {
+                                      @NotNull String world, @NotNull ClaimAccessor claims) {
 
         boolean canConquer = true;
 
@@ -326,10 +328,10 @@ public final class ClaimHelper {
             Faction faction = entry.getKey();
             boolean foundEdge = false;
             for (ChunkCoordinate coordinate : entry.getValue()) {
-                boolean isEdge = !FactionHelper.equals(faction, store.getFaction(world, coordinate.getX() - 1, coordinate.getZ()))
-                        || !FactionHelper.equals(faction, store.getFaction(world, coordinate.getX() + 1, coordinate.getZ()))
-                        || !FactionHelper.equals(faction, store.getFaction(world, coordinate.getX(), coordinate.getZ() - 1))
-                        || !FactionHelper.equals(faction, store.getFaction(world, coordinate.getX(), coordinate.getZ() + 1));
+                boolean isEdge = !FactionHelper.equals(faction, claims.getFaction(world, coordinate.getX() - 1, coordinate.getZ()))
+                        || !FactionHelper.equals(faction, claims.getFaction(world, coordinate.getX() + 1, coordinate.getZ()))
+                        || !FactionHelper.equals(faction, claims.getFaction(world, coordinate.getX(), coordinate.getZ() - 1))
+                        || !FactionHelper.equals(faction, claims.getFaction(world, coordinate.getX(), coordinate.getZ() + 1));
                 if (isEdge) {
                     foundEdge = true;
                 }

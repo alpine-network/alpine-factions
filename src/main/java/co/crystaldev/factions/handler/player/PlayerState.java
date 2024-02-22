@@ -1,14 +1,12 @@
 package co.crystaldev.factions.handler.player;
 
 import co.crystaldev.factions.AlpineFactions;
+import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.player.TerritorialTitleMode;
 import co.crystaldev.factions.util.claims.Claiming;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.ClaimStore;
-import co.crystaldev.factions.store.FactionStore;
-import co.crystaldev.factions.store.PlayerStore;
 import co.crystaldev.factions.util.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +37,7 @@ public final class PlayerState {
     private boolean overriding;
 
     public void onLogin() {
-        Faction faction = FactionStore.getInstance().findFactionOrDefault(this.player);
+        Faction faction = Accessors.factions().findOrDefault(this.player);
         Component motd = faction.getMotd();
 
         if (motd != null) {
@@ -53,16 +51,16 @@ public final class PlayerState {
     }
 
     public void onMoveChunk(@NotNull Chunk oldChunk, @NotNull Chunk newChunk) {
-        FPlayer state = PlayerStore.getInstance().getPlayer(this.player.getUniqueId());
+        FPlayer state = Accessors.players().get(this.player);
 
         // player has entered into a new faction claim
-        if (!ClaimStore.getInstance().isSameClaim(oldChunk, newChunk)) {
+        if (!Accessors.claims().isSameClaim(oldChunk, newChunk)) {
             this.displayTerritorialTitle(state, newChunk);
         }
 
         // now we should attempt to claim/unclaim
         if (this.autoClaimState.isEnabled()) {
-            Faction actingFaction = FactionStore.getInstance().findFactionOrDefault(this.player);
+            Faction actingFaction = Accessors.factions().findOrDefault(this.player);
             AlpineFactions.schedule(() -> Claiming.one(this.player, actingFaction, this.autoClaimState.getFaction()));
         }
 
@@ -73,7 +71,7 @@ public final class PlayerState {
     }
 
     private void displayTerritorialTitle(@NotNull FPlayer state, @NotNull Chunk chunk) {
-        Faction faction = ClaimStore.getInstance().getFactionOrDefault(chunk);
+        Faction faction = Accessors.claims().getFactionOrDefault(chunk);
         TerritorialTitleMode mode = state.getTerritorialTitleMode();
 
         Component description = Optional.ofNullable(faction.getDescription()).orElse(Faction.DEFAULT_DESCRIPTION);

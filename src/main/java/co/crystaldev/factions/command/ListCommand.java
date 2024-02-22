@@ -1,10 +1,10 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
@@ -39,7 +39,7 @@ public final class ListCommand extends FactionsCommand {
         int page = Math.max(1, humanPage.orElse(1));
 
         // sort factions from greatest to least online members
-        List<Faction> factions = new LinkedList<>(FactionStore.getInstance().getAllFactions());
+        List<Faction> factions = new LinkedList<>(Accessors.factions().get());
         factions.sort((o1, o2) -> o2.countMembers() - o1.countMembers());
 
         // build the page

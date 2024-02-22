@@ -1,11 +1,11 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
@@ -37,7 +37,7 @@ public final class MOTDCommand extends FactionsCommand {
             @Join("name") String motd
     ) {
         MessageConfig messageConfig = MessageConfig.getInstance();
-        Faction faction = FactionStore.getInstance().findFactionOrDefault(player);
+        Faction faction = Accessors.factions().findOrDefault(player);
 
         // ensure the user has permission
         if (!faction.isPermitted(player, Permissions.MODIFY_MOTD)) {
@@ -62,7 +62,7 @@ public final class MOTDCommand extends FactionsCommand {
     @Execute
     public void view(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction faction = FactionStore.getInstance().findFactionOrDefault(player);
+        Faction faction = Accessors.factions().findOrDefault(player);
 
         Component motd = Optional.ofNullable(faction.getMotd()).orElse(Faction.DEFAULT_MOTD);
         Component title = config.motdTitle.build(
@@ -75,7 +75,7 @@ public final class MOTDCommand extends FactionsCommand {
     @Execute(name = "clear")
     public void clear(@Context Player player) {
         MessageConfig messageConfig = MessageConfig.getInstance();
-        Faction faction = FactionStore.getInstance().findFactionOrDefault(player);
+        Faction faction = Accessors.factions().findOrDefault(player);
 
         // ensure the user has permission
         if (!faction.isPermitted(player, Permissions.MODIFY_MOTD)) {

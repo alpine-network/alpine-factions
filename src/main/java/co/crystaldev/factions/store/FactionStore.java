@@ -6,39 +6,28 @@ import co.crystaldev.alpinecore.framework.storage.driver.FlatfileDriver;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.Relational;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.faction.member.Rank;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 12/17/2023
  */
-public final class FactionStore extends AlpineStore<String, Faction> {
+public final class FactionStore extends AlpineStore<String, Faction> implements FactionAccessor {
 
-    @Getter
-    private static FactionStore instance;
-    { instance = this; }
-
-    public static final String WILDERNESS_ID = "factions_wilderness";
-    public static final String SAFEZONE_ID = "factions_safezone";
-    public static final String WARZONE_ID = "factions_warzone";
-
-    private final Set<Faction> registeredFactions = new HashSet<>();
+    private final Map<String, Faction> registeredFactions = new ConcurrentHashMap<>();
 
     FactionStore(AlpinePlugin plugin) {
         super(plugin, FlatfileDriver.<String, Faction>builder()
@@ -49,7 +38,10 @@ public final class FactionStore extends AlpineStore<String, Faction> {
 
         // load factions into memory
         try {
-            this.registeredFactions.addAll(this.loadAllEntries());
+            Collection<Faction> factions = this.loadAllEntries();
+            for (Faction faction : factions) {
+                this.registeredFactions.put(faction.getId(), faction);
+            }
         }
         catch (Throwable ex) {
             Reference.LOGGER.error("Unable to load factions", ex);
@@ -62,108 +54,11 @@ public final class FactionStore extends AlpineStore<String, Faction> {
         this.getWarZone();
     }
 
-    @NotNull
-    public Collection<Faction> getAllFactions() {
-        return this.registeredFactions;
-    }
-
-    @Nullable
-    public Faction findFaction(@NotNull UUID member) {
-        for (Faction faction : this.registeredFactions) {
-            if (faction.isMember(member))
-                return faction;
-        }
-        return null;
-    }
-
-    @Nullable
-    public Faction findFaction(@NotNull OfflinePlayer member) {
-        for (Faction faction : this.registeredFactions) {
-            if (faction.isMember(member.getUniqueId()))
-                return faction;
-        }
-        return null;
-    }
-
-    @Nullable
-    public Faction findFaction(@NotNull ServerOperator member) {
-        if (member instanceof OfflinePlayer) {
-            return this.findFaction((OfflinePlayer) member);
-        }
-        return null;
-    }
-
-    @NotNull
-    public Faction findFactionOrDefault(@NotNull UUID member) {
-        for (Faction faction : this.registeredFactions) {
-            if (faction.isMember(member))
-                return faction;
-        }
-        return this.getWilderness();
-    }
-
-    @NotNull
-    public Faction findFactionOrDefault(@NotNull OfflinePlayer member) {
-        for (Faction faction : this.registeredFactions) {
-            if (faction.isMember(member.getUniqueId()))
-                return faction;
-        }
-        return this.getWilderness();
-    }
-
-    @NotNull
-    public Faction findFactionOrDefault(@NotNull ServerOperator member) {
-        if (member instanceof OfflinePlayer) {
-            return findFactionOrDefault((OfflinePlayer) member);
-        }
-        return this.getWilderness();
-    }
-
-    @Nullable
-    public Faction findFactionByName(@NotNull String factionName) {
-        for (Faction faction : this.registeredFactions) {
-            if (factionName.equalsIgnoreCase(faction.getName())) {
-                return faction;
-            }
-        }
-        return null;
-    }
-
-    @Nullable
-    public Faction getFactionById(@NotNull String id) {
-        for (Faction faction : this.registeredFactions) {
-            if (faction.getId().equals(id)) {
-                return faction;
-            }
-        }
-        return null;
-    }
-
-    public void saveFaction(@NotNull Faction faction) {
-        this.put(faction.getId(), faction);
-    }
-
-    public void registerFaction(@NotNull Faction faction) {
-        Reference.LOGGER.info("Registering faction (name={}, id={})", faction.getName(), faction.getId());
-
-        this.put(faction.getId(), faction);
-        this.registeredFactions.add(faction);
-        this.flush(faction.getId());
-    }
-
-    public void unregisterFaction(@NotNull Faction faction) {
-        Reference.LOGGER.info("Unregistering faction (name={}, id={})", faction.getName(), faction.getId());
-
-        this.remove(faction.getId());
-        this.registeredFactions.remove(faction);
-        this.flush(faction.getId());
-    }
-
     public void saveFactions() {
         boolean updated = false;
-        for (Faction faction : this.registeredFactions) {
+        for (Faction faction : this.registeredFactions.values()) {
             if (faction.isDirty()) {
-                this.saveFaction(faction);
+                this.save(faction);
                 faction.setDirty(false);
                 updated = true;
             }
@@ -174,15 +69,43 @@ public final class FactionStore extends AlpineStore<String, Faction> {
         }
     }
 
-    @NotNull
-    public Faction getWilderness() {
-        Faction faction = this.getFactionById(WILDERNESS_ID);
+    @Override
+    public void register(@NotNull Faction faction) {
+        Reference.LOGGER.info("Registering faction (name={}, id={})", faction.getName(), faction.getId());
+
+        this.registeredFactions.put(faction.getId(), faction);
+        this.put(faction.getId(), faction);
+        this.flush(faction.getId());
+    }
+
+    @Override
+    public void unregister(@NotNull Faction faction) {
+        Reference.LOGGER.info("Unregistering faction (name={}, id={})", faction.getName(), faction.getId());
+
+        this.registeredFactions.remove(faction.getId());
+        this.remove(faction.getId());
+        this.flush(faction.getId());
+    }
+
+    @Override
+    public void save(@NotNull Faction faction) {
+        this.put(faction.getId(), faction);
+    }
+
+    @Override
+    public @NotNull Collection<Faction> get() {
+        return this.registeredFactions.values();
+    }
+
+    @Override
+    public @NotNull Faction getWilderness() {
+        Faction faction = this.getById(Faction.WILDERNESS_ID);
         if (faction != null) {
             return faction;
         }
 
         // create the faction
-        faction = new Faction(WILDERNESS_ID, "Wilderness");
+        faction = new Faction(Faction.WILDERNESS_ID, "Wilderness");
         faction.setDescription(Component.text("It's dangerous to go alone."));
 
         // update the flags
@@ -205,19 +128,19 @@ public final class FactionStore extends AlpineStore<String, Faction> {
         faction.setPermissionBulk(Permissions.BANK_DEPOSIT, true);
 
         // register the faction
-        this.registerFaction(faction);
+        this.register(faction);
         return faction;
     }
 
-    @NotNull
-    public Faction getSafeZone() {
-        Faction faction = this.getFactionById(SAFEZONE_ID);
+    @Override
+    public @NotNull Faction getSafeZone() {
+        Faction faction = this.getById(Faction.SAFEZONE_ID);
         if (faction != null) {
             return faction;
         }
 
         // create the faction
-        faction = new Faction(SAFEZONE_ID, "SafeZone");
+        faction = new Faction(Faction.SAFEZONE_ID, "SafeZone");
         faction.setDescription(Component.text("Free from PvP and monsters."));
 
         // update the flags
@@ -241,19 +164,34 @@ public final class FactionStore extends AlpineStore<String, Faction> {
         faction.setPermissionBulk(Permissions.ACCESS_HOME, false, relations);
 
         // register the faction
-        this.registerFaction(faction);
+        this.register(faction);
         return faction;
     }
 
-    @NotNull
-    public Faction getWarZone() {
-        Faction faction = this.getFactionById(WARZONE_ID);
+    @Override
+    public @Nullable Faction getById(@NotNull String id) {
+        return this.registeredFactions.get(id);
+    }
+
+    @Override
+    public @Nullable Faction find(@NotNull Predicate<Faction> factionPredicate) {
+        for (Faction value : this.registeredFactions.values()) {
+            if (factionPredicate.test(value)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public @NotNull Faction getWarZone() {
+        Faction faction = this.getById(Faction.WARZONE_ID);
         if (faction != null) {
             return faction;
         }
 
         // create the faction
-        faction = new Faction(WARZONE_ID, "WarZone");
+        faction = new Faction(Faction.WARZONE_ID, "WarZone");
         faction.setDescription(Component.text("Not the safest place to be."));
 
         // update the flags
@@ -276,7 +214,7 @@ public final class FactionStore extends AlpineStore<String, Faction> {
         faction.setPermissionBulk(Permissions.ACCESS_HOME, false, relations);
 
         // register the faction
-        this.registerFaction(faction);
+        this.register(faction);
         return faction;
     }
 }

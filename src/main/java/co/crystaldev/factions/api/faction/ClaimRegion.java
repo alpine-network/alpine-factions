@@ -1,6 +1,5 @@
 package co.crystaldev.factions.api.faction;
 
-import co.crystaldev.factions.store.FactionStore;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -66,7 +65,7 @@ public final class ClaimRegion {
     @Nullable
     public Claim putClaim(int chunkX, int chunkZ, @NotNull Faction faction) {
         String factionId = faction.getId();
-        if (factionId.equals(FactionStore.WILDERNESS_ID)) {
+        if (factionId.equals(Faction.WILDERNESS_ID)) {
             return null;
         }
 

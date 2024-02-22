@@ -1,9 +1,13 @@
 package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.Activatable;
 import co.crystaldev.alpinecore.framework.storage.SerializerRegistry;
 import co.crystaldev.factions.api.FlagRegistry;
 import co.crystaldev.factions.api.PermissionRegistry;
+import co.crystaldev.factions.api.accessor.ClaimAccessor;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
@@ -13,7 +17,9 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.show.ShowFormatter;
 import co.crystaldev.factions.api.show.component.DefaultShowComponents;
 import co.crystaldev.factions.command.argument.*;
+import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
+import co.crystaldev.factions.store.PlayerStore;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.event.ServerTickEvent;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -26,6 +32,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginManager;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,6 +61,15 @@ public final class AlpineFactions extends AlpinePlugin {
     @Getter
     private final ShowFormatter showFormatter = new ShowFormatter();
 
+    @Getter
+    private ClaimAccessor claimAccessor;
+
+    @Getter
+    private FactionAccessor factionAccessor;
+
+    @Getter
+    private PlayerAccessor playerAccessor;
+
     @Override
     public void onStart() {
 
@@ -68,6 +84,11 @@ public final class AlpineFactions extends AlpinePlugin {
         // register f show elements
         this.showFormatter.register(DefaultShowComponents.VALUES);
 
+        // setup accessors
+        this.claimAccessor = this.getActivatable(ClaimStore.class);
+        this.factionAccessor = this.getActivatable(FactionStore.class);
+        this.playerAccessor = this.getActivatable(PlayerStore.class);
+
         // setup server tick event
         ServerTickEvent event = new ServerTickEvent();
         PluginManager pluginManager = this.getServer().getPluginManager();
@@ -79,8 +100,8 @@ public final class AlpineFactions extends AlpinePlugin {
 
     @Override
     public void onStop() {
-        // flush all dirty factions
-        FactionStore.getInstance().saveFactions();
+        this.getActivatable(ClaimStore.class).saveClaims();
+        this.getActivatable(FactionStore.class).saveFactions();
     }
 
     @Override
@@ -102,6 +123,16 @@ public final class AlpineFactions extends AlpinePlugin {
         super.registerSerializers(serializerRegistry);
 
         serializerRegistry.setMiniMessage(Reference.MINI_MESSAGE);
+    }
+
+    @NotNull @ApiStatus.Internal
+    public <T> T getActivatable(@NotNull Class<T> type) {
+        for (Activatable activatable : this.getActivatables()) {
+            if (activatable.getClass().equals(type)) {
+                return (T) activatable;
+            }
+        }
+        throw new IllegalArgumentException();
     }
 
     public static void schedule(@NotNull Runnable runnable) {

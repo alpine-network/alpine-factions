@@ -1,7 +1,7 @@
 package co.crystaldev.factions.api.faction.member;
 
+import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.player.FPlayer;
-import co.crystaldev.factions.store.PlayerStore;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -57,6 +57,6 @@ public final class Member {
 
     @NotNull
     public FPlayer getUser() {
-        return PlayerStore.getInstance().getPlayer(this.id);
+        return Accessors.players().getById(this.id);
     }
 }

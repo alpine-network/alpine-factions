@@ -1,6 +1,8 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permissions;
@@ -8,7 +10,6 @@ import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
 import co.crystaldev.factions.util.PlayerHelper;
@@ -39,15 +40,15 @@ public final class KickCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionStore store = FactionStore.getInstance();
-        Faction faction = store.findFactionOrDefault(other);
-        Faction actingFaction = store.findFactionOrDefault(sender);
+        FactionAccessor factions = Accessors.factions();
+        Faction faction = factions.findOrDefault(other);
+        Faction actingFaction = factions.findOrDefault(sender);
         boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
 
         // ensure player is in a faction
         if (faction.isWilderness()) {
             config.playerNotInFaction.send(sender,
-                    "player", FactionHelper.formatRelational(sender, store.getWilderness(), other),
+                    "player", FactionHelper.formatRelational(sender, factions.getWilderness(), other),
                     "player_name", other.getName());
             return;
         }

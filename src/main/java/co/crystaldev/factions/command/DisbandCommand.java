@@ -2,7 +2,6 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;

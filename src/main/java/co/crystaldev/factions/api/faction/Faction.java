@@ -1,5 +1,8 @@
 package co.crystaldev.factions.api.faction;
 
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.ClaimAccessor;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.member.MemberInvitation;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.Relational;
@@ -13,8 +16,6 @@ import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.store.FactionStore;
-import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
@@ -42,6 +43,12 @@ import java.util.function.Consumer;
 @SuppressWarnings("unused")
 @Getter @Setter @ToString
 public final class Faction {
+
+    public static final String WILDERNESS_ID = "factions_wilderness";
+
+    public static final String SAFEZONE_ID = "factions_safezone";
+
+    public static final String WARZONE_ID = "factions_warzone";
 
     public static final Component DEFAULT_DESCRIPTION = ComponentHelper.mini("<gray>No description set");
 
@@ -95,7 +102,7 @@ public final class Faction {
     }
 
     public boolean isWilderness() {
-        return this.id.equals(FactionStore.WILDERNESS_ID);
+        return this.id.equals(WILDERNESS_ID);
     }
 
     public boolean canDisband() {
@@ -104,9 +111,10 @@ public final class Faction {
 
     public void disband(@NotNull CommandSender actor) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionStore factionStore = FactionStore.getInstance();
-        ClaimStore claimStore = ClaimStore.getInstance();
-        Faction actingFaction = factionStore.findFactionOrDefault(actor);
+
+        FactionAccessor factions = Accessors.factions();
+        ClaimAccessor claims = Accessors.claims();
+        Faction actingFaction = factions.findOrDefault(actor);
 
         // notify the faction
         Messaging.broadcast(this, actor, observer -> {
@@ -119,13 +127,12 @@ public final class Faction {
         });
 
         // remove all claims
-        List<ClaimedChunk> claims = claimStore.getClaims(this);
-        for (ClaimedChunk claim : claims) {
-            claimStore.removeClaim(claim.getWorld(), claim.getChunkX(), claim.getChunkZ());
+        for (ClaimedChunk claim : claims.getClaims(this)) {
+            claims.remove(claim.getWorld(), claim.getChunkX(), claim.getChunkZ());
         }
 
         // remove the faction from the registry
-        factionStore.unregisterFaction(this);
+        factions.unregister(this);
     }
 
     // region Territory
@@ -173,7 +180,7 @@ public final class Faction {
     }
 
     public int getClaimCount(@Nullable World world) {
-        return ClaimStore.getInstance().countClaims(this, world);
+        return Accessors.claims().countClaims(this, world);
     }
 
     public int getClaimCount() {
@@ -225,10 +232,10 @@ public final class Faction {
     @NotNull
     public Set<RelatedFaction> getRelatedFactions() {
         Set<RelatedFaction> related = new HashSet<>();
-        FactionStore store = FactionStore.getInstance();
+        FactionAccessor factions = Accessors.factions();
 
         this.relationRequests.forEach((factionId, type) -> {
-            Faction other = store.getFactionById(factionId);
+            Faction other = factions.getById(factionId);
             if (other != null && other.relationTo(this) == type) {
                 related.add(new RelatedFaction(other, type));
             }
@@ -240,10 +247,10 @@ public final class Faction {
     @NotNull
     public Set<RelatedFaction> getRelationWishes() {
         Set<RelatedFaction> related = new HashSet<>();
-        FactionStore store = FactionStore.getInstance();
+        FactionAccessor factions = Accessors.factions();
 
         this.relationRequests.forEach((factionId, type) -> {
-            Faction other = store.getFactionById(factionId);
+            Faction other = factions.getById(factionId);
             if (other != null && other.relationTo(this) != type) {
                 related.add(new RelatedFaction(other, type));
             }
@@ -255,14 +262,14 @@ public final class Faction {
     @NotNull
     public Set<Faction> getRelatedFactions(@NotNull FactionRelation relation) {
         Set<Faction> related = new HashSet<>();
-        FactionStore store = FactionStore.getInstance();
+        FactionAccessor factions = Accessors.factions();
 
         this.relationRequests.forEach((factionId, type) -> {
             if (type != relation) {
                 return;
             }
 
-            Faction other = store.getFactionById(factionId);
+            Faction other = factions.getById(factionId);
             if (other != null) {
                 related.add(other);
             }
@@ -324,7 +331,7 @@ public final class Faction {
             return this.isPermitted(this.getMember(offlinePlayer).getRank(), permission);
         }
         else {
-            Faction other = FactionStore.getInstance().findFaction(player);
+            Faction other = Accessors.factions().find(player);
             return this.isPermitted(this.relationTo(other), permission);
         }
     }
@@ -485,7 +492,7 @@ public final class Faction {
             }
             else {
                 // move replacement owner into this faction
-                Faction faction = FactionStore.getInstance().findFaction(owner);
+                Faction faction = Accessors.factions().find(owner);
                 if (faction != null) {
                     faction.removeMember(owner);
                 }

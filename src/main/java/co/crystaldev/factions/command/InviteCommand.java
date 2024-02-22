@@ -1,13 +1,14 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.MemberInvitation;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
@@ -44,9 +45,9 @@ public final class InviteCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer invitee
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionStore store = FactionStore.getInstance();
-        Faction faction = store.findFactionOrDefault(player);
-        Faction inviteeFaction = store.findFactionOrDefault(invitee);
+        FactionAccessor factions = Accessors.factions();
+        Faction faction = factions.findOrDefault(player);
+        Faction inviteeFaction = factions.findOrDefault(invitee);
 
         if (!faction.isPermitted(player, Permissions.INVITE_MEMBERS)) {
             FactionHelper.missingPermission(player, faction, "invite members");
@@ -100,9 +101,9 @@ public final class InviteCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer invitee
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionStore store = FactionStore.getInstance();
-        Faction faction = store.findFactionOrDefault(player);
-        Faction inviteeFaction = store.findFactionOrDefault(invitee);
+        FactionAccessor factions = Accessors.factions();
+        Faction faction = factions.findOrDefault(player);
+        Faction inviteeFaction = factions.findOrDefault(invitee);
 
         if (!faction.isPermitted(player, Permissions.INVITE_MEMBERS)) {
             FactionHelper.missingPermission(player, faction, "invite members");
@@ -131,8 +132,8 @@ public final class InviteCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionStore store = FactionStore.getInstance();
-        Faction resolvedFaction = faction.orElse(store.findFactionOrDefault(sender));
+        FactionAccessor factions = Accessors.factions();
+        Faction resolvedFaction = faction.orElse(factions.findOrDefault(sender));
         Set<MemberInvitation> invitations = resolvedFaction.getInvitations();
 
         if (!resolvedFaction.isPermitted(sender, Permissions.INVITE_MEMBERS)) {
@@ -152,8 +153,8 @@ public final class InviteCommand extends FactionsCommand {
 
             OfflinePlayer invitee = Bukkit.getOfflinePlayer(invite.getPlayerId());
             OfflinePlayer inviter = Bukkit.getOfflinePlayer(invite.getInviterId());
-            Faction inviteeFaction = store.findFactionOrDefault(invite.getPlayerId());
-            Faction inviterFaction = store.findFactionOrDefault(invite.getInviterId());
+            Faction inviteeFaction = factions.findOrDefault(invite.getPlayerId());
+            Faction inviterFaction = factions.findOrDefault(invite.getInviterId());
 
             return config.inviteListEntry.build(
                     "player", FactionHelper.formatRelational(sender, inviteeFaction, invitee),

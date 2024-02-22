@@ -2,6 +2,7 @@ package co.crystaldev.factions.engine.faction;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.event.ServerTickEvent;
 import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
@@ -23,7 +24,7 @@ public final class FactionManagementEngine extends AlpineEngine {
         if (!event.isTime(30L, TimeUnit.SECONDS))
             return;
 
-        FactionStore.getInstance().saveFactions();
-        ClaimStore.getInstance().saveClaims();
+        AlpineFactions.getInstance().getActivatable(ClaimStore.class).saveClaims();
+        AlpineFactions.getInstance().getActivatable(FactionStore.class).saveFactions();
     }
 }

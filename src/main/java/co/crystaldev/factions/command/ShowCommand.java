@@ -2,10 +2,10 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.AlpineFactions;
+import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.Messaging;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
@@ -33,7 +33,7 @@ public final class ShowCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        Faction senderFaction = FactionStore.getInstance().findFactionOrDefault(sender);
+        Faction senderFaction = Accessors.factions().findOrDefault(sender);
         Faction resolvedFaction = faction.orElse(senderFaction);
         Messaging.send(sender, AlpineFactions.getInstance().getShowFormatter().build(sender, resolvedFaction, senderFaction));
     }

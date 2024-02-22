@@ -1,6 +1,8 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
@@ -8,7 +10,6 @@ import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.AutoClaimState;
 import co.crystaldev.factions.handler.player.PlayerState;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.util.claims.Claiming;
@@ -40,9 +41,9 @@ public final class ClaimCommand extends FactionsCommand {
             @Arg("radius") Optional<Integer> rad,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        FactionStore store = FactionStore.getInstance();
-        Faction claimingFaction = faction.orElse(store.findFaction(player));
-        Faction actingFaction = faction.orElse(store.findFactionOrDefault(player));
+        FactionAccessor factions = Accessors.factions();
+        Faction claimingFaction = faction.orElse(factions.find(player));
+        Faction actingFaction = faction.orElse(factions.findOrDefault(player));
         Claiming.mode(player, actingFaction, claimingFaction, type, Math.max(rad.orElse(1), 1));
     }
 
@@ -51,9 +52,9 @@ public final class ClaimCommand extends FactionsCommand {
             @Context Player player,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        FactionStore store = FactionStore.getInstance();
-        Faction claimingFaction = faction.orElse(store.findFaction(player));
-        Faction actingFaction = faction.orElse(store.findFactionOrDefault(player));
+        FactionAccessor factions = Accessors.factions();
+        Faction claimingFaction = faction.orElse(factions.find(player));
+        Faction actingFaction = faction.orElse(factions.findOrDefault(player));
         Claiming.fill(player, actingFaction, claimingFaction);
     }
 
@@ -62,9 +63,9 @@ public final class ClaimCommand extends FactionsCommand {
             @Context Player player,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        FactionStore store = FactionStore.getInstance();
-        Faction claimingFaction = faction.orElse(store.findFaction(player));
-        Faction actingFaction = faction.orElse(store.findFactionOrDefault(player));
+        FactionAccessor factions = Accessors.factions();
+        Faction claimingFaction = faction.orElse(factions.find(player));
+        Faction actingFaction = faction.orElse(factions.findOrDefault(player));
         Claiming.one(player, actingFaction, claimingFaction);
     }
 
@@ -74,7 +75,7 @@ public final class ClaimCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction claimingFaction = faction.orElse(FactionStore.getInstance().findFactionOrDefault(player));
+        Faction claimingFaction = faction.orElse(Accessors.factions().findOrDefault(player));
 
         PlayerState state = PlayerHandler.getInstance().getPlayer(player);
         AutoClaimState autoClaim = state.getAutoClaimState();

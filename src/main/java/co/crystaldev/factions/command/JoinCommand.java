@@ -2,12 +2,13 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.PermissionNodes;
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
 import dev.rollczi.litecommands.annotations.argument.Arg;
@@ -39,8 +40,8 @@ public final class JoinCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
 
-        FactionStore store = FactionStore.getInstance();
-        Faction otherFaction = store.findFactionOrDefault(player);
+        FactionAccessor factions = Accessors.factions();
+        Faction otherFaction = factions.findOrDefault(player);
 
         // ensure the player is not in a faction
         if (!otherFaction.isWilderness()) {
@@ -56,7 +57,7 @@ public final class JoinCommand extends FactionsCommand {
 
             // notify the faction of this attempt
             Messaging.broadcast(faction, observer -> config.attemptedMemberJoin.build(
-                    "player", FactionHelper.formatRelational(observer, store.getWilderness(), player),
+                    "player", FactionHelper.formatRelational(observer, factions.getWilderness(), player),
                     "player_name", player.getName()
             ));
             return;
@@ -102,10 +103,10 @@ public final class JoinCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
 
-        FactionStore store = FactionStore.getInstance();
-        Faction otherFaction = store.findFaction(joiningPlayer);
-        Faction actingFaction = store.findFactionOrDefault(player);
-        Faction wilderness = store.getWilderness();
+        FactionAccessor factions = Accessors.factions();
+        Faction otherFaction = factions.find(joiningPlayer);
+        Faction actingFaction = factions.findOrDefault(player);
+        Faction wilderness = factions.getWilderness();
 
         // ensure the player is not in a faction
         if (otherFaction != null) {

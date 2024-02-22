@@ -1,8 +1,9 @@
 package co.crystaldev.factions.util;
 
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.ClaimStore;
 import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -34,7 +35,7 @@ public final class AsciiFactionMap {
 
     private final MessageConfig config = MessageConfig.getInstance();
 
-    private final ClaimStore store = ClaimStore.getInstance();
+    private final ClaimAccessor claims = Accessors.claims();
 
     private final Map<Faction, FactionMarker> factionColorMap = new LinkedHashMap<>();
 
@@ -65,7 +66,7 @@ public final class AsciiFactionMap {
 
     private void buildTitle(@NotNull List<Component> components) {
         Chunk chunk = this.player.getLocation().getChunk();
-        Faction faction = this.store.getFactionOrDefault(chunk);
+        Faction faction = this.claims.getFactionOrDefault(chunk);
 
         components.add(Formatting.title(this.config.mapTitle.build(
                 "world", this.player.getWorld().getName(),
@@ -135,7 +136,7 @@ public final class AsciiFactionMap {
                     continue;
                 }
 
-                Faction faction = this.store.getFaction(world, chunkX, chunkZ);
+                Faction faction = this.claims.getFaction(world, chunkX, chunkZ);
                 if (faction != null) {
                     // chunk is claimed
 

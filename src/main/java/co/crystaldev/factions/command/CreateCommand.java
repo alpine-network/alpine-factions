@@ -1,12 +1,13 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.FactionStore;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -33,17 +34,17 @@ public final class CreateCommand extends FactionsCommand {
     ) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
-        FactionStore store = FactionStore.getInstance();
+        FactionAccessor factions = Accessors.factions();
 
         // ensure the player isn't already in a faction
-        Faction faction = store.findFaction(player);
+        Faction faction = factions.find(player);
         if (faction != null) {
             messageConfig.alreadyInFaction.send(player);
             return;
         }
 
         // ensure no other faction has the same name
-        faction = store.findFactionByName(name);
+        faction = factions.getByName(name);
         if (faction != null) {
             messageConfig.factionWithName.send(player, "faction_name", name);
             return;
@@ -62,7 +63,7 @@ public final class CreateCommand extends FactionsCommand {
         }
 
         // create the faction
-        store.registerFaction(new Faction(name, player));
+        factions.register(new Faction(name, player));
         messageConfig.create.send(player, "faction_name", name);
     }
 }

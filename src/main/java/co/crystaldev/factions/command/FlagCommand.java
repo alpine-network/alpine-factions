@@ -3,6 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.FlagRegistry;
+import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FlagAdapter;
@@ -10,7 +11,6 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.*;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
@@ -51,7 +51,7 @@ public final class FlagCommand extends FactionsCommand {
             return;
         }
 
-        Faction resolvedFaction = faction.orElse(FactionStore.getInstance().findFactionOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Accessors.factions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_FLAGS)) {
             FactionHelper.missingPermission(sender, resolvedFaction, "modify flags");
             return;
@@ -85,7 +85,7 @@ public final class FlagCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         FlagRegistry registry = AlpineFactions.getInstance().getFlagRegistry();
 
-        Faction resolvedFaction = faction.orElse(FactionStore.getInstance().findFactionOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Accessors.factions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_FLAGS)) {
             FactionHelper.missingPermission(sender, resolvedFaction, "modify flags");
             return;

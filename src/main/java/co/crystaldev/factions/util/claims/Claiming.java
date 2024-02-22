@@ -1,9 +1,9 @@
 package co.crystaldev.factions.util.claims;
 
+import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.ClaimStore;
 import co.crystaldev.factions.util.*;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Chunk;
@@ -23,7 +23,7 @@ public final class Claiming {
     public static void mode(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
                             @NotNull ClaimType type, int radius) {
         Chunk origin = actor.getLocation().getChunk();
-        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
+        Faction replacedFaction = Accessors.claims().getFaction(origin);
 
         // is the player able to claim this land?
         if (ClaimHelper.shouldCancelClaim(actor, replacedFaction, claimingFaction, claimingFaction != null)) {
@@ -53,7 +53,7 @@ public final class Claiming {
     public static void fill(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
         MessageConfig config = MessageConfig.getInstance();
         Chunk origin = actor.getLocation().getChunk();
-        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
+        Faction replacedFaction = Accessors.claims().getFaction(origin);
 
         // is the player able to claim this land?
         if (ClaimHelper.shouldCancelClaim(actor, replacedFaction, claimingFaction, claimingFaction != null)) {
@@ -73,7 +73,7 @@ public final class Claiming {
 
     public static void one(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
         Chunk origin = actor.getLocation().getChunk();
-        Faction replacedFaction = ClaimStore.getInstance().getFaction(origin);
+        Faction replacedFaction = Accessors.claims().getFaction(origin);
 
         // is the player able to claim this land?
         if (ClaimHelper.shouldCancelClaim(actor, replacedFaction, claimingFaction, claimingFaction != null)) {

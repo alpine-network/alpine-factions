@@ -1,11 +1,11 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.player.TerritorialTitleMode;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.PlayerStore;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -28,7 +28,7 @@ public final class TerritorialTitlesCommand extends FactionsCommand {
     public void execute(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FPlayer state = PlayerStore.getInstance().getPlayer(player);
+        FPlayer state = Accessors.players().get(player);
         state.setTerritorialTitleMode(next(state.getTerritorialTitleMode()));
 
         config.stateChange.send(player,

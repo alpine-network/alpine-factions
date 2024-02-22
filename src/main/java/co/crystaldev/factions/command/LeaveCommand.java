@@ -1,11 +1,11 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -28,8 +28,7 @@ public final class LeaveCommand extends FactionsCommand {
     @Execute
     public void execute(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionStore store = FactionStore.getInstance();
-        Faction faction = store.findFaction(player);
+        Faction faction = Accessors.factions().find(player);
 
         // ensure the player is in a faction
         if (faction == null) {

@@ -1,11 +1,12 @@
 package co.crystaldev.factions.util;
 
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.StyleConfig;
-import co.crystaldev.factions.store.FactionStore;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -135,13 +136,13 @@ public final class FactionHelper {
 
     @Nullable
     private static Faction findFaction(@NotNull ServerOperator sender) {
-        FactionStore store = FactionStore.getInstance();
-        return sender instanceof OfflinePlayer ? store.findFaction((OfflinePlayer) sender) : store.getWilderness();
+        FactionAccessor factions = Accessors.factions();
+        return sender instanceof OfflinePlayer ? factions.find((OfflinePlayer) sender) : factions.getWilderness();
     }
 
     @NotNull
     private static Faction findFactionOrDefault(@NotNull ServerOperator sender) {
-        FactionStore store = FactionStore.getInstance();
-        return sender instanceof OfflinePlayer ? store.findFactionOrDefault((OfflinePlayer) sender) : store.getWilderness();
+        FactionAccessor factions = Accessors.factions();
+        return sender instanceof OfflinePlayer ? factions.findOrDefault((OfflinePlayer) sender) : factions.getWilderness();
     }
 }

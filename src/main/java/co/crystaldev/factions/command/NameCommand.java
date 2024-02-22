@@ -1,13 +1,14 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
 import dev.rollczi.litecommands.annotations.argument.Arg;
@@ -39,8 +40,8 @@ public final class NameCommand extends FactionsCommand {
     ) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
-        FactionStore store = FactionStore.getInstance();
-        Faction faction = targetFaction.orElseGet(() -> store.findFactionOrDefault(player));
+        FactionAccessor factions = Accessors.factions();
+        Faction faction = targetFaction.orElseGet(() -> factions.findOrDefault(player));
 
         // ensure the user has permission
         if (!faction.isPermitted(player, Permissions.MODIFY_NAME)) {
@@ -55,7 +56,7 @@ public final class NameCommand extends FactionsCommand {
         }
 
         // ensure there is no other faction with the same name
-        Faction other = store.findFactionByName(name);
+        Faction other = factions.getByName(name);
         if (other != null) {
             messageConfig.factionWithName.send(player, "faction_name", name);
             return;

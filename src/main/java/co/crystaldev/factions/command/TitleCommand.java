@@ -1,12 +1,13 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
@@ -53,9 +54,9 @@ public final class TitleCommand extends FactionsCommand {
 
     private void setTitle(@NotNull CommandSender sender, @NotNull OfflinePlayer other, @Nullable Component title) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionStore store = FactionStore.getInstance();
-        Faction faction = store.findFactionOrDefault(other);
-        Faction actingFaction = store.findFactionOrDefault(sender);
+        FactionAccessor factions = Accessors.factions();
+        Faction faction = factions.findOrDefault(other);
+        Faction actingFaction = factions.findOrDefault(sender);
 
         if (faction.isWilderness()) {
             config.playerNotInFaction.send(sender, "player", FactionHelper.formatRelational(sender, faction, other));

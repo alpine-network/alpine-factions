@@ -1,6 +1,9 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.ClaimAccessor;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
@@ -11,8 +14,6 @@ import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.AutoClaimState;
 import co.crystaldev.factions.handler.player.PlayerState;
-import co.crystaldev.factions.store.ClaimStore;
-import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
 import co.crystaldev.factions.util.claims.ClaimType;
@@ -48,20 +49,20 @@ public final class UnclaimCommand extends FactionsCommand {
             @Arg("type") @Key(Args.CLAIM_TYPE) ClaimType type,
             @OptionalArg("radius") Optional<Integer> rad
     ) {
-        Faction actingFaction = FactionStore.getInstance().findFactionOrDefault(player);
+        Faction actingFaction = Accessors.factions().findOrDefault(player);
         Claiming.mode(player, actingFaction, null, type, Math.max(rad.orElse(1), 1));
     }
 
     @Execute(name = "fill", aliases = "f")
     public void fill(@Context Player player) {
-        Faction actingFaction = FactionStore.getInstance().findFactionOrDefault(player);
+        Faction actingFaction = Accessors.factions().findOrDefault(player);
         Claiming.fill(player, actingFaction, null);
     }
 
     @Execute(name = "one", aliases = "o")
     public void one(@Context Player player) {
-        FactionStore store = FactionStore.getInstance();
-        Claiming.one(player, store.findFactionOrDefault(player), null);
+        FactionAccessor factions = Accessors.factions();
+        Claiming.one(player, factions.findOrDefault(player), null);
     }
 
     @Execute(name = "auto", aliases = "a")
@@ -73,7 +74,7 @@ public final class UnclaimCommand extends FactionsCommand {
         autoClaim.toggle(null);
 
         if (autoClaim.isEnabled()) {
-            Faction wilderness = FactionStore.getInstance().getWilderness();
+            Faction wilderness = Accessors.factions().getWilderness();
             config.enableAutoUnclaim.send(player,
                     "faction", FactionHelper.formatRelational(player, wilderness),
                     "faction_name", wilderness.getName());
@@ -100,32 +101,31 @@ public final class UnclaimCommand extends FactionsCommand {
         }
 
         // fetch all chunks
-        ClaimStore store = ClaimStore.getInstance();
-        List<ClaimedChunk> claims;
+        ClaimAccessor claims = Accessors.claims();
+        List<ClaimedChunk> foundClaims;
         ConfigText message;
         String worldName;
         if (world == WorldClaimType.WORLD) {
-            claims = new ArrayList<>();
+            foundClaims = new ArrayList<>();
             for (World w : Bukkit.getWorlds()) {
-                claims.addAll(store.getClaims(faction, w));
+                foundClaims.addAll(claims.getClaims(faction, w));
             }
             message = config.landClaimAll;
             worldName = "<red>all</red>";
         }
         else {
             World w = player.getWorld();
-            claims = store.getClaims(faction, w);
+            foundClaims = claims.getClaims(faction, w);
             message = config.landClaimWorld;
             worldName = w.getName();
         }
 
         // unclaim all chunks
-        claims.forEach(claim -> store.removeClaim(claim.getWorld(), claim.getChunkX(), claim.getChunkZ()));
-        store.saveClaims();
+        foundClaims.forEach(claim -> claims.remove(claim.getWorld(), claim.getChunkX(), claim.getChunkZ()));
 
         // notify
-        Faction wilderness = FactionStore.getInstance().getWilderness();
-        Faction playerFaction = FactionStore.getInstance().findFactionOrDefault(player);
+        Faction wilderness = Accessors.factions().getWilderness();
+        Faction playerFaction = Accessors.factions().findOrDefault(player);
         Messaging.broadcast(faction, player, observer -> {
             return message.build(
                     "actor", FactionHelper.formatRelational(observer, playerFaction, player),
@@ -133,7 +133,7 @@ public final class UnclaimCommand extends FactionsCommand {
 
                     "faction", FactionHelper.formatRelational(observer, faction),
                     "faction_name", faction.getName(),
-                    "amount", claims.size(),
+                    "amount", foundClaims.size(),
                     "claim_type", config.unclaimed.build(),
                     "world", worldName,
 

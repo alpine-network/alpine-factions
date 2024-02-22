@@ -5,6 +5,7 @@ import co.crystaldev.alpinecore.framework.storage.AlpineStore;
 import co.crystaldev.alpinecore.framework.storage.driver.FlatfileDriver;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.ClaimRegion;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
@@ -24,11 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/06/2024
  */
-public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
-
-    @Getter
-    private static ClaimStore instance;
-    { instance = this; }
+public final class ClaimStore extends AlpineStore<String, ClaimRegion> implements ClaimAccessor {
 
     private final Map<String, ClaimRegion> claimStorage = new HashMap<>();
 
@@ -47,15 +44,15 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
         }
     }
 
-    @NotNull
-    public List<ClaimedChunk> getClaims(@Nullable Faction faction, @Nullable World world) {
-        if (faction == null || faction.isWilderness()) {
+    @Override
+    public @NotNull List<ClaimedChunk> getClaims(@NotNull Faction faction, @Nullable String world) {
+        if (faction.isWilderness()) {
             return Collections.emptyList();
         }
 
         List<ClaimedChunk> claims = new LinkedList<>();
         this.claimStorage.forEach((key, region) -> {
-            if (world != null && !region.getWorldName().equals(world.getName())) {
+            if (world != null && !region.getWorldName().equals(world)) {
                 return;
             }
 
@@ -67,19 +64,15 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
         return claims;
     }
 
-    @NotNull
-    public List<ClaimedChunk> getClaims(@Nullable Faction faction) {
-        return this.getClaims(faction, null);
-    }
-
-    public int countClaims(@Nullable Faction faction, @Nullable World world) {
-        if (faction == null || faction.isWilderness()) {
+    @Override
+    public int countClaims(@NotNull Faction faction, @Nullable String world) {
+        if (faction.isWilderness()) {
             return 0;
         }
 
         AtomicInteger claimCounter = new AtomicInteger();
         this.claimStorage.forEach((key, region) -> {
-            if (world != null && !region.getWorldName().equals(world.getName())) {
+            if (world != null && !region.getWorldName().equals(world)) {
                 return;
             }
 
@@ -91,53 +84,8 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
         return claimCounter.get();
     }
 
-    public int countClaims(@Nullable Faction faction) {
-        return this.countClaims(faction, null);
-    }
-
-    @Nullable
-    public Faction getFaction(@NotNull String worldName, int chunkX, int chunkZ) {
-        Claim claim = this.getClaim(worldName, chunkX, chunkZ);
-        if (claim == null) {
-            return null;
-        }
-
-        return FactionStore.getInstance().getFactionById(claim.getFactionId());
-    }
-
-    @Nullable
-    public Faction getFaction(@NotNull Chunk chunk) {
-        return this.getFaction(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
-    }
-
-    @Nullable
-    public Faction getFaction(@NotNull Entity entity) {
-        return this.getFaction(entity.getLocation().getChunk());
-    }
-
-    @NotNull
-    public Faction getFactionOrDefault(@NotNull String worldName, int chunkX, int chunkZ) {
-        FactionStore store = FactionStore.getInstance();
-        Claim claim = this.getClaim(worldName, chunkX, chunkZ);
-        if (claim == null) {
-            return store.getWilderness();
-        }
-
-        return Optional.ofNullable(store.getFactionById(claim.getFactionId())).orElseGet(store::getWilderness);
-    }
-
-    @NotNull
-    public Faction getFactionOrDefault(@NotNull Chunk chunk) {
-        return this.getFactionOrDefault(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
-    }
-
-    @NotNull
-    public Faction getFactionOrDefault(@NotNull Entity entity) {
-        return this.getFactionOrDefault(entity.getLocation().getChunk());
-    }
-
-    @Nullable
-    public Claim getClaim(@NotNull String worldName, int chunkX, int chunkZ) {
+    @Override
+    public @Nullable Claim getClaim(@NotNull String worldName, int chunkX, int chunkZ) {
         String key = getKey(worldName, chunkX, chunkZ);
         if (!this.has(key)) {
             return null;
@@ -146,11 +94,7 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
         return this.get(key).getClaim(chunkX, chunkZ);
     }
 
-    @Nullable
-    public Claim getClaim(@NotNull Chunk chunk) {
-        return this.getClaim(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
-    }
-
+    @Override
     public boolean isClaimed(@NotNull String worldName, int chunkX, int chunkZ) {
         String key = getKey(worldName, chunkX, chunkZ);
         if (!this.has(key)) {
@@ -160,16 +104,8 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
         return this.get(key).isClaimed(chunkX, chunkZ);
     }
 
-    public boolean isClaimed(@NotNull Chunk chunk) {
-        return this.isClaimed(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
-    }
-
-    public boolean isSameClaim(@NotNull Chunk a, @NotNull Chunk b) {
-        return this.getFactionOrDefault(a).equals(this.getFactionOrDefault(b));
-    }
-
-    @Nullable
-    public Claim putClaim(@NotNull String worldName, int chunkX, int chunkZ, @NotNull Faction faction) {
+    @Override
+    public @Nullable Claim put(@NotNull String worldName, int chunkX, int chunkZ, @NotNull Faction faction) {
         String key = getKey(worldName, chunkX, chunkZ);
         ClaimRegion region = this.getOrCreate(key, () -> new ClaimRegion(key, worldName));
         this.claimStorage.put(key, region);
@@ -179,13 +115,8 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
         return claim;
     }
 
-    @Nullable
-    public Claim putClaim(@NotNull Chunk chunk, @NotNull Faction faction) {
-        return this.putClaim(chunk.getWorld().getName(), chunk.getX(), chunk.getZ(), faction);
-    }
-
-    @Nullable
-    public Claim removeClaim(@NotNull String worldName, int chunkX, int chunkZ) {
+    @Override
+    public @Nullable Claim remove(@NotNull String worldName, int chunkX, int chunkZ) {
         String key = getKey(worldName, chunkX, chunkZ);
         if (!this.has(key)) {
             return null;
@@ -203,11 +134,6 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> {
 
         this.put(key, region);
         return removed;
-    }
-
-    @Nullable
-    public Claim removeClaim(@NotNull Chunk chunk) {
-        return this.removeClaim(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 
     public void saveClaims() {
