@@ -21,6 +21,7 @@ import co.crystaldev.factions.util.claims.Claiming;
 import co.crystaldev.factions.util.claims.WorldClaimType;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -53,7 +54,7 @@ public final class UnclaimCommand extends FactionsCommand {
         Claiming.mode(player, actingFaction, null, type, Math.max(rad.orElse(1), 1));
     }
 
-    @Execute(name = "fill", aliases = "f")
+    @Execute(name = "fill", aliases = "f")  @Async
     public void fill(@Context Player player) {
         Faction actingFaction = Accessors.factions().findOrDefault(player);
         Claiming.fill(player, actingFaction, null);

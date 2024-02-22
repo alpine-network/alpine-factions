@@ -15,6 +15,7 @@ import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.util.claims.Claiming;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -47,7 +48,7 @@ public final class ClaimCommand extends FactionsCommand {
         Claiming.mode(player, actingFaction, claimingFaction, type, Math.max(rad.orElse(1), 1));
     }
 
-    @Execute(name = "fill", aliases = "f")
+    @Execute(name = "fill", aliases = "f") @Async
     public void fill(
             @Context Player player,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction

@@ -55,8 +55,15 @@ public final class Claiming {
         Chunk origin = actor.getLocation().getChunk();
         Faction replacedFaction = Accessors.claims().getFaction(origin);
 
+        // do not unclaim fill if faction is wilderness
+        boolean claiming = claimingFaction != null;
+        if (!claiming && replacedFaction == null) {
+            config.fillLimit.send(actor, "limit", FactionConfig.getInstance().maxClaimFillVolume);
+            return;
+        }
+
         // is the player able to claim this land?
-        if (ClaimHelper.shouldCancelClaim(actor, replacedFaction, claimingFaction, claimingFaction != null)) {
+        if (ClaimHelper.shouldCancelClaim(actor, replacedFaction, claimingFaction, claiming)) {
             return;
         }
 

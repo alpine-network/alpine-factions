@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -24,10 +24,10 @@ public final class ClaimRegion {
     private final String worldName;
 
     @SerializedName("claims")
-    private final HashMap<String, Claim> chunkToClaim = new HashMap<>();
+    private final ConcurrentHashMap<String, Claim> chunkToClaim = new ConcurrentHashMap<>();
 
     @SerializedName("count")
-    private final HashMap<String, Integer> claimCount = new HashMap<>();
+    private final ConcurrentHashMap<String, Integer> claimCount = new ConcurrentHashMap<>();
 
     private transient boolean dirty;
 

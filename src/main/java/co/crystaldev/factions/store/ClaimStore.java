@@ -10,15 +10,12 @@ import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.ClaimRegion;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
-import lombok.Getter;
-import org.bukkit.Chunk;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -27,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public final class ClaimStore extends AlpineStore<String, ClaimRegion> implements ClaimAccessor {
 
-    private final Map<String, ClaimRegion> claimStorage = new HashMap<>();
+    private final Map<String, ClaimRegion> claimStorage = new ConcurrentHashMap<>();
 
     ClaimStore(AlpinePlugin plugin) {
         super(plugin, FlatfileDriver.<String, ClaimRegion>builder()
