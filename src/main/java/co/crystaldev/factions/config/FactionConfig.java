@@ -35,6 +35,12 @@ public final class FactionConfig extends AlpineConfig {
 
     @Comment({
             "",
+            "The maximum length of a member title."
+    })
+    public int maxTitleLength = 16;
+
+    @Comment({
+            "",
             "The member limit for a faction. Faction flags can modify this value."
     })
     public int memberLimit = 30;

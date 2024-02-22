@@ -9,6 +9,7 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
+import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
@@ -20,6 +21,7 @@ import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.join.Join;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -41,9 +43,16 @@ public final class TitleCommand extends FactionsCommand {
     public void execute(
             @Context CommandSender sender,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
-            @Arg("title") String title
+            @Join("title") String title
     ) {
-        set(sender, other, ComponentHelper.legacy(title));
+        Component parsedComponent = ComponentHelper.legacy(title);
+        int maxLength = FactionConfig.getInstance().maxTitleLength;
+        while (ComponentHelper.length(parsedComponent) > maxLength) {
+            // trim down the component length while ignoring color codes
+            parsedComponent = ComponentHelper.legacy(title.substring(0, title.length() - 1));
+        }
+
+        set(sender, other, parsedComponent);
     }
 
     @Execute(name = "clear")
