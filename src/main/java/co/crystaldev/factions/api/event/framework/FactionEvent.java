@@ -16,4 +16,9 @@ public abstract class FactionEvent extends BaseEvent {
     public FactionEvent(@NotNull Faction faction) {
         this.faction = faction;
     }
+
+    public FactionEvent(@NotNull Faction faction, boolean async) {
+        super(async);
+        this.faction = faction;
+    }
 }

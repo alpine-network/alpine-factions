@@ -36,8 +36,9 @@ public final class FactionTerritoryChangeEvent extends FactionEntityEvent<Player
 
     public FactionTerritoryChangeEvent(@NotNull Faction faction, @NotNull Player entity, @NotNull World world,
                                        @NotNull Type type, @NotNull Set<ChunkCoordinate> chunks,
-                                       @NotNull Map<Faction, List<ChunkCoordinate>> conqueredChunks) {
-        super(faction, entity);
+                                       @NotNull Map<Faction, List<ChunkCoordinate>> conqueredChunks,
+                                       boolean async) {
+        super(faction, entity, async);
         this.world = world;
         this.type = type;
         this.chunks = chunks;

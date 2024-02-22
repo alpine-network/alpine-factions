@@ -17,6 +17,7 @@ import co.crystaldev.factions.util.LocationHelper;
 import co.crystaldev.factions.util.Messaging;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
@@ -133,7 +134,7 @@ public final class ClaimHelper {
         // call event
         FactionTerritoryChangeEvent.Type type = claimingFaction == null ? FactionTerritoryChangeEvent.Type.UNCLAIM : FactionTerritoryChangeEvent.Type.CLAIM;
         FactionTerritoryChangeEvent event = AlpineFactions.callEvent(new FactionTerritoryChangeEvent(
-                actingFaction, player, origin.getWorld(), type, chunks, conqueredFactions));
+                actingFaction, player, origin.getWorld(), type, chunks, conqueredFactions, !Bukkit.isPrimaryThread()));
         if (event.isCancelled() || chunks.isEmpty()) {
             return;
         }

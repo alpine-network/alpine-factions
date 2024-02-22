@@ -17,4 +17,9 @@ public abstract class FactionEntityEvent<T> extends FactionEvent {
         super(faction);
         this.entity = entity;
     }
+
+    public FactionEntityEvent(@NotNull Faction faction, @NotNull T entity, boolean async) {
+        super(faction, async);
+        this.entity = entity;
+    }
 }
