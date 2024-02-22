@@ -34,6 +34,8 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText alphanumeric = ConfigText.of("%error_prefix% Your input must be alphanumeric");
 
+    public ConfigText operationCancelled = ConfigText.of("%error_prefix% This operation was cancelled");
+
     public ConfigText missingFactionPerm = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> does not allow you to <error_highlight>%action%</error_highlight>");
 
     public ConfigText notInFaction = ConfigText.of("%error_prefix% You are not in a faction");
@@ -76,7 +78,7 @@ public final class MessageConfig extends AlpineConfig {
             "",
             "| Faction Metadata"
     })
-    public ConfigText rename = ConfigText.of("%prefix% %player% set the faction name to <highlight>%faction_name%</highlight>");
+    public ConfigText rename = ConfigText.of("%prefix% %actor% set the faction name to <highlight>%faction_name%</highlight>");
 
     public ConfigText factionWithName = ConfigText.of("%error_prefix% A faction with the name <error_highlight>%faction_name%</error_highlight> already exists");
 
@@ -86,9 +88,9 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText nameTooLong = ConfigText.of("%error_prefix% Your faction name can't be longer than <error_highlight>%length% characters</error_highlight>");
 
-    public ConfigText description = ConfigText.of("%prefix% %player% set the faction's description to:<br>%description%");
+    public ConfigText description = ConfigText.of("%prefix% %actor% set the faction's description to:<br>%description%");
 
-    public ConfigText motd = ConfigText.of("%prefix% %player% set the faction's message of the day to:<br>%motd%");
+    public ConfigText motd = ConfigText.of("%prefix% %actor% set the faction's message of the day to:<br>%motd%");
 
     public ConfigText motdTitle = ConfigText.of("%faction% <separator>|</separator> Message of the Day");
 

@@ -1,7 +1,10 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.PlayerChangedFactionEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.command.framework.FactionsCommand;
@@ -28,7 +31,8 @@ public final class LeaveCommand extends FactionsCommand {
     @Execute
     public void execute(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction faction = Accessors.factions().find(player);
+        FactionAccessor factions = Accessors.factions();
+        Faction faction = factions.find(player);
 
         // ensure the player is in a faction
         if (faction == null) {
@@ -45,6 +49,13 @@ public final class LeaveCommand extends FactionsCommand {
         else if (faction.getMemberCount() == 1 && faction.canDisband()) {
             // the leader was the only member, disband
             faction.disband(player);
+            return;
+        }
+
+        // call event
+        PlayerChangedFactionEvent event = AlpineFactions.callEvent(new PlayerChangedFactionEvent(factions.getWilderness(), faction, player));
+        if (event.isCancelled()) {
+            config.operationCancelled.send(player);
             return;
         }
 

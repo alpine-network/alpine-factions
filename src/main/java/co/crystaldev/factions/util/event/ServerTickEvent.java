@@ -1,4 +1,4 @@
-package co.crystaldev.factions.event;
+package co.crystaldev.factions.util.event;
 
 import co.crystaldev.factions.AlpineFactions;
 import lombok.Getter;

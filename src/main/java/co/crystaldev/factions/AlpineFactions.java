@@ -17,11 +17,11 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.show.ShowFormatter;
 import co.crystaldev.factions.api.show.component.DefaultShowComponents;
 import co.crystaldev.factions.command.argument.*;
-import co.crystaldev.factions.store.ClaimStore;
+import co.crystaldev.factions.store.claim.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.PlayerStore;
 import co.crystaldev.factions.util.claims.ClaimType;
-import co.crystaldev.factions.event.ServerTickEvent;
+import co.crystaldev.factions.util.event.ServerTickEvent;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.claims.WorldClaimType;
 import dev.rollczi.litecommands.LiteCommandsBuilder;
@@ -31,7 +31,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.PluginManager;
+import org.bukkit.event.Event;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -91,9 +91,8 @@ public final class AlpineFactions extends AlpinePlugin {
 
         // setup server tick event
         ServerTickEvent event = new ServerTickEvent();
-        PluginManager pluginManager = this.getServer().getPluginManager();
         Bukkit.getScheduler().runTaskTimer(this, () -> {
-            pluginManager.callEvent(event);
+            callEvent(event);
             event.setTick(TICK_COUNTER.incrementAndGet());
         }, 0L, 1L);
     }
@@ -133,6 +132,12 @@ public final class AlpineFactions extends AlpinePlugin {
             }
         }
         throw new IllegalArgumentException();
+    }
+
+    @NotNull
+    public static <T extends Event> T callEvent(@NotNull T event) {
+        instance.getServer().getPluginManager().callEvent(event);
+        return event;
     }
 
     public static void schedule(@NotNull Runnable runnable) {

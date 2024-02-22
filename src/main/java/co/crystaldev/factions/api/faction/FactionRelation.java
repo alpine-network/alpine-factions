@@ -2,20 +2,24 @@ package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.factions.api.Relational;
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 12/13/2023
  */
-@AllArgsConstructor @Getter
 public enum FactionRelation implements Relational {
-    @SerializedName("self")    SELF(false),
-    @SerializedName("neutral") NEUTRAL(true),
-    @SerializedName("enemy")   ENEMY(true),
-    @SerializedName("truce")   TRUCE(true),
-    @SerializedName("ally")    ALLY(true);
+    @SerializedName("self")
+    SELF,
 
-    private final boolean applicable;
+    @SerializedName("neutral")
+    NEUTRAL,
+
+    @SerializedName("enemy")
+    ENEMY,
+
+    @SerializedName("truce")
+    TRUCE,
+
+    @SerializedName("ally")
+    ALLY
 }

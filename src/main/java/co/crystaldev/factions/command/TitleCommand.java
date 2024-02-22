@@ -1,8 +1,10 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.FactionMemberTitleUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
@@ -41,7 +43,7 @@ public final class TitleCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
             @Arg("title") String title
     ) {
-        this.setTitle(sender, other, ComponentHelper.legacy(title));
+        set(sender, other, ComponentHelper.legacy(title));
     }
 
     @Execute(name = "clear")
@@ -49,10 +51,10 @@ public final class TitleCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
     ) {
-        this.setTitle(sender, other, null);
+        set(sender, other, null);
     }
 
-    private void setTitle(@NotNull CommandSender sender, @NotNull OfflinePlayer other, @Nullable Component title) {
+    private static void set(@NotNull CommandSender sender, @NotNull OfflinePlayer other, @Nullable Component title) {
         MessageConfig config = MessageConfig.getInstance();
         FactionAccessor factions = Accessors.factions();
         Faction faction = factions.findOrDefault(other);
@@ -69,7 +71,13 @@ public final class TitleCommand extends FactionsCommand {
         }
 
         faction.wrapMember(other.getUniqueId(), member -> {
-            member.setTitle(title);
+            FactionMemberTitleUpdateEvent event = AlpineFactions.callEvent(new FactionMemberTitleUpdateEvent(faction, member, title));
+            if (event.isCancelled()) {
+                config.operationCancelled.send(sender);
+                return;
+            }
+
+            member.setTitle(event.getTitle());
 
             Messaging.broadcast(faction, sender, observer -> config.titleChange.build(
                     "actor", FactionHelper.formatRelational(observer, actingFaction, sender),

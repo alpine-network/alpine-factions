@@ -1,8 +1,10 @@
 package co.crystaldev.factions.util.claims;
 
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.FactionTerritoryChangeEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.FactionConfig;
@@ -125,6 +127,14 @@ public final class ClaimHelper {
         // ensure that the claims can be conquered
         if (conqueredChunkCount > 0 && canConquer(conqueredFactions, origin.getWorld().getName(), claims)) {
             messageConfig.conquerFromEdge.send(player);
+            return;
+        }
+
+        // call event
+        FactionTerritoryChangeEvent.Type type = claimingFaction == null ? FactionTerritoryChangeEvent.Type.UNCLAIM : FactionTerritoryChangeEvent.Type.CLAIM;
+        FactionTerritoryChangeEvent event = AlpineFactions.callEvent(new FactionTerritoryChangeEvent(
+                actingFaction, player, origin.getWorld(), type, chunks, conqueredFactions));
+        if (event.isCancelled() || chunks.isEmpty()) {
             return;
         }
 

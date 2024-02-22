@@ -1,4 +1,4 @@
-package co.crystaldev.factions.store;
+package co.crystaldev.factions.store.claim;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.storage.AlpineStore;
@@ -7,7 +7,6 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Claim;
-import co.crystaldev.factions.api.faction.ClaimRegion;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import org.jetbrains.annotations.NotNull;

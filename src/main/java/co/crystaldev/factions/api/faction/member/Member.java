@@ -23,9 +23,9 @@ public final class Member {
 
     private final long joinedAt = System.currentTimeMillis();
 
-    private Rank rank;
+    private @NotNull Rank rank;
 
-    private Component title;
+    private @Nullable Component title;
 
     public Member(@NotNull UUID id, @NotNull Rank rank) {
         this.id = id;

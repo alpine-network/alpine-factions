@@ -3,8 +3,8 @@ package co.crystaldev.factions.engine.faction;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.event.ServerTickEvent;
-import co.crystaldev.factions.store.ClaimStore;
+import co.crystaldev.factions.util.event.ServerTickEvent;
+import co.crystaldev.factions.store.claim.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
 import org.bukkit.event.EventHandler;
 

@@ -6,10 +6,7 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.ComponentHelper;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Formatting;
-import co.crystaldev.factions.util.Messaging;
+import co.crystaldev.factions.util.*;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -36,7 +33,7 @@ public final class MOTDCommand extends FactionsCommand {
             @Context Player player,
             @Join("name") String motd
     ) {
-        MessageConfig messageConfig = MessageConfig.getInstance();
+        MessageConfig config = MessageConfig.getInstance();
         Faction faction = Accessors.factions().findOrDefault(player);
 
         // ensure the user has permission
@@ -52,9 +49,9 @@ public final class MOTDCommand extends FactionsCommand {
 
         // notify the faction
         Messaging.broadcast(faction, player, observer -> {
-            return messageConfig.motd.build(
-                    "player_name", player.getName(),
-                    "player", FactionHelper.formatRelational(observer, faction, player),
+            return config.motd.build(
+                    "actor", FactionHelper.formatRelational(observer, faction, player),
+                    "actor_name", player.getName(),
                     "motd", formatted);
         });
     }
@@ -74,7 +71,7 @@ public final class MOTDCommand extends FactionsCommand {
 
     @Execute(name = "clear")
     public void clear(@Context Player player) {
-        MessageConfig messageConfig = MessageConfig.getInstance();
+        MessageConfig config = MessageConfig.getInstance();
         Faction faction = Accessors.factions().findOrDefault(player);
 
         // ensure the user has permission
@@ -89,9 +86,9 @@ public final class MOTDCommand extends FactionsCommand {
 
         // notify the faction
         Messaging.broadcast(faction, player, observer -> {
-            return messageConfig.motd.build(
-                    "player_name", player.getName(),
-                    "player", FactionHelper.formatRelational(observer, faction, player),
+            return config.motd.build(
+                    "actor", FactionHelper.formatRelational(observer, faction, player),
+                    "actor_name", player.getName(),
                     "motd", Faction.DEFAULT_MOTD);
         });
     }

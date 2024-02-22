@@ -1,8 +1,10 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.CreateFactionEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
@@ -62,8 +64,16 @@ public final class CreateCommand extends FactionsCommand {
             return;
         }
 
-        // create the faction
-        factions.register(new Faction(name, player));
+        // call event
+        faction = new Faction(name, player);
+        CreateFactionEvent event = AlpineFactions.callEvent(new CreateFactionEvent(faction, player));
+        if (event.isCancelled()) {
+            messageConfig.operationCancelled.send(player);
+            return;
+        }
+
+        // register the faction
+        factions.register(faction);
         messageConfig.create.send(player, "faction_name", name);
     }
 }

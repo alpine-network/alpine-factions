@@ -1,5 +1,8 @@
-package co.crystaldev.factions.api.faction;
+package co.crystaldev.factions.store.claim;
 
+import co.crystaldev.factions.api.faction.Claim;
+import co.crystaldev.factions.api.faction.ClaimedChunk;
+import co.crystaldev.factions.api.faction.Faction;
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 import org.bukkit.Bukkit;

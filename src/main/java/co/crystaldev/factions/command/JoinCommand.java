@@ -1,9 +1,11 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.PermissionNodes;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.PlayerChangedFactionEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
@@ -72,6 +74,13 @@ public final class JoinCommand extends FactionsCommand {
             return;
         }
 
+        // call event
+        PlayerChangedFactionEvent event = AlpineFactions.callEvent(new PlayerChangedFactionEvent(faction, otherFaction, player));
+        if (event.isCancelled()) {
+            config.operationCancelled.send(player);
+            return;
+        }
+
         // add the member
         faction.addMember(player.getUniqueId());
 
@@ -133,6 +142,13 @@ public final class JoinCommand extends FactionsCommand {
                     "faction", FactionHelper.formatRelational(player, faction),
                     "faction_name", faction.getName(),
                     "limit", faction.getMemberLimit());
+            return;
+        }
+
+        // call event
+        PlayerChangedFactionEvent event = AlpineFactions.callEvent(new PlayerChangedFactionEvent(faction, factions.getWilderness(), player));
+        if (event.isCancelled()) {
+            config.operationCancelled.send(player);
             return;
         }
 

@@ -31,8 +31,7 @@ public final class FactionRelationArgumentResolver extends ArgumentResolver<Comm
     @Override
     public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<FactionRelation> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel();
-        return Stream.of(FactionRelation.values())
-                .filter(v -> v != FactionRelation.SELF)
+        return Stream.of(FactionRelation.NEUTRAL, FactionRelation.ENEMY, FactionRelation.TRUCE, FactionRelation.ALLY)
                 .map(v -> v.name().toLowerCase())
                 .filter(v -> v.startsWith(current))
                 .collect(SuggestionResult.collector());

@@ -4,6 +4,7 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.FlagRegistry;
 import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.event.FactionFlagUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FlagAdapter;
@@ -44,9 +45,9 @@ public final class FlagCommand extends FactionsCommand {
     ) {
         MessageConfig config = MessageConfig.getInstance();
         FlagAdapter<?> adapter = flag.getAdapter();
-        Object resolvedState = adapter.deserialize(value);
+        Object resolvedValue = adapter.deserialize(value);
 
-        if (resolvedState == null) {
+        if (resolvedValue == null) {
             config.invalidFlagValue.send(sender, "flag", flag.getName());
             return;
         }
@@ -57,10 +58,18 @@ public final class FlagCommand extends FactionsCommand {
             return;
         }
 
-        resolvedFaction.setFlagValue((FactionFlag) flag, resolvedState);
+        // call event
+        FactionFlagUpdateEvent event = AlpineFactions.callEvent(new FactionFlagUpdateEvent(resolvedFaction, sender, flag, resolvedValue));
+        if (event.isCancelled()) {
+            config.operationCancelled.send(sender);
+            return;
+        }
+
+        Object newValue = event.getValue();
+        resolvedFaction.setFlagValue((FactionFlag) flag, newValue);
 
         String stateDescription = flag.getType().equals(Boolean.class)
-                ? flag.getStateDescription((Boolean) resolvedState)
+                ? flag.getStateDescription((Boolean) newValue)
                 : flag.getStateDescription();
         Messaging.broadcast(resolvedFaction, sender, observer -> {
             return config.updatedFlagValue.build(
@@ -70,8 +79,8 @@ public final class FlagCommand extends FactionsCommand {
                     "flag_id", flag.getId(),
                     "flag_name", flag.getName(),
                     "flag_description", flag.getDescription(),
-                    "flag_state_description", ComponentHelper.mini(Formatting.formatPlaceholders(stateDescription, resolvedState)),
-                    "state", resolvedState
+                    "flag_state_description", ComponentHelper.mini(Formatting.formatPlaceholders(stateDescription, newValue)),
+                    "state", newValue
             );
         });
     }

@@ -1,8 +1,10 @@
 package co.crystaldev.factions.api.faction;
 
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.DisbandFactionEvent;
 import co.crystaldev.factions.api.faction.member.MemberInvitation;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.Relational;
@@ -41,7 +43,7 @@ import java.util.function.Consumer;
  * @since 12/12/2023
  */
 @SuppressWarnings("unused")
-@Getter @Setter @ToString
+@ToString
 public final class Faction {
 
     public static final String WILDERNESS_ID = "factions_wilderness";
@@ -55,14 +57,19 @@ public final class Faction {
     public static final Component DEFAULT_MOTD = ComponentHelper.mini("<gray>No message of the day set");
 
     /** The unique ID of this faction */
-    private final String id;
+    @Getter
+    private @NotNull final String id;
 
-    private String name;
+    @Getter @Setter
+    private @NotNull String name;
 
-    private Component description;
+    @Getter @Setter
+    private @Nullable Component description;
 
-    private Component motd;
+    @Getter @Setter
+    private @Nullable Component motd;
 
+    @Getter
     private final long createdAt = System.currentTimeMillis();
 
     private final HashMap<UUID, MemberInvitation> invitees = new HashMap<>();
@@ -77,7 +84,7 @@ public final class Faction {
 
     private final Map<String, PermissionHolder> permissions = new HashMap<>();
 
-    @Getter
+    @Getter @Setter
     private transient boolean dirty;
 
     public Faction() {
@@ -115,6 +122,13 @@ public final class Faction {
         FactionAccessor factions = Accessors.factions();
         ClaimAccessor claims = Accessors.claims();
         Faction actingFaction = factions.findOrDefault(actor);
+
+        // call event
+        DisbandFactionEvent event = AlpineFactions.callEvent(new DisbandFactionEvent(this, actor));
+        if (event.isCancelled()) {
+            config.operationCancelled.send(actor);
+            return;
+        }
 
         // notify the faction
         Messaging.broadcast(this, actor, observer -> {
@@ -410,6 +424,11 @@ public final class Faction {
         }
 
         this.markDirty();
+    }
+
+    @NotNull
+    public Collection<Member> getMembers() {
+        return this.members.values();
     }
 
     @NotNull

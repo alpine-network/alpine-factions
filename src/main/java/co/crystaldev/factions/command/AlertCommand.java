@@ -57,7 +57,7 @@ public final class AlertCommand extends FactionsCommand {
 
         // broadcast title
         Component title = config.alertTitle.build("alert", parsedAlert);
-        for (Member member : faction.getMembers().values()) {
+        for (Member member : faction.getMembers()) {
             Player observer = member.getPlayer();
             if (observer != null) {
                 Component subtitle = config.alertSubtitle.build(

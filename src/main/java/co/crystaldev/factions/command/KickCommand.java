@@ -1,8 +1,10 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.PlayerChangedFactionEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permissions;
@@ -71,6 +73,13 @@ public final class KickCommand extends FactionsCommand {
                         "player_name", other.getName());
                 return;
             }
+        }
+
+        // call event
+        PlayerChangedFactionEvent event = AlpineFactions.callEvent(new PlayerChangedFactionEvent(faction, factions.getWilderness(), other));
+        if (event.isCancelled()) {
+            config.operationCancelled.send(sender);
+            return;
         }
 
         // notify the faction

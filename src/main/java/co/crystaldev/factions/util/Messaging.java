@@ -80,7 +80,7 @@ public final class Messaging {
     }
 
     public static void broadcast(@NotNull Faction faction, @NotNull Component component) {
-        for (Member member : faction.getMembers().values()) {
+        for (Member member : faction.getMembers()) {
             Player player = member.getPlayer();
             if (player != null) {
                 send(player, component);
@@ -90,7 +90,7 @@ public final class Messaging {
 
     public static void broadcast(@NotNull Faction faction, @Nullable ServerOperator subject, @NotNull Function<Player, @Nullable Component> playerFunction) {
         Component lastComponent = null;
-        for (Member member : faction.getMembers().values()) {
+        for (Member member : faction.getMembers()) {
             Player player = member.getPlayer();
             if (player != null) {
                 if (player.equals(subject)) {

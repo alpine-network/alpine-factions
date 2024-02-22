@@ -1,8 +1,10 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.FactionNameUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
@@ -11,12 +13,14 @@ import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Messaging;
+import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
@@ -34,43 +38,50 @@ public final class NameCommand extends FactionsCommand {
 
     @Execute
     public void execute(
-            @Context Player player,
+            @Context CommandSender sender,
             @Arg("name") @Key(Args.ALPHANUMERIC) String name,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        MessageConfig messageConfig = MessageConfig.getInstance();
+        MessageConfig config = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
         FactionAccessor factions = Accessors.factions();
-        Faction faction = targetFaction.orElseGet(() -> factions.findOrDefault(player));
+        Faction faction = targetFaction.orElseGet(() -> factions.findOrDefault(sender));
 
         // ensure the user has permission
-        if (!faction.isPermitted(player, Permissions.MODIFY_NAME)) {
-            FactionHelper.missingPermission(player, faction, "modify name");
+        if (!faction.isPermitted(sender, Permissions.MODIFY_NAME)) {
+            FactionHelper.missingPermission(sender, faction, "modify name");
             return;
         }
 
         // ensure the name is different
         if (name.equals(faction.getName())) {
-            messageConfig.factionNameUnchanged.send(player);
+            config.factionNameUnchanged.send(sender);
             return;
         }
 
         // ensure there is no other faction with the same name
         Faction other = factions.getByName(name);
         if (other != null) {
-            messageConfig.factionWithName.send(player, "faction_name", name);
+            config.factionWithName.send(sender, "faction_name", name);
             return;
         }
 
         // ensure the name is long enough
         if (name.length() < factionConfig.minNameLength) {
-            messageConfig.nameTooShort.send(player, "length", factionConfig.minNameLength);
+            config.nameTooShort.send(sender, "length", factionConfig.minNameLength);
             return;
         }
 
         // ensure the name isn't too long
         if (name.length() > factionConfig.maxNameLength) {
-            messageConfig.nameTooLong.send(player, "length", factionConfig.maxNameLength);
+            config.nameTooLong.send(sender, "length", factionConfig.maxNameLength);
+            return;
+        }
+
+        // call event
+        FactionNameUpdateEvent event = AlpineFactions.callEvent(new FactionNameUpdateEvent(faction, sender, name));
+        if (event.isCancelled()) {
+            config.operationCancelled.send(sender);
             return;
         }
 
@@ -79,10 +90,10 @@ public final class NameCommand extends FactionsCommand {
         faction.markDirty();
 
         // notify the faction
-        Messaging.broadcast(faction, player, observer -> {
-            return messageConfig.rename.build(
-                    "player_name", player.getName(),
-                    "player", FactionHelper.formatRelational(observer, faction, player),
+        Messaging.broadcast(faction, sender, observer -> {
+            return config.rename.build(
+                    "actor", FactionHelper.formatRelational(observer, faction, sender),
+                    "actor_name", PlayerHelper.getName(sender),
                     "faction_name", name);
         });
     }
