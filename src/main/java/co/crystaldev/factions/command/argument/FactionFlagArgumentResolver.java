@@ -13,7 +13,6 @@ import dev.rollczi.litecommands.suggestion.SuggestionResult;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -41,10 +40,10 @@ public final class FactionFlagArgumentResolver extends ArgumentResolver<CommandS
         FlagRegistry registry = AlpineFactions.getInstance().getFlagRegistry();
         List<FactionFlag<?>> flags = registry.getAll(invocation.sender());
 
-        return SuggestionResult.of(flags.stream()
+        return flags.stream()
                 .filter(flag -> flag.isPermitted(invocation.sender()))
                 .map(FactionFlag::getId)
                 .filter(v -> v.startsWith(current))
-                .collect(Collectors.toList()));
+                .collect(SuggestionResult.collector());
     }
 }

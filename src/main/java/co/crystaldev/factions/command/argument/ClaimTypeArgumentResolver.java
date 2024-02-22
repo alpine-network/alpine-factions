@@ -9,7 +9,6 @@ import dev.rollczi.litecommands.suggestion.SuggestionContext;
 import dev.rollczi.litecommands.suggestion.SuggestionResult;
 import org.bukkit.command.CommandSender;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -30,9 +29,9 @@ public final class ClaimTypeArgumentResolver extends ArgumentResolver<CommandSen
     @Override
     public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<ClaimType> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel();
-        return SuggestionResult.of(Stream.of(ClaimType.values())
+        return Stream.of(ClaimType.values())
                 .map(v -> v.name().toLowerCase())
                 .filter(v -> v.startsWith(current.toLowerCase()))
-                .collect(Collectors.toList()));
+                .collect(SuggestionResult.collector());
     }
 }

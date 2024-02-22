@@ -12,9 +12,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/12/2024
@@ -35,16 +32,10 @@ public final class OfflinePlayerArgumentResolver extends ArgumentResolver<Comman
     @Override
     public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<OfflinePlayer> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel().toLowerCase();
-        if (current.isEmpty()) {
-            return SuggestionResult.empty();
-        }
-
-        List<String> parsed = Bukkit.getOnlinePlayers()
+        return Bukkit.getOnlinePlayers()
                 .stream()
                 .map(Player::getName)
                 .filter(name -> name.toLowerCase().startsWith(current))
-                .collect(Collectors.toList());
-
-        return SuggestionResult.of(parsed);
+                .collect(SuggestionResult.collector());
     }
 }

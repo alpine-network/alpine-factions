@@ -15,7 +15,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -50,10 +49,10 @@ public final class FactionArgumentResolver extends ArgumentResolver<CommandSende
     @Override
     public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<Faction> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel().toLowerCase();
-        return SuggestionResult.of(Accessors.factions().get()
+        return Accessors.factions().get()
                 .stream()
                 .map(Faction::getName)
                 .filter(v -> v.toLowerCase().startsWith(current))
-                .collect(Collectors.toList()));
+                .collect(SuggestionResult.collector());
     }
 }
