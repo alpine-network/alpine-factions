@@ -47,9 +47,12 @@ public final class TitleCommand extends FactionsCommand {
     ) {
         Component parsedComponent = ComponentHelper.legacy(title);
         int maxLength = FactionConfig.getInstance().maxTitleLength;
+
+        int length = title.length();
         while (ComponentHelper.length(parsedComponent) > maxLength) {
             // trim down the component length while ignoring color codes
-            parsedComponent = ComponentHelper.legacy(title.substring(0, title.length() - 1));
+            parsedComponent = ComponentHelper.legacy(title.substring(0, length - 1));
+            length--;
         }
 
         set(sender, other, parsedComponent);
