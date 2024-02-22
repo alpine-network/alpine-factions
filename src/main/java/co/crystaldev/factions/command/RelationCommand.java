@@ -1,7 +1,9 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.event.FactionRelationUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.RelatedFaction;
@@ -130,17 +132,27 @@ public final class RelationCommand extends FactionsCommand {
             return;
         }
 
+        // call event
+        FactionRelationUpdateEvent event = AlpineFactions.callEvent(
+                new FactionRelationUpdateEvent(actingFaction, targetFaction, sender, relation));
+        relation = event.getRelation();
+        if (event.isCancelled() || relation == FactionRelation.SELF) {
+            config.operationCancelled.send(sender);
+            return;
+        }
+
         // set the relation wish internally
         actingFaction.setRelation(targetFaction, relation);
 
         // if override mode is enabled, force set this relation
-        if (PlayerHandler.getInstance().isOverriding(sender)) {
+        boolean force = PlayerHandler.getInstance().isOverriding(sender);
+        if (force) {
             targetFaction.setRelation(actingFaction, relation);
         }
 
         // notify the target faction
         boolean enemy = relation == FactionRelation.ENEMY;
-        boolean wish = !targetFaction.isRelation(actingFaction, relation) && !enemy;
+        boolean wish = !force && !targetFaction.isRelation(actingFaction, relation) && !enemy;
         ConfigText targetMessage = (wish ? config.relationWishes : config.relationDeclarations).get(relation);
         Messaging.broadcast(targetFaction, observer -> {
             return targetMessage.build(
@@ -150,7 +162,7 @@ public final class RelationCommand extends FactionsCommand {
         });
 
         // notify the declaring faction
-        ConfigText actingMessage = (wish ? config.relationRequest : config.relationDeclarations).get(relation);
+        ConfigText actingMessage = (!force && wish ? config.relationRequest : config.relationDeclarations).get(relation);
         Messaging.broadcast(actingFaction, sender, observer -> {
             return actingMessage.build(
                     "faction", FactionHelper.formatRelational(observer, targetFaction, false),
