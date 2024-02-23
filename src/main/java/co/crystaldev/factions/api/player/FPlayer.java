@@ -28,6 +28,9 @@ public final class FPlayer {
     private long powerBoost;
 
     @Setter
+    private int playtime;
+
+    @Setter
     private TerritorialTitleMode territorialTitleMode = TerritorialTitleMode.TITLE;
 
     @Nullable

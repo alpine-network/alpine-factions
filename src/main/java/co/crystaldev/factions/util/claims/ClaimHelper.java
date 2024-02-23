@@ -320,7 +320,7 @@ public final class ClaimHelper {
 
         // ensure claim is the same as the origin claim
         Faction claimOwner = claims.getFaction(world, x, z);
-        if (!FactionHelper.equals(faction, claimOwner)) {
+        if (!Objects.equals(faction, claimOwner)) {
             return;
         }
 
@@ -337,10 +337,10 @@ public final class ClaimHelper {
             Faction faction = entry.getKey();
             boolean foundEdge = false;
             for (ChunkCoordinate coordinate : entry.getValue()) {
-                boolean isEdge = !FactionHelper.equals(faction, claims.getFaction(world, coordinate.getX() - 1, coordinate.getZ()))
-                        || !FactionHelper.equals(faction, claims.getFaction(world, coordinate.getX() + 1, coordinate.getZ()))
-                        || !FactionHelper.equals(faction, claims.getFaction(world, coordinate.getX(), coordinate.getZ() - 1))
-                        || !FactionHelper.equals(faction, claims.getFaction(world, coordinate.getX(), coordinate.getZ() + 1));
+                boolean isEdge = !Objects.equals(faction, claims.getFaction(world, coordinate.getX() - 1, coordinate.getZ()))
+                        || !Objects.equals(faction, claims.getFaction(world, coordinate.getX() + 1, coordinate.getZ()))
+                        || !Objects.equals(faction, claims.getFaction(world, coordinate.getX(), coordinate.getZ() - 1))
+                        || !Objects.equals(faction, claims.getFaction(world, coordinate.getX(), coordinate.getZ() + 1));
                 if (isEdge) {
                     foundEdge = true;
                 }

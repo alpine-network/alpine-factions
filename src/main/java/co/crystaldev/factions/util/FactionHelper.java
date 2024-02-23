@@ -26,10 +26,6 @@ import java.util.Objects;
 @UtilityClass
 public final class FactionHelper {
 
-    public static boolean equals(@Nullable Faction a, @Nullable Faction b) {
-        return (a == b) || (a != null && a.equals(b)) || (b != null && b.equals(a));
-    }
-
     @NotNull
     public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull Component component) {
         if (faction == null) {

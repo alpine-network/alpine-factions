@@ -2,6 +2,7 @@ package co.crystaldev.factions.handler;
 
 import co.crystaldev.factions.handler.player.PlayerState;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -34,6 +36,13 @@ public final class PlayerHandler {
     @NotNull
     public PlayerState getPlayer(@NotNull Player player) {
         return this.playerStateMap.computeIfAbsent(player.getUniqueId(), id -> new PlayerState(player));
+    }
+
+    public void forEach(@NotNull Consumer<PlayerState> playerConsumer) {
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            PlayerState state = this.getPlayer(player);
+            playerConsumer.accept(state);
+        });
     }
 
     public boolean isOverriding(@NotNull CommandSender sender) {

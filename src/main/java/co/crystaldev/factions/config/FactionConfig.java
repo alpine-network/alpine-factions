@@ -71,6 +71,12 @@ public final class FactionConfig extends AlpineConfig {
 
     @Comment({
             "",
+            "The amount of power lost per death."
+    })
+    public int powerLossPerDeath = -15;
+
+    @Comment({
+            "",
             "The maximum amount of claims that can be filled via `/f claim fill`."
     })
     public int maxClaimFillVolume = 1000;

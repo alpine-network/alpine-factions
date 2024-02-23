@@ -42,9 +42,7 @@ public final class ShowFormatter {
 
         Component title = config.showTitle.build("faction", FactionHelper.formatRelational(sender, faction, false),
                 "faction_name", faction.getName());
-        title = Formatting.title(title, config.showTitleUsesPadding);
-
-        return ComponentHelper.joinNewLines(title, ComponentHelper.joinNewLines(components));
+        return ComponentHelper.joinNewLines(Formatting.title(title), ComponentHelper.joinNewLines(components));
     }
 
     private void addComponent(@NotNull ShowComponent component) {

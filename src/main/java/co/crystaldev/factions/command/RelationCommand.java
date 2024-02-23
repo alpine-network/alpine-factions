@@ -68,7 +68,9 @@ public final class RelationCommand extends FactionsCommand {
         }
 
         String command = "/f relation list %page% " + target.getName();
-        Component compiledPage = Formatting.page(config.relationListTitle.build(), target.getRelatedFactions(),
+        Component title = config.relationListTitle.build("faction", FactionHelper.formatRelational(sender, target, false),
+                "faction_name", target.getName());
+        Component compiledPage = Formatting.page(title, target.getRelatedFactions(),
                 command, page.orElse(1), 10, entry -> relatedFactionToEntry(sender, entry));
         Messaging.send(sender, compiledPage);
     }

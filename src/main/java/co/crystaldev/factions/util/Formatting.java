@@ -109,15 +109,10 @@ public final class Formatting {
     }
 
     @NotNull
-    public static Component title(@NotNull Component component, boolean pad) {
+    public static Component title(@NotNull Component component) {
         MessageConfig config = MessageConfig.getInstance();
         component = config.titleFormat.build("content", component);
         return config.titleUsesPadding ? appendTitlePadding(component) : component;
-    }
-
-    @NotNull
-    public static Component title(@NotNull Component component) {
-        return title(component, MessageConfig.getInstance().titleUsesPadding);
     }
 
     @NotNull
@@ -179,6 +174,21 @@ public final class Formatting {
     public static <T> Component page(@NotNull Component title, @NotNull Collection<T> elements,
                                      @NotNull String command, int currentPage, int elementsPerPage) {
         return page(title, elements, command, currentPage, elementsPerPage, Formatting::asComponent);
+    }
+
+    @NotNull
+    public static Component progress(double progress) {
+        progress = Math.max(0.0, Math.min(1.0, progress));
+
+        MessageConfig config = MessageConfig.getInstance();
+
+        int fillLength = (int) (config.progressLength * progress);
+        Component progressComponent = ComponentHelper.join(
+                ComponentHelper.stylize(config.progressIndicatorStyle, Component.text(StringHelper.repeat(config.progressIndicatorCharacter, fillLength))),
+                ComponentHelper.stylize(config.progressRemainingStyle, Component.text(StringHelper.repeat(config.progressRemainingCharacter, config.progressLength - fillLength)))
+        );
+
+        return config.progressBarFormat.build("progress", progressComponent);
     }
 
     @NotNull

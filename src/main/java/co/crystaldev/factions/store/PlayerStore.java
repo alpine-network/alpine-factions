@@ -27,6 +27,11 @@ public final class PlayerStore extends AlpineStore<UUID, FPlayer> implements Pla
     }
 
     @Override
+    public void update(@NotNull FPlayer player) {
+        this.put(player.getId(), player);
+    }
+
+    @Override
     public @NotNull FPlayer getById(@NotNull UUID player) {
         return this.getOrCreate(player, () -> new FPlayer(player));
     }

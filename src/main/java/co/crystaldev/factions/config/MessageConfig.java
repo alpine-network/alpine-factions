@@ -52,13 +52,19 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Formatting"
+            ">>| Formatting",
+            "  > Title"
     })
-    public ConfigText noPages = ConfigText.of("%error_prefix% No pages available to display");
+    public ConfigText titleFormat = ConfigText.of("<bracket><</bracket> %content% <bracket>></bracket>");
 
-    public ConfigText titleFormat = ConfigText.of("<dark_gray><</dark_gray> %content% <dark_gray>></dark_gray>");
+    public boolean titleUsesPadding = true;
 
-    public ConfigText paginatorTitleFormat = ConfigText.of("<dark_gray><</dark_gray> %content% <separator>|</separator> %previous% %page%/%max_pages% %next% <dark_gray>></dark_gray>");
+    public String paddingCharacter = "-";
+
+    public String paddingStyle = "dark_gray strikethrough";
+
+    @Comment("  > Pagination")
+    public ConfigText paginatorTitleFormat = ConfigText.of("<bracket><</bracket> %content% <separator>|</separator> %previous% %page%/%max_pages% %next% <bracket>></bracket>");
 
     public ConfigText previous = ConfigText.of("<bracket>[</bracket><emphasis><</emphasis><bracket>]</bracket>");
 
@@ -68,15 +74,24 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText nextDisabled = ConfigText.of("<emphasis>[>]</emphasis>");
 
-    public boolean titleUsesPadding = true;
+    public ConfigText noPages = ConfigText.of("%error_prefix% No pages available to display");
 
-    public String paddingCharacter = "-";
+    @Comment("  > Progress Indicator")
+    public ConfigText progressBarFormat = ConfigText.of("<bracket>[</bracket>%progress%<bracket>]</bracket>");
 
-    public String paddingStyle = "dark_gray strikethrough";
+    public int progressLength = 20;
+
+    public String progressIndicatorCharacter = "=";
+
+    public String progressRemainingCharacter = "⋯";
+
+    public String progressIndicatorStyle = "aqua strikethrough";
+
+    public String progressRemainingStyle = "light_gray";
 
     @Comment({
             "",
-            "| Faction Metadata"
+            ">>| Faction Metadata"
     })
     public ConfigText rename = ConfigText.of("%prefix% %actor% set the faction name to <highlight>%faction_name%</highlight>");
 
@@ -96,7 +111,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Join"
+            ">>| Join"
     })
     public ConfigText join = ConfigText.of("%prefix% You joined <highlight>%faction_name%</highlight>");
 
@@ -116,7 +131,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Leave"
+            ">>| Leave"
     })
     public ConfigText leave = ConfigText.of("%prefix% You left <highlight>%faction_name%</highlight>");
 
@@ -132,7 +147,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Invite"
+            ">>| Invite"
     })
     public ConfigText notInvited = ConfigText.of("%error_prefix% You are not invited to %faction%");
 
@@ -152,11 +167,9 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Show"
+            ">>| Show"
     })
     public ConfigText showTitle = ConfigText.of("%faction% <separator>|</separator> Faction Info");
-
-    public boolean showTitleUsesPadding = true;
 
     @SuppressWarnings("unused")
     public ConfigText genericShowEntry = ConfigText.of("<emphasis>%name%:</emphasis> <highlight>%value%</highlight>");
@@ -189,7 +202,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Relations"
+            ">>| Relations"
     })
     public ConfigText alreadyRelation = ConfigText.of("%error_prefix% This relation is already set with %faction%");
 
@@ -201,7 +214,7 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText relationWishListTitle = ConfigText.of("Relation Requests");
 
-    public ConfigText relationListTitle = ConfigText.of("Relations");
+    public ConfigText relationListTitle = ConfigText.of("%faction% <separator>|</separator> Relations");
 
     public ConfigText relationListEntry = ConfigText.of("%faction% <separator>»</separator> %relation%");
 
@@ -239,7 +252,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Faction State"
+            ">>| Faction State"
     })
     public ConfigText create = ConfigText.of("%prefix% You created a new faction named <highlight>%faction_name%</highlight>");
 
@@ -262,7 +275,7 @@ public final class MessageConfig extends AlpineConfig {
             "    <emphasis><i>%flag_state_description%"
     );
 
-    public ConfigText flagStateListTitle = ConfigText.of("%faction% | Faction Flags");
+    public ConfigText flagStateListTitle = ConfigText.of("%faction% <separator>|</separator> Faction Flags");
 
     public ConfigText flagStateListEntry = ConfigText.of(
             "<hover:show_text:\"%flag_state_description%\"><notice>%flag_name%</notice></hover> <separator>»</separator> Set to <emphasis>%state%</emphasis>"
@@ -276,15 +289,30 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Player/Member State"
+            ">>| Player/Member State"
     })
     public ConfigText stateChange = ConfigText.of("%prefix% <highlight>%subject%:</highlight> <emphasis>%state%</emphasis>");
 
     public ConfigText titleChange = ConfigText.of("%prefix% %actor% modified the title for %player%");
 
+    public ConfigText factionStatusTitle = ConfigText.of("%faction% <separator>|</separator> Faction Status");
+
+    public ConfigText factionStatusOnlineEntry = ConfigText.of("%player% <separator>»</separator> <emphasis>%power%<bracket>/</bracket>%maxpower% Power</emphasis> <separator>|</separator> <green>✔ online");
+
+    public ConfigText factionStatusOfflineEntry = ConfigText.of("%player% <separator>»</separator> <emphasis>%power%<bracket>/</bracket>%maxpower% Power</emphasis> <separator>|</separator> <red>✘ offline");
+
+    public ConfigText memberStatusTitle = ConfigText.of("%player% <separator>|</separator> Member Status");
+
+    public ConfigText memberStatusBody = ConfigText.of(
+            "<emphasis>Power: %power_indicator%</emphasis> ",
+            "<emphasis>Power Level: <highlight>%power%/%maxpower%</highlight></emphasis>",
+            "<emphasis>Power Gain: <highlight>%power_per_hour%/hour</highlight></emphasis>",
+            "<emphasis>Power Loss: <highlight>%power_per_death%/death</highlight></emphasis>"
+    );
+
     @Comment({
             "",
-            "| Land Claiming"
+            ">>| Land Claiming"
     })
     public ConfigText landClaim = ConfigText.of(
             "%prefix% %actor% %claim_type% <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%",
@@ -334,7 +362,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Alert"
+            ">>| Alert"
     })
     public ConfigText alertTitle = ConfigText.of("<info>Faction Alert</info>");
 
@@ -349,7 +377,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            "| Map"
+            ">>| Map"
     })
     public ConfigText mapTitle = ConfigText.of("<emphasis>%world% %chunk_x%, %chunk_z%</emphasis> <separator>|</separator> %faction%");
 
