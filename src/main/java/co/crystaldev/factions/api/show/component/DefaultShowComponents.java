@@ -116,7 +116,8 @@ public final class DefaultShowComponents {
                         .map(v -> FactionHelper.formatRelational(v.getOfflinePlayer(), ctx.getFaction(), v.getOfflinePlayer(), false))
                         .collect(Collectors.toList());
                 Component joined = members.isEmpty() ? config.none.build() : ComponentHelper.joinCommas(members);
-                Component count = (members.isEmpty() ? config.memberCountOffline : config.memberCountOnline).build(members.size());
+                Component count = (members.isEmpty() ? config.memberCountOffline : config.memberCountOnline).build(
+                        "online_count", members.size(), "member_count", ctx.getFaction().getMemberCount());
                 return config.showOnlineMembers.build("members", joined, "count", count);
             }
     );
@@ -130,7 +131,8 @@ public final class DefaultShowComponents {
                         .map(v -> FactionHelper.formatRelational(v.getOfflinePlayer(), ctx.getFaction(), v.getOfflinePlayer(), false))
                         .collect(Collectors.toList());
                 Component joined = members.isEmpty() ? config.none.build() : ComponentHelper.joinCommas(members);
-                Component count = config.memberCountOffline.build(members.size());
+                Component count = config.memberCountOffline.build("online_count", members.size(),
+                        "member_count", ctx.getFaction().getMemberCount());
                 return config.showOfflineMembers.build("members", joined, "count", count);
             },
             MINIMAL_VISIBILITY_PREDICATE

@@ -103,19 +103,23 @@ public final class JoinCommand extends FactionsCommand {
     }
 
     @Execute
-    @Permission({PermissionNodes.ADMIN})
+    @Permission(PermissionNodes.ADMIN)
     public void execute(
             @Context Player player,
             @Arg("faction") @Key(Args.FACTION) Faction faction,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer joiningPlayer
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        boolean overriding = PlayerHandler.getInstance().isOverriding(player);
 
         FactionAccessor factions = Accessors.factions();
         Faction otherFaction = factions.find(joiningPlayer);
         Faction actingFaction = factions.findOrDefault(player);
         Faction wilderness = factions.getWilderness();
+
+        // require player to be overriding
+        if (!PlayerHandler.getInstance().isOverriding(player)) {
+            return;
+        }
 
         // ensure the player is not in a faction
         if (otherFaction != null) {
@@ -126,7 +130,7 @@ public final class JoinCommand extends FactionsCommand {
         }
 
         // ensure the player is even invited
-        if (!overriding && !faction.canJoin(joiningPlayer.getUniqueId())) {
+        if (!faction.canJoin(joiningPlayer.getUniqueId())) {
             config.playerNotInvited.send(player,
                     "player", FactionHelper.formatRelational(player, wilderness, joiningPlayer),
                     "player_name", joiningPlayer.getName(),
@@ -137,7 +141,7 @@ public final class JoinCommand extends FactionsCommand {
         }
 
         // ensure the faction is not full
-        if (!overriding && faction.getMemberCount() >= faction.getMemberLimit()) {
+        if (faction.getMemberCount() >= faction.getMemberLimit()) {
             config.fullFaction.send(player,
                     "faction", FactionHelper.formatRelational(player, faction),
                     "faction_name", faction.getName(),
@@ -153,7 +157,7 @@ public final class JoinCommand extends FactionsCommand {
         }
 
         // add the member
-        faction.addMember(player.getUniqueId());
+        faction.addMember(joiningPlayer.getUniqueId());
 
         // notify the faction
         Messaging.broadcast(faction, player, observer -> {
