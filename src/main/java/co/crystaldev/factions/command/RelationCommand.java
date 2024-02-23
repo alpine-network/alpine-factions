@@ -10,6 +10,7 @@ import co.crystaldev.factions.api.faction.RelatedFaction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
+import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.StyleConfig;
 import co.crystaldev.factions.config.type.ConfigText;
@@ -111,7 +112,9 @@ public final class RelationCommand extends FactionsCommand {
 
     private static void setRelation(@NotNull CommandSender sender, @NotNull Faction targetFaction,
                                     @NotNull Faction actingFaction, @NotNull FactionRelation relation) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig messageConfig = MessageConfig.getInstance();
+        FactionConfig factionConfig = FactionConfig.getInstance();
+        boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
 
         if (!actingFaction.isPermitted(sender, Permissions.MODIFY_RELATIONS)) {
             FactionHelper.missingPermission(sender, actingFaction, "manage relations");
@@ -119,16 +122,25 @@ public final class RelationCommand extends FactionsCommand {
         }
 
         if (actingFaction.equals(targetFaction)) {
-            config.relationSelf.send(sender,
+            messageConfig.relationSelf.send(sender,
                     "faction", FactionHelper.formatRelational(sender, targetFaction, false),
                     "faction_name", targetFaction.getName());
             return;
         }
 
         if (actingFaction.isRelation(targetFaction, relation)) {
-            config.alreadyRelation.send(sender,
+            messageConfig.alreadyRelation.send(sender,
                     "faction", FactionHelper.formatRelational(sender, targetFaction, false),
                     "faction_name", targetFaction.getName());
+            return;
+        }
+
+        // ensure the ally/truce count is within the limit
+        int limit = relation == FactionRelation.ALLY ? factionConfig.maxAlliances
+                : relation == FactionRelation.TRUCE ? factionConfig.maxTruces
+                : -1;
+        if (!overriding && limit >= 0 && actingFaction.getRelatedFactions(relation).size() >= limit) {
+            (relation == FactionRelation.ALLY ? messageConfig.allyLimit : messageConfig.truceLimit).send(sender, "limit", limit);
             return;
         }
 
@@ -137,7 +149,7 @@ public final class RelationCommand extends FactionsCommand {
                 new FactionRelationUpdateEvent(actingFaction, targetFaction, sender, relation));
         relation = event.getRelation();
         if (event.isCancelled() || relation == FactionRelation.SELF) {
-            config.operationCancelled.send(sender);
+            messageConfig.operationCancelled.send(sender);
             return;
         }
 
@@ -153,7 +165,7 @@ public final class RelationCommand extends FactionsCommand {
         // notify the target faction
         boolean enemy = relation == FactionRelation.ENEMY;
         boolean wish = !force && !targetFaction.isRelation(actingFaction, relation) && !enemy;
-        ConfigText targetMessage = (wish ? config.relationWishes : config.relationDeclarations).get(relation);
+        ConfigText targetMessage = (wish ? messageConfig.relationWishes : messageConfig.relationDeclarations).get(relation);
         Messaging.broadcast(targetFaction, observer -> {
             return targetMessage.build(
                     "faction", FactionHelper.formatRelational(observer, actingFaction, false),
@@ -162,7 +174,7 @@ public final class RelationCommand extends FactionsCommand {
         });
 
         // notify the declaring faction
-        ConfigText actingMessage = (!force && wish ? config.relationRequest : config.relationDeclarations).get(relation);
+        ConfigText actingMessage = (!force && wish ? messageConfig.relationRequest : messageConfig.relationDeclarations).get(relation);
         Messaging.broadcast(actingFaction, sender, observer -> {
             return actingMessage.build(
                     "faction", FactionHelper.formatRelational(observer, targetFaction, false),

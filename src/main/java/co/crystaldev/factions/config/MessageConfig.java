@@ -179,9 +179,9 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText showOfflineMembers = ConfigText.of("<emphasis>Offline Members <bracket>[%count%]</bracket>:</emphasis> %members%");
 
-    public ConfigText memberCountOnline = ConfigText.of("<green>%online%/%offline%");
+    public ConfigText memberCountOnline = ConfigText.of("<green>%online_count%/%member_count%");
 
-    public ConfigText memberCountOffline = ConfigText.of("<red>%online%/%offline%");
+    public ConfigText memberCountOffline = ConfigText.of("<red>%online_count%/%member_count%");
 
     public ConfigText joinable = ConfigText.of("<green>True</green> <bracket>[<emphasis>Can Join</emphasis>]</bracket>");
 
@@ -194,6 +194,10 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText alreadyRelation = ConfigText.of("%error_prefix% This relation is already set with %faction%");
 
     public ConfigText relationSelf = ConfigText.of("%error_prefix% Unable to declare a relation with %faction%");
+
+    public ConfigText truceLimit = ConfigText.of("%error_prefix% You are limited to <error_highlight>%limit% Truces</error_highlight>");
+
+    public ConfigText allyLimit = ConfigText.of("%error_prefix% You are limited to <error_highlight>%limit% Allies</error_highlight>");
 
     public ConfigText relationWishListTitle = ConfigText.of("Relation Requests");
 
