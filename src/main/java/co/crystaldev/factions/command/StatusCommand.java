@@ -63,7 +63,7 @@ public final class StatusCommand extends FactionsCommand {
 
         Component title = messageConfig.factionStatusTitle.build("faction", FactionHelper.formatRelational(sender, target, false),
                 "faction_name", target.getName());
-        String command = "/f status " + target.getName() + " %page";
+        String command = "/f status " + target.getName() + " %page%";
         Component compiledPage = Formatting.page(title, members, command, page.orElse(1), 10, member -> {
             if (member == null) {
                 return ComponentHelper.nil();
