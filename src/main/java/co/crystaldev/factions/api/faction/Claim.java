@@ -1,11 +1,15 @@
 package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.faction.permission.Permission;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import lombok.Getter;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +53,11 @@ public final class Claim {
         this.factionId = faction;
     }
 
+    @NotNull
+    public Faction getFaction() {
+        return Accessors.factions().getById(this.factionId);
+    }
+
     public void setFaction(@NotNull Faction faction) {
         this.setFaction(faction.getId());
     }
@@ -66,8 +75,24 @@ public final class Claim {
         return this.accessedFactionIds != null && this.accessedFactionIds.contains(factionId);
     }
 
+    public boolean isAccessed(@NotNull Faction faction) {
+        return this.isAccessed(faction.getId());
+    }
+
     public boolean isAccessed(@NotNull UUID player) {
         return this.accessedPlayerIds != null && this.accessedPlayerIds.contains(player);
+    }
+
+    public boolean isAccessed(@NotNull OfflinePlayer player) {
+        return this.isAccessed(player.getUniqueId());
+    }
+
+    public boolean isPermitted(@NotNull OfflinePlayer player, @NotNull Permission permission) {
+        FactionAccessor factions = Accessors.factions();
+        Faction faction = factions.getById(this.factionId);
+        Faction playerFaction = factions.findOrDefault(player);
+
+        return this.isAccessed(player) || this.isAccessed(playerFaction) || faction != null && faction.isPermitted(player, permission);
     }
 
     public void setAccess(@NotNull String factionId, boolean accessed) {

@@ -1,18 +1,23 @@
 package co.crystaldev.factions.util;
 
 import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Member;
+import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.StyleConfig;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Chunk;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -122,12 +127,45 @@ public final class FactionHelper {
         return formatRelational(viewer, faction, factionName);
     }
 
+    @NotNull
+    public static Component formatName(@NotNull ServerOperator operator) {
+        if (!(operator instanceof OfflinePlayer)) {
+            return Component.text(PlayerHelper.getName(operator));
+        }
+
+        OfflinePlayer player = (OfflinePlayer) operator;
+        Faction faction = Accessors.factions().findOrDefault(operator);
+        Member member = faction.getMember(player.getUniqueId());
+
+        return ComponentHelper.join(
+                Component.text(member.getRank().getPrefix()),
+                member.getTitle(),
+                member.hasTitle() ? Component.space() : Component.empty(),
+                Component.text(player.getName())
+        );
+    }
+
     public static void missingPermission(@NotNull CommandSender player, @NotNull Faction faction, @NotNull String action) {
         MessageConfig.getInstance().missingFactionPerm.send(player,
                 "action", action,
-                "faction", FactionHelper.formatRelational(player, faction),
+                "faction", formatRelational(player, faction),
                 "faction_name", faction.getName()
         );
+    }
+
+    public static boolean isPermitted(@NotNull Player player, @NotNull Chunk chunk, @NotNull Permission permission, @NotNull String action) {
+        ClaimAccessor claims = Accessors.claims();
+        if (!claims.isClaimed(chunk)) {
+            return true;
+        }
+
+        Claim claim = claims.getClaim(chunk);
+        if (claim != null && !claim.isPermitted(player, permission)) {
+            FactionHelper.missingPermission(player, claim.getFaction(), action);
+            return false;
+        }
+
+        return true;
     }
 
     @Nullable

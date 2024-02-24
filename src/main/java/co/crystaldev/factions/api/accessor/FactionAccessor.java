@@ -24,7 +24,7 @@ public interface FactionAccessor {
 
     // region Get
 
-    @Nullable
+    @NotNull
     Faction getById(@NotNull String id);
 
     @Nullable

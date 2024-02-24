@@ -156,6 +156,7 @@ public final class RelationCommand extends FactionsCommand {
         }
 
         // set the relation wish internally
+        FactionRelation previousRelation = actingFaction.relationTo(targetFaction);
         actingFaction.setRelation(targetFaction, relation);
 
         // if override mode is enabled, force set this relation
@@ -165,8 +166,7 @@ public final class RelationCommand extends FactionsCommand {
         }
 
         // notify the target faction
-        boolean enemy = relation == FactionRelation.ENEMY;
-        boolean wish = !force && !targetFaction.isRelation(actingFaction, relation) && !enemy;
+        boolean wish = !force && !targetFaction.isRelation(actingFaction, relation) && relation.getWeight() > previousRelation.getWeight();
         ConfigText targetMessage = (wish ? messageConfig.relationWishes : messageConfig.relationDeclarations).get(relation);
         Messaging.broadcast(targetFaction, observer -> {
             return targetMessage.build(
@@ -176,7 +176,7 @@ public final class RelationCommand extends FactionsCommand {
         });
 
         // notify the declaring faction
-        ConfigText actingMessage = (!force && wish ? messageConfig.relationRequest : messageConfig.relationDeclarations).get(relation);
+        ConfigText actingMessage = (wish ? messageConfig.relationRequest : messageConfig.relationDeclarations).get(relation);
         Messaging.broadcast(actingFaction, sender, observer -> {
             return actingMessage.build(
                     "faction", FactionHelper.formatRelational(observer, targetFaction, false),
