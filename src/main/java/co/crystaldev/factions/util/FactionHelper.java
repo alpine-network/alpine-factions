@@ -1,5 +1,7 @@
 package co.crystaldev.factions.util;
 
+import co.crystaldev.alpinecore.util.Components;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
@@ -23,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -30,6 +33,40 @@ import java.util.Objects;
  */
 @UtilityClass
 public final class FactionHelper {
+
+    public static void broadcast(@NotNull Faction faction, @NotNull Component component) {
+        for (Member member : faction.getMembers()) {
+            Player player = member.getPlayer();
+            if (player != null) {
+                Messaging.send(player, component);
+            }
+        }
+    }
+
+    public static void broadcast(@NotNull Faction faction, @Nullable ServerOperator subject, @NotNull Function<Player, @Nullable Component> playerFunction) {
+        Component lastComponent = null;
+        for (Member member : faction.getMembers()) {
+            Player player = member.getPlayer();
+            if (player != null) {
+                if (player.equals(subject)) {
+                    subject = null;
+                }
+
+                Messaging.send(player, lastComponent = playerFunction.apply(player));
+            }
+        }
+
+        if (subject instanceof Player) {
+            Messaging.send((Player) subject, playerFunction.apply((Player) subject));
+        }
+        else if (lastComponent != null && subject instanceof CommandSender) {
+            Messaging.send((CommandSender) subject, lastComponent);
+        }
+    }
+
+    public static void broadcast(@NotNull Faction faction, @NotNull Function<Player, Component> playerFunction) {
+        broadcast(faction, null, playerFunction);
+    }
 
     @NotNull
     public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull Component component) {
@@ -42,8 +79,8 @@ public final class FactionHelper {
 
         FactionRelation relation = self.relationTo(faction);
 
-        Component name = ComponentHelper.stylize(config.relationalStyles.get(relation), component);
-        return ComponentHelper.stylize(config.factionNameStyles.get(faction.getName()), name, true);
+        Component name = Components.stylize(config.relationalStyles.get(relation), component);
+        return Components.stylize(config.factionNameStyles.get(faction.getName()), name, true);
     }
 
     @NotNull
@@ -83,7 +120,7 @@ public final class FactionHelper {
             // both the viewer and player are in the same faction, display their title instead of their faction
 
             Member member = faction.getMember(player);
-            return formatRelational(viewer, faction, ComponentHelper.join(
+            return formatRelational(viewer, faction, Components.join(
                     Component.text(member.getRank().getPrefix()),
                     member.getTitle(),
                     member.hasTitle() ? Component.space() : Component.empty(),
@@ -96,7 +133,7 @@ public final class FactionHelper {
             Member member = faction.getMember(player);
             Faction playerFaction = findFactionOrDefault(player);
 
-            return formatRelational(viewer, faction, ComponentHelper.join(
+            return formatRelational(viewer, faction, Components.join(
                     Component.text(member.getRank().getPrefix()),
                     Component.text(playerFaction.getName()),
                     Component.space(),
@@ -137,7 +174,7 @@ public final class FactionHelper {
         Faction faction = Accessors.factions().findOrDefault(operator);
         Member member = faction.getMember(player.getUniqueId());
 
-        return ComponentHelper.join(
+        return Components.join(
                 Component.text(member.getRank().getPrefix()),
                 member.getTitle(),
                 member.hasTitle() ? Component.space() : Component.empty(),

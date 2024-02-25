@@ -1,9 +1,9 @@
 package co.crystaldev.factions.command.argument;
 
+import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
 import co.crystaldev.factions.util.claims.WorldClaimType;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
-import dev.rollczi.litecommands.argument.resolver.ArgumentResolver;
 import dev.rollczi.litecommands.invocation.Invocation;
 import dev.rollczi.litecommands.suggestion.SuggestionContext;
 import dev.rollczi.litecommands.suggestion.SuggestionResult;
@@ -15,7 +15,12 @@ import java.util.stream.Stream;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/06/2024
  */
-public final class WorldClaimArgumentResolver extends ArgumentResolver<CommandSender, WorldClaimType> {
+public final class WorldClaimTypeArgumentResolver extends AlpineArgumentResolver<WorldClaimType> {
+
+    public WorldClaimTypeArgumentResolver() {
+        super(WorldClaimType.class, Args.WORLD_CLAIM_TYPE);
+    }
+
     @Override
     protected ParseResult<WorldClaimType> parse(Invocation<CommandSender> invocation, Argument<WorldClaimType> context, String argument) {
         return ParseResult.success(argument.equalsIgnoreCase("all") ? WorldClaimType.ALL : WorldClaimType.WORLD);

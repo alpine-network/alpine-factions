@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.FlagRegistry;
 import co.crystaldev.factions.api.accessor.Accessors;
@@ -12,7 +13,10 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.*;
+import co.crystaldev.factions.util.ComponentHelper;
+import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -71,7 +75,7 @@ public final class FlagCommand extends FactionsCommand {
         String stateDescription = flag.getType().equals(Boolean.class)
                 ? flag.getStateDescription((Boolean) newValue)
                 : flag.getStateDescription();
-        Messaging.broadcast(resolvedFaction, sender, observer -> {
+        FactionHelper.broadcast(resolvedFaction, sender, observer -> {
             return config.updatedFlagValue.build(
                     "actor", FactionHelper.formatRelational(observer, resolvedFaction, sender),
                     "actor_name", PlayerHelper.getName(sender),

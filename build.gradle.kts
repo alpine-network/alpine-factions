@@ -28,7 +28,7 @@ repositories {
 configurations.create("shaded")
 dependencies {
     compileOnly(group = "org.spigotmc", name = "spigot", version = project.property("spigot_version") as String)
-    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.2.3")
+    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.3.0")
 
     val xseries = "9.9.0"
     compileOnly(group = "com.github.cryptomorin", name = "XSeries", version = xseries)

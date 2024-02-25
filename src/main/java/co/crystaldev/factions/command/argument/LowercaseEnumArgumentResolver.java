@@ -1,8 +1,8 @@
 package co.crystaldev.factions.command.argument;
 
+import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
-import dev.rollczi.litecommands.argument.resolver.ArgumentResolver;
 import dev.rollczi.litecommands.invalidusage.InvalidUsage;
 import dev.rollczi.litecommands.invocation.Invocation;
 import dev.rollczi.litecommands.suggestion.SuggestionContext;
@@ -18,9 +18,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 02/20/2024
  */
 @SuppressWarnings("rawtypes")
-public final class LowercaseEnumArgumentResolver extends ArgumentResolver<CommandSender, Enum> {
+public final class LowercaseEnumArgumentResolver extends AlpineArgumentResolver<Enum> {
 
     private final Map<Class<Enum>, SuggestionResult> cachedEnumSuggestions = new ConcurrentHashMap<>();
+
+    public LowercaseEnumArgumentResolver() {
+        super(Enum.class, Args.LC_ENUM);
+    }
 
     @Override
     protected ParseResult<Enum> parse(Invocation<CommandSender> invocation, Argument<Enum> context, String argument) {

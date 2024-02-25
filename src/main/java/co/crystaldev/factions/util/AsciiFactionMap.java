@@ -1,5 +1,6 @@
 package co.crystaldev.factions.util;
 
+import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Faction;
@@ -61,7 +62,7 @@ public final class AsciiFactionMap {
         this.buildMap(lines);
         this.buildLegend(lines);
 
-        return ComponentHelper.joinNewLines(lines);
+        return Components.joinNewLines(lines);
     }
 
     private void buildTitle(@NotNull List<Component> components) {
@@ -79,7 +80,7 @@ public final class AsciiFactionMap {
 
     private void buildMap(@NotNull List<Component> components) {
         for (Component[] line : this.storage) {
-            components.add(ComponentHelper.join(line));
+            components.add(Components.join(line));
         }
     }
 
@@ -105,7 +106,7 @@ public final class AsciiFactionMap {
         });
 
         // add the legend
-        components.add(ComponentHelper.joinSpaces(legend));
+        components.add(Components.joinSpaces(legend));
 
         // overflown
         if (this.factionColorMap.size() >= KEY_CHARS.length) {
@@ -178,7 +179,7 @@ public final class AsciiFactionMap {
 
     private void putDirection(int x, int z, char ch, boolean facing) {
         String style = facing ? this.config.mapCompassDirectionStyle : this.config.mapCompassStyle;
-        this.put(ComponentHelper.stylize(style, Component.text(ch)), x, z);
+        this.put(Components.stylize(style, Component.text(ch)), x, z);
     }
 
     private void put(@NotNull Component component, int x, int y) {

@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
@@ -12,7 +13,6 @@ import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
-import co.crystaldev.factions.util.Messaging;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -69,7 +69,7 @@ public final class InviteCommand extends FactionsCommand {
         faction.addInvitation(invitee.getUniqueId(), player.getUniqueId());
 
         // notify the faction
-        Messaging.broadcast(faction, observer -> {
+        FactionHelper.broadcast(faction, observer -> {
             if (previouslyInvited && !player.equals(observer)) {
                 // if the member was already invited, do not send broadcast to the
                 // rest of the faction, only to the sender
@@ -114,7 +114,7 @@ public final class InviteCommand extends FactionsCommand {
         faction.removeInvitation(invitee.getUniqueId());
 
         // notify the faction
-        Messaging.broadcast(faction, observer -> {
+        FactionHelper.broadcast(faction, observer -> {
             return config.inviteRevoke.build(
                     "actor", FactionHelper.formatRelational(observer, faction, player),
                     "actor_name", player.getName(),

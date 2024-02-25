@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
@@ -13,7 +14,6 @@ import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Messaging;
 import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
@@ -83,7 +83,7 @@ public final class KickCommand extends FactionsCommand {
         }
 
         // notify the faction
-        Messaging.broadcast(faction, sender, observer -> {
+        FactionHelper.broadcast(faction, sender, observer -> {
             if (observer.getUniqueId().equals(other.getUniqueId())) {
                 return null;
             }

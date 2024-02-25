@@ -1,10 +1,11 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.command.framework.FactionsCommand;
-import co.crystaldev.factions.util.Messaging;
+import co.crystaldev.factions.util.ComponentHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -25,7 +26,7 @@ public final class VersionCommand extends FactionsCommand {
     @Execute
     public void execute(@Context CommandSender sender) {
         String authors = String.join(", ", AlpineFactions.getInstance().getDescription().getAuthors());
-        Messaging.send(sender, Reference.MINI_MESSAGE.deserialize(String.join("<br>",
+        Messaging.send(sender, ComponentHelper.mini(String.join("<br>",
                 "<info>.</info>",
                 "<info>|</info> This server is running <b><gradient:#00aaaa:#78cccc:#00aaaa>AlpineFactions</gradient></b>",
                 "<info>|</info> <emphasis>Version:</emphasis> v" + Reference.VERSION,

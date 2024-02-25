@@ -12,7 +12,6 @@ import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Messaging;
 import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
@@ -21,7 +20,6 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
@@ -90,7 +88,7 @@ public final class NameCommand extends FactionsCommand {
         faction.markDirty();
 
         // notify the faction
-        Messaging.broadcast(faction, sender, observer -> {
+        FactionHelper.broadcast(faction, sender, observer -> {
             return config.rename.build(
                     "actor", FactionHelper.formatRelational(observer, faction, sender),
                     "actor_name", PlayerHelper.getName(sender),

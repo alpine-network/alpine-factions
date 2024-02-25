@@ -9,7 +9,6 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Messaging;
 import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -67,7 +66,7 @@ public final class DescriptionCommand extends FactionsCommand {
         faction.markDirty();
 
         // notify the faction
-        Messaging.broadcast(faction, sender, observer -> {
+        FactionHelper.broadcast(faction, sender, observer -> {
             return config.description.build(
                     "actor", FactionHelper.formatRelational(observer, faction, sender),
                     "actor_name", PlayerHelper.getName(sender),

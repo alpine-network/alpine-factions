@@ -1,5 +1,6 @@
 package co.crystaldev.factions.api.show.component;
 
+import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.show.ShowContext;
@@ -7,7 +8,6 @@ import co.crystaldev.factions.api.show.order.ShowOrder;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import lombok.experimental.UtilityClass;
@@ -115,7 +115,7 @@ public final class DefaultShowComponents {
                         .stream()
                         .map(v -> FactionHelper.formatName(v.getOfflinePlayer()))
                         .collect(Collectors.toList());
-                Component joined = members.isEmpty() ? config.none.build() : ComponentHelper.joinCommas(members);
+                Component joined = members.isEmpty() ? config.none.build() : Components.joinCommas(members);
                 Component count = (members.isEmpty() ? config.memberCountOffline : config.memberCountOnline).build(
                         "online_count", members.size(), "member_count", ctx.getFaction().getMemberCount());
                 return config.showOnlineMembers.build("members", joined, "count", count);
@@ -130,7 +130,7 @@ public final class DefaultShowComponents {
                         .stream()
                         .map(v -> FactionHelper.formatRelational(v.getOfflinePlayer(), ctx.getFaction(), v.getOfflinePlayer(), false))
                         .collect(Collectors.toList());
-                Component joined = members.isEmpty() ? config.none.build() : ComponentHelper.joinCommas(members);
+                Component joined = members.isEmpty() ? config.none.build() : Components.joinCommas(members);
                 Component count = config.memberCountOffline.build("online_count", members.size(),
                         "member_count", ctx.getFaction().getMemberCount());
                 return config.showOfflineMembers.build("members", joined, "count", count);

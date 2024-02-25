@@ -1,10 +1,10 @@
 package co.crystaldev.factions.api.show;
 
+import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.show.component.ShowComponent;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import net.kyori.adventure.text.Component;
@@ -42,7 +42,7 @@ public final class ShowFormatter {
 
         Component title = config.showTitle.build("faction", FactionHelper.formatRelational(sender, faction, false),
                 "faction_name", faction.getName());
-        return ComponentHelper.joinNewLines(Formatting.title(title), ComponentHelper.joinNewLines(components));
+        return Components.joinNewLines(Formatting.title(title), Components.joinNewLines(components));
     }
 
     private void addComponent(@NotNull ShowComponent component) {

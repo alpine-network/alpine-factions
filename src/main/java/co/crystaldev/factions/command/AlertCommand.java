@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Member;
@@ -9,7 +10,6 @@ import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Messaging;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -47,7 +47,7 @@ public final class AlertCommand extends FactionsCommand {
         // TODO: play sound
 
         // broadcast chat message
-        Messaging.broadcast(faction, observer -> {
+        FactionHelper.broadcast(faction, observer -> {
             return config.alertMessage.build(
                     "actor", FactionHelper.formatRelational(observer, faction, player, false),
                     "actor_name", player.getName(),

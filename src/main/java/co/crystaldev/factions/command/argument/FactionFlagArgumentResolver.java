@@ -1,12 +1,12 @@
 package co.crystaldev.factions.command.argument;
 
+import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.FlagRegistry;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.config.MessageConfig;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
-import dev.rollczi.litecommands.argument.resolver.ArgumentResolver;
 import dev.rollczi.litecommands.invocation.Invocation;
 import dev.rollczi.litecommands.suggestion.SuggestionContext;
 import dev.rollczi.litecommands.suggestion.SuggestionResult;
@@ -18,7 +18,10 @@ import java.util.List;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/17/2024
  */
-public final class FactionFlagArgumentResolver extends ArgumentResolver<CommandSender, FactionFlag> {
+public final class FactionFlagArgumentResolver extends AlpineArgumentResolver<FactionFlag> {
+    public FactionFlagArgumentResolver() {
+        super(FactionFlag.class, Args.FACTION_FLAG);
+    }
 
     @Override
     protected ParseResult<FactionFlag> parse(Invocation<CommandSender> invocation, Argument<FactionFlag> context, String argument) {

@@ -15,7 +15,6 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.AutoClaimState;
 import co.crystaldev.factions.handler.player.PlayerState;
 import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Messaging;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.util.claims.Claiming;
 import co.crystaldev.factions.util.claims.WorldClaimType;
@@ -127,7 +126,7 @@ public final class UnclaimCommand extends FactionsCommand {
         // notify
         Faction wilderness = Accessors.factions().getWilderness();
         Faction playerFaction = Accessors.factions().findOrDefault(player);
-        Messaging.broadcast(faction, player, observer -> {
+        FactionHelper.broadcast(faction, player, observer -> {
             return message.build(
                     "actor", FactionHelper.formatRelational(observer, playerFaction, player),
                     "actor_name", player.getName(),

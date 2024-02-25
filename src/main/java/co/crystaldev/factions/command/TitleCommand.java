@@ -13,7 +13,6 @@ import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Messaging;
 import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
@@ -91,7 +90,7 @@ public final class TitleCommand extends FactionsCommand {
 
             member.setTitle(event.getTitle());
 
-            Messaging.broadcast(faction, sender, observer -> config.titleChange.build(
+            FactionHelper.broadcast(faction, sender, observer -> config.titleChange.build(
                     "actor", FactionHelper.formatRelational(observer, actingFaction, sender),
                     "actor_name", PlayerHelper.getName(sender),
                     "player", FactionHelper.formatRelational(observer, faction, other, false),

@@ -14,7 +14,6 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.ChunkCoordinate;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.LocationHelper;
-import co.crystaldev.factions.util.Messaging;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -157,7 +156,7 @@ public final class ClaimHelper {
             Faction newFaction = claimingFaction == null ? wilderness : actingFaction;
 
             Component claimType = (claimingFaction == null ? messageConfig.unclaimed : messageConfig.claimed).build();
-            Messaging.broadcast(actingFaction, player, observer -> {
+            FactionHelper.broadcast(actingFaction, player, observer -> {
                 ConfigText message = claimedChunks == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
                 return buildClaimMessage(observer, player, message, origin, action, claimType, claimedChunks, oldFaction,
                         newFaction, playerFaction);
@@ -175,13 +174,13 @@ public final class ClaimHelper {
                 Chunk chunk = origin.getWorld().getChunkAt(conquered.get(0).getX(), conquered.get(0).getZ());
 
                 // notify the conquered faction
-                Messaging.broadcast(faction, observer -> {
+                FactionHelper.broadcast(faction, observer -> {
                     return buildClaimMessage(observer, player, message, chunk, action, claimType, conquered.size(),
                             faction, newFaction, playerFaction);
                 });
 
                 // notify the new faction
-                Messaging.broadcast(actingFaction, player, observer -> {
+                FactionHelper.broadcast(actingFaction, player, observer -> {
                     return buildClaimMessage(observer, player, message, chunk, action, claimType, conquered.size(), faction,
                             newFaction, playerFaction);
                 });

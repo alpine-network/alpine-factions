@@ -1,7 +1,7 @@
 package co.crystaldev.factions.api.faction.flag;
 
+import co.crystaldev.alpinecore.util.ReflectionHelper;
 import co.crystaldev.factions.Reference;
-import co.crystaldev.factions.util.ReflectionHelper;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;

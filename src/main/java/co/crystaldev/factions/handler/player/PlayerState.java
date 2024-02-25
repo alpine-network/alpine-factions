@@ -1,13 +1,17 @@
 package co.crystaldev.factions.handler.player;
 
+import co.crystaldev.alpinecore.util.Components;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.player.TerritorialTitleMode;
+import co.crystaldev.factions.util.AsciiFactionMap;
+import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.Formatting;
 import co.crystaldev.factions.util.claims.Claiming;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -46,7 +50,7 @@ public final class PlayerState {
                     "faction", FactionHelper.formatRelational(this.player, faction, faction.getName()),
                     "faction_name", faction.getName());
 
-            AlpineFactions.schedule(() -> Messaging.send(this.player, ComponentHelper.joinNewLines(Formatting.title(title), motd)));
+            AlpineFactions.schedule(() -> Messaging.send(this.player, Components.joinNewLines(Formatting.title(title), motd)));
         }
     }
 
@@ -81,7 +85,7 @@ public final class PlayerState {
                     Component.text("").color(NamedTextColor.GRAY).append(description));
         }
         else {
-            Component desc = ComponentHelper.joinSpaces(Component.text(faction.getName() + ":"), description);
+            Component desc = Components.joinSpaces(Component.text(faction.getName() + ":"), description);
             desc = FactionHelper.formatRelational(this.player, faction, desc);
 
             if (mode == TerritorialTitleMode.ACTION_BAR) {

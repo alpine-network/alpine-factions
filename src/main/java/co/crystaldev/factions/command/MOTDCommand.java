@@ -1,12 +1,16 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.util.Components;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.*;
+import co.crystaldev.factions.util.ComponentHelper;
+import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.Formatting;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -48,7 +52,7 @@ public final class MOTDCommand extends FactionsCommand {
         faction.markDirty();
 
         // notify the faction
-        Messaging.broadcast(faction, player, observer -> {
+        FactionHelper.broadcast(faction, player, observer -> {
             return config.motd.build(
                     "actor", FactionHelper.formatRelational(observer, faction, player),
                     "actor_name", player.getName(),
@@ -66,7 +70,7 @@ public final class MOTDCommand extends FactionsCommand {
                 "faction", FactionHelper.formatRelational(player, faction, faction.getName()),
                 "faction_name", faction.getName());
 
-        Messaging.send(player, ComponentHelper.joinNewLines(Formatting.title(title), motd));
+        Messaging.send(player, Components.joinNewLines(Formatting.title(title), motd));
     }
 
     @Execute(name = "clear")
@@ -85,7 +89,7 @@ public final class MOTDCommand extends FactionsCommand {
         faction.markDirty();
 
         // notify the faction
-        Messaging.broadcast(faction, player, observer -> {
+        FactionHelper.broadcast(faction, player, observer -> {
             return config.motd.build(
                     "actor", FactionHelper.formatRelational(observer, faction, player),
                     "actor_name", player.getName(),

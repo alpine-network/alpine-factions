@@ -20,7 +20,6 @@ import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Messaging;
 import co.crystaldev.factions.util.PlayerHelper;
 import com.google.common.collect.ImmutableSet;
 import lombok.Getter;
@@ -131,7 +130,7 @@ public final class Faction {
         }
 
         // notify the faction
-        Messaging.broadcast(this, actor, observer -> {
+        FactionHelper.broadcast(this, actor, observer -> {
             return config.disband.build(
                     "actor", FactionHelper.formatRelational(observer, actingFaction, actor),
                     "actor_name", PlayerHelper.getName(actor),

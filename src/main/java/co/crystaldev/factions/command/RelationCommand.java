@@ -1,6 +1,8 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.util.Components;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.event.FactionRelationUpdateEvent;
@@ -18,7 +20,6 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
-import co.crystaldev.factions.util.Messaging;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -107,7 +108,7 @@ public final class RelationCommand extends FactionsCommand {
         return MessageConfig.getInstance().relationListEntry.build(
                 "faction", FactionHelper.formatRelational(sender, faction, false),
                 "faction_name", faction.getName(),
-                "relation", ComponentHelper.stylize(StyleConfig.getInstance().relationalStyles.get(relation), Component.text(relation.name().toLowerCase())),
+                "relation", Components.stylize(StyleConfig.getInstance().relationalStyles.get(relation), Component.text(relation.name().toLowerCase())),
                 "relation_name", relation.name().toLowerCase()
         );
     }
@@ -168,7 +169,7 @@ public final class RelationCommand extends FactionsCommand {
         // notify the target faction
         boolean wish = !force && !targetFaction.isRelation(actingFaction, relation) && relation.getWeight() > previousRelation.getWeight();
         ConfigText targetMessage = (wish ? messageConfig.relationWishes : messageConfig.relationDeclarations).get(relation);
-        Messaging.broadcast(targetFaction, observer -> {
+        FactionHelper.broadcast(targetFaction, observer -> {
             return targetMessage.build(
                     "faction", FactionHelper.formatRelational(observer, actingFaction, false),
                     "faction_name", actingFaction.getName()
@@ -177,7 +178,7 @@ public final class RelationCommand extends FactionsCommand {
 
         // notify the declaring faction
         ConfigText actingMessage = (wish ? messageConfig.relationRequest : messageConfig.relationDeclarations).get(relation);
-        Messaging.broadcast(actingFaction, sender, observer -> {
+        FactionHelper.broadcast(actingFaction, sender, observer -> {
             return actingMessage.build(
                     "faction", FactionHelper.formatRelational(observer, targetFaction, false),
                     "faction_name", targetFaction.getName()

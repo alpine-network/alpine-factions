@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.PermissionNodes;
 import co.crystaldev.factions.api.accessor.Accessors;
@@ -12,7 +13,6 @@ import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Messaging;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -58,7 +58,7 @@ public final class JoinCommand extends FactionsCommand {
                     "faction_name", faction.getName());
 
             // notify the faction of this attempt
-            Messaging.broadcast(faction, observer -> config.attemptedMemberJoin.build(
+            FactionHelper.broadcast(faction, observer -> config.attemptedMemberJoin.build(
                     "player", FactionHelper.formatRelational(observer, factions.getWilderness(), player),
                     "player_name", player.getName()
             ));
@@ -85,7 +85,7 @@ public final class JoinCommand extends FactionsCommand {
         faction.addMember(player.getUniqueId());
 
         // notify the faction
-        Messaging.broadcast(faction, observer -> {
+        FactionHelper.broadcast(faction, observer -> {
             if (observer.equals(player)) {
                 return null;
             }
@@ -160,7 +160,7 @@ public final class JoinCommand extends FactionsCommand {
         faction.addMember(joiningPlayer.getUniqueId());
 
         // notify the faction
-        Messaging.broadcast(faction, player, observer -> {
+        FactionHelper.broadcast(faction, player, observer -> {
             if (observer.getUniqueId().equals(joiningPlayer.getUniqueId())) {
                 return null;
             }

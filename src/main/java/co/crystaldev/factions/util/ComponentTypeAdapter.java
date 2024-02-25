@@ -1,6 +1,5 @@
 package co.crystaldev.factions.util;
 
-import co.crystaldev.factions.Reference;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -21,7 +20,7 @@ public final class ComponentTypeAdapter extends TypeAdapter<Component> {
             return;
         }
 
-        jsonWriter.value(Reference.MINI_MESSAGE.serialize(component));
+        jsonWriter.value(ComponentHelper.mini(component));
     }
 
     @Override
@@ -31,6 +30,6 @@ public final class ComponentTypeAdapter extends TypeAdapter<Component> {
             return null;
         }
 
-        return Reference.MINI_MESSAGE.deserialize(next);
+        return ComponentHelper.mini(next);
     }
 }

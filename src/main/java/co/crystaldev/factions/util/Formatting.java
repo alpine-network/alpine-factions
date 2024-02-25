@@ -1,7 +1,7 @@
 package co.crystaldev.factions.util;
 
 import co.crystaldev.alpinecore.util.Components;
-import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.config.MessageConfig;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
@@ -9,7 +9,6 @@ import net.kyori.adventure.text.ComponentLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -27,37 +26,11 @@ import java.util.function.Function;
 @UtilityClass
 public final class Formatting {
 
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
-
     private static final int TITLE_LENGTH = 54;
 
     @NotNull
     public static String formatPlaceholders(@Nullable String string, @NotNull Object... placeholders) {
-        if (string == null)
-            return "";
-        if (placeholders.length == 0)
-            return string;
-
-        if (placeholders.length == 1) {
-            // Replace all placeholders with given value
-            string = string.replaceAll("%\\w+%", placeholders[0].toString());
-        }
-        else {
-            for (int i = 0; i < (placeholders.length / 2) * 2; i += 2) {
-                String placeholder = (String) placeholders[i];
-                Object rawReplacer = placeholders[i + 1];
-                String formattedReplacer;
-
-                if (rawReplacer instanceof Float || rawReplacer instanceof Double) formattedReplacer = DECIMAL_FORMAT.format(rawReplacer);
-                else if (rawReplacer instanceof Boolean) formattedReplacer = (Boolean) rawReplacer ? "True" : "False";
-                else if (rawReplacer instanceof Component) formattedReplacer = Reference.STRICT_MINIMESSAGE.serialize(((Component) rawReplacer).append(Components.reset()));
-                else formattedReplacer = rawReplacer.toString();
-
-                string = string.replaceAll("%" + placeholder + "%", formattedReplacer);
-            }
-        }
-
-        return string;
+        return co.crystaldev.alpinecore.util.Formatting.formatPlaceholders(AlpineFactions.getInstance(), string, placeholders);
     }
 
     @NotNull
@@ -104,8 +77,8 @@ public final class Formatting {
         MessageConfig config = MessageConfig.getInstance();
         int paddingLength = Math.max(4, (TITLE_LENGTH - ComponentHelper.length(component)) / 2);
         String paddingString = StringHelper.repeat(config.paddingCharacter, paddingLength);
-        Component padding = ComponentHelper.stylize(config.paddingStyle, Component.text(paddingString));
-        return ComponentHelper.join(padding, component, padding);
+        Component padding = Components.stylize(config.paddingStyle, Component.text(paddingString));
+        return Components.join(padding, component, padding);
     }
 
     @NotNull
@@ -164,9 +137,9 @@ public final class Formatting {
         );
 
         // build the component
-        return ComponentHelper.joinNewLines(
+        return Components.joinNewLines(
                 appendTitlePadding(center),
-                ComponentHelper.joinNewLines(pageElements)
+                Components.joinNewLines(pageElements)
         );
     }
 
@@ -183,9 +156,9 @@ public final class Formatting {
         MessageConfig config = MessageConfig.getInstance();
 
         int fillLength = (int) (config.progressLength * progress);
-        Component progressComponent = ComponentHelper.join(
-                ComponentHelper.stylize(config.progressIndicatorStyle, Component.text(StringHelper.repeat(config.progressIndicatorCharacter, fillLength))),
-                ComponentHelper.stylize(config.progressRemainingStyle, Component.text(StringHelper.repeat(config.progressRemainingCharacter, config.progressLength - fillLength)))
+        Component progressComponent = Components.join(
+                Components.stylize(config.progressIndicatorStyle, Component.text(StringHelper.repeat(config.progressIndicatorCharacter, fillLength))),
+                Components.stylize(config.progressRemainingStyle, Component.text(StringHelper.repeat(config.progressRemainingCharacter, config.progressLength - fillLength)))
         );
 
         return config.progressBarFormat.build("progress", progressComponent);

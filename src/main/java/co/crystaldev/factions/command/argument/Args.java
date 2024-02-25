@@ -30,7 +30,7 @@ public final class Args {
 
     /**
      * Represents a {@link co.crystaldev.factions.util.claims.WorldClaimType WorldClaimType} argument.
-     * @see WorldClaimArgumentResolver
+     * @see WorldClaimTypeArgumentResolver
      */
     public static final String WORLD_CLAIM_TYPE = "factions:world_claim_argument_resolver";
 

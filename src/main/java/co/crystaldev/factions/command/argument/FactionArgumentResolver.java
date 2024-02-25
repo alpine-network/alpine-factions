@@ -1,12 +1,12 @@
 package co.crystaldev.factions.command.argument;
 
+import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.MessageConfig;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
-import dev.rollczi.litecommands.argument.resolver.ArgumentResolver;
 import dev.rollczi.litecommands.invocation.Invocation;
 import dev.rollczi.litecommands.suggestion.SuggestionContext;
 import dev.rollczi.litecommands.suggestion.SuggestionResult;
@@ -20,7 +20,11 @@ import java.util.Optional;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/07/2024
  */
-public final class FactionArgumentResolver extends ArgumentResolver<CommandSender, Faction> {
+public final class FactionArgumentResolver extends AlpineArgumentResolver<Faction> {
+    public FactionArgumentResolver() {
+        super(Faction.class, Args.FACTION);
+    }
+
     @Override
     protected ParseResult<Faction> parse(Invocation<CommandSender> invocation, Argument<Faction> context, String argument) {
         FactionAccessor factions = Accessors.factions();

@@ -1,9 +1,9 @@
 package co.crystaldev.factions.command.argument;
 
+import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
 import co.crystaldev.factions.util.claims.ClaimType;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
-import dev.rollczi.litecommands.argument.resolver.ArgumentResolver;
 import dev.rollczi.litecommands.invocation.Invocation;
 import dev.rollczi.litecommands.suggestion.SuggestionContext;
 import dev.rollczi.litecommands.suggestion.SuggestionResult;
@@ -15,7 +15,11 @@ import java.util.stream.Stream;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/06/2024
  */
-public final class ClaimTypeArgumentResolver extends ArgumentResolver<CommandSender, ClaimType> {
+public final class ClaimTypeArgumentResolver extends AlpineArgumentResolver<ClaimType> {
+    public ClaimTypeArgumentResolver() {
+        super(ClaimType.class, Args.CLAIM_TYPE);
+    }
+
     @Override
     protected ParseResult<ClaimType> parse(Invocation<CommandSender> invocation, Argument<ClaimType> context, String argument) {
         ClaimType type = ClaimType.get(argument);

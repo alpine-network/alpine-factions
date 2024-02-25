@@ -1,10 +1,9 @@
 package co.crystaldev.factions.config.type;
 
-import co.crystaldev.factions.Reference;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.config.MessageConfig;
+import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.Formatting;
-import co.crystaldev.factions.util.Messaging;
-import de.exlll.configlib.Configuration;
 import de.exlll.configlib.SerializeWith;
 import de.exlll.configlib.Serializer;
 import lombok.AllArgsConstructor;
@@ -24,7 +23,7 @@ import java.util.List;
  * @since 11/14/2023
  */
 @Getter @AllArgsConstructor @NoArgsConstructor
-@Configuration @SerializeWith(serializer = ConfigText.ConfigTextSerializer.class)
+@SerializeWith(serializer = ConfigText.ConfigTextSerializer.class)
 public final class ConfigText {
 
     private List<String> message;
@@ -35,7 +34,7 @@ public final class ConfigText {
         String message = Formatting.formatPlaceholders(String.join("\n", this.message),
                 "prefix", conf.prefix.buildWithoutPlaceholders(),
                 "error_prefix", conf.errorPrefix.buildWithoutPlaceholders());
-        return Reference.MINI_MESSAGE.deserialize(message);
+        return ComponentHelper.mini(message);
     }
 
     @NotNull
@@ -45,7 +44,7 @@ public final class ConfigText {
                 "prefix", conf.prefix.buildWithoutPlaceholders(),
                 "error_prefix", conf.errorPrefix.buildWithoutPlaceholders());
         message = Formatting.formatPlaceholders(message, placeholders);
-        return Reference.MINI_MESSAGE.deserialize(message);
+        return ComponentHelper.mini(message);
     }
 
     @NotNull
@@ -67,7 +66,7 @@ public final class ConfigText {
 
     @NotNull
     private Component buildWithoutPlaceholders() {
-        return Reference.MINI_MESSAGE.deserialize(String.join("\n", this.message));
+        return ComponentHelper.mini(String.join("\n", this.message));
     }
 
     public void send(@NotNull CommandSender sender, @NotNull Object... placeholders) {
@@ -94,7 +93,7 @@ public final class ConfigText {
 
     @NotNull
     public static ConfigText of(@NotNull Component component) {
-        String message = Reference.MINI_MESSAGE.serialize(component);
+        String message = ComponentHelper.mini(component);
         return new ConfigText(Arrays.asList(message.replace("\r", "").split("(\n|<br>)")));
     }
 

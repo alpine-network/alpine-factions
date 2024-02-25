@@ -7,6 +7,7 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.player.FPlayer;
+import co.crystaldev.factions.config.FactionConfig;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -33,6 +34,10 @@ public final class PlayerStore extends AlpineStore<UUID, FPlayer> implements Pla
 
     @Override
     public @NotNull FPlayer getById(@NotNull UUID player) {
-        return this.getOrCreate(player, () -> new FPlayer(player));
+        return this.getOrCreate(player, () -> {
+            FPlayer fPlayer = new FPlayer(player);
+            fPlayer.setPowerLevel(FactionConfig.getInstance().initialPlayerPower);
+            return fPlayer;
+        });
     }
 }
