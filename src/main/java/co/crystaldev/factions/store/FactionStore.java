@@ -169,7 +169,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
     }
 
     @Override
-    public @NotNull Faction getById(@NotNull String id) {
+    public @Nullable Faction getById(@NotNull String id) {
         return this.registeredFactions.get(id);
     }
 

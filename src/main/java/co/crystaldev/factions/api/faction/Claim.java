@@ -55,7 +55,7 @@ public final class Claim {
 
     @NotNull
     public Faction getFaction() {
-        return Accessors.factions().getById(this.factionId);
+        return Accessors.factions().getByIdOrDefault(this.factionId);
     }
 
     public void setFaction(@NotNull Faction faction) {

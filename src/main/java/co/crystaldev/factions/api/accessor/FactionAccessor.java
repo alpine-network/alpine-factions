@@ -24,8 +24,14 @@ public interface FactionAccessor {
 
     // region Get
 
-    @NotNull
+    @Nullable
     Faction getById(@NotNull String id);
+
+    @NotNull
+    default Faction getByIdOrDefault(@NotNull String id) {
+        Faction faction = this.getById(id);
+        return faction == null ? this.getWilderness() : faction;
+    }
 
     @Nullable
     default Faction getByName(@NotNull String name) {
