@@ -20,7 +20,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Override
     public String getFileName() {
-        return "message_config.yml";
+        return "messages.yml";
     }
 
     @Comment({
@@ -28,34 +28,42 @@ public final class MessageConfig extends AlpineConfig {
             "Developed by Crystal Development, LLC.",
             ""
     })
-    public ConfigText prefix = ConfigText.of("<info>Factions</info> <separator>»</separator><text>");
+    public ConfigText alphanumeric = ConfigText.of(
+            "%error_prefix% Your input must be alphanumeric");
 
-    public ConfigText errorPrefix = ConfigText.of("<error>Factions</error> <separator>»</separator><text>");
+    public ConfigText operationCancelled = ConfigText.of(
+            "%error_prefix% This operation was cancelled");
 
-    public ConfigText alphanumeric = ConfigText.of("%error_prefix% Your input must be alphanumeric");
+    public ConfigText missingFactionPerm = ConfigText.of(
+            "%error_prefix% <error_highlight>%faction%</error_highlight> does not allow you to <error_highlight>%action%</error_highlight>");
 
-    public ConfigText operationCancelled = ConfigText.of("%error_prefix% This operation was cancelled");
+    public ConfigText notInFaction = ConfigText.of(
+            "%error_prefix% You are not in a faction");
 
-    public ConfigText missingFactionPerm = ConfigText.of("%error_prefix% <error_highlight>%faction%</error_highlight> does not allow you to <error_highlight>%action%</error_highlight>");
+    public ConfigText playerNotInFaction = ConfigText.of(
+            "%error_prefix% %player% is not in a faction");
 
-    public ConfigText notInFaction = ConfigText.of("%error_prefix% You are not in a faction");
+    public ConfigText unknownFaction = ConfigText.of(
+            "%error_prefix% No faction or player was found with the name <error_highlight>%value%</error_highlight>");
 
-    public ConfigText playerNotInFaction = ConfigText.of("%error_prefix% %player% is not in a faction");
+    public ConfigText unknownPlayer = ConfigText.of(
+            "%error_prefix% No player was found with the name <error_highlight>%player_name%</error_highlight>");
 
-    public ConfigText unknownFaction = ConfigText.of("%error_prefix% No faction or player was found with the name <error_highlight>%value%</error_highlight>");
+    public ConfigText none = ConfigText.of(
+            "<gray>None</gray>");
 
-    public ConfigText unknownPlayer = ConfigText.of("%error_prefix% No player was found with the name <error_highlight>%player_name%</error_highlight>");
+    public ConfigText hidden = ConfigText.of(
+            "<gray>Hidden</gray>");
 
-    public ConfigText none = ConfigText.of("<gray>None</gray>");
 
-    public ConfigText hidden = ConfigText.of("<gray>Hidden</gray>");
 
     @Comment({
             "",
             ">>| Formatting",
             "  > Title"
     })
-    public ConfigText titleFormat = ConfigText.of("<bracket><</bracket> %content% <bracket>></bracket>");
+    public ConfigText titleFormat = ConfigText.of(
+            "<bracket><</bracket> %content% <bracket>></bracket>");
 
     public boolean titleUsesPadding = true;
 
@@ -63,21 +71,32 @@ public final class MessageConfig extends AlpineConfig {
 
     public String paddingStyle = "dark_gray strikethrough";
 
+
+
     @Comment("  > Pagination")
-    public ConfigText paginatorTitleFormat = ConfigText.of("<bracket><</bracket> %content% <separator>|</separator> %previous% %page%/%max_pages% %next% <bracket>></bracket>");
+    public ConfigText paginatorTitleFormat = ConfigText.of(
+            "<bracket><</bracket> %content% <separator>|</separator> %previous% %page%/%max_pages% %next% <bracket>></bracket>");
 
-    public ConfigText previous = ConfigText.of("<bracket>[</bracket><emphasis><</emphasis><bracket>]</bracket>");
+    public ConfigText previous = ConfigText.of(
+            "<bracket>[</bracket><emphasis><</emphasis><bracket>]</bracket>");
 
-    public ConfigText next = ConfigText.of("<bracket>[</bracket><emphasis>></emphasis><bracket>]</bracket>");
+    public ConfigText next = ConfigText.of(
+            "<bracket>[</bracket><emphasis>></emphasis><bracket>]</bracket>");
 
-    public ConfigText previousDisabled = ConfigText.of("<emphasis>[<]</emphasis>");
+    public ConfigText previousDisabled = ConfigText.of(
+            "<emphasis>[<]</emphasis>");
 
-    public ConfigText nextDisabled = ConfigText.of("<emphasis>[>]</emphasis>");
+    public ConfigText nextDisabled = ConfigText.of(
+            "<emphasis>[>]</emphasis>");
 
-    public ConfigText noPages = ConfigText.of("%error_prefix% No pages available to display");
+    public ConfigText noPages = ConfigText.of(
+            "%error_prefix% No pages available to display");
+
+
 
     @Comment("  > Progress Indicator")
-    public ConfigText progressBarFormat = ConfigText.of("<bracket>[</bracket>%progress%<bracket>]</bracket>");
+    public ConfigText progressBarFormat = ConfigText.of(
+            "<bracket>[</bracket>%progress%<bracket>]</bracket>");
 
     public int progressLength = 20;
 
@@ -89,134 +108,198 @@ public final class MessageConfig extends AlpineConfig {
 
     public String progressRemainingStyle = "light_gray";
 
+
+
     @Comment({
             "",
             ">>| Faction Metadata"
     })
-    public ConfigText rename = ConfigText.of("%prefix% %actor% set the faction name to <highlight>%faction_name%</highlight>");
+    public ConfigText rename = ConfigText.of(
+            "%prefix% %actor% set the faction name to <highlight>%faction_name%</highlight>");
 
-    public ConfigText factionWithName = ConfigText.of("%error_prefix% A faction with the name <error_highlight>%faction_name%</error_highlight> already exists");
+    public ConfigText factionWithName = ConfigText.of(
+            "%error_prefix% A faction with the name <error_highlight>%faction_name%</error_highlight> already exists");
 
-    public ConfigText factionNameUnchanged = ConfigText.of("%error_prefix% The new name must differ from the existing name");
+    public ConfigText factionNameUnchanged = ConfigText.of(
+            "%error_prefix% The new name must differ from the existing name");
 
-    public ConfigText nameTooShort = ConfigText.of("%error_prefix% Your faction name can't be shorter than <error_highlight>%length% characters</error_highlight>");
+    public ConfigText nameTooShort = ConfigText.of(
+            "%error_prefix% Your faction name can't be shorter than <error_highlight>%length% characters</error_highlight>");
 
-    public ConfigText nameTooLong = ConfigText.of("%error_prefix% Your faction name can't be longer than <error_highlight>%length% characters</error_highlight>");
+    public ConfigText nameTooLong = ConfigText.of(
+            "%error_prefix% Your faction name can't be longer than <error_highlight>%length% characters</error_highlight>");
 
-    public ConfigText description = ConfigText.of("%prefix% %actor% set the faction's description to:<br>%description%");
+    public ConfigText description = ConfigText.of(
+            "%prefix% %actor% set the faction's description to:<br>%description%");
 
-    public ConfigText motd = ConfigText.of("%prefix% %actor% set the faction's message of the day to:<br>%motd%");
+    public ConfigText motd = ConfigText.of(
+            "%prefix% %actor% set the faction's message of the day to:<br>%motd%");
 
-    public ConfigText motdTitle = ConfigText.of("%faction% <separator>|</separator> Message of the Day");
+    public ConfigText motdTitle = ConfigText.of(
+            "%faction% <separator>|</separator> Message of the Day");
+
+
 
     @Comment({
             "",
             ">>| Join"
     })
-    public ConfigText join = ConfigText.of("%prefix% You joined <highlight>%faction_name%</highlight>");
+    public ConfigText join = ConfigText.of(
+            "%prefix% You joined <highlight>%faction_name%</highlight>");
 
-    public ConfigText forceJoin = ConfigText.of("%prefix% %actor% added you to %faction%");
+    public ConfigText forceJoin = ConfigText.of(
+            "%prefix% %actor% added you to %faction%");
 
-    public ConfigText memberJoin = ConfigText.of("%prefix% %player% joined the faction");
+    public ConfigText memberJoin = ConfigText.of(
+            "%prefix% %player% joined the faction");
 
-    public ConfigText memberForceJoin = ConfigText.of("%prefix% %inviter% added %player% to the faction");
+    public ConfigText memberForceJoin = ConfigText.of(
+            "%prefix% %inviter% added %player% to the faction");
 
-    public ConfigText attemptedMemberJoin = ConfigText.of("%prefix% %player% attempted to join the faction");
+    public ConfigText attemptedMemberJoin = ConfigText.of(
+            "%prefix% %player% attempted to join the faction");
 
-    public ConfigText fullFaction = ConfigText.of("%error_prefix% %faction% has reached its member limit of <error_highlight>%limit% members</error_highlight>");
+    public ConfigText fullFaction = ConfigText.of(
+            "%error_prefix% %faction% has reached its member limit of <error_highlight>%limit% members</error_highlight>");
 
-    public ConfigText alreadyInFaction = ConfigText.of("%error_prefix% You must leave your current faction first");
+    public ConfigText alreadyInFaction = ConfigText.of(
+            "%error_prefix% You must leave your current faction first");
 
-    public ConfigText playerAlreadyInFaction = ConfigText.of("%error_prefix% %player% is already in a faction");
+    public ConfigText playerAlreadyInFaction = ConfigText.of(
+            "%error_prefix% %player% is already in a faction");
+
+
 
     @Comment({
             "",
             ">>| Leave"
     })
-    public ConfigText leave = ConfigText.of("%prefix% You left <highlight>%faction_name%</highlight>");
+    public ConfigText leave = ConfigText.of(
+            "%prefix% You left <highlight>%faction_name%</highlight>");
 
-    public ConfigText memberLeave = ConfigText.of("%prefix% %player% left the faction");
+    public ConfigText memberLeave = ConfigText.of(
+            "%prefix% %player% left the faction");
 
-    public ConfigText promoteLeader = ConfigText.of("%error_prefix% You must promote a new leader first");
+    public ConfigText promoteLeader = ConfigText.of(
+            "%error_prefix% You must promote a new leader first");
 
-    public ConfigText kick = ConfigText.of("%prefix% %actor% kicked %player% from the faction");
+    public ConfigText kick = ConfigText.of(
+            "%prefix% %actor% kicked %player% from the faction");
 
-    public ConfigText kicked = ConfigText.of("%prefix% %actor% kicked you from %faction%");
+    public ConfigText kicked = ConfigText.of(
+            "%prefix% %actor% kicked you from %faction%");
 
-    public ConfigText cantKick = ConfigText.of("%error_prefix% You can't kick %player% from the faction");
+    public ConfigText cantKick = ConfigText.of(
+            "%error_prefix% You can't kick %player% from the faction");
+
+
 
     @Comment({
             "",
             ">>| Invite"
     })
-    public ConfigText notInvited = ConfigText.of("%error_prefix% You are not invited to %faction%");
+    public ConfigText notInvited = ConfigText.of(
+            "%error_prefix% You are not invited to %faction%");
 
-    public ConfigText playerNotInvited = ConfigText.of("%error_prefix% %player% is not invited to %faction%");
+    public ConfigText playerNotInvited = ConfigText.of(
+            "%error_prefix% %player% is not invited to %faction%");
 
-    public ConfigText inviteFail = ConfigText.of("%error_prefix% %player% is already a member of %faction%");
+    public ConfigText inviteFail = ConfigText.of(
+            "%error_prefix% %player% is already a member of %faction%");
 
-    public ConfigText invite = ConfigText.of("%prefix% %actor% invited %invitee% to your faction");
+    public ConfigText invite = ConfigText.of(
+            "%prefix% %actor% invited %invitee% to your faction");
 
-    public ConfigText invited = ConfigText.of("%prefix% %actor% invited you to %faction%");
+    public ConfigText invited = ConfigText.of(
+            "%prefix% %actor% invited you to %faction%");
 
-    public ConfigText inviteRevoke = ConfigText.of("%prefix% %actor% revoked the invitation of %invitee%");
+    public ConfigText inviteRevoke = ConfigText.of(
+            "%prefix% %actor% revoked the invitation of %invitee%");
 
-    public ConfigText inviteListTitle = ConfigText.of("%faction% <separator>|</separator> Invitations");
+    public ConfigText inviteListTitle = ConfigText.of(
+            "%faction% <separator>|</separator> Invitations");
 
-    public ConfigText inviteListEntry = ConfigText.of("%player% <separator>»</separator> Invited by %inviter%");
+    public ConfigText inviteListEntry = ConfigText.of(
+            "%player% <separator>»</separator> Invited by %inviter%");
+
+
 
     @Comment({
             "",
             ">>| Show"
     })
-    public ConfigText showTitle = ConfigText.of("%faction% <separator>|</separator> Faction Info");
+    public ConfigText showTitle = ConfigText.of(
+            "%faction% <separator>|</separator> Faction Info");
 
     @SuppressWarnings("unused")
-    public ConfigText genericShowEntry = ConfigText.of("<emphasis>%name%:</emphasis> <highlight>%value%</highlight>");
+    public ConfigText genericShowEntry = ConfigText.of(
+            "<emphasis>%name%:</emphasis> <highlight>%value%</highlight>");
 
-    public ConfigText showDesc = ConfigText.of("<emphasis>Description: \"%description%\"");
+    public ConfigText showDesc = ConfigText.of(
+            "<emphasis>Description: \"%description%\"");
 
-    public ConfigText showId = ConfigText.of("<hover:show_text:Copy To Clipboard><click:copy_to_clipboard:%id%><emphasis>Faction ID: <highlight>%id%</highlight>");
+    public ConfigText showId = ConfigText.of(
+            "<hover:show_text:Copy To Clipboard><click:copy_to_clipboard:%id%><emphasis>Faction ID: <highlight>%id%</highlight>");
 
-    public ConfigText showCreated = ConfigText.of("<emphasis>Created:</emphasis> <highlight>%created%");
+    public ConfigText showCreated = ConfigText.of(
+            "<emphasis>Created:</emphasis> <highlight>%created%");
 
-    public ConfigText showJoinState = ConfigText.of("<emphasis>Joining:</emphasis> %joining%");
+    public ConfigText showJoinState = ConfigText.of(
+            "<emphasis>Joining:</emphasis> %joining%");
 
-    public ConfigText showLandPower = ConfigText.of("<emphasis>Land<bracket>/</bracket>Power<bracket>/</bracket>Max Power:</emphasis> <highlight>%land%/%power%/%max_power%");
+    public ConfigText showLandPower = ConfigText.of(
+            "<emphasis>Land<bracket>/</bracket>Power<bracket>/</bracket>Max Power:</emphasis> <highlight>%land%/%power%/%max_power%");
 
-    public ConfigText showAllies = ConfigText.of("<emphasis>Allies <bracket>[<dark_purple>%ally_count%/%max_allies%</dark_purple>]</bracket>:</emphasis> <highlight>%allies%");
+    public ConfigText showAllies = ConfigText.of(
+            "<emphasis>Allies <bracket>[<dark_purple>%ally_count%/%max_allies%</dark_purple>]</bracket>:</emphasis> <highlight>%allies%");
 
-    public ConfigText showTruces = ConfigText.of("<emphasis>Truces <bracket>[<light_purple>%truce_count%/%max_truces%</light_purple>]</bracket>:</emphasis> <highlight>%truces%");
+    public ConfigText showTruces = ConfigText.of(
+            "<emphasis>Truces <bracket>[<light_purple>%truce_count%/%max_truces%</light_purple>]</bracket>:</emphasis> <highlight>%truces%");
 
-    public ConfigText showOnlineMembers = ConfigText.of("<emphasis>Online Members <bracket>[%count%]</bracket>:</emphasis> %members%");
+    public ConfigText showOnlineMembers = ConfigText.of(
+            "<emphasis>Online Members <bracket>[%count%]</bracket>:</emphasis> %members%");
 
-    public ConfigText showOfflineMembers = ConfigText.of("<emphasis>Offline Members <bracket>[%count%]</bracket>:</emphasis> %members%");
+    public ConfigText showOfflineMembers = ConfigText.of(
+            "<emphasis>Offline Members <bracket>[%count%]</bracket>:</emphasis> %members%");
 
-    public ConfigText memberCountOnline = ConfigText.of("<green>%online_count%/%member_count%");
+    public ConfigText memberCountOnline = ConfigText.of(
+            "<green>%online_count%/%member_count%");
 
-    public ConfigText memberCountOffline = ConfigText.of("<red>%online_count%/%member_count%");
+    public ConfigText memberCountOffline = ConfigText.of(
+            "<red>%online_count%/%member_count%");
 
-    public ConfigText joinable = ConfigText.of("<green>True</green> <bracket>[<emphasis>Can Join</emphasis>]</bracket>");
+    public ConfigText joinable = ConfigText.of(
+            "<green>True</green> <bracket>[<emphasis>Can Join</emphasis>]</bracket>");
 
-    public ConfigText notJoinable = ConfigText.of("<red>False</red> <bracket>[<emphasis>Invite Only</emphasis>]</bracket>");
+    public ConfigText notJoinable = ConfigText.of(
+            "<red>False</red> <bracket>[<emphasis>Invite Only</emphasis>]</bracket>");
+
+
 
     @Comment({
             "",
             ">>| Relations"
     })
-    public ConfigText alreadyRelation = ConfigText.of("%error_prefix% This relation is already set with %faction%");
+    public ConfigText alreadyRelation = ConfigText.of(
+            "%error_prefix% This relation is already set with %faction%");
 
-    public ConfigText relationSelf = ConfigText.of("%error_prefix% Unable to declare a relation with %faction%");
+    public ConfigText relationSelf = ConfigText.of(
+            "%error_prefix% Unable to declare a relation with %faction%");
 
-    public ConfigText truceLimit = ConfigText.of("%error_prefix% You are limited to <error_highlight>%limit% Truces</error_highlight>");
+    public ConfigText truceLimit = ConfigText.of(
+            "%error_prefix% You are limited to <error_highlight>%limit% Truces</error_highlight>");
 
-    public ConfigText allyLimit = ConfigText.of("%error_prefix% You are limited to <error_highlight>%limit% Allies</error_highlight>");
+    public ConfigText allyLimit = ConfigText.of(
+            "%error_prefix% You are limited to <error_highlight>%limit% Allies</error_highlight>");
 
-    public ConfigText relationWishListTitle = ConfigText.of("Relation Requests");
+    public ConfigText relationWishListTitle = ConfigText.of(
+            "Relation Requests");
 
-    public ConfigText relationListTitle = ConfigText.of("%faction% <separator>|</separator> Relations");
+    public ConfigText relationListTitle = ConfigText.of(
+            "%faction% <separator>|</separator> Relations");
 
-    public ConfigText relationListEntry = ConfigText.of("%faction% <separator>»</separator> %relation%");
+    public ConfigText relationListEntry = ConfigText.of(
+            "%faction% <separator>»</separator> %relation%");
 
     public LinkedHashMap<FactionRelation, ConfigText> relationDeclarations = new LinkedHashMap<>();
     {
@@ -250,32 +333,43 @@ public final class MessageConfig extends AlpineConfig {
                 "%prefix% %faction% wishes to be an <dark_purple>allied faction</dark_purple>. <dark_purple><b><click:run_command:\"/f ally %faction_name%\">[Accept]"));
     }
 
+
+
     @Comment({
             "",
             ">>| Faction State"
     })
-    public ConfigText create = ConfigText.of("%prefix% You created a new faction named <highlight>%faction_name%</highlight>");
+    public ConfigText create = ConfigText.of(
+            "%prefix% You created a new faction named <highlight>%faction_name%</highlight>");
 
-    public ConfigText disband = ConfigText.of("%prefix% %actor% disbanded %faction%");
+    public ConfigText disband = ConfigText.of(
+            "%prefix% %actor% disbanded %faction%");
 
-    public ConfigText disbandConfirm = ConfigText.of("%prefix% Please confirm by sending this command again");
+    public ConfigText disbandConfirm = ConfigText.of(
+            "%prefix% Please confirm by sending this command again");
 
-    public ConfigText unableToDisband = ConfigText.of("%error_prefix% This faction cannot be disbanded");
+    public ConfigText unableToDisband = ConfigText.of(
+            "%error_prefix% This faction cannot be disbanded");
 
-    public ConfigText listTitle = ConfigText.of("Factions List");
+    public ConfigText listTitle = ConfigText.of(
+            "Factions List");
 
-    public ConfigText listEntry = ConfigText.of("%faction% <separator>»</separator> %online%/%members% online, <emphasis>%land%/%power%/%max_power%</emphasis>");
+    public ConfigText listEntry = ConfigText.of(
+            "%faction% <separator>»</separator> %online%/%members% online, <emphasis>%land%/%power%/%max_power%</emphasis>");
 
-    public ConfigText unknownFlag = ConfigText.of("%error_prefix% No flag was found with the ID <error_highlight>%value%</error_highlight>");
+    public ConfigText unknownFlag = ConfigText.of(
+            "%error_prefix% No flag was found with the ID <error_highlight>%value%</error_highlight>");
 
-    public ConfigText invalidFlagValue = ConfigText.of("%error_prefix% Invalid flag input for flag %flag%");
+    public ConfigText invalidFlagValue = ConfigText.of(
+            "%error_prefix% Invalid flag input for flag %flag%");
 
     public ConfigText updatedFlagValue = ConfigText.of(
             "%prefix% %actor% set the faction flag <highlight>%flag_name%</highlight> to <highlight>%state%</highlight>",
             "    <emphasis><i>%flag_state_description%"
     );
 
-    public ConfigText flagStateListTitle = ConfigText.of("%faction% <separator>|</separator> Faction Flags");
+    public ConfigText flagStateListTitle = ConfigText.of(
+            "%faction% <separator>|</separator> Faction Flags");
 
     public ConfigText flagStateListEntry = ConfigText.of(
             "<hover:show_text:\"%flag_state_description%\"><notice>%flag_name%</notice></hover> <separator>»</separator> Set to <emphasis>%state%</emphasis>"
@@ -287,21 +381,29 @@ public final class MessageConfig extends AlpineConfig {
             "<hover:show_text:\"%flag_description%\"><notice>%flag_name%</notice></hover> <separator>»</separator> Set to <emphasis>%default_state%</emphasis> by default"
     );
 
+
+
     @Comment({
             "",
             ">>| Player/Member State"
     })
-    public ConfigText stateChange = ConfigText.of("%prefix% <highlight>%subject%:</highlight> <emphasis>%state%</emphasis>");
+    public ConfigText stateChange = ConfigText.of(
+            "%prefix% <highlight>%subject%:</highlight> <emphasis>%state%</emphasis>");
 
-    public ConfigText titleChange = ConfigText.of("%prefix% %actor% modified the title for %player%");
+    public ConfigText titleChange = ConfigText.of(
+            "%prefix% %actor% modified the title for %player%");
 
-    public ConfigText factionStatusTitle = ConfigText.of("%faction% <separator>|</separator> Faction Status");
+    public ConfigText factionStatusTitle = ConfigText.of(
+            "%faction% <separator>|</separator> Faction Status");
 
-    public ConfigText factionStatusOnlineEntry = ConfigText.of("%player% <separator>»</separator> <emphasis>%power%<bracket>/</bracket>%maxpower% Power</emphasis> <separator>|</separator> <green>✔ online");
+    public ConfigText factionStatusOnlineEntry = ConfigText.of(
+            "%player% <separator>»</separator> <emphasis>%power%<bracket>/</bracket>%maxpower% Power</emphasis> <separator>|</separator> <green>✔ online");
 
-    public ConfigText factionStatusOfflineEntry = ConfigText.of("%player% <separator>»</separator> <emphasis>%power%<bracket>/</bracket>%maxpower% Power</emphasis> <separator>|</separator> <red>✘ offline");
+    public ConfigText factionStatusOfflineEntry = ConfigText.of(
+            "%player% <separator>»</separator> <emphasis>%power%<bracket>/</bracket>%maxpower% Power</emphasis> <separator>|</separator> <red>✘ offline");
 
-    public ConfigText memberStatusTitle = ConfigText.of("%player% <separator>|</separator> Member Status");
+    public ConfigText memberStatusTitle = ConfigText.of(
+            "%player% <separator>|</separator> Member Status");
 
     public ConfigText memberStatusBody = ConfigText.of(
             "<emphasis>Power: %power_indicator%</emphasis> ",
@@ -309,6 +411,8 @@ public final class MessageConfig extends AlpineConfig {
             "<emphasis>Power Gain: <highlight>%power_per_hour%/hour</highlight></emphasis>",
             "<emphasis>Power Loss: <highlight>%power_per_death%/death</highlight></emphasis>"
     );
+
+
 
     @Comment({
             "",
@@ -334,39 +438,56 @@ public final class MessageConfig extends AlpineConfig {
             "    <i>%old_faction% → %new_faction%</i>"
     );
 
-    public ConfigText claimed = ConfigText.of("claimed");
+    public ConfigText claimed = ConfigText.of(
+            "claimed");
 
-    public ConfigText unclaimed = ConfigText.of("unclaimed");
+    public ConfigText unclaimed = ConfigText.of(
+            "unclaimed");
 
-    public ConfigText pillaged = ConfigText.of("pillaged");
+    public ConfigText pillaged = ConfigText.of(
+            "pillaged");
 
-    public ConfigText conquered = ConfigText.of("conquered");
+    public ConfigText conquered = ConfigText.of(
+            "conquered");
 
-    public ConfigText conquerFail = ConfigText.of("%error_prefix% %faction% owns this land and is strong enough to keep it");
+    public ConfigText conquerFail = ConfigText.of(
+            "%error_prefix% %faction% owns this land and is strong enough to keep it");
 
-    public ConfigText conquerFromEdge = ConfigText.of("%error_prefix% You must begin conquering at the edge of this territory");
+    public ConfigText conquerFromEdge = ConfigText.of(
+            "%error_prefix% You must begin conquering at the edge of this territory");
 
-    public ConfigText landOwned = ConfigText.of("%prefix% This land is already owned by %faction%");
+    public ConfigText landOwned = ConfigText.of(
+            "%prefix% This land is already owned by %faction%");
 
-    public ConfigText insufficientPower = ConfigText.of("%error_prefix% %faction% does not have enough power to claim this land");
+    public ConfigText insufficientPower = ConfigText.of(
+            "%error_prefix% %faction% does not have enough power to claim this land");
 
-    public ConfigText fillLimit = ConfigText.of("%error_prefix% Reached the fill limit of <error_highlight>%limit% chunks</error_highlight>");
+    public ConfigText fillLimit = ConfigText.of(
+            "%error_prefix% Reached the fill limit of <error_highlight>%limit% chunks</error_highlight>");
 
-    public ConfigText claimTooFar = ConfigText.of("%error_prefix% Unable to claim land too far away.");
+    public ConfigText claimTooFar = ConfigText.of(
+            "%error_prefix% Unable to claim land too far away.");
 
-    public ConfigText disableAutoSetting = ConfigText.of("%prefix% Disabled auto-claim.");
+    public ConfigText disableAutoSetting = ConfigText.of(
+            "%prefix% Disabled auto-claim.");
 
-    public ConfigText enableAutoClaim = ConfigText.of("%prefix% Enabled auto-claim for %faction%");
+    public ConfigText enableAutoClaim = ConfigText.of(
+            "%prefix% Enabled auto-claim for %faction%");
 
-    public ConfigText enableAutoUnclaim = ConfigText.of("%prefix% Enabled auto-unclaim for %faction%");
+    public ConfigText enableAutoUnclaim = ConfigText.of(
+            "%prefix% Enabled auto-unclaim for %faction%");
+
+
 
     @Comment({
             "",
             ">>| Alert"
     })
-    public ConfigText alertTitle = ConfigText.of("<info>Faction Alert</info>");
+    public ConfigText alertTitle = ConfigText.of(
+            "<info>Faction Alert</info>");
 
-    public ConfigText alertSubtitle = ConfigText.of("<emphasis>%actor_name%: %alert%</emphasis>");
+    public ConfigText alertSubtitle = ConfigText.of(
+            "<emphasis>%actor_name%: %alert%</emphasis>");
 
     public ConfigText alertMessage = ConfigText.of(
             "<b></b>",
@@ -375,17 +496,23 @@ public final class MessageConfig extends AlpineConfig {
             "<b></b>"
     );
 
+
+
     @Comment({
             "",
             ">>| Map"
     })
-    public ConfigText mapTitle = ConfigText.of("<emphasis>%world% %chunk_x%, %chunk_z%</emphasis> <separator>|</separator> %faction%");
+    public ConfigText mapTitle = ConfigText.of(
+            "<emphasis>%world% %chunk_x%, %chunk_z%</emphasis> <separator>|</separator> %faction%");
 
-    public ConfigText mapLegendFormat = ConfigText.of("%character%: %faction%");
+    public ConfigText mapLegendFormat = ConfigText.of(
+            "%character%: %faction%");
 
-    public ConfigText mapLegendOverflowFormat = ConfigText.of("%character%: <error_highlight>Unable to represent all factions on this map.</error_highlight>");
+    public ConfigText mapLegendOverflowFormat = ConfigText.of(
+            "%character%: <error_highlight>Unable to represent all factions on this map.</error_highlight>");
 
-    public ConfigText mapCenter = ConfigText.of("<aqua>+</aqua>");
+    public ConfigText mapCenter = ConfigText.of(
+            "<aqua>+</aqua>");
 
     public String mapCompassStyle = "dark_gray";
 

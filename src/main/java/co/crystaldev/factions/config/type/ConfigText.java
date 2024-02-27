@@ -1,72 +1,42 @@
 package co.crystaldev.factions.config.type;
 
+import co.crystaldev.alpinecore.framework.config.object.ConfigMessage;
 import co.crystaldev.alpinecore.util.Messaging;
-import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.ComponentHelper;
-import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.AlpineFactions;
+import de.exlll.configlib.Configuration;
 import de.exlll.configlib.SerializeWith;
-import de.exlll.configlib.Serializer;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 11/14/2023
  */
-@Getter @AllArgsConstructor @NoArgsConstructor
-@SerializeWith(serializer = ConfigText.ConfigTextSerializer.class)
-public final class ConfigText {
+@NoArgsConstructor
+@Configuration @SerializeWith(serializer = ConfigText.Serializer.class)
+public final class ConfigText extends ConfigMessage {
 
-    private List<String> message;
+    private ConfigText(@NotNull List<String> message) {
+        super(message);
+    }
 
-    @NotNull
-    public Component build() {
-        MessageConfig conf = MessageConfig.getInstance();
-        String message = Formatting.formatPlaceholders(String.join("\n", this.message),
-                "prefix", conf.prefix.buildWithoutPlaceholders(),
-                "error_prefix", conf.errorPrefix.buildWithoutPlaceholders());
-        return ComponentHelper.mini(message);
+    private ConfigText(@NotNull String message) {
+        super(message);
     }
 
     @NotNull
     public Component build(@NotNull Object... placeholders) {
-        MessageConfig conf = MessageConfig.getInstance();
-        String message = Formatting.formatPlaceholders(String.join("\n", this.message),
-                "prefix", conf.prefix.buildWithoutPlaceholders(),
-                "error_prefix", conf.errorPrefix.buildWithoutPlaceholders());
-        message = Formatting.formatPlaceholders(message, placeholders);
-        return ComponentHelper.mini(message);
-    }
-
-    @NotNull
-    public String buildString() {
-        MessageConfig conf = MessageConfig.getInstance();
-        return Formatting.formatPlaceholders(String.join("\n", this.message),
-                "prefix", conf.prefix.buildWithoutPlaceholders(),
-                "error_prefix", conf.errorPrefix.buildWithoutPlaceholders());
+        return super.build(AlpineFactions.getInstance(), placeholders);
     }
 
     @NotNull
     public String buildString(@NotNull Object... placeholders) {
-        MessageConfig conf = MessageConfig.getInstance();
-        String message = Formatting.formatPlaceholders(String.join("\n", this.message),
-                "prefix", conf.prefix.buildWithoutPlaceholders(),
-                "error_prefix", conf.errorPrefix.buildWithoutPlaceholders());
-        return Formatting.formatPlaceholders(message, placeholders);
-    }
-
-    @NotNull
-    private Component buildWithoutPlaceholders() {
-        return ComponentHelper.mini(String.join("\n", this.message));
+        return super.buildString(AlpineFactions.getInstance(), placeholders);
     }
 
     public void send(@NotNull CommandSender sender, @NotNull Object... placeholders) {
@@ -78,7 +48,7 @@ public final class ConfigText {
     }
 
     public void sendActionBar(@NotNull CommandSender sender, @NotNull Object... placeholders) {
-        Messaging.wrap(sender).sendActionBar(this.build(placeholders));
+        Messaging.actionBar(sender, this.build(placeholders));
     }
 
     @NotNull
@@ -87,25 +57,36 @@ public final class ConfigText {
     }
 
     @NotNull
-    public static ConfigText of(@NotNull String... components) {
-        return new ConfigText(Arrays.asList(components));
+    public static ConfigText of(@NotNull String... component) {
+        return new ConfigText(Arrays.asList(component));
     }
 
-    @NotNull
-    public static ConfigText of(@NotNull Component component) {
-        String message = ComponentHelper.mini(component);
-        return new ConfigText(Arrays.asList(message.replace("\r", "").split("(\n|<br>)")));
-    }
-
-    public static final class ConfigTextSerializer implements Serializer<ConfigText, String> {
+    public static class Serializer implements de.exlll.configlib.Serializer<ConfigText, Object> {
         @Override
-        public String serialize(ConfigText element) {
+        public Object serialize(ConfigText element) {
             return String.join("\n", element.message);
         }
 
         @Override
-        public ConfigText deserialize(String element) {
-            return new ConfigText(Arrays.asList(element.split("(<br>|\n|\r)")));
+        public ConfigText deserialize(Object element) {
+            if (element instanceof Map) {
+                Object value = ((Map) element).get("message");
+                List<String> message = value instanceof Collection<?>
+                        ? new LinkedList<>((Collection<String>) value)
+                        : Collections.singletonList(value.toString());
+                return new ConfigText(message);
+            }
+            else if (element instanceof List) {
+                return new ConfigText(((List<?>) element).stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining("\n")));
+            }
+            else if (element instanceof String) {
+                return new ConfigText((String) element);
+            }
+            else {
+                return new ConfigText(element.toString());
+            }
         }
     }
 }

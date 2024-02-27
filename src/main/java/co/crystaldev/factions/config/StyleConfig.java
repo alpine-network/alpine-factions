@@ -19,7 +19,7 @@ public final class StyleConfig extends AlpineConfig {
 
     @Override
     public String getFileName() {
-        return "style_config.yml";
+        return "styles.yml";
     }
 
     @Comment({
@@ -36,6 +36,7 @@ public final class StyleConfig extends AlpineConfig {
         this.relationalStyles.put(FactionRelation.TRUCE, "light_purple");
     }
 
+    @Comment("")
     public HashMap<String, String> factionNameStyles = new LinkedHashMap<>();
     {
         this.factionNameStyles.put("Wilderness", "dark_green");

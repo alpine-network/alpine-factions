@@ -80,6 +80,12 @@ public final class AlpineFactions extends AlpinePlugin {
         this.getActivatable(FactionStore.class).saveFactions();
     }
 
+    @Override
+    public void setupDefaultVariables(@NotNull VariableConsumer variableConsumer) {
+        variableConsumer.addVariable("prefix", "<info>Factions</info> <separator>»</separator><text>");
+        variableConsumer.addVariable("error_prefix", "<error>Factions</error> <separator>»</separator><text>");
+    }
+
     @NotNull @ApiStatus.Internal
     public <T> T getActivatable(@NotNull Class<T> type) {
         for (Activatable activatable : this.getActivatables()) {
