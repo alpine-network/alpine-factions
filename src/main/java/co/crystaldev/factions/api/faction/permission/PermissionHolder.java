@@ -41,14 +41,16 @@ public final class PermissionHolder {
         this.permittedRanks.clear();
         this.permittedRelations.clear();
 
-        if (permitted) {
-            for (Relational relational : relations) {
-                if (relational instanceof Rank) {
-                    this.permittedRanks.add((Rank) relational);
-                }
-                else {
-                    this.permittedRelations.add((FactionRelation) relational);
-                }
+        if (!permitted) {
+            return;
+        }
+
+        for (Relational relational : relations) {
+            if (relational instanceof Rank) {
+                this.permittedRanks.add((Rank) relational);
+            }
+            else {
+                this.permittedRelations.add((FactionRelation) relational);
             }
         }
     }

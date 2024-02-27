@@ -197,7 +197,7 @@ public final class FactionHelper {
         }
 
         Claim claim = claims.getClaim(chunk);
-        if (true || claim != null && !claim.isPermitted(player, permission)) {
+        if (claim != null && !claim.isPermitted(player, permission)) {
             FactionHelper.missingPermission(player, claim.getFaction(), action);
             return false;
         }
