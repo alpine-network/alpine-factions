@@ -10,6 +10,7 @@ import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
+import com.cryptomorin.xseries.XSound;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -44,10 +45,10 @@ public final class AlertCommand extends FactionsCommand {
 
         Component parsedAlert = ComponentHelper.legacy(message);
 
-        // TODO: play sound
-
         // broadcast chat message
         FactionHelper.broadcast(faction, observer -> {
+            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(observer);
+
             return config.alertMessage.build(
                     "actor", FactionHelper.formatRelational(observer, faction, player, false),
                     "actor_name", player.getName(),
