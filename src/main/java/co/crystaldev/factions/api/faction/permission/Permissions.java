@@ -60,6 +60,12 @@ public final class Permissions {
             .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
             .build();
 
+    public static final Permission MODIFY_ROSTER = Permission.builder("modify_roster")
+            .name("Modify Roster")
+            .description("ability to modify roster")
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .build();
+
     public static final Permission MODIFY_TERRITORY = Permission.builder("modify_territory")
             .name("Modify Territory")
             .description("ability to modify territory")
@@ -155,6 +161,7 @@ public final class Permissions {
             STATUS,
             INVITE_MEMBERS,
             KICK_MEMBERS,
+            MODIFY_ROSTER,
             MODIFY_TERRITORY,
             MODIFY_ACCESS,
             MODIFY_FLAGS,

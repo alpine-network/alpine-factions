@@ -64,10 +64,10 @@ public final class KickCommand extends FactionsCommand {
         // ensure the player is not superior
         if (!overriding && sender instanceof Player) {
             Player player = (Player) sender;
-            Rank senderRank = faction.getMemberRank(player.getUniqueId(), Rank.LEADER);
-            Rank memberRank = faction.getMemberRank(other.getUniqueId());
+            Rank senderRank = faction.getMemberRankOrDefault(player.getUniqueId(), Rank.LEADER);
+            Rank memberRank = faction.getMemberRankOrDefault(other.getUniqueId(), Rank.getDefault());
 
-            if (senderRank.ordinal() > memberRank.ordinal()) {
+            if (memberRank.isSuperiorOrMatching(senderRank)) {
                 config.cantKick.send(sender,
                         "player", FactionHelper.formatRelational(sender, faction, other),
                         "player_name", other.getName());

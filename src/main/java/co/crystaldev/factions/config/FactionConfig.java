@@ -47,6 +47,12 @@ public final class FactionConfig extends AlpineConfig {
 
     @Comment({
             "",
+            "Whether the faction roster is enabled."
+    })
+    public boolean rosterEnabled = true;
+
+    @Comment({
+            "",
             "The roster limit for a faction. Faction flags can modify this value."
     })
     public int rosterLimit = 50;

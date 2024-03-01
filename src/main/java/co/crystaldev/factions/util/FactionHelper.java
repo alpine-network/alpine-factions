@@ -24,6 +24,7 @@ import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -39,6 +40,31 @@ public final class FactionHelper {
             Player player = member.getPlayer();
             if (player != null) {
                 Messaging.send(player, component);
+            }
+        }
+    }
+
+    public static void broadcast(@NotNull Faction faction, @Nullable List<ServerOperator> subjects, @NotNull Function<Player, @Nullable Component> playerFunction) {
+        Component lastComponent = null;
+        for (Member member : faction.getMembers()) {
+            Player player = member.getPlayer();
+            if (player != null) {
+                if (subjects  != null) {
+                    subjects.remove(player);
+                }
+
+                Messaging.send(player, lastComponent = playerFunction.apply(player));
+            }
+        }
+
+        if (subjects != null) {
+            for (ServerOperator subject : subjects) {
+                if (subject instanceof Player) {
+                    Messaging.send((Player) subject, playerFunction.apply((Player) subject));
+                }
+                else if (lastComponent != null && subject instanceof CommandSender) {
+                    Messaging.send((CommandSender) subject, lastComponent);
+                }
             }
         }
     }
@@ -65,7 +91,7 @@ public final class FactionHelper {
     }
 
     public static void broadcast(@NotNull Faction faction, @NotNull Function<Player, Component> playerFunction) {
-        broadcast(faction, null, playerFunction);
+        broadcast(faction, (ServerOperator) null, playerFunction);
     }
 
     @NotNull
@@ -89,7 +115,8 @@ public final class FactionHelper {
     }
 
     @NotNull
-    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull ServerOperator other, boolean checkEquals) {
+    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction,
+                                             @NotNull ServerOperator other, boolean checkEquals) {
         if (faction == null) {
             return ComponentHelper.nil();
         }

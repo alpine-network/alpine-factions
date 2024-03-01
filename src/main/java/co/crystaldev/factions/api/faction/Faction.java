@@ -431,6 +431,11 @@ public final class Faction {
     }
 
     @NotNull
+    public Collection<Member> getRoster() {
+        return this.roster.values();
+    }
+
+    @NotNull
     public Collection<Member> getOnlineMembers() {
         List<Member> members = new ArrayList<>();
 
@@ -654,9 +659,24 @@ public final class Faction {
     }
 
     @NotNull
-    public Rank getMemberRank(@NotNull UUID player, @NotNull Rank defaultRank) {
+    public Rank getMemberRankOrDefault(@NotNull UUID player, @NotNull Rank defaultRank) {
         Rank rank = this.getMemberRank(player);
         return rank == null ? defaultRank : rank;
+    }
+
+    @NotNull
+    public Rank getMemberRankOrDefault(@NotNull UUID player) {
+        Rank rank = this.getMemberRank(player);
+        return rank == null ? Rank.getDefault() : rank;
+    }
+
+    public void setRosterRank(@NotNull UUID player, @NotNull Rank rank) {
+        if (!this.isOnRoster(player)) {
+            return;
+        }
+
+        this.roster.get(player).setRank(rank);
+        this.setDirty(true);
     }
 
     // endregion Members

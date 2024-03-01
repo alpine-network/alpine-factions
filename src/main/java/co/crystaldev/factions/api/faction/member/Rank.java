@@ -32,6 +32,14 @@ public enum Rank implements Relational {
         return values()[Math.min(4, this.ordinal() + 1)];
     }
 
+    public boolean isSuperior(@NotNull Rank other) {
+        return this.ordinal() > other.ordinal();
+    }
+
+    public boolean isSuperiorOrMatching(@NotNull Rank other) {
+        return this.ordinal() >= other.ordinal();
+    }
+
     @NotNull
     public static Rank getDefault() {
         return RECRUIT;

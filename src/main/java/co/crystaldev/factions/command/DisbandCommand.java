@@ -43,7 +43,7 @@ public final class DisbandCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         boolean owner = sender instanceof ConsoleCommandSender
                 || PlayerHandler.getInstance().isOverriding(sender)
-                || sender instanceof OfflinePlayer && faction.getMemberRank(((OfflinePlayer) sender).getUniqueId(), Rank.RECRUIT) == Rank.LEADER;
+                || sender instanceof OfflinePlayer && faction.getMemberRankOrDefault(((OfflinePlayer) sender).getUniqueId(), Rank.RECRUIT) == Rank.LEADER;
         if (!owner) {
             FactionHelper.missingPermission(sender, faction, "disband");
             return;

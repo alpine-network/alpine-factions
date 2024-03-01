@@ -49,6 +49,9 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText unknownPlayer = ConfigText.of(
             "%error_prefix% No player was found with the name <error_highlight>%player_name%</error_highlight>");
 
+    public ConfigText rankTooHigh = ConfigText.of(
+            "%error_prefix% You can't set ranks higher than or matching your own");
+
     public ConfigText none = ConfigText.of(
             "<gray>None</gray>");
 
@@ -211,7 +214,7 @@ public final class MessageConfig extends AlpineConfig {
             "%prefix% %actor% invited %invitee% to your faction");
 
     public ConfigText invited = ConfigText.of(
-            "%prefix% %actor% invited you to %faction%");
+            "%prefix% %actor% invited you to %faction_name%");
 
     public ConfigText inviteRevoke = ConfigText.of(
             "%prefix% %actor% revoked the invitation of %invitee%");
@@ -221,6 +224,42 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText inviteListEntry = ConfigText.of(
             "%player% <separator>»</separator> Invited by %inviter%");
+
+
+
+    @Comment({
+            "",
+            ">>| Roster"
+    })
+    public ConfigText rosterAdd = ConfigText.of(
+            "%prefix% %actor% added %player% to your faction roster as a <highlight>%rank%</highlight>");
+
+    public ConfigText rosterAdded = ConfigText.of(
+            "%prefix% %actor% added you to %faction_name%'s roster");
+
+    public ConfigText rosterRemove = ConfigText.of(
+            "%prefix% %actor% removed %player% from your faction's roster");
+
+    public ConfigText rosterRemoved = ConfigText.of(
+            "%prefix% %actor% removed you from %faction_name%'s roster");
+
+    public ConfigText rosterSetRank = ConfigText.of(
+            "%prefix% %actor% set the rank of %player% to <highlight>%rank%</highlight> in your faction roster");
+
+    public ConfigText rosterFull = ConfigText.of(
+            "%error_prefix% The faction roster is full");
+
+    public ConfigText alreadyOnRoster = ConfigText.of(
+            "%error_prefix% %player% is already on %faction_name%'s roster");
+
+    public ConfigText notOnRoster = ConfigText.of(
+            "%error_prefix% %player% is not on %faction_name%'s roster");
+
+    public ConfigText rosterListTitle = ConfigText.of(
+            "%faction% <separator>|</separator> Roster");
+
+    public ConfigText rosterListEntry = ConfigText.of(
+            "%player% <separator>»</separator> %rank%");
 
 
 
