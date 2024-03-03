@@ -89,6 +89,25 @@ public final class Formatting {
     }
 
     @NotNull
+    public static <T> Component elements(@NotNull Collection<T> elements, @NotNull Function<@Nullable T, Component> toComponentFn) {
+        MessageConfig config = MessageConfig.getInstance();
+        List<Component> pageElements = new LinkedList<>();
+
+        // collect page elements
+        for (T element : elements) {
+            pageElements.add(toComponentFn.apply(element));
+        }
+
+        // ensure there is data to display
+        if (pageElements.isEmpty()) {
+            return config.noPages.build();
+        }
+
+        // build the component
+        return Components.joinNewLines(pageElements);
+    }
+
+    @NotNull
     public static <T> Component page(@NotNull Component title, @NotNull Collection<T> elements,
                                      @NotNull String command, int currentPage, int elementsPerPage,
                                      @NotNull Function<@Nullable T, Component> toComponentFn) {

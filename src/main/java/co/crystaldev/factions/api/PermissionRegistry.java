@@ -4,10 +4,7 @@ import co.crystaldev.factions.api.faction.permission.Permission;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -15,7 +12,7 @@ import java.util.Set;
  */
 public final class PermissionRegistry {
 
-    private final Map<Plugin, Set<Permission>> registeredPermissions = new HashMap<>();
+    private final Map<Plugin, List<Permission>> registeredPermissions = new HashMap<>();
 
     public boolean register(@NotNull Plugin plugin, @NotNull Permission permission) {
         return this.getPermissions(plugin).add(permission);
@@ -30,14 +27,14 @@ public final class PermissionRegistry {
     }
 
     @NotNull
-    public Set<Permission> getAll() {
-        Set<Permission> permissions = new HashSet<>();
+    public List<Permission> getAll() {
+        List<Permission> permissions = new LinkedList<>();
         this.registeredPermissions.forEach((plugin, permSet) -> permissions.addAll(permSet));
         return permissions;
     }
 
     @NotNull
-    private Set<Permission> getPermissions(@NotNull Plugin plugin) {
-        return this.registeredPermissions.computeIfAbsent(plugin, pl -> new HashSet<>());
+    private List<Permission> getPermissions(@NotNull Plugin plugin) {
+        return this.registeredPermissions.computeIfAbsent(plugin, pl -> new LinkedList<>());
     }
 }

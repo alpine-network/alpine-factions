@@ -21,61 +21,61 @@ public final class Permissions {
     public static final Permission MODIFY_DESCRIPTION = Permission.builder("modify_description")
             .name("Modify Description")
             .description("ability to modify the faction description")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission MODIFY_MOTD = Permission.builder("modify_motd")
             .name("Modify MOTD")
             .description("ability to modify the faction motd")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission MODIFY_TITLE = Permission.builder("modify_title")
             .name("Modify Member Titles")
             .description("ability to modify member titles")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission ALERT = Permission.builder("alert")
             .name("Alert")
             .description("alert the faction")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission STATUS = Permission.builder("status")
             .name("Status")
             .description("view the state of the faction")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission INVITE_MEMBERS = Permission.builder("invite_members")
             .name("Invite Members")
             .description("ability to invite members")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission KICK_MEMBERS = Permission.builder("kick_members")
             .name("Kick Members")
             .description("ability to kick members")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission MODIFY_ROSTER = Permission.builder("modify_roster")
             .name("Modify Roster")
             .description("ability to modify roster")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission MODIFY_TERRITORY = Permission.builder("modify_territory")
             .name("Modify Territory")
             .description("ability to modify territory")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission MODIFY_ACCESS = Permission.builder("modify_access")
             .name("Modify Access")
             .description("ability to change access")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission MODIFY_FLAGS = Permission.builder("modify_flags")
@@ -93,13 +93,13 @@ public final class Permissions {
     public static final Permission MODIFY_RELATIONS = Permission.builder("modify_relations")
             .name("Modify Relations")
             .description("ability to change relations")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission BANK_WITHDRAW = Permission.builder("bank_withdraw")
             .name("Bank Withdraw")
             .description("withdraw from the faction")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission BANK_DEPOSIT = Permission.builder("bank_deposit")
@@ -117,7 +117,7 @@ public final class Permissions {
     public static final Permission MODIFY_HOME = Permission.builder("modify_home")
             .name("Modify Home")
             .description("set the faction home")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
     public static final Permission USE_CONTAINERS = Permission.builder("access_containers")
@@ -137,19 +137,19 @@ public final class Permissions {
     public static final Permission OPEN_DOORS = Permission.builder("open_doors")
             .name("Doors")
             .description("ability to trigger pressure plates")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD, Rank.MEMBER)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER, Rank.MEMBER)
             .build();
 
     public static final Permission TRIGGER_PRESSURE_PLATES = Permission.builder("pressure_plates")
             .name("Pressure Plates")
             .description("ability to trigger pressure plates")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD, Rank.MEMBER)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER, Rank.MEMBER)
             .build();
 
     public static final Permission USE_SWITCHES = Permission.builder("switches")
             .name("Switches")
             .description("ability to access buttons and levers")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.MOD, Rank.MEMBER)
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER, Rank.MEMBER)
             .build();
 
     public static final Permission[] VALUES = {

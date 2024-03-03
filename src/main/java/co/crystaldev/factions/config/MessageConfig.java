@@ -52,6 +52,9 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText rankTooHigh = ConfigText.of(
             "%error_prefix% You can't set ranks higher than or matching your own");
 
+    public ConfigText unknownRelational = ConfigText.of(
+            "%error_prefix% No rank or relation was found with the ID <error_highlight>%value%</error_highlight");
+
     public ConfigText none = ConfigText.of(
             "<gray>None</gray>");
 
@@ -396,6 +399,12 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText listEntry = ConfigText.of(
             "%faction% <separator>»</separator> %online%/%members% online, <emphasis>%land%/%power%/%max_power%</emphasis>");
 
+
+
+    @Comment({
+            "",
+            ">>| Flags"
+    })
     public ConfigText unknownFlag = ConfigText.of(
             "%error_prefix% No flag was found with the ID <error_highlight>%value%</error_highlight>");
 
@@ -419,6 +428,41 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText flagListEntry = ConfigText.of(
             "<hover:show_text:\"%flag_description%\"><notice>%flag_name%</notice></hover> <separator>»</separator> Set to <emphasis>%default_state%</emphasis> by default"
     );
+
+
+
+    @Comment({
+            "",
+            ">>| Permissions"
+    })
+    public ConfigText unknownPermission = ConfigText.of(
+            "%error_prefix% No permission was found with the ID <error_highlight>%value%</error_highlight>");
+
+    public ConfigText updatedPermissionValue = ConfigText.of(
+            "%prefix% %actor% set the permission <highlight>%permission_name%</highlight> to <highlight>%state%</highlight> for %relation%");
+
+    public ConfigText permissionStateListTitle = ConfigText.of(
+            "%faction% <separator>|</separator> Faction Permissions");
+
+    public ConfigText permissionStateListEntry = ConfigText.of(
+            "%relation_states% <separator>»</separator> <hover:show_text:\"%permission_description%\"><notice>%permission_name%</notice></hover>");
+
+    public ConfigText permissionListTitle = ConfigText.of("Available Permissions");
+
+    public ConfigText permissionListEntry = ConfigText.of(
+            "<notice>%permission_name%</notice> <separator>»</separator> %permission_description%");
+
+    public ConfigText permissionRelationStateTitle = ConfigText.of(
+            "<red>ENE</red> <aqua>NEU</aqua> <light_purple>TRU</light_purple> <dark_purple>ALL</dark_purple> <green>REC MEM OFF COL LEA</green>");
+
+    public ConfigText permissionRelationState = ConfigText.of(
+            "%enemy% %neutral% %truce% %ally% %recruit% %member% %officer% %coleader% %leader%");
+
+    public ConfigText permissionYes = ConfigText.of(
+            "<success_highlight>YES</success_highlight>");
+
+    public ConfigText permissionNo = ConfigText.of(
+            "<error_highlight>NOO</error_highlight>");
 
 
 

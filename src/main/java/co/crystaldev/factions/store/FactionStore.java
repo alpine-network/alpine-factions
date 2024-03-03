@@ -118,7 +118,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
         // update default perms
         Relational[] relations = {
                 FactionRelation.ALLY, FactionRelation.TRUCE, FactionRelation.NEUTRAL, FactionRelation.ENEMY,
-                Rank.LEADER, Rank.COLEADER, Rank.MOD, Rank.MEMBER, Rank.RECRUIT
+                Rank.LEADER, Rank.COLEADER, Rank.OFFICER, Rank.MEMBER, Rank.RECRUIT
         };
         faction.setPermissionBulk(Permissions.BUILD, true, relations);
         faction.setPermissionBulk(Permissions.OPEN_DOORS, true, relations);
@@ -155,7 +155,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
 
         // update default perms
         Relational[] relations = {
-                Rank.LEADER, Rank.COLEADER, Rank.MOD
+                Rank.LEADER, Rank.COLEADER, Rank.OFFICER
         };
         faction.setPermissionBulk(Permissions.BUILD, false, relations);
         faction.setPermissionBulk(Permissions.OPEN_DOORS, false, relations);
@@ -205,7 +205,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
 
         // update default perms
         Relational[] relations = {
-                Rank.LEADER, Rank.COLEADER, Rank.MOD
+                Rank.LEADER, Rank.COLEADER, Rank.OFFICER
         };
         faction.setPermissionBulk(Permissions.BUILD, false, relations);
         faction.setPermissionBulk(Permissions.OPEN_DOORS, false, relations);

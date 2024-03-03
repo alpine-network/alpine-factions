@@ -47,6 +47,18 @@ public final class Args {
     public static final String FACTION_FLAG = "factions:faction_flag_argument_resolver";
 
     /**
+     * Represents a {@link co.crystaldev.factions.api.faction.permission.Permission Permission} argument.
+     * @see FactionPermissionArgumentResolver
+     */
+    public static final String FACTION_PERMISSION = "factions:faction_permission_argument_resolver";
+
+    /**
+     * Represents a {@link co.crystaldev.factions.api.Relational Relational} argument.
+     * @see RelationalArgumentResolver
+     */
+    public static final String RELATIONAL = "factions:relational_argument_resolver";
+
+    /**
      * Represents an {@link org.bukkit.OfflinePlayer OfflinePlayer} argument.
      * @see OfflinePlayerArgumentResolver
      */

@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public enum Rank implements Relational {
     @SerializedName("leader")    LEADER("***", "leader"),
     @SerializedName("coleader")  COLEADER("**", "coleader"),
-    @SerializedName("moderator") MOD("*", "moderator"),
+    @SerializedName("officer")   OFFICER("*", "officer"),
     @SerializedName("member")    MEMBER("+", "member"),
     @SerializedName("recruit")   RECRUIT("-", "recruit");
 
