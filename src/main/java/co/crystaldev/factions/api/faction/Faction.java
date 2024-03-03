@@ -184,20 +184,20 @@ public final class Faction {
         return powerLevel + this.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER);
     }
 
-    public long getRemainingPower() {
-        if (this.hasInfinitePower()) {
-            return Integer.MAX_VALUE;
-        }
-
-        return this.getMaxPowerLevel() - this.getPowerLevel();
-    }
-
     public int getClaimCount(@Nullable World world) {
         return Accessors.claims().countClaims(this, world);
     }
 
     public int getClaimCount() {
         return this.getClaimCount(null);
+    }
+
+    public long getRemainingClaims() {
+        if (this.hasInfinitePower()) {
+            return Integer.MAX_VALUE;
+        }
+
+        return this.getPowerLevel() - this.getClaimCount();
     }
 
     public boolean isConquerable() {

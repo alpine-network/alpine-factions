@@ -7,6 +7,7 @@ import co.crystaldev.factions.util.ChunkCoordinate;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,6 +62,11 @@ public interface ClaimAccessor {
     }
 
     @Nullable
+    default Claim getClaim(@NotNull Block block) {
+        return this.getClaim(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
+    }
+
+    @Nullable
     default Claim getClaim(@NotNull Chunk chunk) {
         return this.getClaim(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
@@ -75,11 +81,19 @@ public interface ClaimAccessor {
         return this.isClaimed(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
 
+    default boolean isClaimed(@NotNull Block block) {
+        return this.isClaimed(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
+    }
+
     default boolean isClaimed(@NotNull Chunk chunk) {
         return this.isClaimed(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 
     default boolean isSameClaim(@NotNull Location a, @NotNull Location b) {
+        return this.getFactionOrDefault(a).equals(this.getFactionOrDefault(b));
+    }
+
+    default boolean isSameClaim(@NotNull Block a, @NotNull Block b) {
         return this.getFactionOrDefault(a).equals(this.getFactionOrDefault(b));
     }
 
@@ -106,10 +120,17 @@ public interface ClaimAccessor {
         return this.getFaction(worldName, chunk.getX(), chunk.getZ());
     }
 
+    @Nullable
     default Faction getFaction(@NotNull Location location) {
         return this.getFaction(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
 
+    @Nullable
+    default Faction getFaction(@NotNull Block block) {
+        return this.getFaction(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
+    }
+
+    @Nullable
     default Faction getFaction(@NotNull Chunk chunk) {
         return this.getFaction(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
@@ -136,6 +157,11 @@ public interface ClaimAccessor {
     }
 
     @NotNull
+    default Faction getFactionOrDefault(@NotNull Block block) {
+        return this.getFactionOrDefault(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
+    }
+
+    @NotNull
     default Faction getFactionOrDefault(@NotNull Chunk chunk) {
         return this.getFactionOrDefault(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
@@ -158,6 +184,11 @@ public interface ClaimAccessor {
     }
 
     @Nullable
+    default Claim put(@NotNull Block block, @NotNull Faction faction) {
+        return this.put(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4, faction);
+    }
+
+    @Nullable
     default Claim put(@NotNull Chunk chunk, @NotNull Faction faction) {
         return this.put(chunk.getWorld().getName(), chunk.getX(), chunk.getZ(), faction);
     }
@@ -173,6 +204,11 @@ public interface ClaimAccessor {
     @Nullable
     default Claim remove(@NotNull Location location) {
         return this.remove(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
+    }
+
+    @Nullable
+    default Claim remove(@NotNull Block block) {
+        return this.remove(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
     }
 
     @Nullable

@@ -1,4 +1,4 @@
-package co.crystaldev.factions.engine.player;
+package co.crystaldev.factions.engine;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
@@ -88,8 +88,11 @@ public final class InteractionEngine extends AlpineEngine {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        Block block = event.getClickedBlock();
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.PHYSICAL) {
+            return;
+        }
 
+        Block block = event.getClickedBlock();
 
     }
 }

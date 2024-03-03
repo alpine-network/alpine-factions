@@ -1,4 +1,4 @@
-package co.crystaldev.factions.engine.player;
+package co.crystaldev.factions.engine;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.event.ServerTickEvent;

@@ -26,7 +26,7 @@ public final class Claiming {
         Faction replacedFaction = Accessors.claims().getFaction(origin);
 
         // is the player able to claim this land?
-        if (ClaimHelper.shouldCancelClaim(actor, replacedFaction, claimingFaction, claimingFaction != null)) {
+        if (ClaimHelper.shouldCancelClaim(actor, claimingFaction, claimingFaction != null)) {
             return;
         }
 
@@ -63,7 +63,7 @@ public final class Claiming {
         }
 
         // is the player able to claim this land?
-        if (ClaimHelper.shouldCancelClaim(actor, replacedFaction, claimingFaction, claiming)) {
+        if (ClaimHelper.shouldCancelClaim(actor, claimingFaction, claiming)) {
             return;
         }
 
@@ -83,7 +83,7 @@ public final class Claiming {
         Faction replacedFaction = Accessors.claims().getFaction(origin);
 
         // is the player able to claim this land?
-        if (ClaimHelper.shouldCancelClaim(actor, replacedFaction, claimingFaction, claimingFaction != null)) {
+        if (ClaimHelper.shouldCancelClaim(actor, claimingFaction, claimingFaction != null)) {
             return;
         }
 

@@ -56,7 +56,7 @@ public final class ClaimHelper {
         }
 
         // ensure the claiming faction has enough power to claim this land
-        if (!overriding && claimingFaction != null && claimingFaction.getRemainingPower() < chunks.size()) {
+        if (!overriding && claimingFaction != null && claimingFaction.getRemainingClaims() < chunks.size()) {
             messageConfig.insufficientPower.send(player,
                     "faction", FactionHelper.formatRelational(player, claimingFaction),
                     "faction_name", claimingFaction.getName());
@@ -66,12 +66,6 @@ public final class ClaimHelper {
         // ensure that the claim limit hasn't been reached
         if (!overriding && chunks.size() > factionConfig.maxClaimFillVolume) {
             messageConfig.fillLimit.send(player, "limit", factionConfig.maxClaimFillVolume);
-            return;
-        }
-
-        // ensure that the player has permission to claim the land
-        if (!overriding && claimingFaction != null && !claimingFaction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
-            FactionHelper.missingPermission(player, claimingFaction, "modify territory");
             return;
         }
 
@@ -188,8 +182,7 @@ public final class ClaimHelper {
         }
     }
 
-    public static boolean shouldCancelClaim(@NotNull Player player, @Nullable Faction replacedFaction,
-                                            @Nullable Faction claimingFaction, boolean claiming) {
+    public static boolean shouldCancelClaim(@NotNull Player player, @Nullable Faction claimingFaction, boolean claiming) {
         MessageConfig config = MessageConfig.getInstance();
 
         if (claiming && claimingFaction == null) {
@@ -198,11 +191,6 @@ public final class ClaimHelper {
                     "faction", FactionHelper.formatRelational(player, wilderness),
                     "faction_name", wilderness.getName()
             );
-            return true;
-        }
-
-        if (replacedFaction != null && !replacedFaction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
-            FactionHelper.missingPermission(player, replacedFaction, "modify territory");
             return true;
         }
 
