@@ -33,11 +33,11 @@ public enum Rank implements Relational {
     }
 
     public boolean isSuperior(@NotNull Rank other) {
-        return this.ordinal() > other.ordinal();
+        return this.ordinal() < other.ordinal();
     }
 
     public boolean isSuperiorOrMatching(@NotNull Rank other) {
-        return this.ordinal() >= other.ordinal();
+        return this.ordinal() <= other.ordinal();
     }
 
     @NotNull

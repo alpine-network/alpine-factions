@@ -41,15 +41,17 @@ public final class LeaveCommand extends FactionsCommand {
         }
 
         // ensure that the player can leave
-        if (faction.getMemberCount() > 1 && faction.getMemberRank(player.getUniqueId()) == Rank.LEADER) {
-            // the leader can't just leave the faction!
-            config.promoteLeader.send(player);
-            return;
-        }
-        else if (faction.getMemberCount() == 1 && faction.canDisband()) {
-            // the leader was the only member, disband
-            faction.disband(player);
-            return;
+        if (faction.canDisband()) {
+            if (faction.getMemberCount() > 1 && faction.getMemberRank(player.getUniqueId()) == Rank.LEADER) {
+                // the leader can't just leave the faction!
+                config.promoteLeader.send(player);
+                return;
+            }
+            else if (faction.getMemberCount() == 1) {
+                // the leader was the only member, disband
+                faction.disband(player);
+                return;
+            }
         }
 
         // call event

@@ -49,7 +49,7 @@ public final class RosterCommand extends FactionsCommand implements Initializabl
     public void add(
             @Context CommandSender sender,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
-            @Arg("rank") @Key(Args.LC_ENUM) Optional<Rank> rank,
+            @Arg("rank") @Key(Args.FACTION_RANK) Optional<Rank> rank,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
         MessageConfig config = MessageConfig.getInstance();
@@ -182,7 +182,7 @@ public final class RosterCommand extends FactionsCommand implements Initializabl
     public void setRank(
             @Context CommandSender sender,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
-            @Arg("rank") @Key(Args.LC_ENUM) Rank rank,
+            @Arg("rank") @Key(Args.FACTION_RANK) Rank rank,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
         MessageConfig config = MessageConfig.getInstance();

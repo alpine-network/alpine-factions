@@ -49,14 +49,16 @@ public final class DisbandCommand extends FactionsCommand {
             return;
         }
 
+        // ensure the faction can even disband
         if (!faction.canDisband()) {
             config.unableToDisband.send(sender);
             return;
         }
 
+        // require a confirmation from the user
         if (!this.confirmationMap.containsKey(sender) || System.currentTimeMillis() - this.confirmationMap.get(sender) > 10_000L) {
             this.confirmationMap.put(sender, System.currentTimeMillis());
-            config.disbandConfirm.send(sender);
+            config.confirm.send(sender);
             return;
         }
 

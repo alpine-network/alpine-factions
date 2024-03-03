@@ -21,6 +21,8 @@ import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import org.bukkit.command.CommandSender;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -30,6 +32,9 @@ import java.util.Optional;
 @Command(name = "factions name")
 @Description("Rename your faction.")
 public final class NameCommand extends FactionsCommand {
+
+    private final Map<CommandSender, Long> confirmationMap = new HashMap<>();
+
     public NameCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -73,6 +78,13 @@ public final class NameCommand extends FactionsCommand {
         // ensure the name isn't too long
         if (name.length() > factionConfig.maxNameLength) {
             config.nameTooLong.send(sender, "length", factionConfig.maxNameLength);
+            return;
+        }
+
+        // require a confirmation from the user
+        if (!this.confirmationMap.containsKey(sender) || System.currentTimeMillis() - this.confirmationMap.get(sender) > 10_000L) {
+            this.confirmationMap.put(sender, System.currentTimeMillis());
+            config.confirm.send(sender);
             return;
         }
 

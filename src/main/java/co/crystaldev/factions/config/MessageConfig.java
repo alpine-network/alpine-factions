@@ -34,6 +34,9 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText operationCancelled = ConfigText.of(
             "%error_prefix% This operation was cancelled");
 
+    public ConfigText confirm = ConfigText.of(
+            "%prefix% Please confirm by sending this command again");
+
     public ConfigText missingFactionPerm = ConfigText.of(
             "%error_prefix% <error_highlight>%faction%</error_highlight> does not allow you to <error_highlight>%action%</error_highlight>");
 
@@ -387,9 +390,6 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText disband = ConfigText.of(
             "%prefix% %actor% disbanded %faction%");
 
-    public ConfigText disbandConfirm = ConfigText.of(
-            "%prefix% Please confirm by sending this command again");
-
     public ConfigText unableToDisband = ConfigText.of(
             "%error_prefix% This faction cannot be disbanded");
 
@@ -475,6 +475,24 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText titleChange = ConfigText.of(
             "%prefix% %actor% modified the title for %player%");
+
+    public ConfigText memberRank = ConfigText.of(
+            "%prefix% %player% is a <highlight>%rank%</highlight> in %faction%");
+
+    public ConfigText promote = ConfigText.of(
+            "%prefix% %actor% promoted %player% to <highlight>%new_rank%</highlight> from %old_rank% in %faction%");
+
+    public ConfigText demote = ConfigText.of(
+            "%prefix% %actor% demoted %player% to <highlight>%new_rank%</highlight> from %old_rank% in %faction%");
+
+    public ConfigText leader = ConfigText.of(
+            "%prefix% %actor% gave %player% leadership of %faction%");
+
+    public ConfigText unableToUpdateSelf = ConfigText.of(
+            "%error_prefix% Unable to update the rank of yourself");
+
+    public ConfigText unableToUpdateRank = ConfigText.of(
+            "%error_prefix% Unable to update the rank of %player%");
 
     public ConfigText factionStatusTitle = ConfigText.of(
             "%faction% <separator>|</separator> Faction Status");
