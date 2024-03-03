@@ -2,10 +2,14 @@ package co.crystaldev.factions.api.faction.permission;
 
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Rank;
+import co.crystaldev.factions.handler.PlayerHandler;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -23,6 +27,18 @@ public final class Permission {
     private final String permission;
     private final Set<Rank> defaultRankPermits;
     private final Set<FactionRelation> defaultRelationPermits;
+
+    public boolean isPermitted(@NotNull Permissible permissible) {
+        if (permissible instanceof ConsoleCommandSender) {
+            return true;
+        }
+
+        if (permissible instanceof CommandSender && PlayerHandler.getInstance().isOverriding((CommandSender) permissible)) {
+            return true;
+        }
+
+        return this.permission == null || permissible.hasPermission(this.permission);
+    }
 
     @NotNull
     public static Builder builder(@NotNull String id) {

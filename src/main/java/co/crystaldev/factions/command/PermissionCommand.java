@@ -143,18 +143,19 @@ public final class PermissionCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         PermissionRegistry registry = AlpineFactions.getInstance().getPermissionRegistry();
 
-        List<Permission> flags = registry.getAll();
+        List<Permission> permissions = registry.getAll();
+
         String command = "/f permission list %page%";
         Component title = config.permissionListTitle.build();
-        Component compiledPage = Formatting.page(title, flags, command, page.orElse(1), 10, flag -> {
-            if (flag == null) {
+        Component compiledPage = Formatting.page(title, permissions, command, page.orElse(1), 10, perm -> {
+            if (perm == null) {
                 return ComponentHelper.nil();
             }
 
             return config.permissionListEntry.build(
-                    "permission_id", flag.getId(),
-                    "permission_name", flag.getName(),
-                    "permission_description", flag.getDescription()
+                    "permission_id", perm.getId(),
+                    "permission_name", perm.getName(),
+                    "permission_description", perm.getDescription()
             );
         });
 

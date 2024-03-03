@@ -29,7 +29,7 @@ public final class FactionPermissionArgumentResolver extends AlpineArgumentResol
         List<Permission> permissions = registry.getAll();
 
         for (Permission permission : permissions) {
-            if (permission.getId().equalsIgnoreCase(argument)) {
+            if (permission.isPermitted(invocation.sender()) && permission.getId().equalsIgnoreCase(argument)) {
                 return ParseResult.success(permission);
             }
         }
@@ -44,6 +44,7 @@ public final class FactionPermissionArgumentResolver extends AlpineArgumentResol
         List<Permission> permissions = registry.getAll();
 
         return permissions.stream()
+                .filter(perm -> perm.isPermitted(invocation.sender()))
                 .map(Permission::getId)
                 .filter(v -> v.startsWith(current))
                 .collect(SuggestionResult.collector());

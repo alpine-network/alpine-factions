@@ -113,7 +113,7 @@ public final class Formatting {
                                      @NotNull Function<@Nullable T, Component> toComponentFn) {
         MessageConfig config = MessageConfig.getInstance();
         List<Component> pageElements = new LinkedList<>();
-        int totalPages = (int) Math.ceil(elementsPerPage / (double) elementsPerPage);
+        int totalPages = (int) Math.ceil((double) elements.size() / elementsPerPage);
 
         // needs to be non-zero based
         int humanPage = currentPage;
