@@ -109,10 +109,6 @@ public final class FlagCommand extends FactionsCommand {
         Component title = config.flagStateListTitle.build("faction", FactionHelper.formatRelational(sender, resolvedFaction, false),
                 "faction_name", resolvedFaction.getName());
         Component compiledPage = Formatting.page(title, flags, command, page.orElse(1), 10, flag -> {
-            if (flag == null) {
-                return ComponentHelper.nil();
-            }
-
             Object resolvedState = resolvedFaction.getFlagValueOrDefault(flag);
             String stateDescription = flag.getType().equals(Boolean.class)
                     ? flag.getStateDescription((Boolean) resolvedState)
@@ -143,10 +139,6 @@ public final class FlagCommand extends FactionsCommand {
         String command = "/f flag list %page%";
         Component title = config.flagListTitle.build();
         Component compiledPage = Formatting.page(title, flags, command, page.orElse(1), 10, flag -> {
-            if (flag == null) {
-                return ComponentHelper.nil();
-            }
-
             return config.flagListEntry.build(
                     "flag_id", flag.getId(),
                     "flag_name", flag.getName(),

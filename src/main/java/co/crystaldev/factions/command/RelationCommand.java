@@ -17,7 +17,6 @@ import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.StyleConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import dev.rollczi.litecommands.annotations.argument.Arg;
@@ -29,7 +28,6 @@ import dev.rollczi.litecommands.annotations.execute.Execute;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -97,11 +95,7 @@ public final class RelationCommand extends FactionsCommand {
     }
 
     @NotNull
-    private static Component relatedFactionToEntry(@NotNull CommandSender sender, @Nullable RelatedFaction entry) {
-        if (entry == null) {
-            return ComponentHelper.nil();
-        }
-
+    private static Component relatedFactionToEntry(@NotNull CommandSender sender, @NotNull RelatedFaction entry) {
         Faction faction = entry.getFaction();
         FactionRelation relation = entry.getRelation();
 

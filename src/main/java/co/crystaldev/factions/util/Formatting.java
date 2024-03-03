@@ -5,7 +5,6 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.config.MessageConfig;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -89,12 +88,16 @@ public final class Formatting {
     }
 
     @NotNull
-    public static <T> Component elements(@NotNull Collection<T> elements, @NotNull Function<@Nullable T, Component> toComponentFn) {
+    public static <T> Component elements(@NotNull Collection<T> elements, @NotNull Function<@NotNull T, Component> toComponentFn) {
         MessageConfig config = MessageConfig.getInstance();
         List<Component> pageElements = new LinkedList<>();
 
         // collect page elements
         for (T element : elements) {
+            if (element == null) {
+                continue;
+            }
+
             pageElements.add(toComponentFn.apply(element));
         }
 
@@ -110,7 +113,7 @@ public final class Formatting {
     @NotNull
     public static <T> Component page(@NotNull Component title, @NotNull Collection<T> elements,
                                      @NotNull String command, int currentPage, int elementsPerPage,
-                                     @NotNull Function<@Nullable T, Component> toComponentFn) {
+                                     @NotNull Function<@NotNull T, Component> toComponentFn) {
         MessageConfig config = MessageConfig.getInstance();
         List<Component> pageElements = new LinkedList<>();
         int totalPages = (int) Math.ceil((double) elements.size() / elementsPerPage);
@@ -122,6 +125,10 @@ public final class Formatting {
         // collect page elements
         int index = 0;
         for (T element : elements) {
+            if (element == null) {
+                continue;
+            }
+
             if (pageElements.size() >= elementsPerPage) {
                 break;
             }
@@ -163,12 +170,6 @@ public final class Formatting {
     }
 
     @NotNull
-    public static <T> Component page(@NotNull Component title, @NotNull Collection<T> elements,
-                                     @NotNull String command, int currentPage, int elementsPerPage) {
-        return page(title, elements, command, currentPage, elementsPerPage, Formatting::asComponent);
-    }
-
-    @NotNull
     public static Component progress(double progress) {
         progress = Math.max(0.0, Math.min(1.0, progress));
 
@@ -181,18 +182,5 @@ public final class Formatting {
         );
 
         return config.progressBarFormat.build("progress", progressComponent);
-    }
-
-    @NotNull
-    private static Component asComponent(@Nullable Object obj) {
-        if (obj == null) {
-            return ComponentHelper.nil();
-        }
-
-        if (obj instanceof ComponentLike) {
-            return ((ComponentLike) obj).asComponent();
-        }
-
-        return Component.text(obj.toString());
     }
 }

@@ -10,7 +10,6 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import dev.rollczi.litecommands.annotations.argument.Arg;
@@ -147,10 +146,6 @@ public final class InviteCommand extends FactionsCommand {
         );
         String command = "/f invite list %page% " + resolvedFaction.getName();
         Messaging.send(sender, Formatting.page(title, invitations, command, page.orElse(1), 10, invite -> {
-            if (invite == null) {
-                return ComponentHelper.nil();
-            }
-
             OfflinePlayer invitee = Bukkit.getOfflinePlayer(invite.getPlayerId());
             OfflinePlayer inviter = Bukkit.getOfflinePlayer(invite.getInviterId());
             Faction inviteeFaction = factions.findOrDefault(invite.getPlayerId());

@@ -16,7 +16,6 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import co.crystaldev.factions.util.PlayerHelper;
@@ -108,10 +107,6 @@ public final class PermissionCommand extends FactionsCommand {
         );
 
         Component elements = Formatting.elements(permissions, permission -> {
-            if (permission == null) {
-                return ComponentHelper.nil();
-            }
-
             Component relationStates = config.permissionRelationState.build(
                     "enemy", (resolvedFaction.isPermitted(FactionRelation.ENEMY, permission) ? config.permissionYes : config.permissionNo).build(),
                     "neutral", (resolvedFaction.isPermitted(FactionRelation.ENEMY, permission) ? config.permissionYes : config.permissionNo).build(),
@@ -148,10 +143,6 @@ public final class PermissionCommand extends FactionsCommand {
         String command = "/f permission list %page%";
         Component title = config.permissionListTitle.build();
         Component compiledPage = Formatting.page(title, permissions, command, page.orElse(1), 10, perm -> {
-            if (perm == null) {
-                return ComponentHelper.nil();
-            }
-
             return config.permissionListEntry.build(
                     "permission_id", perm.getId(),
                     "permission_name", perm.getName(),

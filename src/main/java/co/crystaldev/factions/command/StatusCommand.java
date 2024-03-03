@@ -14,7 +14,6 @@ import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import dev.rollczi.litecommands.annotations.argument.Arg;
@@ -66,10 +65,6 @@ public final class StatusCommand extends FactionsCommand {
                 "faction_name", target.getName());
         String command = "/f status " + target.getName() + " %page%";
         Component compiledPage = Formatting.page(title, members, command, page.orElse(1), 10, member -> {
-            if (member == null) {
-                return ComponentHelper.nil();
-            }
-
             OfflinePlayer player = member.getOfflinePlayer();
             FPlayer state = Accessors.players().get(player);
 

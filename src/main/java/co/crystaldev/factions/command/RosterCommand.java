@@ -13,7 +13,6 @@ import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import co.crystaldev.factions.util.PlayerHelper;
@@ -250,10 +249,6 @@ public final class RosterCommand extends FactionsCommand implements Initializabl
         );
         String command = "/f roster list %page% " + faction.getName();
         Messaging.send(sender, Formatting.page(title, faction.getRoster(), command, page.orElse(1), 10, member -> {
-            if (member == null) {
-                return ComponentHelper.nil();
-            }
-
             OfflinePlayer player = member.getOfflinePlayer();
             return config.rosterListEntry.build(
                     "player", FactionHelper.formatRelational(sender, faction, player, false),

@@ -44,10 +44,6 @@ public final class ListCommand extends FactionsCommand {
 
         // build the page
         Component compiledPage = Formatting.page(config.listTitle.build(), factions, "/f list %page%", page, 10, faction -> {
-            if (faction == null) {
-                return ComponentHelper.nil();
-            }
-
             boolean wilderness = faction.isWilderness();
             String factionName = wilderness ? "Factionless" : faction.getName();
             Component formattedFactionName = wilderness
