@@ -23,7 +23,6 @@ public final class Claiming {
     public static void mode(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
                             @NotNull ClaimType type, int radius) {
         Chunk origin = actor.getLocation().getChunk();
-        Faction replacedFaction = Accessors.claims().getFaction(origin);
 
         // is the player able to claim this land?
         if (ClaimHelper.shouldCancelClaim(actor, claimingFaction, claimingFaction != null)) {
@@ -80,7 +79,6 @@ public final class Claiming {
 
     public static void one(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
         Chunk origin = actor.getLocation().getChunk();
-        Faction replacedFaction = Accessors.claims().getFaction(origin);
 
         // is the player able to claim this land?
         if (ClaimHelper.shouldCancelClaim(actor, claimingFaction, claimingFaction != null)) {

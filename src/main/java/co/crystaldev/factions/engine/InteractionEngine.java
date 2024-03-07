@@ -1,24 +1,25 @@
 package co.crystaldev.factions.engine;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.event.ServerTickEvent;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
-import co.crystaldev.factions.api.accessor.Accessors;
-import co.crystaldev.factions.api.accessor.ClaimAccessor;
-import co.crystaldev.factions.api.faction.Claim;
-import co.crystaldev.factions.api.faction.permission.Permission;
+import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.util.FactionHelper;
-import org.bukkit.Chunk;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -95,4 +96,22 @@ public final class InteractionEngine extends AlpineEngine {
         Block block = event.getClickedBlock();
 
     }
+
+    private boolean toggled;
+
+//    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+//    public void onPlayerChatPre(AsyncPlayerChatEvent event) {
+//        if ("ooga".equals(event.getMessage())) {
+//            this.toggled = !toggled;
+//            Messaging.send(event.getPlayer(), this.toggled ? Component.text("booga").color(NamedTextColor.GREEN) : Component.text("womp womp").color(NamedTextColor.RED));
+//        }
+//    }
+//
+//    @EventHandler
+//    public void onEvent(Event event) {
+//        if (event instanceof ServerTickEvent || !this.toggled)
+//            return;
+//
+//        System.out.println(event.getClass().getName());
+//    }
 }
