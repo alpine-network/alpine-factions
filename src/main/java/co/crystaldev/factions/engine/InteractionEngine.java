@@ -146,7 +146,6 @@ public final class InteractionEngine extends AlpineEngine {
             boolean result = MaterialMapping.MATERIAL_EDIT_TOOLS.test(item);
             if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.BUILD, "edit the terrain")) {
                 event.setCancelled(true);
-                return;
             }
         }
     }
