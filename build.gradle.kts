@@ -28,7 +28,7 @@ repositories {
 configurations.create("shaded")
 dependencies {
     compileOnly(group = "org.spigotmc", name = "spigot", version = project.property("spigot_version") as String)
-    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.3.4")
+    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.3.5")
 
     compileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.30")
     annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.30")
@@ -36,8 +36,8 @@ dependencies {
 
 tasks {
     java {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     withType<JavaCompile> {

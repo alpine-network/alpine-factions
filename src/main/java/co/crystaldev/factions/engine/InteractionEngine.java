@@ -1,25 +1,29 @@
 package co.crystaldev.factions.engine;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.alpinecore.event.ServerTickEvent;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
-import co.crystaldev.alpinecore.util.Messaging;
+import co.crystaldev.alpinecore.util.ItemHelper;
+import co.crystaldev.alpinecore.util.MaterialHelper;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.util.FactionHelper;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import co.crystaldev.factions.util.MaterialMapping;
+import com.cryptomorin.xseries.XMaterial;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -32,7 +36,7 @@ public final class InteractionEngine extends AlpineEngine {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlockPlaced().getChunk(), Permissions.BUILD, "build")) {
+        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlockPlaced().getChunk(), Permissions.BUILD, "edit the terrain")) {
             event.setCancelled(true);
         }
     }
@@ -40,7 +44,7 @@ public final class InteractionEngine extends AlpineEngine {
     @EventHandler
     public void onBlockPlace(BlockMultiPlaceEvent event) {
         for (BlockState state : event.getReplacedBlockStates()) {
-            if (!FactionHelper.isPermitted(event.getPlayer(), state.getChunk(), Permissions.BUILD, "build")) {
+            if (!FactionHelper.isPermitted(event.getPlayer(), state.getChunk(), Permissions.BUILD, "edit the terrain")) {
                 event.setCancelled(true);
                 return;
             }
@@ -49,28 +53,28 @@ public final class InteractionEngine extends AlpineEngine {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "build")) {
+        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockDamage(BlockDamageEvent event) {
-        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "build")) {
+        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
-        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "build")) {
+        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onHangingPlace(HangingPlaceEvent event) {
-        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "build")) {
+        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
             event.setCancelled(true);
         }
     }
@@ -82,36 +86,90 @@ public final class InteractionEngine extends AlpineEngine {
             return;
         }
 
-        if (!FactionHelper.isPermitted((Player) remover, event.getEntity().getLocation().getChunk(), Permissions.BUILD, "build")) {
+        if (!FactionHelper.isPermitted((Player) remover, event.getEntity().getLocation().getChunk(), Permissions.BUILD, "edit the terrain")) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.PHYSICAL) {
+        Player player = event.getPlayer();
+        Block block = event.getClickedBlock();
+        ItemStack item = event.getItem();
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.PHYSICAL || !event.hasBlock()) {
             return;
         }
 
-        Block block = event.getClickedBlock();
+        if (event.hasBlock()) {
+            // containers
+            boolean result = MaterialMapping.CONTAINERS.test(block);
+            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.USE_CONTAINERS, "use containers")) {
+                event.setCancelled(true);
+                return;
+            }
 
+            // doors
+            result = MaterialMapping.DOORS.test(block);
+            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.OPEN_DOORS, "open doors")) {
+                event.setCancelled(true);
+                return;
+            }
+
+            // buttons/levers
+            result = MaterialMapping.SWITCHES.test(block);
+            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.USE_SWITCHES, "use switches")) {
+                event.setCancelled(true);
+                return;
+            }
+
+            // pressure plates
+            result = MaterialMapping.PRESSURE_PLATES.test(block);
+            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.TRIGGER_PRESSURE_PLATES, "trigger pressure plates")) {
+                event.setCancelled(true);
+                return;
+            }
+
+            // block interaction
+            result = MaterialMapping.MATERIAL_EDIT_ON_INTERACT.test(block)
+                    || MaterialMapping.CANDLES.test(item) && MaterialMapping.CANDLES.test(block)
+                    || MaterialMapping.BUCKETS.test(item) && MaterialMapping.CAULDRONS.test(block)
+                    || ItemHelper.AXES.test(item) && MaterialMapping.STRIPPED_LOGS.test(block)
+                    || ItemHelper.HOES.test(item) && MaterialHelper.getType(block) == XMaterial.FARMLAND
+                    || ItemHelper.SHOVELS.test(item) && MaterialHelper.getType(block) == XMaterial.DIRT_PATH;
+            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.BUILD, "edit the terrain")) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        if (event.hasItem() && block != null) {
+            boolean result = MaterialMapping.MATERIAL_EDIT_TOOLS.test(item);
+            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.BUILD, "edit the terrain")) {
+                event.setCancelled(true);
+                return;
+            }
+        }
     }
 
-    private boolean toggled;
+    @EventHandler
+    public void onBucketEmpty(PlayerBucketEmptyEvent event) {
+        BlockFace face = event.getBlockFace();
+        Location location = event.getBlockClicked().getLocation().clone();
+        location.add(face.getModX(), face.getModY(), face.getModZ());
 
-//    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-//    public void onPlayerChatPre(AsyncPlayerChatEvent event) {
-//        if ("ooga".equals(event.getMessage())) {
-//            this.toggled = !toggled;
-//            Messaging.send(event.getPlayer(), this.toggled ? Component.text("booga").color(NamedTextColor.GREEN) : Component.text("womp womp").color(NamedTextColor.RED));
-//        }
-//    }
-//
-//    @EventHandler
-//    public void onEvent(Event event) {
-//        if (event instanceof ServerTickEvent || !this.toggled)
-//            return;
-//
-//        System.out.println(event.getClass().getName());
-//    }
+        if (!FactionHelper.isPermitted(event.getPlayer(), location.getChunk(), Permissions.BUILD, "edit the terrain")) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBucketFill(PlayerBucketFillEvent event) {
+        BlockFace face = event.getBlockFace();
+        Location location = event.getBlockClicked().getLocation().clone();
+        location.add(face.getModX(), face.getModY(), face.getModZ());
+
+        if (!FactionHelper.isPermitted(event.getPlayer(), location.getChunk(), Permissions.BUILD, "edit the terrain")) {
+            event.setCancelled(true);
+        }
+    }
 }

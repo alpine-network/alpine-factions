@@ -25,12 +25,12 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> implement
 
     private final Map<String, ClaimRegion> claimStorage = new ConcurrentHashMap<>();
 
-    ClaimStore(AlpinePlugin plugin) {
+    ClaimStore(@NotNull AlpinePlugin plugin) {
         super(plugin, FlatfileDriver.<String, ClaimRegion>builder()
                 .directory(new File(AlpineFactions.getInstance().getDataFolder(), "regions"))
                 .gson(Reference.GSON)
                 .dataType(ClaimRegion.class)
-                .build());
+                .build(plugin));
 
         Collection<ClaimRegion> regions = this.loadAllEntries(ex -> {
             Reference.LOGGER.info("Unable to read claim region", ex);

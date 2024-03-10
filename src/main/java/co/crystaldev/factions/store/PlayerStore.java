@@ -19,12 +19,12 @@ import java.util.UUID;
  */
 public final class PlayerStore extends AlpineStore<UUID, FPlayer> implements PlayerAccessor {
 
-    PlayerStore(AlpinePlugin plugin) {
+    PlayerStore(@NotNull AlpinePlugin plugin) {
         super(plugin, FlatfileDriver.<UUID, FPlayer>builder()
                 .directory(new File(AlpineFactions.getInstance().getDataFolder(), "players"))
                 .gson(Reference.GSON)
                 .dataType(FPlayer.class)
-                .build());
+                .build(plugin));
     }
 
     @Override

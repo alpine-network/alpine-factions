@@ -29,12 +29,12 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
 
     private final Map<String, Faction> registeredFactions = new ConcurrentHashMap<>();
 
-    FactionStore(AlpinePlugin plugin) {
+    FactionStore(@NotNull AlpinePlugin plugin) {
         super(plugin, FlatfileDriver.<String, Faction>builder()
                 .directory(new File(AlpineFactions.getInstance().getDataFolder(), "factions"))
                 .gson(Reference.GSON)
                 .dataType(Faction.class)
-                .build());
+                .build(plugin));
 
         // load factions into memory
         try {
