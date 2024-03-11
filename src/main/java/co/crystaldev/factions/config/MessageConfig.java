@@ -68,7 +68,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Formatting",
+            ">>> Formatting",
             "  > Title"
     })
     public ConfigText titleFormat = ConfigText.of(
@@ -121,7 +121,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Faction Metadata"
+            ">>> Faction Metadata"
     })
     public ConfigText rename = ConfigText.of(
             "%prefix% %actor% set the faction name to <highlight>%faction_name%</highlight>");
@@ -151,7 +151,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Join"
+            ">>> Join"
     })
     public ConfigText join = ConfigText.of(
             "%prefix% You joined <highlight>%faction_name%</highlight>");
@@ -181,7 +181,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Leave"
+            ">>> Leave"
     })
     public ConfigText leave = ConfigText.of(
             "%prefix% You left <highlight>%faction_name%</highlight>");
@@ -205,7 +205,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Invite"
+            ">>> Invite"
     })
     public ConfigText notInvited = ConfigText.of(
             "%error_prefix% You are not invited to %faction%");
@@ -235,7 +235,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Roster"
+            ">>> Roster"
     })
     public ConfigText rosterAdd = ConfigText.of(
             "%prefix% %actor% added %player% to your faction roster as a <highlight>%rank%</highlight>");
@@ -271,7 +271,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Show"
+            ">>> Show"
     })
     public ConfigText showTitle = ConfigText.of(
             "%faction% <separator>|</separator> Faction Info");
@@ -323,7 +323,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Relations"
+            ">>> Relations"
     })
     public ConfigText alreadyRelation = ConfigText.of(
             "%error_prefix% This relation is already set with %faction%");
@@ -382,7 +382,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Faction State"
+            ">>> Faction State"
     })
     public ConfigText create = ConfigText.of(
             "%prefix% You created a new faction named <highlight>%faction_name%</highlight>");
@@ -403,7 +403,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Flags"
+            ">>> Flags"
     })
     public ConfigText unknownFlag = ConfigText.of(
             "%error_prefix% No flag was found with the ID <error_highlight>%value%</error_highlight>");
@@ -433,7 +433,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Permissions"
+            ">>> Permissions"
     })
     public ConfigText unknownPermission = ConfigText.of(
             "%error_prefix% No permission was found with the ID <error_highlight>%value%</error_highlight>");
@@ -468,7 +468,28 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Player/Member State"
+            ">>> Chunk Access"
+    })
+    public ConfigText accessGranted = ConfigText.of(
+            "%prefix% %subject% now has elevated privileges in this chunk");
+
+    public ConfigText accessRevoked = ConfigText.of(
+            "%prefix% %subject% now has standard privileges in this chunk");
+
+    public ConfigText accessViewTitle = ConfigText.of(
+            "<emphasis>%world% %chunk_x%, %chunk_z%</emphasis> <separator>|</separator> Chunk Access");
+
+    public ConfigText accessViewBody = ConfigText.of(
+            "<emphasis>Faction:</emphasis> <highlight>%faction%</highlight>",
+            "<emphasis>Granted Players:</emphasis> <highlight>%players%</highlight>",
+            "<emphasis>Granted Factions:</emphasis> <highlight>%factions%</highlight>"
+    );
+
+
+
+    @Comment({
+            "",
+            ">>> Player/Member State"
     })
     public ConfigText stateChange = ConfigText.of(
             "%prefix% <highlight>%subject%:</highlight> <emphasis>%state%</emphasis>");
@@ -507,17 +528,16 @@ public final class MessageConfig extends AlpineConfig {
             "%player% <separator>|</separator> Member Status");
 
     public ConfigText memberStatusBody = ConfigText.of(
-            "<emphasis>Power: %power_indicator%</emphasis> ",
-            "<emphasis>Power Level: <highlight>%power%/%maxpower%</highlight></emphasis>",
-            "<emphasis>Power Gain: <highlight>%power_per_hour%/hour</highlight></emphasis>",
-            "<emphasis>Power Loss: <highlight>%power_per_death%/death</highlight></emphasis>"
+            "<emphasis>Power: %power_indicator%</emphasis> <highlight>%power%/%maxpower%</highlight>",
+            "<emphasis>Power Gain:</emphasis> <highlight>%power_per_hour%/hour</highlight>",
+            "<emphasis>Power Loss:</emphasis> <highlight>%power_per_death%/death</highlight>"
     );
 
 
 
     @Comment({
             "",
-            ">>| Land Claiming"
+            ">>> Land Claiming"
     })
     public ConfigText landClaim = ConfigText.of(
             "%prefix% %actor% %claim_type% <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%",
@@ -582,7 +602,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Alert"
+            ">>> Alert"
     })
     public ConfigText alertTitle = ConfigText.of(
             "<info>Faction Alert</info>");
@@ -601,7 +621,7 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>| Map"
+            ">>> Map"
     })
     public ConfigText mapTitle = ConfigText.of(
             "<emphasis>%world% %chunk_x%, %chunk_z%</emphasis> <separator>|</separator> %faction%");

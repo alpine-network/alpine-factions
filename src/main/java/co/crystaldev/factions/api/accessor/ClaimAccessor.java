@@ -101,6 +101,24 @@ public interface ClaimAccessor {
         return this.getFactionOrDefault(a).equals(this.getFactionOrDefault(b));
     }
 
+    void save(@NotNull String worldName, int chunkX, int chunkZ);
+
+    default void save(@NotNull String worldName, @NotNull ChunkCoordinate chunk) {
+        this.save(worldName, chunk.getX(), chunk.getZ());
+    }
+
+    default void save(@NotNull Location location) {
+        this.save(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
+    }
+
+    default void save(@NotNull Block block) {
+        this.save(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
+    }
+
+    default void save(@NotNull Chunk chunk) {
+        this.save(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
+    }
+
     // endregion Claim
 
     // region Faction

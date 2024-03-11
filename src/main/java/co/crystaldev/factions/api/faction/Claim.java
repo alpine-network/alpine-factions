@@ -3,7 +3,9 @@ package co.crystaldev.factions.api.faction;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.permission.Permission;
+import co.crystaldev.factions.api.player.FPlayer;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -15,7 +17,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * @author BestBearr <crumbygames12@gmail.com>
@@ -95,22 +99,34 @@ public final class Claim {
         return this.isAccessed(player) || this.isAccessed(playerFaction) || faction != null && faction.isPermitted(player, permission);
     }
 
-    public void setAccess(@NotNull String factionId, boolean accessed) {
+    public void setAccess(@NotNull Faction faction, boolean accessed) {
         if (accessed) {
-            this.accessedFactionIds.add(factionId);
+            this.accessedFactionIds.add(faction.getId());
         }
         else {
-            this.accessedFactionIds.remove(factionId);
+            this.accessedFactionIds.remove(faction.getId());
         }
     }
 
-    public void setAccess(@NotNull UUID player, boolean accessed) {
+    public void setAccess(@NotNull OfflinePlayer player, boolean accessed) {
         if (accessed) {
-            this.accessedPlayerIds.add(player);
+            this.accessedPlayerIds.add(player.getUniqueId());
         }
         else {
-            this.accessedPlayerIds.remove(player);
+            this.accessedPlayerIds.remove(player.getUniqueId());
         }
+    }
+
+    @NotNull
+    public Set<FPlayer> getPlayers() {
+        PlayerAccessor players = Accessors.players();
+        return this.accessedPlayerIds.stream().map(players::getById).collect(Collectors.toSet());
+    }
+
+    @NotNull
+    public Set<Faction> getFactions() {
+        FactionAccessor factions = Accessors.factions();
+        return this.accessedFactionIds.stream().map(factions::getById).collect(Collectors.toSet());
     }
 
     public void clearAccess() {

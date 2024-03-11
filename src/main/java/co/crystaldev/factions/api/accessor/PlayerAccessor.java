@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  */
 public interface PlayerAccessor {
 
-    void update(@NotNull FPlayer player);
+    void save(@NotNull FPlayer player);
 
     @NotNull
     FPlayer getById(@NotNull UUID player);

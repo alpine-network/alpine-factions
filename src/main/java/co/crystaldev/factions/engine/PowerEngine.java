@@ -39,7 +39,7 @@ public final class PowerEngine extends AlpineEngine {
             player.setPlaytime(player.getPlaytime() + 1);
 
             // update the user!
-            players.update(player);
+            players.save(player);
         });
     }
 
@@ -50,6 +50,6 @@ public final class PowerEngine extends AlpineEngine {
         FPlayer player = players.get(event.getEntity());
 
         player.setPowerLevel(Math.max(0.0, player.getPowerLevel() + config.powerLossPerDeath));
-        players.update(player);
+        players.save(player);
     }
 }
