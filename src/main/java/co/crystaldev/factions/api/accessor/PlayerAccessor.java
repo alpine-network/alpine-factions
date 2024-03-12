@@ -20,12 +20,6 @@ public interface PlayerAccessor {
     @NotNull
     FPlayer getById(@NotNull UUID player);
 
-    default void forEach(@NotNull Consumer<FPlayer> playerConsumer) {
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            playerConsumer.accept(this.get(player));
-        });
-    }
-
     @NotNull
     default FPlayer get(@NotNull OfflinePlayer player) {
         return this.getById(player.getUniqueId());
@@ -37,5 +31,21 @@ public interface PlayerAccessor {
             throw new IllegalArgumentException();
         }
         return this.getById(((OfflinePlayer) player).getUniqueId());
+    }
+
+    default void wrap(@NotNull UUID player, @NotNull Consumer<@NotNull FPlayer> playerConsumer) {
+        FPlayer wrapped = this.getById(player);
+        playerConsumer.accept(wrapped);
+        this.save(wrapped);
+    }
+
+    default void wrap(@NotNull OfflinePlayer player, @NotNull Consumer<@NotNull FPlayer> playerConsumer) {
+        this.wrap(player.getUniqueId(), playerConsumer);
+    }
+
+    default void forEach(@NotNull Consumer<FPlayer> playerConsumer) {
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            playerConsumer.accept(this.get(player));
+        });
     }
 }

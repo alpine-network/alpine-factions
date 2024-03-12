@@ -1,5 +1,6 @@
 package co.crystaldev.factions.api.player;
 
+import co.crystaldev.factions.config.FactionConfig;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -32,6 +33,14 @@ public final class FPlayer {
 
     @Setter
     private TerritorialTitleMode territorialTitleMode = TerritorialTitleMode.TITLE;
+
+    public long getEffectivePower() {
+        return (long) (this.powerLevel + this.powerBoost);
+    }
+
+    public long getMaxPower() {
+        return FactionConfig.getInstance().maxPlayerPower + this.powerBoost;
+    }
 
     @Nullable
     public Player getPlayer() {

@@ -162,7 +162,7 @@ public final class Faction {
         long powerLevel = 0L;
         for (Member member : this.members.values()) {
             FPlayer user = member.getUser();
-            powerLevel += Math.round(user.getPowerLevel()) + user.getPowerBoost();
+            powerLevel += user.getEffectivePower();
         }
 
         return powerLevel;
@@ -173,12 +173,10 @@ public final class Faction {
             return Integer.MAX_VALUE;
         }
 
-        FactionConfig config = FactionConfig.getInstance();
-
         long powerLevel = 0L;
         for (Member member : this.members.values()) {
             FPlayer user = member.getUser();
-            powerLevel += config.maxPlayerPower + user.getPowerBoost();
+            powerLevel += user.getMaxPower();
         }
 
         return powerLevel + this.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER);

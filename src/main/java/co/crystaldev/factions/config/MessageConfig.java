@@ -494,6 +494,14 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText stateChange = ConfigText.of(
             "%prefix% <highlight>%subject%:</highlight> <emphasis>%state%</emphasis>");
 
+    public ConfigText modifyPower = ConfigText.of(
+            "%prefix% Set power for %player% to <highlight>%power% power</highlight>",
+            "    %power_indicator% <highlight>%power%/%maxpower%</highlight>");
+
+    public ConfigText modifyPowerBoost = ConfigText.of(
+            "%prefix% Set power boost for %player% to <highlight>%powerboost% power</highlight>",
+            "    %power_indicator% <highlight>%power%/%maxpower%</highlight>");
+
     public ConfigText titleChange = ConfigText.of(
             "%prefix% %actor% modified the title for %player%");
 

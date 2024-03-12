@@ -46,8 +46,7 @@ public final class StatusCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction,
             @Arg("page") Optional<Integer> page
     ) {
-        MessageConfig messageConfig = MessageConfig.getInstance();
-        FactionConfig factionConfig = FactionConfig.getInstance();
+        MessageConfig config = MessageConfig.getInstance();
 
         FactionAccessor factions = Accessors.factions();
         Faction target = targetFaction.orElse(factions.findOrDefault(sender));
@@ -61,20 +60,20 @@ public final class StatusCommand extends FactionsCommand {
         List<Member> members = new LinkedList<>(target.getMembers());
         members.sort(Comparator.comparing(Member::isOnline));
 
-        Component title = messageConfig.factionStatusTitle.build("faction", FactionHelper.formatRelational(sender, target, false),
+        Component title = config.factionStatusTitle.build("faction", FactionHelper.formatRelational(sender, target, false),
                 "faction_name", target.getName());
         String command = "/f status " + target.getName() + " %page%";
         Component compiledPage = Formatting.page(title, members, command, page.orElse(1), 10, member -> {
             OfflinePlayer player = member.getOfflinePlayer();
             FPlayer state = Accessors.players().get(player);
 
-            ConfigText text = member.isOnline() ? messageConfig.factionStatusOnlineEntry : messageConfig.factionStatusOfflineEntry;
+            ConfigText text = member.isOnline() ? config.factionStatusOnlineEntry : config.factionStatusOfflineEntry;
             return text.build(
                     "player", FactionHelper.formatRelational(sender, target, player, false),
                     "player_name", player.getName(),
                     "power_boost", state.getPowerBoost(),
-                    "power", state.getPowerLevel(),
-                    "maxpower", factionConfig.maxPlayerPower
+                    "power", state.getEffectivePower(),
+                    "maxpower", state.getMaxPower()
             );
         });
         Messaging.send(sender, compiledPage);
@@ -99,9 +98,9 @@ public final class StatusCommand extends FactionsCommand {
                 "player", FactionHelper.formatRelational(sender, faction, target, false),
                 "player_name", target.getName());
         Component body = messageConfig.memberStatusBody.build(
-                "power_indicator", Formatting.progress(state.getPowerLevel() / (double) factionConfig.maxPlayerPower),
-                "power", state.getPowerLevel(),
-                "maxpower", factionConfig.maxPlayerPower,
+                "power_indicator", Formatting.progress(state.getEffectivePower() / (double) factionConfig.maxPlayerPower),
+                "power", state.getEffectivePower(),
+                "maxpower", factionConfig.maxPlayerPower + state.getPowerBoost(),
                 "power_per_hour", factionConfig.powerGainPerHour,
                 "power_per_death", factionConfig.powerLossPerDeath
         );
