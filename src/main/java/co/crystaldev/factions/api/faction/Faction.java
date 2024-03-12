@@ -146,8 +146,11 @@ public final class Faction {
         this.markDirty();
     }
 
-    public void setHome(@NotNull Location home) {
-        home = new Location(home.getWorld(), home.getBlockX() + 0.5, home.getBlockY(), home.getBlockZ() + 0.5);
+    public void setHome(@Nullable Location home) {
+        if (home != null) {
+            home = new Location(home.getWorld(), home.getBlockX() + 0.5, home.getBlockY(), home.getBlockZ() + 0.5);
+        }
+
         if (Objects.equals(home, this.home)) {
             return;
         }

@@ -105,10 +105,12 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> implement
     public void save(@NotNull String worldName, int chunkX, int chunkZ) {
         String key = getKey(worldName, chunkX, chunkZ);
         if (!this.has(key)) {
-            return ;
+            return;
         }
 
-        this.get(key).markDirty();
+        ClaimRegion region = this.get(key);
+        region.markDirty();
+        this.put(key, region);
     }
 
     @Override

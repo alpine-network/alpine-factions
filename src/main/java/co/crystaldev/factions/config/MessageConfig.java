@@ -52,11 +52,20 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText unknownPlayer = ConfigText.of(
             "%error_prefix% No player was found with the name <error_highlight>%player_name%</error_highlight>");
 
+    public ConfigText outsideTerritory = ConfigText.of(
+            "%error_prefix% You are not within the territory of %faction%");
+
     public ConfigText rankTooHigh = ConfigText.of(
             "%error_prefix% You can't set ranks higher than or matching your own");
 
     public ConfigText unknownRelational = ConfigText.of(
             "%error_prefix% No rank or relation was found with the ID <error_highlight>%value%</error_highlight");
+
+    public ConfigText teleport = ConfigText.of(
+            "%prefix% Teleporting...");
+
+    public ConfigText teleportFailed = ConfigText.of(
+            "%error_prefix% Teleportation failed due to movement");
 
     public ConfigText none = ConfigText.of(
             "<gray>None</gray>");
@@ -393,6 +402,17 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText unableToDisband = ConfigText.of(
             "%error_prefix% This faction cannot be disbanded");
 
+    public ConfigText setHome = ConfigText.of("%prefix% %actor% set the faction home near <emphasis>(%world% %x%, %y%, %z%)</emphasis>");
+
+    public ConfigText unsetHome = ConfigText.of(
+            "%prefix% Your faction home was un-set due to it no longer being in your territory");
+
+    public ConfigText home = ConfigText.of(
+            "%prefix% Warping to the home of %faction% in <highlight>%seconds% seconds</highlight> unless you move...");
+
+    public ConfigText noHome = ConfigText.of(
+            "%error_prefix% %faction% does not have a home set");
+
     public ConfigText listTitle = ConfigText.of(
             "Factions List");
 
@@ -489,10 +509,10 @@ public final class MessageConfig extends AlpineConfig {
             "%prefix% %subject% now has standard privileges in <highlight>%amount% chunks</highlight>");
 
     public ConfigText accessGranted = ConfigText.of(
-            "%prefix% %subject% now has elevated privileges in <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%");
+            "%prefix% %subject% now has elevated privileges in <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x%, %chunk_z%)</emphasis> using %type%");
 
     public ConfigText accessRevoked = ConfigText.of(
-            "%prefix% %subject% now has standard privileges in <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%");
+            "%prefix% %subject% now has standard privileges in <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x%, %chunk_z%)</emphasis> using %type%");
 
     public ConfigText accessViewTitle = ConfigText.of(
             "<emphasis>%world% %chunk_x%, %chunk_z%</emphasis> <separator>|</separator> Chunk Access");
@@ -566,7 +586,7 @@ public final class MessageConfig extends AlpineConfig {
             ">>> Land Claiming"
     })
     public ConfigText landClaim = ConfigText.of(
-            "%prefix% %actor% %claim_type% <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%",
+            "%prefix% %actor% %claim_type% <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x%, %chunk_z%)</emphasis> using %type%",
             "    <i>%old_faction% → %new_faction%</i>"
     );
 

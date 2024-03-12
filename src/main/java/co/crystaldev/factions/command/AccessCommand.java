@@ -169,7 +169,7 @@ public final class AccessCommand extends FactionsCommand {
 
             // set access
             setAccess(claim, subject, access);
-            claims.save(location);
+            claims.save(origin);
 
             // notify
             ConfigText message = access ? config.accessGrantedSingle : config.accessRevokedSingle;

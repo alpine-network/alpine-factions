@@ -101,7 +101,7 @@ public final class NameCommand extends FactionsCommand {
         // notify the faction
         FactionHelper.broadcast(faction, sender, observer -> {
             return config.rename.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, sender),
+                    "actor", FactionHelper.formatRelational(observer, sender),
                     "actor_name", PlayerHelper.getName(sender),
                     "faction_name", name);
         });

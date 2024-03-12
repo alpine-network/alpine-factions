@@ -135,7 +135,7 @@ public final class JoinCommand extends FactionsCommand {
                     "player", FactionHelper.formatRelational(player, wilderness, joiningPlayer),
                     "player_name", joiningPlayer.getName(),
 
-                    "faction", FactionHelper.formatRelational(player, wilderness, joiningPlayer),
+                    "faction", FactionHelper.formatRelational(player, faction, false),
                     "faction_name", faction.getName());
             return;
         }

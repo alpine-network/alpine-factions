@@ -192,6 +192,34 @@ public final class FactionHelper {
     }
 
     @NotNull
+    public static Component formatRelational(@NotNull ServerOperator viewer, @NotNull ServerOperator sender) {
+        if (!(sender instanceof OfflinePlayer)) {
+            return Component.text(PlayerHelper.getName(sender));
+        }
+
+        OfflinePlayer player = (OfflinePlayer) sender;
+
+        Faction viewerFaction = Accessors.factions().findOrDefault(viewer);
+        Faction playerFaction = Accessors.factions().findOrDefault(player);
+        Member member = playerFaction.getMember(player.getUniqueId());
+
+        if (!playerFaction.isWilderness() && playerFaction.equals(viewerFaction)) {
+            return formatRelational(viewer, playerFaction, Components.join(
+                    Component.text(member.getRank().getPrefix()),
+                    member.getTitle(),
+                    member.hasTitle() ? Component.space() : Component.empty(),
+                    Component.text(player.getName())
+            ));
+        }
+        else {
+            return formatRelational(viewer, playerFaction, Components.join(
+                    Component.text(member.getRank().getPrefix()),
+                    Component.text(player.getName())
+            ));
+        }
+    }
+
+    @NotNull
     public static Component formatName(@NotNull ServerOperator operator) {
         if (!(operator instanceof OfflinePlayer)) {
             return Component.text(PlayerHelper.getName(operator));

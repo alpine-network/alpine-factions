@@ -53,6 +53,7 @@ public final class FactionArgumentResolver extends AlpineArgumentResolver<Factio
     @Override
     public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<Faction> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel().toLowerCase();
+
         return Accessors.factions().get()
                 .stream()
                 .map(Faction::getName)

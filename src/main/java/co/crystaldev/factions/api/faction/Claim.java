@@ -7,6 +7,7 @@ import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.player.FPlayer;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
@@ -28,10 +29,13 @@ import java.util.stream.Collectors;
 public final class Claim {
 
     @Getter
+    @SerializedName("faction")
     private String factionId;
 
+    @SerializedName("factions")
     private final HashSet<String> accessedFactionIds;
 
+    @SerializedName("players")
     private final HashSet<UUID> accessedPlayerIds;
 
     private Claim(@Nullable String faction, @NotNull HashSet<String> accessedFactionIds, @NotNull HashSet<UUID> accessedPlayerIds) {

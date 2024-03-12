@@ -13,6 +13,7 @@ import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.show.ShowFormatter;
 import co.crystaldev.factions.api.show.component.DefaultShowComponents;
+import co.crystaldev.factions.handler.TeleportManager;
 import co.crystaldev.factions.store.claim.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.PlayerStore;
@@ -35,6 +36,9 @@ public final class AlpineFactions extends AlpinePlugin {
 
     @Getter
     private final PlayerHandler playerHandler = new PlayerHandler();
+
+    @Getter
+    private final TeleportManager teleportManager = new TeleportManager();
 
     @Getter
     private final FlagRegistry flagRegistry = new FlagRegistry();

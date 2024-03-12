@@ -128,7 +128,7 @@ public final class DefaultShowComponents {
                 MessageConfig config = conf();
                 Collection<Component> members = ctx.getFaction().getOfflineMembers()
                         .stream()
-                        .map(v -> FactionHelper.formatRelational(v.getOfflinePlayer(), ctx.getFaction(), v.getOfflinePlayer(), false))
+                        .map(v -> FactionHelper.formatName(v.getOfflinePlayer()))
                         .collect(Collectors.toList());
                 Component joined = members.isEmpty() ? config.none.build() : Components.joinCommas(members);
                 Component count = config.memberCountOffline.build("online_count", members.size(),

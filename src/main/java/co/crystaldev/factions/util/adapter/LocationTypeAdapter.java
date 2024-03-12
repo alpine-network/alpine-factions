@@ -1,7 +1,10 @@
 package co.crystaldev.factions.util.adapter;
 
+import co.crystaldev.factions.Reference;
+import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,6 +18,11 @@ import java.io.IOException;
 public final class LocationTypeAdapter extends TypeAdapter<Location> {
     @Override
     public void write(JsonWriter jsonWriter, Location location) throws IOException {
+        if (location == null) {
+            jsonWriter.nullValue();
+            return;
+        }
+
         jsonWriter.beginObject();
 
         jsonWriter.name("world");
@@ -34,32 +42,15 @@ public final class LocationTypeAdapter extends TypeAdapter<Location> {
 
     @Override
     public Location read(JsonReader jsonReader) throws IOException {
-        String worldName = null;
-        double x = 0.0, y = 0.0, z = 0.0;
-
-        jsonReader.beginObject();
-        while (jsonReader.hasNext()) {
-            switch (jsonReader.nextName()) {
-                case "name": {
-                    worldName = jsonReader.nextString();
-                    break;
-                }
-                case "x": {
-                    x = jsonReader.nextDouble();
-                    break;
-                }
-                case "y": {
-                    y = jsonReader.nextDouble();
-                    break;
-                }
-                case "z": {
-                    z = jsonReader.nextDouble();
-                    break;
-                }
-            }
+        if (jsonReader.peek() == JsonToken.NULL) {
+            return null;
         }
-        jsonReader.endObject();
 
+        JsonObject obj = Reference.GSON.fromJson(jsonReader, JsonObject.class);
+        String worldName = obj.has("world") ? obj.get("world").getAsString() : null;
+        double x = obj.get("x").getAsDouble();
+        double y = obj.get("y").getAsDouble();
+        double z = obj.get("z").getAsDouble();
         return new Location(worldName == null ? null : Bukkit.getWorld(worldName), x, y, z);
     }
 }
