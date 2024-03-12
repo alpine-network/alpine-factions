@@ -86,7 +86,7 @@ public final class Claiming {
         }
 
         // attempt to claim
-        Set<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(new ChunkCoordinate(origin.getX(), origin.getZ())));
+        Set<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(ChunkCoordinate.of(origin.getX(), origin.getZ())));
         ClaimHelper.attemptClaim(actor, "square", actingFaction, claimingFaction, chunks, origin);
     }
 }

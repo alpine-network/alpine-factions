@@ -3,13 +3,15 @@ package co.crystaldev.factions;
 import co.crystaldev.alpinecore.util.UuidTypeAdapter;
 import co.crystaldev.factions.api.faction.flag.FlagHolder;
 import co.crystaldev.factions.api.faction.Claim;
-import co.crystaldev.factions.util.ComponentTypeAdapter;
+import co.crystaldev.factions.util.adapter.ComponentTypeAdapter;
+import co.crystaldev.factions.util.adapter.LocationTypeAdapter;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.kyori.adventure.text.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bukkit.Location;
 
 import java.util.UUID;
 
@@ -27,6 +29,7 @@ public final class Reference {
             .registerTypeAdapter(Claim.class, new Claim.Adapter())
             .registerTypeAdapter(Component.class, new ComponentTypeAdapter())
             .registerTypeAdapter(UUID.class, new UuidTypeAdapter())
+            .registerTypeAdapter(Location.class, new LocationTypeAdapter())
             .disableHtmlEscaping()
             .create();
 }

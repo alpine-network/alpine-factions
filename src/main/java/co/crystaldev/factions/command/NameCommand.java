@@ -97,7 +97,6 @@ public final class NameCommand extends FactionsCommand {
 
         // rename the faction
         faction.setName(name);
-        faction.markDirty();
 
         // notify the faction
         FactionHelper.broadcast(faction, sender, observer -> {

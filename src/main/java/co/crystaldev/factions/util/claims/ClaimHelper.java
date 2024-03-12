@@ -199,7 +199,7 @@ public final class ClaimHelper {
 
     @NotNull
     public static Set<ChunkCoordinate> square(@NotNull Chunk origin, int radius) {
-        radius--;
+        radius = Math.min(30, Math.abs(radius) - 1);
 
         int chunkX = origin.getX();
         int chunkZ = origin.getZ();
@@ -207,7 +207,7 @@ public final class ClaimHelper {
         Set<ChunkCoordinate> chunks = new HashSet<>();
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
-                chunks.add(new ChunkCoordinate(chunkX + x, chunkZ + z));
+                chunks.add(ChunkCoordinate.of(chunkX + x, chunkZ + z));
             }
         }
 
@@ -216,12 +216,14 @@ public final class ClaimHelper {
 
     @NotNull
     public static Set<ChunkCoordinate> line(@NotNull Chunk origin, int length, @NotNull BlockFace facing) {
+        length = Math.min(30, Math.abs(length));
+
         int chunkX = origin.getX();
         int chunkZ = origin.getZ();
 
         Set<ChunkCoordinate> chunks = new HashSet<>();
         for (int i = 0; i < length; i++) {
-            chunks.add(new ChunkCoordinate(chunkX, chunkZ));
+            chunks.add(ChunkCoordinate.of(chunkX, chunkZ));
             chunkX += facing.getModX();
             chunkZ += facing.getModZ();
         }
@@ -231,7 +233,7 @@ public final class ClaimHelper {
 
     @NotNull
     public static Set<ChunkCoordinate> circle(@NotNull Chunk origin, int radius) {
-        radius--;
+        radius = Math.min(30, Math.abs(radius) - 1);
 
         int chunkX = origin.getX();
         int chunkZ = origin.getZ();
@@ -243,7 +245,7 @@ public final class ClaimHelper {
                 if (x * x + z * z > radiusSquared)
                     continue;
 
-                chunks.add(new ChunkCoordinate(chunkX + x, chunkZ + z));
+                chunks.add(ChunkCoordinate.of(chunkX + x, chunkZ + z));
             }
         }
 
@@ -258,7 +260,7 @@ public final class ClaimHelper {
         Set<ChunkCoordinate> chunks = new HashSet<>();
 
         // discover chunks to fill
-        chunks.add(new ChunkCoordinate(origin.getX(), origin.getZ()));
+        chunks.add(ChunkCoordinate.of(origin.getX(), origin.getZ()));
         recurse(chunks, world.getName(), claims.getFaction(origin), claims, max);
 
         // limit was reached, disregard
@@ -300,7 +302,7 @@ public final class ClaimHelper {
 
     private static void check(@NotNull Set<ChunkCoordinate> nearby, @NotNull Set<ChunkCoordinate> filled,
                               @NotNull String world, int x, int z, @Nullable Faction faction, @NotNull ClaimAccessor claims) {
-        ChunkCoordinate coord = new ChunkCoordinate(x, z);
+        ChunkCoordinate coord = ChunkCoordinate.of(x, z);
         if (filled.contains(coord)) {
             return;
         }

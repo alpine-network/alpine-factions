@@ -49,7 +49,6 @@ public final class MOTDCommand extends FactionsCommand {
         // set the motd
         Component formatted = ComponentHelper.legacy(motd);
         faction.setMotd(formatted);
-        faction.markDirty();
 
         // notify the faction
         FactionHelper.broadcast(faction, player, observer -> {
@@ -86,7 +85,6 @@ public final class MOTDCommand extends FactionsCommand {
 
         // remove the motd
         faction.setMotd(null);
-        faction.markDirty();
 
         // notify the faction
         FactionHelper.broadcast(faction, player, observer -> {

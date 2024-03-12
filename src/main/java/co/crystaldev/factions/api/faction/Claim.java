@@ -1,6 +1,6 @@
 package co.crystaldev.factions.api.faction;
 
-import co.crystaldev.factions.Reference;
+import co.crystaldev.alpinecore.Reference;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
@@ -142,6 +142,7 @@ public final class Claim {
                 return;
             }
 
+            // AlpineCore gson instance
             Reference.GSON.toJson(claim, Claim.class, jsonWriter);
         }
 
@@ -150,6 +151,8 @@ public final class Claim {
             if (jsonReader.peek() == JsonToken.STRING) {
                 return new Claim(jsonReader.nextString());
             }
+
+            // AlpineCore gson instance
             return Reference.GSON.fromJson(jsonReader, Claim.class);
         }
     }

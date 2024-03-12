@@ -470,11 +470,29 @@ public final class MessageConfig extends AlpineConfig {
             "",
             ">>> Chunk Access"
     })
-    public ConfigText accessGranted = ConfigText.of(
+    public ConfigText elevatedAccess = ConfigText.of(
+            "%prefix% You have elevated access in this chunk");
+
+    public ConfigText standardAccess = ConfigText.of(
+            "%prefix% You have standard access in this chunk");
+
+    public ConfigText accessGrantedSingle = ConfigText.of(
             "%prefix% %subject% now has elevated privileges in this chunk");
 
-    public ConfigText accessRevoked = ConfigText.of(
+    public ConfigText accessRevokedSingle = ConfigText.of(
             "%prefix% %subject% now has standard privileges in this chunk");
+
+    public ConfigText accessGrantedAll = ConfigText.of(
+            "%prefix% %subject% now has elevated privileges in <highlight>%amount% chunks</highlight>");
+
+    public ConfigText accessRevokedAll = ConfigText.of(
+            "%prefix% %subject% now has standard privileges in <highlight>%amount% chunks</highlight>");
+
+    public ConfigText accessGranted = ConfigText.of(
+            "%prefix% %subject% now has elevated privileges in <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%");
+
+    public ConfigText accessRevoked = ConfigText.of(
+            "%prefix% %subject% now has standard privileges in <highlight>%amount% chunks</highlight> near <emphasis>(%world% %chunk_x% %chunk_z%)</emphasis> using %type%");
 
     public ConfigText accessViewTitle = ConfigText.of(
             "<emphasis>%world% %chunk_x%, %chunk_z%</emphasis> <separator>|</separator> Chunk Access");

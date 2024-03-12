@@ -26,11 +26,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,14 +61,17 @@ public final class Faction {
     @Getter
     private @NotNull final String id;
 
-    @Getter @Setter
+    @Getter
     private @NotNull String name;
 
-    @Getter @Setter
+    @Getter
     private @Nullable Component description;
 
-    @Getter @Setter
+    @Getter
     private @Nullable Component motd;
+
+    @Getter
+    private @Nullable Location home;
 
     @Getter
     private final long createdAt = System.currentTimeMillis();
@@ -86,6 +91,7 @@ public final class Faction {
     @Getter @Setter
     private transient boolean dirty;
 
+    @ApiStatus.Internal
     public Faction() {
         this.id = UUID.randomUUID().toString();
     }
@@ -103,12 +109,51 @@ public final class Faction {
         this.roster.put(owner.getUniqueId(), member);
     }
 
+    // region State
+
     public boolean isMinimal() {
         return this.getFlagValueOrDefault(FactionFlags.MINIMAL_VISIBILITY);
     }
 
     public boolean isWilderness() {
         return this.id.equals(WILDERNESS_ID);
+    }
+
+    public void setName(@NotNull String name) {
+        if (name.equals(this.name)) {
+            return;
+        }
+
+        this.name = name;
+        this.markDirty();
+    }
+
+    public void setDescription(@Nullable Component description) {
+        if (Objects.equals(description, this.description)) {
+            return;
+        }
+
+        this.description = description;
+        this.markDirty();
+    }
+
+    public void setMotd(@Nullable Component motd) {
+        if (Objects.equals(motd, this.motd)) {
+            return;
+        }
+
+        this.motd = motd;
+        this.markDirty();
+    }
+
+    public void setHome(@NotNull Location home) {
+        home = new Location(home.getWorld(), home.getBlockX() + 0.5, home.getBlockY(), home.getBlockZ() + 0.5);
+        if (Objects.equals(home, this.home)) {
+            return;
+        }
+
+        this.home = home;
+        this.markDirty();
     }
 
     public boolean canDisband() {
@@ -147,6 +192,8 @@ public final class Faction {
         // remove the faction from the registry
         factions.unregister(this);
     }
+
+    // endregion State
 
     // region Territory
 

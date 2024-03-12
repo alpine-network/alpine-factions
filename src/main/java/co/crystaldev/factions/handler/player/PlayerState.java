@@ -4,9 +4,11 @@ import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.player.TerritorialTitleMode;
+import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.util.AsciiFactionMap;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
@@ -58,7 +60,8 @@ public final class PlayerState {
         FPlayer state = Accessors.players().get(this.player);
 
         // player has entered into a new faction claim
-        if (!Accessors.claims().isSameClaim(oldChunk, newChunk)) {
+        ClaimAccessor claims = Accessors.claims();
+        if (!claims.isSameClaim(oldChunk, newChunk)) {
             this.displayTerritorialTitle(state, newChunk);
         }
 
@@ -71,6 +74,15 @@ public final class PlayerState {
         // now send the minimized faction map
         if (this.autoFactionMap) {
             AlpineFactions.schedule(() -> Messaging.send(this.player, AsciiFactionMap.create(this.player, true)));
+        }
+
+        // check the player's access
+        boolean isElevated = Optional.ofNullable(claims.getClaim(newChunk)).map(claim -> claim.isAccessed(this.player)).orElse(false);
+        boolean wasElevated = Optional.ofNullable(claims.getClaim(oldChunk)).map(claim -> claim.isAccessed(this.player)).orElse(false);
+        if (isElevated != wasElevated) {
+            MessageConfig config = MessageConfig.getInstance();
+            ConfigText message = isElevated ? config.elevatedAccess : config.standardAccess;
+            AlpineFactions.schedule(() -> message.send(this.player));
         }
     }
 

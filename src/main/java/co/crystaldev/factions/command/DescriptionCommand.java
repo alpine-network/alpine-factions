@@ -63,7 +63,6 @@ public final class DescriptionCommand extends FactionsCommand {
         // change the faction description
         Component newDescription = event.getDescription();
         faction.setDescription(newDescription);
-        faction.markDirty();
 
         // notify the faction
         FactionHelper.broadcast(faction, sender, observer -> {

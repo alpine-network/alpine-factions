@@ -1,5 +1,6 @@
-package co.crystaldev.factions.util;
+package co.crystaldev.factions.util.adapter;
 
+import co.crystaldev.factions.util.ComponentHelper;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
