@@ -125,7 +125,7 @@ public final class RelationCommand extends FactionsCommand {
             return;
         }
 
-        if (actingFaction.isRelation(targetFaction, relation)) {
+        if (actingFaction.isRelationWish(targetFaction, relation)) {
             messageConfig.alreadyRelation.send(sender,
                     "faction", FactionHelper.formatRelational(sender, targetFaction, false),
                     "faction_name", targetFaction.getName());
@@ -151,7 +151,7 @@ public final class RelationCommand extends FactionsCommand {
         }
 
         // set the relation wish internally
-        FactionRelation previousRelation = actingFaction.relationTo(targetFaction);
+        FactionRelation previousRelation = actingFaction.relationWishTo(targetFaction);
         actingFaction.setRelation(targetFaction, relation);
 
         // if override mode is enabled, force set this relation

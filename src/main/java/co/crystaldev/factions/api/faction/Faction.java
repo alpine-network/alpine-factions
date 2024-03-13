@@ -258,7 +258,25 @@ public final class Faction {
 
     @NotNull
     public FactionRelation relationTo(@Nullable Faction faction) {
-        if (faction == null) {
+        if (faction == null || faction.isWilderness()) {
+            return FactionRelation.NEUTRAL;
+        }
+
+        if (this.equals(faction)) {
+            return FactionRelation.SELF;
+        }
+
+        FactionRelation relationToOther = this.relationRequests.getOrDefault(faction.getId(), FactionRelation.NEUTRAL);
+        FactionRelation relationToSelf = faction.relationRequests.getOrDefault(this.getId(), FactionRelation.NEUTRAL);
+
+        return relationToOther == relationToSelf
+                ? relationToOther
+                : relationToOther.getWeight() > 0 ? FactionRelation.NEUTRAL : relationToOther;
+    }
+
+    @NotNull
+    public FactionRelation relationWishTo(@Nullable Faction faction) {
+        if (faction == null || faction.isWilderness()) {
             return FactionRelation.NEUTRAL;
         }
 
@@ -270,13 +288,21 @@ public final class Faction {
     }
 
     public boolean isRelation(@Nullable Faction faction, @NotNull FactionRelation relation) {
-        if (faction == null) {
-            return relation == FactionRelation.NEUTRAL;
+        return this.relationTo(faction) == relation;
+    }
+
+    public boolean isRelationWish(@Nullable Faction faction, @NotNull FactionRelation relation) {
+        return this.relationWishTo(faction) == relation;
+    }
+
+    public boolean isFriendly(@Nullable Faction faction) {
+        if (faction == null || faction.isWilderness()) {
+            return false;
         }
 
         FactionRelation relationToOther = this.relationTo(faction);
         FactionRelation relationToSelf = faction.relationTo(this);
-        return relationToOther == relationToSelf && relationToOther == relation;
+        return relationToOther == relationToSelf && relationToOther.isFriendly();
     }
 
     public void setRelation(@NotNull Faction faction, @NotNull FactionRelation relation) {
@@ -297,7 +323,7 @@ public final class Faction {
 
         this.relationRequests.forEach((factionId, type) -> {
             Faction other = factions.getById(factionId);
-            if (other != null && other.relationTo(this) == type) {
+            if (other != null && other.relationWishTo(this) == type) {
                 related.add(new RelatedFaction(other, type));
             }
         });
@@ -312,7 +338,7 @@ public final class Faction {
 
         this.relationRequests.forEach((factionId, type) -> {
             Faction other = factions.getById(factionId);
-            if (other != null && other.relationTo(this) != type) {
+            if (other != null && other.relationWishTo(this) != type) {
                 related.add(new RelatedFaction(other, type));
             }
         });
@@ -393,7 +419,7 @@ public final class Faction {
         }
         else {
             Faction other = Accessors.factions().find(player);
-            return this.isPermitted(this.relationTo(other), permission);
+            return this.isPermitted(this.relationWishTo(other), permission);
         }
     }
 

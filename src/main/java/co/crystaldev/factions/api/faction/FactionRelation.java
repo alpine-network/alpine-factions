@@ -12,26 +12,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor @Getter
 public enum FactionRelation implements Relational {
     @SerializedName("self")
-    SELF(0, "self") {
+    SELF(0, "self", true) {
         @Override
         public boolean isValid() {
             return false;
         }
     },
 
-    @SerializedName("neutral")
-    NEUTRAL(0, "neutral"),
-
     @SerializedName("enemy")
-    ENEMY(0, "enemy"),
+    ENEMY(0, "enemy", false),
+
+    @SerializedName("neutral")
+    NEUTRAL(1, "neutral", false),
 
     @SerializedName("truce")
-    TRUCE(1, "truce"),
+    TRUCE(2, "truce", true),
 
     @SerializedName("ally")
-    ALLY(2, "ally");
+    ALLY(3, "ally", true);
 
     private final int weight;
 
     private final String id;
+
+    private final boolean friendly;
 }

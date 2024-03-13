@@ -583,6 +583,24 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
+            ">>> Combat"
+    })
+    public ConfigText cantHurtFriendly = ConfigText.of(
+            "%error_prefix% You can't hurt %player%");
+
+    public ConfigText cantHurtNeutral = ConfigText.of(
+            "%error_prefix% You can't hurt neutral players in their own territory unless you declare them as an enemy");
+
+    public ConfigText attemptedDamage = ConfigText.of(
+            "%prefix% %attacker% tried to hurt you");
+
+    public ConfigText combatDisabled = ConfigText.of(
+            "%prefix% Combat is disabled in %faction%");
+
+
+
+    @Comment({
+            "",
             ">>> Land Claiming"
     })
     public ConfigText landClaim = ConfigText.of(
