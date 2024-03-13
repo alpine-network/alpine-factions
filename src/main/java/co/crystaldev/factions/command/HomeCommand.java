@@ -1,7 +1,9 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.event.FactionHomeUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
@@ -44,13 +46,8 @@ public final class HomeCommand extends FactionsCommand {
             return;
         }
 
+        // ensure the faction has a home
         Location home = faction.getHome();
-        if (home != null && !Accessors.claims().getFactionOrDefault(home).equals(faction)) {
-            faction.setHome(null);
-            FactionHelper.broadcast(faction, config.unsetHome.build());
-            return;
-        }
-
         if (home == null) {
             config.noHome.send(player,
                     "faction", FactionHelper.formatRelational(player, faction),
@@ -58,6 +55,19 @@ public final class HomeCommand extends FactionsCommand {
             return;
         }
 
+        // ensure home is still in the faction's own territory
+        if (!Accessors.claims().getFactionOrDefault(home).equals(faction)) {
+            FactionHomeUpdateEvent event = AlpineFactions.callEvent(new FactionHomeUpdateEvent(faction, player, null));
+            if (!event.isCancelled()) {
+                faction.setHome(event.getLocation());
+                if (event.getLocation() != null) {
+                    FactionHelper.broadcast(faction, config.unsetHome.build());
+                }
+                return;
+            }
+        }
+
+        // notify the player
         config.home.send(player,
                 "faction", FactionHelper.formatRelational(player, faction, false),
                 "faction_name", faction.getName(),

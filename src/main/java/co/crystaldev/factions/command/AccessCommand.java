@@ -3,10 +3,13 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.ChunkAccessUpdateEvent;
 import co.crystaldev.factions.api.faction.Claim;
+import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.player.FPlayer;
@@ -33,10 +36,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -164,7 +164,20 @@ public final class AccessCommand extends FactionsCommand {
             chunks = Collections.singleton(ChunkCoordinate.of(origin.getX(), origin.getZ()));
         }
 
-        if (chunks.size() == 1) {
+        String world = player.getWorld().getName();
+        String owningFaction = claim.getFactionId();
+        Set<ClaimedChunk> claimedChunks = chunks.stream()
+                .map(ch -> new ClaimedChunk(claims.getClaim(world, ch), world, ch.getX(), ch.getZ()))
+                .filter(ch -> ch.getClaim() != null && Objects.equals(ch.getClaim().getFactionId(), owningFaction))
+                .collect(Collectors.toCollection(HashSet::new));
+
+        ChunkAccessUpdateEvent event = AlpineFactions.callEvent(new ChunkAccessUpdateEvent(claimedFaction, player, claimedChunks, subject));
+        if (event.isCancelled() || claimedChunks.isEmpty()) {
+            config.operationCancelled.send(player);
+            return;
+        }
+
+        if (claimedChunks.size() == 1) {
             // handle a single chunk
 
             // set access
@@ -181,17 +194,9 @@ public final class AccessCommand extends FactionsCommand {
             // handle multiple chunks
 
             // set access
-            String owningFaction = claim.getFactionId();
-            String world = player.getWorld().getName();
-            for (ChunkCoordinate chunk : chunks) {
-                claim = claims.getClaim(world, chunk);
-                if (claim == null || !Objects.equals(claim.getFactionId(), owningFaction)) {
-                    continue;
-                }
-
-                // set access
-                setAccess(claim, subject, access);
-                claims.save(world, chunk);
+            for (ClaimedChunk chunk : claimedChunks) {
+                setAccess(chunk.getClaim(), subject, access);
+                claims.save(world, chunk.getChunkX(), chunk.getChunkZ());
             }
 
             // notify

@@ -1,9 +1,11 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.ChunkAccessUpdateEvent;
 import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
@@ -86,6 +88,13 @@ public final class AccessAllCommand extends FactionsCommand {
         }
 
         List<ClaimedChunk> chunks = claims.getClaims(targetFaction);
+
+        ChunkAccessUpdateEvent event = AlpineFactions.callEvent(new ChunkAccessUpdateEvent(targetFaction, sender, chunks, subject));
+        if (event.isCancelled() || chunks.isEmpty()) {
+            config.operationCancelled.send(sender);
+            return;
+        }
+
         if (chunks.size() == 1) {
             // handle a single chunk
 

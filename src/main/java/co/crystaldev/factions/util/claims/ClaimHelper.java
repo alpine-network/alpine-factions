@@ -4,7 +4,7 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
-import co.crystaldev.factions.api.event.FactionTerritoryChangeEvent;
+import co.crystaldev.factions.api.event.FactionTerritoryUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.FactionConfig;
@@ -125,8 +125,8 @@ public final class ClaimHelper {
         }
 
         // call event
-        FactionTerritoryChangeEvent.Type type = claimingFaction == null ? FactionTerritoryChangeEvent.Type.UNCLAIM : FactionTerritoryChangeEvent.Type.CLAIM;
-        FactionTerritoryChangeEvent event = AlpineFactions.callEvent(new FactionTerritoryChangeEvent(
+        FactionTerritoryUpdateEvent.Type type = claimingFaction == null ? FactionTerritoryUpdateEvent.Type.UNCLAIM : FactionTerritoryUpdateEvent.Type.CLAIM;
+        FactionTerritoryUpdateEvent event = AlpineFactions.callEvent(new FactionTerritoryUpdateEvent(
                 actingFaction, player, origin.getWorld(), type, chunks, conqueredFactions, !Bukkit.isPrimaryThread()));
         if (event.isCancelled() || chunks.isEmpty()) {
             return;

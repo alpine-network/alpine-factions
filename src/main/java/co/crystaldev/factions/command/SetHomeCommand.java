@@ -1,7 +1,9 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.event.FactionHomeUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.framework.FactionsCommand;
@@ -31,8 +33,8 @@ public final class SetHomeCommand extends FactionsCommand {
 
         Location location = player.getLocation();
         Faction faction = Accessors.claims().getFactionOrDefault(location);
+        Faction selfFaction = Accessors.factions().findOrDefault(player);
         if (faction.isWilderness() || !faction.isMember(player.getUniqueId())) {
-            Faction selfFaction = Accessors.factions().findOrDefault(player);
             config.outsideTerritory.send(player,
                     "faction", FactionHelper.formatRelational(player, selfFaction, false),
                     "faction_name", faction.getName());
@@ -44,16 +46,28 @@ public final class SetHomeCommand extends FactionsCommand {
             return;
         }
 
-        faction.setHome(location);
+        FactionHomeUpdateEvent event = AlpineFactions.callEvent(new FactionHomeUpdateEvent(selfFaction, player, location));
+        if (event.isCancelled()) {
+            config.operationCancelled.send(player);
+            return;
+        }
+
+        Location newLocation = event.getLocation();
+        faction.setHome(newLocation);
+
+        // event unset the location, do not notify
+        if (newLocation == null) {
+            return;
+        }
 
         FactionHelper.broadcast(faction, observer -> {
             return config.setHome.build(
                     "actor", FactionHelper.formatRelational(observer, faction, player),
                     "actor_name", player.getName(),
                     "world", player.getWorld().getName(),
-                    "x", location.getBlockX(),
-                    "y", location.getBlockY(),
-                    "z", location.getBlockZ());
+                    "x", newLocation.getBlockX(),
+                    "y", newLocation.getBlockY(),
+                    "z", newLocation.getBlockZ());
         });
     }
 }

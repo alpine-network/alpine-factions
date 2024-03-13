@@ -21,7 +21,7 @@ import java.util.Set;
  * @since 02/22/2024
  */
 @Getter
-public final class FactionTerritoryChangeEvent extends FactionEntityEvent<Player> implements Cancellable {
+public final class FactionTerritoryUpdateEvent extends FactionEntityEvent<Player> implements Cancellable {
 
     private final @NotNull World world;
 
@@ -34,7 +34,7 @@ public final class FactionTerritoryChangeEvent extends FactionEntityEvent<Player
     @Setter
     private boolean cancelled;
 
-    public FactionTerritoryChangeEvent(@NotNull Faction faction, @NotNull Player entity, @NotNull World world,
+    public FactionTerritoryUpdateEvent(@NotNull Faction faction, @NotNull Player entity, @NotNull World world,
                                        @NotNull Type type, @NotNull Set<ChunkCoordinate> chunks,
                                        @NotNull Map<Faction, List<ChunkCoordinate>> conqueredChunks,
                                        boolean async) {
