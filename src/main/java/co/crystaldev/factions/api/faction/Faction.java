@@ -547,6 +547,18 @@ public final class Faction {
         return members;
     }
 
+    public int countOfflineMembers() {
+        int members = 0;
+
+        for (Member member : this.members.values()) {
+            if (!member.isOnline()) {
+                members++;
+            }
+        }
+
+        return members;
+    }
+
     public int countMembers() {
         return this.members.size();
     }
