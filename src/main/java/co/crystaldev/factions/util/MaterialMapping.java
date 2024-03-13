@@ -38,10 +38,6 @@ public final class MaterialMapping {
             .add(XMaterial.LEVER)
             .build();
 
-    public static final MappedMaterial PRESSURE_PLATES = MappedMaterial.builder()
-            .add(types -> types.filter(m -> m.name().endsWith("_PRESSURE_PLATE")))
-            .build();
-
     public static final MappedMaterial MATERIAL_EDIT_ON_INTERACT = MappedMaterial.of(
             XMaterial.NOTE_BLOCK,
             XMaterial.JUKEBOX,

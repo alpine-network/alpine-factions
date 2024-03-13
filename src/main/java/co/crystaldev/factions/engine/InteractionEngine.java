@@ -14,7 +14,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -22,7 +21,6 @@ import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -118,13 +116,6 @@ public final class InteractionEngine extends AlpineEngine {
             // buttons/levers
             result = MaterialMapping.SWITCHES.test(block);
             if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.USE_SWITCHES, "use switches")) {
-                event.setCancelled(true);
-                return;
-            }
-
-            // pressure plates
-            result = MaterialMapping.PRESSURE_PLATES.test(block);
-            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.TRIGGER_PRESSURE_PLATES, "trigger pressure plates")) {
                 event.setCancelled(true);
                 return;
             }

@@ -122,7 +122,6 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
         };
         faction.setPermissionBulk(Permissions.BUILD, true, relations);
         faction.setPermissionBulk(Permissions.OPEN_DOORS, true, relations);
-        faction.setPermissionBulk(Permissions.TRIGGER_PRESSURE_PLATES, true, relations);
         faction.setPermissionBulk(Permissions.USE_SWITCHES, true, relations);
         faction.setPermissionBulk(Permissions.ACCESS_HOME, true, relations);
         faction.setPermissionBulk(Permissions.BANK_DEPOSIT, true);
@@ -159,7 +158,6 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
         };
         faction.setPermissionBulk(Permissions.BUILD, false, relations);
         faction.setPermissionBulk(Permissions.OPEN_DOORS, false, relations);
-        faction.setPermissionBulk(Permissions.TRIGGER_PRESSURE_PLATES, false, relations);
         faction.setPermissionBulk(Permissions.USE_SWITCHES, false, relations);
         faction.setPermissionBulk(Permissions.ACCESS_HOME, false, relations);
 
@@ -209,7 +207,6 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
         };
         faction.setPermissionBulk(Permissions.BUILD, false, relations);
         faction.setPermissionBulk(Permissions.OPEN_DOORS, false, relations);
-        faction.setPermissionBulk(Permissions.TRIGGER_PRESSURE_PLATES, false, relations);
         faction.setPermissionBulk(Permissions.USE_SWITCHES, false, relations);
         faction.setPermissionBulk(Permissions.ACCESS_HOME, false, relations);
 

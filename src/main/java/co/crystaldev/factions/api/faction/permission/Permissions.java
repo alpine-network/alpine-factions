@@ -140,12 +140,6 @@ public final class Permissions {
             .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER, Rank.MEMBER)
             .build();
 
-    public static final Permission TRIGGER_PRESSURE_PLATES = Permission.builder("pressure_plates")
-            .name("Pressure Plates")
-            .description("ability to trigger pressure plates")
-            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER, Rank.MEMBER)
-            .build();
-
     public static final Permission USE_SWITCHES = Permission.builder("switches")
             .name("Switches")
             .description("ability to access buttons and levers")
@@ -174,7 +168,6 @@ public final class Permissions {
             USE_CONTAINERS,
             BUILD,
             OPEN_DOORS,
-            TRIGGER_PRESSURE_PLATES,
             USE_SWITCHES
     };
 }
