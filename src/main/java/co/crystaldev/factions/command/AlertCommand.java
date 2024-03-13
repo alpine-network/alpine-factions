@@ -47,7 +47,7 @@ public final class AlertCommand extends FactionsCommand {
 
         // broadcast chat message
         FactionHelper.broadcast(faction, observer -> {
-            XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(observer);
+            XSound.ENTITY_PLAYER_LEVELUP.play(observer);
 
             return config.alertMessage.build(
                     "actor", FactionHelper.formatRelational(observer, faction, player, false),
