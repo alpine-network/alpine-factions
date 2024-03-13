@@ -6,3 +6,5 @@ authors: [ BestBearr ]
 api-version: 1.13
 depend:
   - AlpineCore
+softdepend:
+  - PlaceholderAPI
