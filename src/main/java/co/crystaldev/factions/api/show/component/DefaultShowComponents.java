@@ -69,12 +69,12 @@ public final class DefaultShowComponents {
             ShowOrder.inserting(),
             ctx -> {
                 Faction faction = ctx.getFaction();
-                boolean infinitePower = faction.hasInfinitePower();
+                boolean infinite = faction.hasInfinitePower();
                 int land = faction.getClaimCount();
 
                 return conf().showLandPower.build("land", faction.getClaimCount(),
-                        "power", infinitePower ? land + 1 : faction.getPowerLevel(),
-                        "max_power", infinitePower ? land + 1 : faction.getMaxPowerLevel());
+                        "power", infinite ? "∞" : faction.getPowerLevel(),
+                        "max_power", infinite ? "∞" : faction.getMaxPowerLevel());
             },
             MINIMAL_VISIBILITY_PREDICATE
     );

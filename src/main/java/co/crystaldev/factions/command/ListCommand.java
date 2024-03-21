@@ -52,8 +52,6 @@ public final class ListCommand extends FactionsCommand {
 
             boolean infinite = faction.hasInfinitePower();
             int land = faction.getClaimCount();
-            long power = infinite ? land + 1 : faction.getPowerLevel();
-            long maxPower = infinite ? land + 1 : faction.getMaxPowerLevel();
 
             return config.listEntry.build(
                     "faction", formattedFactionName,
@@ -61,8 +59,8 @@ public final class ListCommand extends FactionsCommand {
                     "online", faction.countOnlineMembers(),
                     "members", faction.countMembers(),
                     "land", land,
-                    "power", power,
-                    "max_power", maxPower
+                    "power", infinite ? "∞" : faction.getPowerLevel(),
+                    "max_power", infinite ? "∞" : faction.getMaxPowerLevel()
             );
         });
 
