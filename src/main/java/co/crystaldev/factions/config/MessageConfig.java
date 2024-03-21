@@ -77,59 +77,6 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>> Formatting",
-            "  > Title"
-    })
-    public ConfigText titleFormat = ConfigText.of(
-            "<bracket><</bracket> %content% <bracket>></bracket>");
-
-    public boolean titleUsesPadding = true;
-
-    public String paddingCharacter = "-";
-
-    public String paddingStyle = "dark_gray strikethrough";
-
-
-
-    @Comment("  > Pagination")
-    public ConfigText paginatorTitleFormat = ConfigText.of(
-            "<bracket><</bracket> %content% <separator>|</separator> %previous% %page%/%max_pages% %next% <bracket>></bracket>");
-
-    public ConfigText previous = ConfigText.of(
-            "<bracket>[</bracket><emphasis><</emphasis><bracket>]</bracket>");
-
-    public ConfigText next = ConfigText.of(
-            "<bracket>[</bracket><emphasis>></emphasis><bracket>]</bracket>");
-
-    public ConfigText previousDisabled = ConfigText.of(
-            "<emphasis>[<]</emphasis>");
-
-    public ConfigText nextDisabled = ConfigText.of(
-            "<emphasis>[>]</emphasis>");
-
-    public ConfigText noPages = ConfigText.of(
-            "%error_prefix% No pages available to display");
-
-
-
-    @Comment("  > Progress Indicator")
-    public ConfigText progressBarFormat = ConfigText.of(
-            "<bracket>[</bracket>%progress%<bracket>]</bracket>");
-
-    public int progressLength = 20;
-
-    public String progressIndicatorCharacter = "=";
-
-    public String progressRemainingCharacter = "⋯";
-
-    public String progressIndicatorStyle = "aqua strikethrough";
-
-    public String progressRemainingStyle = "light_gray";
-
-
-
-    @Comment({
-            "",
             ">>> Faction Metadata"
     })
     public ConfigText rename = ConfigText.of(

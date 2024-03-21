@@ -83,7 +83,7 @@ public final class FlagCommand extends FactionsCommand {
                     "flag_id", flag.getId(),
                     "flag_name", flag.getName(),
                     "flag_description", flag.getDescription(),
-                    "flag_state_description", ComponentHelper.mini(Formatting.formatPlaceholders(stateDescription, "value", newValue)),
+                    "flag_state_description", ComponentHelper.mini(Formatting.placeholders(stateDescription, "value", newValue)),
                     "state", newValue
             );
         });
@@ -119,7 +119,7 @@ public final class FlagCommand extends FactionsCommand {
                     "flag_id", flag.getId(),
                     "flag_name", flag.getName(),
                     "flag_description", flag.getDescription(),
-                    "flag_state_description", ComponentHelper.mini(Formatting.formatPlaceholders(stateDescription, state)),
+                    "flag_state_description", ComponentHelper.mini(Formatting.placeholders(stateDescription, state)),
                     "state", state
             );
         });

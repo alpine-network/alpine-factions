@@ -1,7 +1,9 @@
 package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.config.AlpineCoreConfig;
 import co.crystaldev.alpinecore.framework.Activatable;
+import co.crystaldev.alpinecore.framework.config.object.ConfigMessage;
 import co.crystaldev.factions.api.FlagRegistry;
 import co.crystaldev.factions.api.PermissionRegistry;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
@@ -88,6 +90,11 @@ public final class AlpineFactions extends AlpinePlugin {
     public void setupDefaultVariables(@NotNull VariableConsumer variableConsumer) {
         variableConsumer.addVariable("prefix", "<info>Factions</info> <separator>»</separator><text>");
         variableConsumer.addVariable("error_prefix", "<error>Factions</error> <separator>»</separator><text>");
+    }
+
+    @Override
+    public void setupDefaultConfiguration(@NotNull AlpineCoreConfig config) {
+        config.noPages = ConfigMessage.of("%error_prefix% No pages available to display");
     }
 
     @NotNull @ApiStatus.Internal

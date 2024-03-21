@@ -1,8 +1,6 @@
 package co.crystaldev.factions.util;
 
-import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.config.MessageConfig;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
@@ -14,8 +12,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -24,12 +20,9 @@ import java.util.function.Function;
  */
 @UtilityClass
 public final class Formatting {
-
-    private static final int TITLE_LENGTH = 54;
-
     @NotNull
-    public static String formatPlaceholders(@Nullable String string, @NotNull Object... placeholders) {
-        return co.crystaldev.alpinecore.util.Formatting.formatPlaceholders(AlpineFactions.getInstance(), string, placeholders);
+    public static String placeholders(@Nullable String string, @NotNull Object... placeholders) {
+        return co.crystaldev.alpinecore.util.Formatting.placeholders(AlpineFactions.getInstance(), string, placeholders);
     }
 
     @NotNull
@@ -72,115 +65,29 @@ public final class Formatting {
     }
 
     @NotNull
-    public static Component appendTitlePadding(@NotNull Component component) {
-        MessageConfig config = MessageConfig.getInstance();
-        int paddingLength = Math.max(4, (TITLE_LENGTH - ComponentHelper.length(component)) / 2);
-        String paddingString = StringHelper.repeat(config.paddingCharacter, paddingLength);
-        Component padding = Components.stylize(config.paddingStyle, Component.text(paddingString));
-        return Components.join(padding, component, padding);
+    public static Component applyTitlePadding(@NotNull Component component) {
+        return co.crystaldev.alpinecore.util.Formatting.applyTitlePadding(AlpineFactions.getInstance(), component);
     }
 
     @NotNull
     public static Component title(@NotNull Component component) {
-        MessageConfig config = MessageConfig.getInstance();
-        component = config.titleFormat.build("content", component);
-        return config.titleUsesPadding ? appendTitlePadding(component) : component;
+        return co.crystaldev.alpinecore.util.Formatting.title(AlpineFactions.getInstance(), component);
     }
 
     @NotNull
     public static <T> Component elements(@NotNull Collection<T> elements, @NotNull Function<@NotNull T, Component> toComponentFn) {
-        MessageConfig config = MessageConfig.getInstance();
-        List<Component> pageElements = new LinkedList<>();
-
-        // collect page elements
-        for (T element : elements) {
-            if (element == null) {
-                continue;
-            }
-
-            pageElements.add(toComponentFn.apply(element));
-        }
-
-        // ensure there is data to display
-        if (pageElements.isEmpty()) {
-            return config.noPages.build();
-        }
-
-        // build the component
-        return Components.joinNewLines(pageElements);
+        return co.crystaldev.alpinecore.util.Formatting.elements(AlpineFactions.getInstance(), elements, toComponentFn);
     }
 
     @NotNull
     public static <T> Component page(@NotNull Component title, @NotNull Collection<T> elements,
                                      @NotNull String command, int currentPage, int elementsPerPage,
                                      @NotNull Function<@NotNull T, Component> toComponentFn) {
-        MessageConfig config = MessageConfig.getInstance();
-        List<Component> pageElements = new LinkedList<>();
-        int totalPages = (int) Math.ceil((double) elements.size() / elementsPerPage);
-
-        // needs to be non-zero based
-        int humanPage = currentPage;
-        currentPage--;
-
-        // collect page elements
-        int index = 0;
-        for (T element : elements) {
-            if (element == null) {
-                continue;
-            }
-
-            if (pageElements.size() >= elementsPerPage) {
-                break;
-            }
-
-            if (index >= currentPage * elementsPerPage) {
-                pageElements.add(toComponentFn.apply(element));
-            }
-
-            index++;
-        }
-
-        // ensure there is data to display
-        if (pageElements.isEmpty()) {
-            return config.noPages.build();
-        }
-
-        // create the title
-        Component previous = currentPage == 0
-                ? config.previousDisabled.build()
-                : ComponentHelper.events(config.previous.build(), Formatting.formatPlaceholders(command, humanPage - 1));
-        Component next = currentPage == totalPages - 1
-                ? config.nextDisabled.build()
-                : ComponentHelper.events(config.next.build(), Formatting.formatPlaceholders(command, humanPage + 1));
-
-        // build the title
-        Component center = config.paginatorTitleFormat.build(
-                "content", title,
-                "page", humanPage,
-                "max_pages", totalPages,
-                "previous", previous,
-                "next", next
-        );
-
-        // build the component
-        return Components.joinNewLines(
-                appendTitlePadding(center),
-                Components.joinNewLines(pageElements)
-        );
+        return co.crystaldev.alpinecore.util.Formatting.page(AlpineFactions.getInstance(), title, elements, command, currentPage, elementsPerPage, toComponentFn);
     }
 
     @NotNull
     public static Component progress(double progress) {
-        progress = Math.max(0.0, Math.min(1.0, progress));
-
-        MessageConfig config = MessageConfig.getInstance();
-
-        int fillLength = (int) (config.progressLength * progress);
-        Component progressComponent = Components.join(
-                Components.stylize(config.progressIndicatorStyle, Component.text(StringHelper.repeat(config.progressIndicatorCharacter, fillLength))),
-                Components.stylize(config.progressRemainingStyle, Component.text(StringHelper.repeat(config.progressRemainingCharacter, config.progressLength - fillLength)))
-        );
-
-        return config.progressBarFormat.build("progress", progressComponent);
+        return co.crystaldev.alpinecore.util.Formatting.progress(AlpineFactions.getInstance(), progress);
     }
 }

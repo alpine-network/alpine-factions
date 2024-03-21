@@ -102,7 +102,7 @@ public final class PermissionCommand extends FactionsCommand {
                 "faction", FactionHelper.formatRelational(sender, resolvedFaction, false),
                 "faction_name", resolvedFaction.getName());
         Component compiledTitle = Components.joinNewLines(
-                Formatting.appendTitlePadding(title),
+                Formatting.applyTitlePadding(title),
                 config.permissionRelationStateTitle.build()
         );
 
