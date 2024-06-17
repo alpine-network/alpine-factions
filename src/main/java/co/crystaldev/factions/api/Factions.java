@@ -6,7 +6,7 @@ import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- *
+ * @since 0.1.0
  */
 public interface Factions {
 
