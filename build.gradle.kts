@@ -48,11 +48,11 @@ publishing {
             from(components["java"])
 
             pom {
-                name.set("${rootProject.properties["plugin_name"]}-API")
+                name.set("${rootProject.properties["plugin_name"]}")
                 description.set(rootProject.properties["plugin_description"] as String)
 
                 groupId = rootProject.properties["maven_group"] as String
-                artifactId = "${rootProject.properties["maven_artifact"]}-api"
+                artifactId = "${rootProject.properties["maven_artifact"]}"
                 version = rootProject.version as String
                 packaging = "jar"
             }
