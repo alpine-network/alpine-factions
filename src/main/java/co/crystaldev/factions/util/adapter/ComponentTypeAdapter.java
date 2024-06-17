@@ -9,8 +9,7 @@ import net.kyori.adventure.text.Component;
 import java.io.IOException;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/17/2023
+ * @since 0.1.0
  */
 public final class ComponentTypeAdapter extends TypeAdapter<Component> {
 

@@ -1,7 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
@@ -33,12 +33,11 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/06/2024
+ * @since 0.1.0
  */
 @Command(name = "factions unclaim")
 @Description("Unclaim faction territory.")
-public final class UnclaimCommand extends FactionsCommand {
+final class UnclaimCommand extends FactionsCommand {
     public UnclaimCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -49,19 +48,19 @@ public final class UnclaimCommand extends FactionsCommand {
             @Arg("type") @Key(Args.CLAIM_TYPE) ClaimType type,
             @OptionalArg("radius") Optional<Integer> rad
     ) {
-        Faction actingFaction = Accessors.factions().findOrDefault(player);
+        Faction actingFaction = Factions.get().getFactions().findOrDefault(player);
         Claiming.mode(player, actingFaction, null, type, Math.max(rad.orElse(1), 1));
     }
 
     @Execute(name = "fill", aliases = "f")  @Async
     public void fill(@Context Player player) {
-        Faction actingFaction = Accessors.factions().findOrDefault(player);
+        Faction actingFaction = Factions.get().getFactions().findOrDefault(player);
         Claiming.fill(player, actingFaction, null);
     }
 
     @Execute(name = "one", aliases = "o")
     public void one(@Context Player player) {
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Claiming.one(player, factions.findOrDefault(player), null);
     }
 
@@ -74,7 +73,7 @@ public final class UnclaimCommand extends FactionsCommand {
         autoClaim.toggle(null);
 
         if (autoClaim.isEnabled()) {
-            Faction wilderness = Accessors.factions().getWilderness();
+            Faction wilderness = Factions.get().getFactions().getWilderness();
             config.enableAutoUnclaim.send(player,
                     "faction", FactionHelper.formatRelational(player, wilderness),
                     "faction_name", wilderness.getName());
@@ -101,7 +100,7 @@ public final class UnclaimCommand extends FactionsCommand {
         }
 
         // fetch all chunks
-        ClaimAccessor claims = Accessors.claims();
+        ClaimAccessor claims = Factions.get().getClaims();
         List<ClaimedChunk> foundClaims;
         ConfigText message;
         String worldName;
@@ -124,8 +123,8 @@ public final class UnclaimCommand extends FactionsCommand {
         foundClaims.forEach(claim -> claims.remove(claim.getWorld(), claim.getChunkX(), claim.getChunkZ()));
 
         // notify
-        Faction wilderness = Accessors.factions().getWilderness();
-        Faction playerFaction = Accessors.factions().findOrDefault(player);
+        Faction wilderness = Factions.get().getFactions().getWilderness();
+        Faction playerFaction = Factions.get().getFactions().findOrDefault(player);
         FactionHelper.broadcast(faction, player, observer -> {
             return message.build(
                     "actor", FactionHelper.formatRelational(observer, playerFaction, player),

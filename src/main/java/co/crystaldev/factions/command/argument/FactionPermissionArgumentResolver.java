@@ -15,10 +15,9 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/17/2024
+ * @since 0.1.0
  */
-public final class FactionPermissionArgumentResolver extends AlpineArgumentResolver<Permission> {
+final class FactionPermissionArgumentResolver extends AlpineArgumentResolver<Permission> {
     public FactionPermissionArgumentResolver() {
         super(Permission.class, Args.FACTION_PERMISSION);
     }

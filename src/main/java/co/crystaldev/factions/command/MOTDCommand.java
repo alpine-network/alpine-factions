@@ -3,7 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.framework.FactionsCommand;
@@ -22,12 +22,11 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/10/2024
+ * @since 0.1.0
  */
 @Command(name = "factions motd")
 @Description("Modify your faction's message of the day.")
-public final class MOTDCommand extends FactionsCommand {
+final class MOTDCommand extends FactionsCommand {
     public MOTDCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -38,7 +37,7 @@ public final class MOTDCommand extends FactionsCommand {
             @Join("name") String motd
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction faction = Accessors.factions().findOrDefault(player);
+        Faction faction = Factions.get().getFactions().findOrDefault(player);
 
         // ensure the user has permission
         if (!faction.isPermitted(player, Permissions.MODIFY_MOTD)) {
@@ -62,7 +61,7 @@ public final class MOTDCommand extends FactionsCommand {
     @Execute
     public void view(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction faction = Accessors.factions().findOrDefault(player);
+        Faction faction = Factions.get().getFactions().findOrDefault(player);
 
         Component motd = Optional.ofNullable(faction.getMotd()).orElse(Faction.DEFAULT_MOTD);
         Component title = config.motdTitle.build(
@@ -75,7 +74,7 @@ public final class MOTDCommand extends FactionsCommand {
     @Execute(name = "clear")
     public void clear(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction faction = Accessors.factions().findOrDefault(player);
+        Faction faction = Factions.get().getFactions().findOrDefault(player);
 
         // ensure the user has permission
         if (!faction.isPermitted(player, Permissions.MODIFY_MOTD)) {

@@ -11,8 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/12/2024
+ * @since 0.1.0
  */
 @Getter @Setter
 public final class FactionHomeUpdateEvent extends FactionEntityEvent<Player> implements Cancellable {

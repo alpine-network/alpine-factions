@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/08/2024
+ * @since 0.1.0
  */
 @NoArgsConstructor(access = AccessLevel.PACKAGE) @Getter
 public final class AutoClaimState {

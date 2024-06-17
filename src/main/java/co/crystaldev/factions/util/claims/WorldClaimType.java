@@ -1,8 +1,7 @@
 package co.crystaldev.factions.util.claims;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/17/2024
+ * @since 0.1.0
  */
 public enum WorldClaimType {
     ALL,

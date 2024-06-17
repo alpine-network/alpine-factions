@@ -3,7 +3,7 @@ package co.crystaldev.factions.engine;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.event.ServerTickEvent;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.FactionConfig;
@@ -13,8 +13,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/22/2024
+ * @since 0.1.0
  */
 public final class PowerEngine extends AlpineEngine {
     PowerEngine(AlpinePlugin plugin) {
@@ -30,7 +29,7 @@ public final class PowerEngine extends AlpineEngine {
         FactionConfig config = FactionConfig.getInstance();
         double powerGain = config.powerGainPerHour / 60.0;
 
-        PlayerAccessor players = Accessors.players();
+        PlayerAccessor players = Factions.get().getPlayers();
         players.forEach(player -> {
             // modify the player's power
             player.setPowerLevel(Math.min(player.getPowerLevel() + powerGain, config.maxPlayerPower));
@@ -46,7 +45,7 @@ public final class PowerEngine extends AlpineEngine {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         FactionConfig config = FactionConfig.getInstance();
-        PlayerAccessor players = Accessors.players();
+        PlayerAccessor players = Factions.get().getPlayers();
         FPlayer player = players.get(event.getEntity());
 
         player.setPowerLevel(Math.max(0.0, player.getPowerLevel() + config.powerLossPerDeath));

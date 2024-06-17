@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/15/2024
+ * @since 0.1.0
  */
 @AllArgsConstructor
 final class FixedShowOrdering implements ShowOrder {

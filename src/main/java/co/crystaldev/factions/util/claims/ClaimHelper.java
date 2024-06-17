@@ -1,7 +1,7 @@
 package co.crystaldev.factions.util.claims;
 
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.FactionTerritoryUpdateEvent;
@@ -28,8 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/11/2024
+ * @since 0.1.0
  */
 @UtilityClass @ApiStatus.Internal
 public final class ClaimHelper {
@@ -38,7 +37,7 @@ public final class ClaimHelper {
                                     @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
 
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
         Chunk playerChunk = player.getLocation().getChunk();
@@ -71,7 +70,7 @@ public final class ClaimHelper {
 
         // iterate and validate chunks
         Faction playerFaction = factions.findOrDefault(player);
-        ClaimAccessor claims = Accessors.claims();
+        ClaimAccessor claims = Factions.get().getClaims();
         int conqueredChunkCount = 0;
         Map<Faction, List<ChunkCoordinate>> conqueredFactions = new HashMap<>();
         Iterator<ChunkCoordinate> iterator = chunks.iterator();
@@ -186,7 +185,7 @@ public final class ClaimHelper {
         MessageConfig config = MessageConfig.getInstance();
 
         if (claiming && claimingFaction == null) {
-            Faction wilderness = Accessors.factions().getWilderness();
+            Faction wilderness = Factions.get().getFactions().getWilderness();
             config.landOwned.send(player,
                     "faction", FactionHelper.formatRelational(player, wilderness),
                     "faction_name", wilderness.getName()
@@ -256,7 +255,7 @@ public final class ClaimHelper {
     public static Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
         int max = FactionConfig.getInstance().maxClaimFillVolume;
         World world = origin.getWorld();
-        ClaimAccessor claims = Accessors.claims();
+        ClaimAccessor claims = Factions.get().getClaims();
         Set<ChunkCoordinate> chunks = new HashSet<>();
 
         // discover chunks to fill

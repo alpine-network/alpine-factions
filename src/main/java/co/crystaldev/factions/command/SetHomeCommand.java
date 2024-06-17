@@ -2,7 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.event.FactionHomeUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
@@ -17,12 +17,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/11/2024
+ * @since 0.1.0
  */
 @Command(name = "factions sethome")
 @Description("Set the faction home to your current location.")
-public final class SetHomeCommand extends FactionsCommand {
+final class SetHomeCommand extends FactionsCommand {
     public SetHomeCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -32,8 +31,8 @@ public final class SetHomeCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
 
         Location location = player.getLocation();
-        Faction faction = Accessors.claims().getFactionOrDefault(location);
-        Faction selfFaction = Accessors.factions().findOrDefault(player);
+        Faction faction = Factions.get().getClaims().getFactionOrDefault(location);
+        Faction selfFaction = Factions.get().getFactions().findOrDefault(player);
         if (faction.isWilderness() || !faction.isMember(player.getUniqueId())) {
             config.outsideTerritory.send(player,
                     "faction", FactionHelper.formatRelational(player, selfFaction, false),

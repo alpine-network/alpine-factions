@@ -14,8 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 11/14/2023
+ * @since 0.1.0
  */
 @NoArgsConstructor
 @Configuration @SerializeWith(serializer = ConfigText.Serializer.class)

@@ -14,12 +14,11 @@ import dev.rollczi.litecommands.annotations.execute.Execute;
 import org.bukkit.entity.Player;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/07/2024
+ * @since 0.1.0
  */
 @Command(name = "factions map", aliases = "factions ma")
 @Description("Display the factions map.")
-public final class MapCommand extends FactionsCommand {
+final class MapCommand extends FactionsCommand {
     public MapCommand(AlpinePlugin plugin) {
         super(plugin);
     }

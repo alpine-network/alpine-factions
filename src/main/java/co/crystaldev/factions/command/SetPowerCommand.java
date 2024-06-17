@@ -2,7 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.PermissionNodes;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
@@ -23,12 +23,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/11/2024
+ * @since 0.1.0
  */
 @Command(name = "factions setpower")
 @Description("Modify a player power.")
-public final class SetPowerCommand extends FactionsCommand {
+final class SetPowerCommand extends FactionsCommand {
     public SetPowerCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -43,9 +42,9 @@ public final class SetPowerCommand extends FactionsCommand {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
 
-        Faction faction = Accessors.factions().findOrDefault(other);
+        Faction faction = Factions.get().getFactions().findOrDefault(other);
 
-        PlayerAccessor players = Accessors.players();
+        PlayerAccessor players = Factions.get().getPlayers();
         FPlayer state = players.get(other);
         state.setPowerLevel(Math.max(0, Math.min(factionConfig.maxPlayerPower, power)));
         players.save(state);

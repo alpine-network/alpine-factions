@@ -1,7 +1,7 @@
 package co.crystaldev.factions.util;
 
 import co.crystaldev.alpinecore.util.Components;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.MessageConfig;
@@ -19,8 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/07/2024
+ * @since 0.1.0
  */
 public final class AsciiFactionMap {
 
@@ -36,7 +35,7 @@ public final class AsciiFactionMap {
 
     private final MessageConfig config = MessageConfig.getInstance();
 
-    private final ClaimAccessor claims = Accessors.claims();
+    private final ClaimAccessor claims = Factions.get().getClaims();
 
     private final Map<Faction, FactionMarker> factionColorMap = new LinkedHashMap<>();
 

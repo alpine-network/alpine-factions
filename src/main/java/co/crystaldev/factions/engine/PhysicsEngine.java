@@ -2,7 +2,7 @@ package co.crystaldev.factions.engine;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import org.bukkit.Chunk;
@@ -17,8 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/02/2024
+ * @since 0.1.0
  */
 public final class PhysicsEngine extends AlpineEngine {
     PhysicsEngine(AlpinePlugin plugin) {
@@ -40,7 +39,7 @@ public final class PhysicsEngine extends AlpineEngine {
     }
 
     private static boolean checkBlocks(@NotNull Block sourceBlock, @NotNull List<Block> blocks, @NotNull BlockFace facing) {
-        ClaimAccessor claims = Accessors.claims();
+        ClaimAccessor claims = Factions.get().getClaims();
         Faction sourceFaction = claims.getFactionOrDefault(sourceBlock);
 
         Chunk lastChunk = null;

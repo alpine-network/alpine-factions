@@ -3,8 +3,7 @@ package co.crystaldev.factions.command.argument;
 import lombok.experimental.UtilityClass;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/17/2024
+ * @since 0.1.0
  */
 @UtilityClass
 public final class Args {

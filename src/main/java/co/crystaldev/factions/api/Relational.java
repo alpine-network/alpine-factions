@@ -3,8 +3,7 @@ package co.crystaldev.factions.api;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/05/2024
+ * @since 0.1.0
  */
 public interface Relational {
     @NotNull

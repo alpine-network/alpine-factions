@@ -14,8 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/21/2024
+ * @since 0.1.0
  */
 public interface ClaimAccessor {
 
@@ -127,7 +126,7 @@ public interface ClaimAccessor {
     default Faction getFaction(@NotNull String worldName, int chunkX, int chunkZ) {
         Claim claim = this.getClaim(worldName, chunkX, chunkZ);
         if (claim != null) {
-            FactionAccessor factions = Accessors.factions();
+            FactionAccessor factions = Factions.get().getFactions();
             return factions.getById(claim.getFactionId());
         }
         return null;
@@ -155,7 +154,7 @@ public interface ClaimAccessor {
 
     @NotNull
     default Faction getFactionOrDefault(@NotNull String worldName, int chunkX, int chunkZ) {
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Claim claim = this.getClaim(worldName, chunkX, chunkZ);
         Faction fac = null;
         if (claim != null) {

@@ -1,7 +1,7 @@
 package co.crystaldev.factions.command.argument;
 
 import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.MessageConfig;
@@ -17,17 +17,16 @@ import org.bukkit.command.CommandSender;
 import java.util.Optional;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/07/2024
+ * @since 0.1.0
  */
-public final class FactionArgumentResolver extends AlpineArgumentResolver<Faction> {
+final class FactionArgumentResolver extends AlpineArgumentResolver<Faction> {
     public FactionArgumentResolver() {
         super(Faction.class, Args.FACTION);
     }
 
     @Override
     protected ParseResult<Faction> parse(Invocation<CommandSender> invocation, Argument<Faction> context, String argument) {
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         boolean foundPlayer = false;
 
         // attempt to find faction by its name
@@ -54,7 +53,7 @@ public final class FactionArgumentResolver extends AlpineArgumentResolver<Factio
     public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<Faction> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel().toLowerCase();
 
-        return Accessors.factions().get()
+        return Factions.get().getFactions().get()
                 .stream()
                 .map(Faction::getName)
                 .filter(v -> v.toLowerCase().startsWith(current))

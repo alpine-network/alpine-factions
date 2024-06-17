@@ -1,7 +1,7 @@
 package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.alpinecore.Reference;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.permission.Permission;
@@ -23,8 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/06/2024
+ * @since 0.1.0
  */
 public final class Claim {
 
@@ -63,7 +62,7 @@ public final class Claim {
 
     @NotNull
     public Faction getFaction() {
-        return Accessors.factions().getByIdOrDefault(this.factionId);
+        return Factions.get().getFactions().getByIdOrDefault(this.factionId);
     }
 
     public void setFaction(@NotNull Faction faction) {
@@ -96,7 +95,7 @@ public final class Claim {
     }
 
     public boolean isPermitted(@NotNull OfflinePlayer player, @NotNull Permission permission) {
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction faction = factions.getById(this.factionId);
         Faction playerFaction = factions.findOrDefault(player);
 
@@ -123,13 +122,13 @@ public final class Claim {
 
     @NotNull
     public Set<FPlayer> getPlayers() {
-        PlayerAccessor players = Accessors.players();
+        PlayerAccessor players = Factions.get().getPlayers();
         return this.accessedPlayerIds.stream().map(players::getById).collect(Collectors.toSet());
     }
 
     @NotNull
     public Set<Faction> getFactions() {
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         return this.accessedFactionIds.stream().map(factions::getById).collect(Collectors.toSet());
     }
 

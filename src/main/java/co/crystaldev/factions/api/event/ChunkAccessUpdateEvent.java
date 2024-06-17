@@ -13,8 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/22/2024
+ * @since 0.1.0
  */
 @Getter @Setter
 public final class ChunkAccessUpdateEvent extends FactionEntityEvent<CommandSender> implements Cancellable {

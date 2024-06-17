@@ -2,7 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Messaging;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.MemberInvitation;
@@ -28,12 +28,11 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/12/2024
+ * @since 0.1.0
  */
 @Command(name = "factions invite", aliases = "factions inv")
 @Description("Manage faction membership invitations.")
-public final class InviteCommand extends FactionsCommand {
+final class InviteCommand extends FactionsCommand {
     public InviteCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -44,7 +43,7 @@ public final class InviteCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer invitee
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction faction = factions.findOrDefault(player);
         Faction inviteeFaction = factions.findOrDefault(invitee);
 
@@ -100,7 +99,7 @@ public final class InviteCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer invitee
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction faction = factions.findOrDefault(player);
         Faction inviteeFaction = factions.findOrDefault(invitee);
 
@@ -131,7 +130,7 @@ public final class InviteCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction resolvedFaction = faction.orElse(factions.findOrDefault(sender));
         Set<MemberInvitation> invitations = resolvedFaction.getInvitations();
 

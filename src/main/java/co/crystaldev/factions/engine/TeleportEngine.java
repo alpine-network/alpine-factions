@@ -10,8 +10,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/12/2024
+ * @since 0.1.0
  */
 public final class TeleportEngine extends AlpineEngine {
     TeleportEngine(AlpinePlugin plugin) {

@@ -19,8 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/06/2024
+ * @since 0.1.0
  */
 public final class ClaimStore extends AlpineStore<String, ClaimRegion> implements ClaimAccessor {
 

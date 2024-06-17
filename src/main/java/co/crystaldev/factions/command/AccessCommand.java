@@ -4,7 +4,7 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.ChunkAccessUpdateEvent;
@@ -40,12 +40,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/10/2024
+ * @since 0.1.0
  */
 @Command(name = "factions access")
 @Description("Manage chunk access.")
-public final class AccessCommand extends FactionsCommand {
+final class AccessCommand extends FactionsCommand {
     public AccessCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -58,7 +57,7 @@ public final class AccessCommand extends FactionsCommand {
             @Arg("type") @Key(Args.CLAIM_TYPE) Optional<ClaimType> optionalType,
             @Arg("radius") Optional<Integer> optionalRadius
     ) {
-        Faction otherFaction = Accessors.factions().findOrDefault(other);
+        Faction otherFaction = Factions.get().getFactions().findOrDefault(other);
         setAccess(player, other, access, optionalType, optionalRadius,
                 FactionHelper.formatRelational(player, otherFaction, other, false),
                 Component.text(other.getName()));
@@ -80,8 +79,8 @@ public final class AccessCommand extends FactionsCommand {
     public void show(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FactionAccessor factions = Accessors.factions();
-        ClaimAccessor claims = Accessors.claims();
+        FactionAccessor factions = Factions.get().getFactions();
+        ClaimAccessor claims = Factions.get().getClaims();
 
         Location location = player.getLocation();
         Claim claim = claims.getClaim(location);
@@ -119,8 +118,8 @@ public final class AccessCommand extends FactionsCommand {
                                       @NotNull Component formattedSubject, @NotNull Component subjectName) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FactionAccessor factions = Accessors.factions();
-        ClaimAccessor claims = Accessors.claims();
+        FactionAccessor factions = Factions.get().getFactions();
+        ClaimAccessor claims = Factions.get().getClaims();
 
         Location location = player.getLocation();
         Claim claim = claims.getClaim(location);

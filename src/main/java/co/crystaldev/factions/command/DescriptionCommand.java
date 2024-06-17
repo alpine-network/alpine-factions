@@ -2,7 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.event.FactionDescriptionUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
@@ -21,12 +21,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/10/2024
+ * @since 0.1.0
  */
 @Command(name = "factions description", aliases = "factions desc")
 @Description("Modify your faction's description.")
-public final class DescriptionCommand extends FactionsCommand {
+final class DescriptionCommand extends FactionsCommand {
     public DescriptionCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -36,12 +35,12 @@ public final class DescriptionCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Join("name") String description
     ) {
-        set(Accessors.factions().findOrDefault(sender), sender, Component.text(description));
+        set(Factions.get().getFactions().findOrDefault(sender), sender, Component.text(description));
     }
 
     @Execute(name = "clear")
     public void clear(@Context CommandSender sender) {
-        set(Accessors.factions().findOrDefault(sender), sender, null);
+        set(Factions.get().getFactions().findOrDefault(sender), sender, null);
     }
 
     private static void set(@NotNull Faction faction, @NotNull CommandSender sender, @Nullable Component description) {

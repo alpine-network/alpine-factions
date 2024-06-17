@@ -2,7 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Messaging;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
@@ -20,12 +20,11 @@ import org.bukkit.command.CommandSender;
 import java.util.*;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/11/2024
+ * @since 0.1.0
  */
 @Command(name = "factions list")
 @Description("List all factions.")
-public final class ListCommand extends FactionsCommand {
+final class ListCommand extends FactionsCommand {
     public ListCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -39,7 +38,7 @@ public final class ListCommand extends FactionsCommand {
         int page = Math.max(1, humanPage.orElse(1));
 
         // sort factions from greatest to least online members
-        List<Faction> factions = new LinkedList<>(Accessors.factions().get());
+        List<Faction> factions = new LinkedList<>(Factions.get().getFactions().get());
         factions.sort((o1, o2) -> o2.countMembers() - o1.countMembers());
 
         // build the page

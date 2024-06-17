@@ -8,15 +8,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/06/2024
+ * @since 0.1.0
  */
+@Getter
 public enum ClaimType {
     SQUARE("s", "sq"),
     CIRCLE("c"),
     LINE("l");
 
-    @Getter
     private final List<String> aliases;
 
     ClaimType(@NotNull String... aliases) {

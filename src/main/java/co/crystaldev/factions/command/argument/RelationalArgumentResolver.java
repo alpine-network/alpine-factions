@@ -16,10 +16,9 @@ import org.bukkit.command.CommandSender;
 import java.util.Set;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/02/2024
+ * @since 0.1.0
  */
-public final class RelationalArgumentResolver extends AlpineArgumentResolver<Relational> {
+final class RelationalArgumentResolver extends AlpineArgumentResolver<Relational> {
 
     private static final Set<Relational> RELATIONALS = ImmutableSet.<Relational>builder()
             .add(Rank.values())

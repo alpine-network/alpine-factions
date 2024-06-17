@@ -11,8 +11,7 @@ import org.bukkit.event.EventHandler;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/05/2024
+ * @since 0.1.0
  */
 public final class FactionManagementEngine extends AlpineEngine {
     FactionManagementEngine(AlpinePlugin plugin) {

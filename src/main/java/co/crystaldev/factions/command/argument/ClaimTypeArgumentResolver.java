@@ -12,10 +12,9 @@ import org.bukkit.command.CommandSender;
 import java.util.stream.Stream;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/06/2024
+ * @since 0.1.0
  */
-public final class ClaimTypeArgumentResolver extends AlpineArgumentResolver<ClaimType> {
+final class ClaimTypeArgumentResolver extends AlpineArgumentResolver<ClaimType> {
     public ClaimTypeArgumentResolver() {
         super(ClaimType.class, Args.CLAIM_TYPE);
     }

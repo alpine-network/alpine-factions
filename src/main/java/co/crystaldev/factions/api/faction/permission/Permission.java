@@ -16,8 +16,7 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/20/2023
+ * @since 0.1.0
  */
 @Data
 public final class Permission {

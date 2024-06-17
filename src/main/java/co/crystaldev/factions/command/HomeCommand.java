@@ -2,7 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.event.FactionHomeUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
@@ -23,12 +23,11 @@ import org.bukkit.entity.Player;
 import java.util.Optional;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/12/2024
+ * @since 0.1.0
  */
 @Command(name = "factions home")
 @Description("Warp to the faction home.")
-public final class HomeCommand extends FactionsCommand {
+final class HomeCommand extends FactionsCommand {
     public HomeCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -40,7 +39,7 @@ public final class HomeCommand extends FactionsCommand {
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        Faction faction = targetFaction.orElse(Accessors.factions().findOrDefault(player));
+        Faction faction = targetFaction.orElse(Factions.get().getFactions().findOrDefault(player));
         if (!faction.isPermitted(player, Permissions.ACCESS_HOME)) {
             FactionHelper.missingPermission(player, faction, "access home");
             return;
@@ -56,7 +55,7 @@ public final class HomeCommand extends FactionsCommand {
         }
 
         // ensure home is still in the faction's own territory
-        if (!Accessors.claims().getFactionOrDefault(home).equals(faction)) {
+        if (!Factions.get().getClaims().getFactionOrDefault(home).equals(faction)) {
             FactionHomeUpdateEvent event = AlpineFactions.callEvent(new FactionHomeUpdateEvent(faction, player, null));
             if (!event.isCancelled()) {
                 faction.setHome(event.getLocation());

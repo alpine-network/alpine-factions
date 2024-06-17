@@ -2,7 +2,7 @@ package co.crystaldev.factions.engine;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
@@ -25,8 +25,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/12/2024
+ * @since 0.1.0
  */
 public final class CombatEngine extends AlpineEngine {
 
@@ -131,8 +130,8 @@ public final class CombatEngine extends AlpineEngine {
 
     private boolean shouldCancelDamage(@NotNull Player player, @NotNull Player damager) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Accessors.factions();
-        ClaimAccessor claims = Accessors.claims();
+        FactionAccessor factions = Factions.get().getFactions();
+        ClaimAccessor claims = Factions.get().getClaims();
 
         // allow overriding players to damage other players
         if (PlayerHandler.getInstance().isOverriding(damager)) {

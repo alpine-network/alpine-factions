@@ -4,9 +4,9 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.PermissionRegistry;
 import co.crystaldev.factions.api.Relational;
-import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.event.FactionPermissionUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
@@ -32,12 +32,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/02/2024
+ * @since 0.1.0
  */
 @Command(name = "factions permission", aliases = { "factions perm" })
 @Description("Manage faction permissions.")
-public final class PermissionCommand extends FactionsCommand {
+final class PermissionCommand extends FactionsCommand {
     public PermissionCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -52,7 +51,7 @@ public final class PermissionCommand extends FactionsCommand {
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        Faction resolvedFaction = faction.orElse(Accessors.factions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.get().getFactions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_PERMS)) {
             FactionHelper.missingPermission(sender, resolvedFaction, "modify permissions");
             return;
@@ -91,7 +90,7 @@ public final class PermissionCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         PermissionRegistry registry = AlpineFactions.getInstance().getPermissionRegistry();
 
-        Faction resolvedFaction = faction.orElse(Accessors.factions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.get().getFactions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_PERMS)) {
             FactionHelper.missingPermission(sender, resolvedFaction, "modify permissions");
             return;

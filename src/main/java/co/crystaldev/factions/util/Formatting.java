@@ -15,8 +15,7 @@ import java.util.Collection;
 import java.util.function.Function;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/05/2024
+ * @since 0.1.0
  */
 @UtilityClass
 public final class Formatting {

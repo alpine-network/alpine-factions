@@ -1,7 +1,7 @@
 package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.DisbandFactionEvent;
@@ -40,8 +40,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/12/2023
+ * @since 0.1.0
  */
 @SuppressWarnings("unused")
 @ToString
@@ -166,8 +165,8 @@ public final class Faction {
     public void disband(@NotNull CommandSender actor) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FactionAccessor factions = Accessors.factions();
-        ClaimAccessor claims = Accessors.claims();
+        FactionAccessor factions = Factions.get().getFactions();
+        ClaimAccessor claims = Factions.get().getClaims();
         Faction actingFaction = factions.findOrDefault(actor);
 
         // call event
@@ -233,7 +232,7 @@ public final class Faction {
     }
 
     public int getClaimCount(@Nullable World world) {
-        return Accessors.claims().countClaims(this, world);
+        return Factions.get().getClaims().countClaims(this, world);
     }
 
     public int getClaimCount() {
@@ -319,7 +318,7 @@ public final class Faction {
     @NotNull
     public Set<RelatedFaction> getRelatedFactions() {
         Set<RelatedFaction> related = new HashSet<>();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
 
         this.relationRequests.forEach((factionId, type) -> {
             Faction other = factions.getById(factionId);
@@ -334,7 +333,7 @@ public final class Faction {
     @NotNull
     public Set<RelatedFaction> getRelationWishes() {
         Set<RelatedFaction> related = new HashSet<>();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
 
         this.relationRequests.forEach((factionId, type) -> {
             Faction other = factions.getById(factionId);
@@ -349,7 +348,7 @@ public final class Faction {
     @NotNull
     public Set<Faction> getRelatedFactions(@NotNull FactionRelation relation) {
         Set<Faction> related = new HashSet<>();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
 
         this.relationRequests.forEach((factionId, type) -> {
             if (type != relation) {
@@ -418,7 +417,7 @@ public final class Faction {
             return this.isPermitted(this.getMember(offlinePlayer).getRank(), permission);
         }
         else {
-            Faction other = Accessors.factions().find(player);
+            Faction other = Factions.get().getFactions().find(player);
             return this.isPermitted(this.relationWishTo(other), permission);
         }
     }
@@ -601,7 +600,7 @@ public final class Faction {
             }
             else {
                 // move replacement owner into this faction
-                Faction faction = Accessors.factions().find(owner);
+                Faction faction = Factions.get().getFactions().find(owner);
                 if (faction != null) {
                     faction.removeMember(owner);
                 }

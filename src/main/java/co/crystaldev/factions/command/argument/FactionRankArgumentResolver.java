@@ -13,10 +13,9 @@ import org.bukkit.command.CommandSender;
 import java.util.stream.Stream;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/20/2024
+ * @since 0.1.0
  */
-public final class FactionRankArgumentResolver extends AlpineArgumentResolver<Rank> {
+final class FactionRankArgumentResolver extends AlpineArgumentResolver<Rank> {
     public FactionRankArgumentResolver() {
         super(Rank.class, Args.FACTION_RANK);
     }

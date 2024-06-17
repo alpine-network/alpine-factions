@@ -11,8 +11,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/21/2024
+ * @since 0.1.0
  */
 public interface FactionAccessor {
 

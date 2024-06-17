@@ -1,8 +1,9 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.FactionMemberTitleUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
@@ -33,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @Command(name = "factions title")
 @Description("Modify a member title.")
-public final class TitleCommand extends FactionsCommand {
+final class TitleCommand extends FactionsCommand {
     public TitleCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -48,7 +49,7 @@ public final class TitleCommand extends FactionsCommand {
         int maxLength = FactionConfig.getInstance().maxTitleLength;
 
         int length = title.length();
-        while (ComponentHelper.length(parsedComponent) > maxLength) {
+        while (Components.length(parsedComponent) > maxLength) {
             // trim down the component length while ignoring color codes
             parsedComponent = ComponentHelper.legacy(title.substring(0, length - 1));
             length--;
@@ -67,7 +68,7 @@ public final class TitleCommand extends FactionsCommand {
 
     private static void set(@NotNull CommandSender sender, @NotNull OfflinePlayer other, @Nullable Component title) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction faction = factions.findOrDefault(other);
         Faction actingFaction = factions.findOrDefault(sender);
 

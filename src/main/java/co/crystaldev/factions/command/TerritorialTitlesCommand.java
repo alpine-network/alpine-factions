@@ -1,9 +1,8 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
-import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.player.TerritorialTitleMode;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
@@ -15,12 +14,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/10/2024
+ * @since 0.1.0
  */
 @Command(name = "factions territorialtitles", aliases = { "factions territorialtitle", "factions tt" })
 @Description("Switch between territorial title modes.")
-public final class TerritorialTitlesCommand extends FactionsCommand {
+final class TerritorialTitlesCommand extends FactionsCommand {
     public TerritorialTitlesCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -29,7 +27,7 @@ public final class TerritorialTitlesCommand extends FactionsCommand {
     public void execute(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
 
-        PlayerAccessor players = Accessors.players();
+        PlayerAccessor players = Factions.get().getPlayers();
         players.wrap(player, state -> {
             state.setTerritorialTitleMode(next(state.getTerritorialTitleMode()));
 

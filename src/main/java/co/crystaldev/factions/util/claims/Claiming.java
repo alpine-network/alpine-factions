@@ -1,6 +1,6 @@
 package co.crystaldev.factions.util.claims;
 
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
@@ -14,8 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/07/2024
+ * @since 0.1.0
  */
 @UtilityClass
 public final class Claiming {
@@ -52,7 +51,7 @@ public final class Claiming {
     public static void fill(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
         MessageConfig config = MessageConfig.getInstance();
         Chunk origin = actor.getLocation().getChunk();
-        Faction replacedFaction = Accessors.claims().getFaction(origin);
+        Faction replacedFaction = Factions.get().getClaims().getFaction(origin);
 
         // do not unclaim fill if faction is wilderness
         boolean claiming = claimingFaction != null;

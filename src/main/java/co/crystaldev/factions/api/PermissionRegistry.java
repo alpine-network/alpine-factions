@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/04/2024
+ * @since 0.1.0
  */
 public final class PermissionRegistry {
 

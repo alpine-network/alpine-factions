@@ -14,12 +14,11 @@ import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.entity.Player;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/12/2024
+ * @since 0.1.0
  */
 @Command(name = "factions override", aliases = "factions admin")
 @Description("Override factions permission checks.")
-public final class OverrideCommand extends FactionsCommand {
+final class OverrideCommand extends FactionsCommand {
     public OverrideCommand(AlpinePlugin plugin) {
         super(plugin);
     }

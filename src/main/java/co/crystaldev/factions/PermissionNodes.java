@@ -1,8 +1,7 @@
 package co.crystaldev.factions;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/20/2023
+ * @since 0.1.0
  */
 public final class PermissionNodes {
     public static final String ADMIN = "alpinefactions.faction.admin";

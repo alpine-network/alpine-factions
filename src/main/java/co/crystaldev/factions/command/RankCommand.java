@@ -1,7 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
@@ -29,12 +29,11 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/02/2024
+ * @since 0.1.0
  */
 @Command(name = "factions rank")
 @Description("Manage faction ranks.")
-public final class RankCommand extends FactionsCommand {
+final class RankCommand extends FactionsCommand {
 
     private static final Map<CommandSender, Long> CONFIRMATION_MAP = new HashMap<>();
 
@@ -57,7 +56,7 @@ public final class RankCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction faction = Accessors.factions().findOrDefault(other);
+        Faction faction = Factions.get().getFactions().findOrDefault(other);
 
         config.memberRank.send(sender,
                 "faction", FactionHelper.formatRelational(sender, faction, false),
@@ -73,7 +72,7 @@ public final class RankCommand extends FactionsCommand {
         boolean overriding = PlayerHandler.getInstance().isOverriding(actor);
         UUID actorId = PlayerHelper.getId(actor);
 
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction senderFaction = factions.findOrDefault(actor);
         Faction targetFaction = factions.findOrDefault(other);
 
@@ -157,7 +156,7 @@ public final class RankCommand extends FactionsCommand {
                 @Context CommandSender sender,
                 @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
         ) {
-            Rank rank = Accessors.factions().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
+            Rank rank = Factions.get().getFactions().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
             setRank(sender, other, rank.getNextRank());
         }
     }
@@ -174,7 +173,7 @@ public final class RankCommand extends FactionsCommand {
                 @Context CommandSender sender,
                 @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
         ) {
-            Rank rank = Accessors.factions().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
+            Rank rank = Factions.get().getFactions().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
             setRank(sender, other, rank.getPreviousRank());
         }
     }

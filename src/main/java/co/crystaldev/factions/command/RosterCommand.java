@@ -3,7 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.Initializable;
 import co.crystaldev.alpinecore.util.Messaging;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
@@ -29,12 +29,11 @@ import org.bukkit.command.CommandSender;
 import java.util.Optional;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/29/2024
+ * @since 0.1.0
  */
 @Command(name = "factions roster")
 @Description("Manage the faction roster.")
-public final class RosterCommand extends FactionsCommand implements Initializable {
+final class RosterCommand extends FactionsCommand implements Initializable {
     public RosterCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -53,7 +52,7 @@ public final class RosterCommand extends FactionsCommand implements Initializabl
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        Faction senderFaction = Accessors.factions().findOrDefault(sender);
+        Faction senderFaction = Factions.get().getFactions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
         if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {
@@ -122,7 +121,7 @@ public final class RosterCommand extends FactionsCommand implements Initializabl
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        Faction senderFaction = Accessors.factions().findOrDefault(sender);
+        Faction senderFaction = Factions.get().getFactions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
         if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {
@@ -186,7 +185,7 @@ public final class RosterCommand extends FactionsCommand implements Initializabl
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        Faction senderFaction = Accessors.factions().findOrDefault(sender);
+        Faction senderFaction = Factions.get().getFactions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
         if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {
@@ -235,7 +234,7 @@ public final class RosterCommand extends FactionsCommand implements Initializabl
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction faction = targetFaction.orElse(factions.findOrDefault(sender));
 
         if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {

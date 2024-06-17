@@ -3,7 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Member;
@@ -30,12 +30,11 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/22/2024
+ * @since 0.1.0
  */
 @Command(name = "factions status")
 @Description("View the status of your faction's members.")
-public final class StatusCommand extends FactionsCommand {
+final class StatusCommand extends FactionsCommand {
     public StatusCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -48,7 +47,7 @@ public final class StatusCommand extends FactionsCommand {
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction target = targetFaction.orElse(factions.findOrDefault(sender));
         Faction senderFaction = factions.findOrDefault(sender);
 
@@ -65,7 +64,7 @@ public final class StatusCommand extends FactionsCommand {
         String command = "/f status " + target.getName() + " %page%";
         Component compiledPage = Formatting.page(title, members, command, page.orElse(1), 10, member -> {
             OfflinePlayer player = member.getOfflinePlayer();
-            FPlayer state = Accessors.players().get(player);
+            FPlayer state = Factions.get().getPlayers().get(player);
 
             ConfigText text = member.isOnline() ? config.factionStatusOnlineEntry : config.factionStatusOfflineEntry;
             return text.build(
@@ -92,8 +91,8 @@ public final class StatusCommand extends FactionsCommand {
             return;
         }
 
-        FPlayer state = Accessors.players().get(target);
-        Faction faction = Accessors.factions().findOrDefault(target);
+        FPlayer state = Factions.get().getPlayers().get(target);
+        Faction faction = Factions.get().getFactions().findOrDefault(target);
         Component title = messageConfig.memberStatusTitle.build(
                 "player", FactionHelper.formatRelational(sender, faction, target, false),
                 "player_name", target.getName());

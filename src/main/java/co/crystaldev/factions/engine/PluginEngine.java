@@ -7,8 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.server.PluginDisableEvent;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/04/2024
+ * @since 0.1.0
  */
 public final class PluginEngine extends AlpineEngine {
     PluginEngine(AlpinePlugin plugin) {

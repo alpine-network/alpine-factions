@@ -5,7 +5,7 @@ import co.crystaldev.alpinecore.framework.integration.AlpineIntegration;
 import co.crystaldev.alpinecore.framework.integration.AlpineIntegrationEngine;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.Reference;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
@@ -25,8 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/13/2024
+ * @since 0.1.0
  */
 public final class PlaceholderAPIIntegration extends AlpineIntegration {
     PlaceholderAPIIntegration(AlpinePlugin plugin) {
@@ -74,12 +73,12 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
 
         @Override
         public String onPlaceholderRequest(Player one, Player two, String identifier) {
-            FactionAccessor factions = Accessors.factions();
+            FactionAccessor factions = Factions.get().getFactions();
 
             Player subject = two == null ? one : two;
             Faction selfFaction = factions.findOrDefault(one);
             Faction faction = two == null ? factions.findOrDefault(one) : factions.findOrDefault(two);
-            FPlayer playerState = Accessors.players().get(subject);
+            FPlayer playerState = Factions.get().getPlayers().get(subject);
             Member member = faction.getMember(subject.getUniqueId());
 
             switch (identifier) {

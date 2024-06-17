@@ -11,8 +11,7 @@ import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/15/2023
+ * @since 0.1.0
  */
 @AllArgsConstructor(access = AccessLevel.PACKAGE) @Getter
 public final class FactionFlag<T> {

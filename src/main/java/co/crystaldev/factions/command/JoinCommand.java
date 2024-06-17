@@ -4,7 +4,7 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.PermissionNodes;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.PlayerChangedFactionEvent;
 import co.crystaldev.factions.api.faction.Faction;
@@ -24,12 +24,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/12/2024
+ * @since 0.1.0
  */
 @Command(name = "factions join")
 @Description("Join a faction.")
-public final class JoinCommand extends FactionsCommand {
+final class JoinCommand extends FactionsCommand {
     public JoinCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -42,7 +41,7 @@ public final class JoinCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
 
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction otherFaction = factions.findOrDefault(player);
 
         // ensure the player is not in a faction
@@ -111,7 +110,7 @@ public final class JoinCommand extends FactionsCommand {
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction otherFaction = factions.find(joiningPlayer);
         Faction actingFaction = factions.findOrDefault(player);
         Faction wilderness = factions.getWilderness();

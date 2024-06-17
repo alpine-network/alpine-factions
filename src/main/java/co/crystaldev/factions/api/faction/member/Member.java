@@ -1,6 +1,6 @@
 package co.crystaldev.factions.api.faction.member;
 
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.player.FPlayer;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
@@ -13,8 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/12/2023
+ * @since 0.1.0
  */
 @Data
 public final class Member {
@@ -57,6 +56,6 @@ public final class Member {
 
     @NotNull
     public FPlayer getUser() {
-        return Accessors.players().getById(this.id);
+        return Factions.get().getPlayers().getById(this.id);
     }
 }

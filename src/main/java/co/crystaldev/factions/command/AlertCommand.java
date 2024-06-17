@@ -2,7 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Messaging;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.api.faction.permission.Permissions;
@@ -20,12 +20,11 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/20/2024
+ * @since 0.1.0
  */
 @Command(name = "factions alert")
 @Description("Notify the faction.")
-public final class AlertCommand extends FactionsCommand {
+final class AlertCommand extends FactionsCommand {
     public AlertCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -36,7 +35,7 @@ public final class AlertCommand extends FactionsCommand {
             @Join("message") String message
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction faction = Accessors.factions().findOrDefault(player);
+        Faction faction = Factions.get().getFactions().findOrDefault(player);
 
         if (!faction.isPermitted(player, Permissions.ALERT)) {
             FactionHelper.missingPermission(player, faction, "alert");

@@ -14,8 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/08/2024
+ * @since 0.1.0
  */
 public final class PlayerHandler {
 

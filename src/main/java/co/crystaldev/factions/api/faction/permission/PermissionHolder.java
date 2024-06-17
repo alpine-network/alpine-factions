@@ -10,8 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/20/2023
+ * @since 0.1.0
  */
 @NoArgsConstructor
 public final class PermissionHolder {

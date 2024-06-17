@@ -2,7 +2,7 @@ package co.crystaldev.factions.util;
 
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Claim;
@@ -29,8 +29,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/05/2024
+ * @since 0.1.0
  */
 @UtilityClass
 public final class FactionHelper {
@@ -199,8 +198,8 @@ public final class FactionHelper {
 
         OfflinePlayer player = (OfflinePlayer) sender;
 
-        Faction viewerFaction = Accessors.factions().findOrDefault(viewer);
-        Faction playerFaction = Accessors.factions().findOrDefault(player);
+        Faction viewerFaction = Factions.get().getFactions().findOrDefault(viewer);
+        Faction playerFaction = Factions.get().getFactions().findOrDefault(player);
         Member member = playerFaction.getMember(player.getUniqueId());
 
         if (!playerFaction.isWilderness() && playerFaction.equals(viewerFaction)) {
@@ -226,7 +225,7 @@ public final class FactionHelper {
         }
 
         OfflinePlayer player = (OfflinePlayer) operator;
-        Faction faction = Accessors.factions().findOrDefault(operator);
+        Faction faction = Factions.get().getFactions().findOrDefault(operator);
         Member member = faction.getMember(player.getUniqueId());
 
         return Components.join(
@@ -246,7 +245,7 @@ public final class FactionHelper {
     }
 
     public static boolean isPermitted(@NotNull Player player, @NotNull Chunk chunk, @NotNull Permission permission, @NotNull String action) {
-        ClaimAccessor claims = Accessors.claims();
+        ClaimAccessor claims = Factions.get().getClaims();
         if (!claims.isClaimed(chunk)) {
             return true;
         }
@@ -262,13 +261,13 @@ public final class FactionHelper {
 
     @Nullable
     private static Faction findFaction(@NotNull ServerOperator sender) {
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         return sender instanceof OfflinePlayer ? factions.find((OfflinePlayer) sender) : factions.getWilderness();
     }
 
     @NotNull
     private static Faction findFactionOrDefault(@NotNull ServerOperator sender) {
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         return sender instanceof OfflinePlayer ? factions.findOrDefault((OfflinePlayer) sender) : factions.getWilderness();
     }
 }

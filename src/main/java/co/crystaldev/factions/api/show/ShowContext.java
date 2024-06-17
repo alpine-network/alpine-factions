@@ -11,8 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/15/2024
+ * @since 0.1.0
  */
 @AllArgsConstructor @ToString
 public final class ShowContext {

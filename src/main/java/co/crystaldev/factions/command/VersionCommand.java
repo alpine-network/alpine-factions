@@ -13,12 +13,11 @@ import dev.rollczi.litecommands.annotations.execute.Execute;
 import org.bukkit.command.CommandSender;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/04/2024
+ * @since 0.1.0
  */
 @Command(name = "factions version")
 @Description("Display plugin versioning information.")
-public final class VersionCommand extends FactionsCommand {
+final class VersionCommand extends FactionsCommand {
     public VersionCommand(AlpinePlugin plugin) {
         super(plugin);
     }

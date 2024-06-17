@@ -5,8 +5,7 @@ import com.cryptomorin.xseries.XMaterial;
 import lombok.experimental.UtilityClass;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/08/2024
+ * @since 0.1.0
  */
 @UtilityClass
 public final class MaterialMapping {

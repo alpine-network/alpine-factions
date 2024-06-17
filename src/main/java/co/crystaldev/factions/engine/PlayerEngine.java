@@ -11,8 +11,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/18/2023
+ * @since 0.1.0
  */
 public final class PlayerEngine extends AlpineEngine {
     PlayerEngine(AlpinePlugin plugin) {

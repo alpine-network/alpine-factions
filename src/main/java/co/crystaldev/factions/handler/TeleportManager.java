@@ -13,10 +13,9 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/12/2024
+ * @since 0.1.0
  *
- * TODO: move this class AlpineCore
+ * TODO: move to AlpineCore
  */
 public final class TeleportManager {
 

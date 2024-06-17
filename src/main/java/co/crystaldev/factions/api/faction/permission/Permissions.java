@@ -6,8 +6,7 @@ import co.crystaldev.factions.api.faction.member.Rank;
 import lombok.experimental.UtilityClass;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/20/2023
+ * @since 0.1.0
  */
 @UtilityClass
 public final class Permissions {

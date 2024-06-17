@@ -22,11 +22,10 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/15/2024
+ * @since 0.1.0
  */
 @UtilityClass
-public final class DefaultShowComponents {
+public final class ShowComponents {
 
     public static final Predicate<ShowContext> MINIMAL_VISIBILITY_PREDICATE = ctx -> {
         return PlayerHandler.getInstance().isOverriding(ctx.getSender()) || !ctx.getFaction().isMinimal();

@@ -8,8 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.text.DecimalFormat;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/17/2024
+ * @since 0.1.0
  */
 @UtilityClass
 public final class FlagAdapters {

@@ -24,8 +24,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/23/2024
+ * @since 0.1.0
  */
 public final class InteractionEngine extends AlpineEngine {
     InteractionEngine(AlpinePlugin plugin) {

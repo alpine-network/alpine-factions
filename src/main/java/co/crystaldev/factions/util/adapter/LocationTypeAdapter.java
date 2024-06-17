@@ -12,8 +12,7 @@ import org.bukkit.Location;
 import java.io.IOException;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/11/2024
+ * @since 0.1.0
  */
 public final class LocationTypeAdapter extends TypeAdapter<Location> {
     @Override

@@ -22,12 +22,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/19/2024
+ * @since 0.1.0
  */
 @Command(name = "factions disband")
 @Description("Disband your faction.")
-public final class DisbandCommand extends FactionsCommand {
+final class DisbandCommand extends FactionsCommand {
 
     private final Map<CommandSender, Long> confirmationMap = new HashMap<>();
 

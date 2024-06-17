@@ -3,8 +3,7 @@ package co.crystaldev.factions.api.faction;
 import lombok.Data;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/20/2024
+ * @since 0.1.0
  */
 @Data
 public final class RelatedFaction {

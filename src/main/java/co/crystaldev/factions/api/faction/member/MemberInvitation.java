@@ -6,8 +6,7 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/12/2024
+ * @since 0.1.0
  */
 @Data
 public final class MemberInvitation {

@@ -16,8 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/15/2024
+ * @since 0.1.0
  */
 public final class ShowFormatter {
 

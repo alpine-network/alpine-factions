@@ -13,10 +13,9 @@ import org.bukkit.command.CommandSender;
 import java.util.stream.Stream;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/20/2024
+ * @since 0.1.0
  */
-public final class FactionRelationArgumentResolver extends AlpineArgumentResolver<FactionRelation> {
+final class FactionRelationArgumentResolver extends AlpineArgumentResolver<FactionRelation> {
     public FactionRelationArgumentResolver() {
         super(FactionRelation.class, Args.FACTION_RELATION);
     }

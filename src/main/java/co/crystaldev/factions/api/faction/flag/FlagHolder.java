@@ -12,8 +12,7 @@ import lombok.Setter;
 import java.io.IOException;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/19/2023
+ * @since 0.1.0
  */
 @AllArgsConstructor @Getter @Setter
 public final class FlagHolder<T> {

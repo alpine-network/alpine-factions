@@ -3,7 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.PlayerChangedFactionEvent;
 import co.crystaldev.factions.api.faction.Faction;
@@ -26,12 +26,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/12/2024
+ * @since 0.1.0
  */
 @Command(name = "factions kick")
 @Description("Remove a member from the faction.")
-public final class KickCommand extends FactionsCommand {
+final class KickCommand extends FactionsCommand {
     public KickCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -42,7 +41,7 @@ public final class KickCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction faction = factions.findOrDefault(other);
         Faction actingFaction = factions.findOrDefault(sender);
         boolean overriding = PlayerHandler.getInstance().isOverriding(sender);

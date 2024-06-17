@@ -4,8 +4,7 @@ import co.crystaldev.factions.PermissionNodes;
 import lombok.experimental.UtilityClass;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/15/2023
+ * @since 0.1.0
  */
 @UtilityClass
 public final class FactionFlags {

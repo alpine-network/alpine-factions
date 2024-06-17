@@ -2,7 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.ChunkAccessUpdateEvent;
@@ -29,12 +29,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 03/10/2024
+ * @since 0.1.0
  */
 @Command(name = "factions accessall")
 @Description("Manage chunk access.")
-public final class AccessAllCommand extends FactionsCommand {
+final class AccessAllCommand extends FactionsCommand {
     public AccessAllCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -46,7 +45,7 @@ public final class AccessAllCommand extends FactionsCommand {
             @Arg("access") boolean access,
             @Arg("target_faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction target = targetFaction.orElse(factions.findOrDefault(sender));
         if (target.isWilderness()) {
             FactionHelper.missingPermission(sender, target, "grant access");
@@ -65,7 +64,7 @@ public final class AccessAllCommand extends FactionsCommand {
             @Arg("access") boolean access,
             @Arg("target_faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        Faction target = targetFaction.orElse(Accessors.factions().findOrDefault(sender));
+        Faction target = targetFaction.orElse(Factions.get().getFactions().findOrDefault(sender));
         if (target.isWilderness()) {
             FactionHelper.missingPermission(sender, target, "grant access");
             return;
@@ -79,7 +78,7 @@ public final class AccessAllCommand extends FactionsCommand {
                                   @NotNull Faction targetFaction, @NotNull Component formattedSubject,
                                   @NotNull Component subjectName) {
         MessageConfig config = MessageConfig.getInstance();
-        ClaimAccessor claims = Accessors.claims();
+        ClaimAccessor claims = Factions.get().getClaims();
 
         // ensure the player has permission for the faction
         if (!targetFaction.isPermitted(sender, Permissions.MODIFY_ACCESS)) {

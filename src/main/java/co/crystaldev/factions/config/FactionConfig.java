@@ -5,8 +5,7 @@ import de.exlll.configlib.Comment;
 import lombok.Getter;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/24/2023
+ * @since 0.1.0
  */
 public final class FactionConfig extends AlpineConfig {
 

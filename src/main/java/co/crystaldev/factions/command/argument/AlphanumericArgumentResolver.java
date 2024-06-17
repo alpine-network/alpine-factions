@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command.argument;
 
 import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.config.MessageConfig;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
@@ -8,10 +9,9 @@ import dev.rollczi.litecommands.invocation.Invocation;
 import org.bukkit.command.CommandSender;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/05/2024
+ * @since 0.1.0
  */
-public final class AlphanumericArgumentResolver extends AlpineArgumentResolver<String> {
+final class AlphanumericArgumentResolver extends AlpineArgumentResolver<String> {
     public AlphanumericArgumentResolver() {
         super(String.class, Args.ALPHANUMERIC);
     }
@@ -20,6 +20,6 @@ public final class AlphanumericArgumentResolver extends AlpineArgumentResolver<S
     protected ParseResult<String> parse(Invocation<CommandSender> invocation, Argument<String> context, String argument) {
         if (argument.matches("^[a-zA-Z0-9]+$"))
             return ParseResult.success(argument);
-        return ParseResult.failure(MessageConfig.getInstance().alphanumeric.buildString());
+        return ParseResult.failure(MessageConfig.getInstance().alphanumeric.buildString(AlpineFactions.getInstance()));
     }
 }

@@ -4,8 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/17/2024
+ * @since 0.1.0
  */
 public interface FlagAdapter<T> {
     @NotNull

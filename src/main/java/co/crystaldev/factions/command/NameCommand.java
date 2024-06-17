@@ -2,7 +2,7 @@ package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.accessor.Accessors;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.FactionNameUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
@@ -26,12 +26,11 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/04/2024
+ * @since 0.1.0
  */
 @Command(name = "factions name")
 @Description("Rename your faction.")
-public final class NameCommand extends FactionsCommand {
+final class NameCommand extends FactionsCommand {
 
     private final Map<CommandSender, Long> confirmationMap = new HashMap<>();
 
@@ -47,7 +46,7 @@ public final class NameCommand extends FactionsCommand {
     ) {
         MessageConfig config = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
-        FactionAccessor factions = Accessors.factions();
+        FactionAccessor factions = Factions.get().getFactions();
         Faction faction = targetFaction.orElseGet(() -> factions.findOrDefault(sender));
 
         // ensure the user has permission

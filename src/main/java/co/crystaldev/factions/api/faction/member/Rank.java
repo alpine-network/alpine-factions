@@ -7,8 +7,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/12/2023
+ * @since 0.1.0
  */
 @AllArgsConstructor @Getter
 public enum Rank implements Relational {

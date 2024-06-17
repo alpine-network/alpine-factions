@@ -16,8 +16,7 @@ import org.bukkit.Location;
 import java.util.UUID;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/17/2023
+ * @since 0.1.0
  */
 public final class Reference {
     public static final String ID = "{{ mavenArtifact }}";

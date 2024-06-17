@@ -13,10 +13,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/12/2024
+ * @since 0.1.0
  */
-public final class OfflinePlayerArgumentResolver extends AlpineArgumentResolver<OfflinePlayer> {
+final class OfflinePlayerArgumentResolver extends AlpineArgumentResolver<OfflinePlayer> {
     public OfflinePlayerArgumentResolver() {
         super(OfflinePlayer.class, Args.OFFLINE_PLAYER);
     }

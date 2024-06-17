@@ -10,8 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/19/2024
+ * @since 0.1.0
  */
 @UtilityClass
 public final class PlayerHelper {

@@ -9,8 +9,7 @@ import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/22/2024
+ * @since 0.1.0
  */
 @Getter
 public final class FactionNameUpdateEvent extends FactionEntityEvent<CommandSender> implements Cancellable {

@@ -3,8 +3,8 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.FlagRegistry;
-import co.crystaldev.factions.api.accessor.Accessors;
 import co.crystaldev.factions.api.event.FactionFlagUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
@@ -30,12 +30,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/17/2024
+ * @since 0.1.0
  */
 @Command(name = "factions flag")
 @Description("Modify faction flags.")
-public final class FlagCommand extends FactionsCommand {
+final class FlagCommand extends FactionsCommand {
     public FlagCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -56,7 +55,7 @@ public final class FlagCommand extends FactionsCommand {
             return;
         }
 
-        Faction resolvedFaction = faction.orElse(Accessors.factions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.get().getFactions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_FLAGS)) {
             FactionHelper.missingPermission(sender, resolvedFaction, "modify flags");
             return;
@@ -98,7 +97,7 @@ public final class FlagCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         FlagRegistry registry = AlpineFactions.getInstance().getFlagRegistry();
 
-        Faction resolvedFaction = faction.orElse(Accessors.factions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.get().getFactions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_FLAGS)) {
             FactionHelper.missingPermission(sender, resolvedFaction, "modify flags");
             return;

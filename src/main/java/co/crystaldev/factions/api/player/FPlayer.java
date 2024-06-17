@@ -14,8 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/19/2023
+ * @since 0.1.0
  */
 @RequiredArgsConstructor @Getter
 public final class FPlayer {

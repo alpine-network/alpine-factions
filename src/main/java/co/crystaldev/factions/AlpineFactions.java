@@ -4,6 +4,7 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.config.AlpineCoreConfig;
 import co.crystaldev.alpinecore.framework.Activatable;
 import co.crystaldev.alpinecore.framework.config.object.ConfigMessage;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.FlagRegistry;
 import co.crystaldev.factions.api.PermissionRegistry;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
@@ -14,7 +15,7 @@ import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.show.ShowFormatter;
-import co.crystaldev.factions.api.show.component.DefaultShowComponents;
+import co.crystaldev.factions.api.show.component.ShowComponents;
 import co.crystaldev.factions.handler.TeleportManager;
 import co.crystaldev.factions.store.claim.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
@@ -27,10 +28,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 12/12/2023
+ * @since 0.1.0
  */
-public final class AlpineFactions extends AlpinePlugin {
+public final class AlpineFactions extends AlpinePlugin implements Factions {
 
     @Getter
     private static AlpineFactions instance;
@@ -72,7 +72,7 @@ public final class AlpineFactions extends AlpinePlugin {
         }
 
         // register f show elements
-        this.showFormatter.register(DefaultShowComponents.VALUES);
+        this.showFormatter.register(ShowComponents.VALUES);
 
         // setup accessors
         this.claimAccessor = this.getActivatable(ClaimStore.class);
@@ -95,6 +95,21 @@ public final class AlpineFactions extends AlpinePlugin {
     @Override
     public void setupDefaultConfiguration(@NotNull AlpineCoreConfig config) {
         config.noPages = ConfigMessage.of("%error_prefix% No pages available to display");
+    }
+
+    @Override
+    public @NotNull ClaimAccessor getClaims() {
+        return this.claimAccessor;
+    }
+
+    @Override
+    public @NotNull PlayerAccessor getPlayers() {
+        return this.playerAccessor;
+    }
+
+    @Override
+    public @NotNull FactionAccessor getFactions() {
+        return this.factionAccessor;
     }
 
     @NotNull @ApiStatus.Internal

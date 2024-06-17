@@ -4,8 +4,7 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/04/2024
+ * @since 0.1.0
  */
 public abstract class FactionsCommand extends AlpineCommand {
     public FactionsCommand(AlpinePlugin plugin) {

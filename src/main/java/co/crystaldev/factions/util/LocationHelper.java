@@ -6,8 +6,7 @@ import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/07/2024
+ * @since 0.1.0
  */
 @UtilityClass
 public final class LocationHelper {
