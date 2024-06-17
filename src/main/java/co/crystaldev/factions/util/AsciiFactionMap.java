@@ -35,7 +35,7 @@ public final class AsciiFactionMap {
 
     private final MessageConfig config = MessageConfig.getInstance();
 
-    private final ClaimAccessor claims = Factions.get().getClaims();
+    private final ClaimAccessor claims = Factions.get().claims();
 
     private final Map<Faction, FactionMarker> factionColorMap = new LinkedHashMap<>();
 

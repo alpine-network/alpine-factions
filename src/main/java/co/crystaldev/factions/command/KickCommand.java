@@ -41,7 +41,7 @@ final class KickCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(other);
         Faction actingFaction = factions.findOrDefault(sender);
         boolean overriding = PlayerHandler.getInstance().isOverriding(sender);

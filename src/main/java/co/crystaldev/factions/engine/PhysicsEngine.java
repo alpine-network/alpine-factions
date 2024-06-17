@@ -39,7 +39,7 @@ public final class PhysicsEngine extends AlpineEngine {
     }
 
     private static boolean checkBlocks(@NotNull Block sourceBlock, @NotNull List<Block> blocks, @NotNull BlockFace facing) {
-        ClaimAccessor claims = Factions.get().getClaims();
+        ClaimAccessor claims = Factions.get().claims();
         Faction sourceFaction = claims.getFactionOrDefault(sourceBlock);
 
         Chunk lastChunk = null;

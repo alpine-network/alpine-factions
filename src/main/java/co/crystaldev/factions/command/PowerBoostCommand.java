@@ -38,9 +38,9 @@ final class PowerBoostCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
             @Arg("powerboost") int powerboost
     ) {
-        Faction faction = Factions.get().getFactions().findOrDefault(other);
+        Faction faction = Factions.get().factions().findOrDefault(other);
 
-        PlayerAccessor players = Factions.get().getPlayers();
+        PlayerAccessor players = Factions.get().players();
         FPlayer state = players.get(other);
         state.setPowerBoost(powerboost);
         players.save(state);

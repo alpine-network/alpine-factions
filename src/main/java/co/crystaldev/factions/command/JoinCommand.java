@@ -41,7 +41,7 @@ final class JoinCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
 
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction otherFaction = factions.findOrDefault(player);
 
         // ensure the player is not in a faction
@@ -110,7 +110,7 @@ final class JoinCommand extends FactionsCommand {
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction otherFaction = factions.find(joiningPlayer);
         Faction actingFaction = factions.findOrDefault(player);
         Faction wilderness = factions.getWilderness();

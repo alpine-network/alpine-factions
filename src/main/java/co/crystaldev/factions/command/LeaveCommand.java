@@ -30,7 +30,7 @@ final class LeaveCommand extends FactionsCommand {
     @Execute
     public void execute(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.find(player);
 
         // ensure the player is in a faction

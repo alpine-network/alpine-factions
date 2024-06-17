@@ -45,7 +45,7 @@ final class AccessAllCommand extends FactionsCommand {
             @Arg("access") boolean access,
             @Arg("target_faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction target = targetFaction.orElse(factions.findOrDefault(sender));
         if (target.isWilderness()) {
             FactionHelper.missingPermission(sender, target, "grant access");
@@ -64,7 +64,7 @@ final class AccessAllCommand extends FactionsCommand {
             @Arg("access") boolean access,
             @Arg("target_faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        Faction target = targetFaction.orElse(Factions.get().getFactions().findOrDefault(sender));
+        Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
         if (target.isWilderness()) {
             FactionHelper.missingPermission(sender, target, "grant access");
             return;
@@ -78,7 +78,7 @@ final class AccessAllCommand extends FactionsCommand {
                                   @NotNull Faction targetFaction, @NotNull Component formattedSubject,
                                   @NotNull Component subjectName) {
         MessageConfig config = MessageConfig.getInstance();
-        ClaimAccessor claims = Factions.get().getClaims();
+        ClaimAccessor claims = Factions.get().claims();
 
         // ensure the player has permission for the faction
         if (!targetFaction.isPermitted(sender, Permissions.MODIFY_ACCESS)) {

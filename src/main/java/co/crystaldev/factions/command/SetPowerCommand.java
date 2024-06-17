@@ -42,9 +42,9 @@ final class SetPowerCommand extends FactionsCommand {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
 
-        Faction faction = Factions.get().getFactions().findOrDefault(other);
+        Faction faction = Factions.get().factions().findOrDefault(other);
 
-        PlayerAccessor players = Factions.get().getPlayers();
+        PlayerAccessor players = Factions.get().players();
         FPlayer state = players.get(other);
         state.setPowerLevel(Math.max(0, Math.min(factionConfig.maxPlayerPower, power)));
         players.save(state);

@@ -68,7 +68,7 @@ final class TitleCommand extends FactionsCommand {
 
     private static void set(@NotNull CommandSender sender, @NotNull OfflinePlayer other, @Nullable Component title) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(other);
         Faction actingFaction = factions.findOrDefault(sender);
 

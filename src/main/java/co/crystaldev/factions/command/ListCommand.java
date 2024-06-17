@@ -38,7 +38,7 @@ final class ListCommand extends FactionsCommand {
         int page = Math.max(1, humanPage.orElse(1));
 
         // sort factions from greatest to least online members
-        List<Faction> factions = new LinkedList<>(Factions.get().getFactions().get());
+        List<Faction> factions = new LinkedList<>(Factions.get().factions().get());
         factions.sort((o1, o2) -> o2.countMembers() - o1.countMembers());
 
         // build the page

@@ -35,7 +35,7 @@ final class CreateCommand extends FactionsCommand {
     ) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
 
         // ensure the player isn't already in a faction
         Faction faction = factions.find(player);

@@ -46,7 +46,7 @@ final class NameCommand extends FactionsCommand {
     ) {
         MessageConfig config = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction faction = targetFaction.orElseGet(() -> factions.findOrDefault(sender));
 
         // ensure the user has permission

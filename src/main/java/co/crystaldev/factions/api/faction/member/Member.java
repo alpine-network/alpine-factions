@@ -56,6 +56,6 @@ public final class Member {
 
     @NotNull
     public FPlayer getUser() {
-        return Factions.get().getPlayers().getById(this.id);
+        return Factions.get().players().getById(this.id);
     }
 }

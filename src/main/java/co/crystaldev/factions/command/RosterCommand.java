@@ -52,7 +52,7 @@ final class RosterCommand extends FactionsCommand implements Initializable {
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        Faction senderFaction = Factions.get().getFactions().findOrDefault(sender);
+        Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
         if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {
@@ -121,7 +121,7 @@ final class RosterCommand extends FactionsCommand implements Initializable {
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        Faction senderFaction = Factions.get().getFactions().findOrDefault(sender);
+        Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
         if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {
@@ -185,7 +185,7 @@ final class RosterCommand extends FactionsCommand implements Initializable {
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        Faction senderFaction = Factions.get().getFactions().findOrDefault(sender);
+        Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
         if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {
@@ -234,7 +234,7 @@ final class RosterCommand extends FactionsCommand implements Initializable {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction faction = targetFaction.orElse(factions.findOrDefault(sender));
 
         if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {

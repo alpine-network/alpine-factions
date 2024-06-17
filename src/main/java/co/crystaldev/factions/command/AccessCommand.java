@@ -57,7 +57,7 @@ final class AccessCommand extends FactionsCommand {
             @Arg("type") @Key(Args.CLAIM_TYPE) Optional<ClaimType> optionalType,
             @Arg("radius") Optional<Integer> optionalRadius
     ) {
-        Faction otherFaction = Factions.get().getFactions().findOrDefault(other);
+        Faction otherFaction = Factions.get().factions().findOrDefault(other);
         setAccess(player, other, access, optionalType, optionalRadius,
                 FactionHelper.formatRelational(player, otherFaction, other, false),
                 Component.text(other.getName()));
@@ -79,8 +79,8 @@ final class AccessCommand extends FactionsCommand {
     public void show(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FactionAccessor factions = Factions.get().getFactions();
-        ClaimAccessor claims = Factions.get().getClaims();
+        FactionAccessor factions = Factions.get().factions();
+        ClaimAccessor claims = Factions.get().claims();
 
         Location location = player.getLocation();
         Claim claim = claims.getClaim(location);
@@ -118,8 +118,8 @@ final class AccessCommand extends FactionsCommand {
                                       @NotNull Component formattedSubject, @NotNull Component subjectName) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FactionAccessor factions = Factions.get().getFactions();
-        ClaimAccessor claims = Factions.get().getClaims();
+        FactionAccessor factions = Factions.get().factions();
+        ClaimAccessor claims = Factions.get().claims();
 
         Location location = player.getLocation();
         Claim claim = claims.getClaim(location);

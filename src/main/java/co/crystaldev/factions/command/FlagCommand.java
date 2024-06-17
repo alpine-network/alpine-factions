@@ -55,7 +55,7 @@ final class FlagCommand extends FactionsCommand {
             return;
         }
 
-        Faction resolvedFaction = faction.orElse(Factions.get().getFactions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_FLAGS)) {
             FactionHelper.missingPermission(sender, resolvedFaction, "modify flags");
             return;
@@ -97,7 +97,7 @@ final class FlagCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         FlagRegistry registry = AlpineFactions.getInstance().getFlagRegistry();
 
-        Faction resolvedFaction = faction.orElse(Factions.get().getFactions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_FLAGS)) {
             FactionHelper.missingPermission(sender, resolvedFaction, "modify flags");
             return;

@@ -35,12 +35,12 @@ final class DescriptionCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Join("name") String description
     ) {
-        set(Factions.get().getFactions().findOrDefault(sender), sender, Component.text(description));
+        set(Factions.get().factions().findOrDefault(sender), sender, Component.text(description));
     }
 
     @Execute(name = "clear")
     public void clear(@Context CommandSender sender) {
-        set(Factions.get().getFactions().findOrDefault(sender), sender, null);
+        set(Factions.get().factions().findOrDefault(sender), sender, null);
     }
 
     private static void set(@NotNull Faction faction, @NotNull CommandSender sender, @Nullable Component description) {

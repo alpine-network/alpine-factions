@@ -37,7 +37,7 @@ public final class ClaimHelper {
                                     @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
 
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
         Chunk playerChunk = player.getLocation().getChunk();
@@ -70,7 +70,7 @@ public final class ClaimHelper {
 
         // iterate and validate chunks
         Faction playerFaction = factions.findOrDefault(player);
-        ClaimAccessor claims = Factions.get().getClaims();
+        ClaimAccessor claims = Factions.get().claims();
         int conqueredChunkCount = 0;
         Map<Faction, List<ChunkCoordinate>> conqueredFactions = new HashMap<>();
         Iterator<ChunkCoordinate> iterator = chunks.iterator();
@@ -185,7 +185,7 @@ public final class ClaimHelper {
         MessageConfig config = MessageConfig.getInstance();
 
         if (claiming && claimingFaction == null) {
-            Faction wilderness = Factions.get().getFactions().getWilderness();
+            Faction wilderness = Factions.get().factions().getWilderness();
             config.landOwned.send(player,
                     "faction", FactionHelper.formatRelational(player, wilderness),
                     "faction_name", wilderness.getName()
@@ -255,7 +255,7 @@ public final class ClaimHelper {
     public static Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
         int max = FactionConfig.getInstance().maxClaimFillVolume;
         World world = origin.getWorld();
-        ClaimAccessor claims = Factions.get().getClaims();
+        ClaimAccessor claims = Factions.get().claims();
         Set<ChunkCoordinate> chunks = new HashSet<>();
 
         // discover chunks to fill

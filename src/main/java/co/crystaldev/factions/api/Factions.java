@@ -16,11 +16,11 @@ public interface Factions {
     }
 
     @NotNull
-    ClaimAccessor getClaims();
+    ClaimAccessor claims();
 
     @NotNull
-    PlayerAccessor getPlayers();
+    PlayerAccessor players();
 
     @NotNull
-    FactionAccessor getFactions();
+    FactionAccessor factions();
 }

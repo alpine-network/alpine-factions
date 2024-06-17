@@ -41,7 +41,7 @@ final class ClaimCommand extends FactionsCommand {
             @Arg("radius") Optional<Integer> rad,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction claimingFaction = faction.orElse(factions.find(player));
         Faction actingFaction = faction.orElse(factions.findOrDefault(player));
         Claiming.mode(player, actingFaction, claimingFaction, type, Math.max(rad.orElse(1), 1));
@@ -52,7 +52,7 @@ final class ClaimCommand extends FactionsCommand {
             @Context Player player,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction claimingFaction = faction.orElse(factions.find(player));
         Faction actingFaction = faction.orElse(factions.findOrDefault(player));
         Claiming.fill(player, actingFaction, claimingFaction);
@@ -63,7 +63,7 @@ final class ClaimCommand extends FactionsCommand {
             @Context Player player,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction claimingFaction = faction.orElse(factions.find(player));
         Faction actingFaction = faction.orElse(factions.findOrDefault(player));
         Claiming.one(player, actingFaction, claimingFaction);
@@ -75,7 +75,7 @@ final class ClaimCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction claimingFaction = faction.orElse(Factions.get().getFactions().findOrDefault(player));
+        Faction claimingFaction = faction.orElse(Factions.get().factions().findOrDefault(player));
 
         PlayerState state = PlayerHandler.getInstance().getPlayer(player);
         AutoClaimState autoClaim = state.getAutoClaimState();

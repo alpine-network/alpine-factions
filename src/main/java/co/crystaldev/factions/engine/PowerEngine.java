@@ -29,7 +29,7 @@ public final class PowerEngine extends AlpineEngine {
         FactionConfig config = FactionConfig.getInstance();
         double powerGain = config.powerGainPerHour / 60.0;
 
-        PlayerAccessor players = Factions.get().getPlayers();
+        PlayerAccessor players = Factions.get().players();
         players.forEach(player -> {
             // modify the player's power
             player.setPowerLevel(Math.min(player.getPowerLevel() + powerGain, config.maxPlayerPower));
@@ -45,7 +45,7 @@ public final class PowerEngine extends AlpineEngine {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         FactionConfig config = FactionConfig.getInstance();
-        PlayerAccessor players = Factions.get().getPlayers();
+        PlayerAccessor players = Factions.get().players();
         FPlayer player = players.get(event.getEntity());
 
         player.setPowerLevel(Math.max(0.0, player.getPowerLevel() + config.powerLossPerDeath));

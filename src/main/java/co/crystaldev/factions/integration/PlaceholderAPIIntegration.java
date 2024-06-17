@@ -73,12 +73,12 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
 
         @Override
         public String onPlaceholderRequest(Player one, Player two, String identifier) {
-            FactionAccessor factions = Factions.get().getFactions();
+            FactionAccessor factions = Factions.get().factions();
 
             Player subject = two == null ? one : two;
             Faction selfFaction = factions.findOrDefault(one);
             Faction faction = two == null ? factions.findOrDefault(one) : factions.findOrDefault(two);
-            FPlayer playerState = Factions.get().getPlayers().get(subject);
+            FPlayer playerState = Factions.get().players().get(subject);
             Member member = faction.getMember(subject.getUniqueId());
 
             switch (identifier) {

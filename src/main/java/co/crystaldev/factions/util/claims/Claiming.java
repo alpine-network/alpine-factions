@@ -51,7 +51,7 @@ public final class Claiming {
     public static void fill(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
         MessageConfig config = MessageConfig.getInstance();
         Chunk origin = actor.getLocation().getChunk();
-        Faction replacedFaction = Factions.get().getClaims().getFaction(origin);
+        Faction replacedFaction = Factions.get().claims().getFaction(origin);
 
         // do not unclaim fill if faction is wilderness
         boolean claiming = claimingFaction != null;

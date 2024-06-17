@@ -130,8 +130,8 @@ public final class CombatEngine extends AlpineEngine {
 
     private boolean shouldCancelDamage(@NotNull Player player, @NotNull Player damager) {
         MessageConfig config = MessageConfig.getInstance();
-        FactionAccessor factions = Factions.get().getFactions();
-        ClaimAccessor claims = Factions.get().getClaims();
+        FactionAccessor factions = Factions.get().factions();
+        ClaimAccessor claims = Factions.get().claims();
 
         // allow overriding players to damage other players
         if (PlayerHandler.getInstance().isOverriding(damager)) {

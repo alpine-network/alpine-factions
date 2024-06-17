@@ -27,7 +27,7 @@ final class TerritorialTitlesCommand extends FactionsCommand {
     public void execute(@Context Player player) {
         MessageConfig config = MessageConfig.getInstance();
 
-        PlayerAccessor players = Factions.get().getPlayers();
+        PlayerAccessor players = Factions.get().players();
         players.wrap(player, state -> {
             state.setTerritorialTitleMode(next(state.getTerritorialTitleMode()));
 

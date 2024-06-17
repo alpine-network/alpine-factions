@@ -56,7 +56,7 @@ final class RankCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction faction = Factions.get().getFactions().findOrDefault(other);
+        Faction faction = Factions.get().factions().findOrDefault(other);
 
         config.memberRank.send(sender,
                 "faction", FactionHelper.formatRelational(sender, faction, false),
@@ -72,7 +72,7 @@ final class RankCommand extends FactionsCommand {
         boolean overriding = PlayerHandler.getInstance().isOverriding(actor);
         UUID actorId = PlayerHelper.getId(actor);
 
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction senderFaction = factions.findOrDefault(actor);
         Faction targetFaction = factions.findOrDefault(other);
 
@@ -156,7 +156,7 @@ final class RankCommand extends FactionsCommand {
                 @Context CommandSender sender,
                 @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
         ) {
-            Rank rank = Factions.get().getFactions().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
+            Rank rank = Factions.get().factions().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
             setRank(sender, other, rank.getNextRank());
         }
     }
@@ -173,7 +173,7 @@ final class RankCommand extends FactionsCommand {
                 @Context CommandSender sender,
                 @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
         ) {
-            Rank rank = Factions.get().getFactions().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
+            Rank rank = Factions.get().factions().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
             setRank(sender, other, rank.getPreviousRank());
         }
     }

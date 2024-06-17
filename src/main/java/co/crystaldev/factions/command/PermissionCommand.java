@@ -51,7 +51,7 @@ final class PermissionCommand extends FactionsCommand {
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        Faction resolvedFaction = faction.orElse(Factions.get().getFactions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_PERMS)) {
             FactionHelper.missingPermission(sender, resolvedFaction, "modify permissions");
             return;
@@ -90,7 +90,7 @@ final class PermissionCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
         PermissionRegistry registry = AlpineFactions.getInstance().getPermissionRegistry();
 
-        Faction resolvedFaction = faction.orElse(Factions.get().getFactions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_PERMS)) {
             FactionHelper.missingPermission(sender, resolvedFaction, "modify permissions");
             return;

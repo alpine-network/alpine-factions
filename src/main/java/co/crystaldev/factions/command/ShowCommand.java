@@ -32,7 +32,7 @@ final class ShowCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        Faction senderFaction = Factions.get().getFactions().findOrDefault(sender);
+        Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction resolvedFaction = faction.orElse(senderFaction);
         Messaging.send(sender, AlpineFactions.getInstance().getShowFormatter().build(sender, resolvedFaction, senderFaction));
     }

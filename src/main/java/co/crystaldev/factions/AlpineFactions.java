@@ -98,17 +98,17 @@ public final class AlpineFactions extends AlpinePlugin implements Factions {
     }
 
     @Override
-    public @NotNull ClaimAccessor getClaims() {
+    public @NotNull ClaimAccessor claims() {
         return this.claimAccessor;
     }
 
     @Override
-    public @NotNull PlayerAccessor getPlayers() {
+    public @NotNull PlayerAccessor players() {
         return this.playerAccessor;
     }
 
     @Override
-    public @NotNull FactionAccessor getFactions() {
+    public @NotNull FactionAccessor factions() {
         return this.factionAccessor;
     }
 

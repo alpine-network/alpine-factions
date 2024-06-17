@@ -165,8 +165,8 @@ public final class Faction {
     public void disband(@NotNull CommandSender actor) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FactionAccessor factions = Factions.get().getFactions();
-        ClaimAccessor claims = Factions.get().getClaims();
+        FactionAccessor factions = Factions.get().factions();
+        ClaimAccessor claims = Factions.get().claims();
         Faction actingFaction = factions.findOrDefault(actor);
 
         // call event
@@ -232,7 +232,7 @@ public final class Faction {
     }
 
     public int getClaimCount(@Nullable World world) {
-        return Factions.get().getClaims().countClaims(this, world);
+        return Factions.get().claims().countClaims(this, world);
     }
 
     public int getClaimCount() {
@@ -318,7 +318,7 @@ public final class Faction {
     @NotNull
     public Set<RelatedFaction> getRelatedFactions() {
         Set<RelatedFaction> related = new HashSet<>();
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
 
         this.relationRequests.forEach((factionId, type) -> {
             Faction other = factions.getById(factionId);
@@ -333,7 +333,7 @@ public final class Faction {
     @NotNull
     public Set<RelatedFaction> getRelationWishes() {
         Set<RelatedFaction> related = new HashSet<>();
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
 
         this.relationRequests.forEach((factionId, type) -> {
             Faction other = factions.getById(factionId);
@@ -348,7 +348,7 @@ public final class Faction {
     @NotNull
     public Set<Faction> getRelatedFactions(@NotNull FactionRelation relation) {
         Set<Faction> related = new HashSet<>();
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
 
         this.relationRequests.forEach((factionId, type) -> {
             if (type != relation) {
@@ -417,7 +417,7 @@ public final class Faction {
             return this.isPermitted(this.getMember(offlinePlayer).getRank(), permission);
         }
         else {
-            Faction other = Factions.get().getFactions().find(player);
+            Faction other = Factions.get().factions().find(player);
             return this.isPermitted(this.relationWishTo(other), permission);
         }
     }
@@ -600,7 +600,7 @@ public final class Faction {
             }
             else {
                 // move replacement owner into this faction
-                Faction faction = Factions.get().getFactions().find(owner);
+                Faction faction = Factions.get().factions().find(owner);
                 if (faction != null) {
                     faction.removeMember(owner);
                 }

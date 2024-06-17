@@ -47,7 +47,7 @@ final class StatusCommand extends FactionsCommand {
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
-        FactionAccessor factions = Factions.get().getFactions();
+        FactionAccessor factions = Factions.get().factions();
         Faction target = targetFaction.orElse(factions.findOrDefault(sender));
         Faction senderFaction = factions.findOrDefault(sender);
 
@@ -64,7 +64,7 @@ final class StatusCommand extends FactionsCommand {
         String command = "/f status " + target.getName() + " %page%";
         Component compiledPage = Formatting.page(title, members, command, page.orElse(1), 10, member -> {
             OfflinePlayer player = member.getOfflinePlayer();
-            FPlayer state = Factions.get().getPlayers().get(player);
+            FPlayer state = Factions.get().players().get(player);
 
             ConfigText text = member.isOnline() ? config.factionStatusOnlineEntry : config.factionStatusOfflineEntry;
             return text.build(
@@ -91,8 +91,8 @@ final class StatusCommand extends FactionsCommand {
             return;
         }
 
-        FPlayer state = Factions.get().getPlayers().get(target);
-        Faction faction = Factions.get().getFactions().findOrDefault(target);
+        FPlayer state = Factions.get().players().get(target);
+        Faction faction = Factions.get().factions().findOrDefault(target);
         Component title = messageConfig.memberStatusTitle.build(
                 "player", FactionHelper.formatRelational(sender, faction, target, false),
                 "player_name", target.getName());

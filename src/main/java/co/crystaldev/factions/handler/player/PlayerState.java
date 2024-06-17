@@ -42,7 +42,7 @@ public final class PlayerState {
     private boolean overriding;
 
     public void onLogin() {
-        Faction faction = Factions.get().getFactions().findOrDefault(this.player);
+        Faction faction = Factions.get().factions().findOrDefault(this.player);
         Component motd = faction.getMotd();
 
         if (motd != null) {
@@ -56,17 +56,17 @@ public final class PlayerState {
     }
 
     public void onMoveChunk(@NotNull Chunk oldChunk, @NotNull Chunk newChunk) {
-        FPlayer state = Factions.get().getPlayers().get(this.player);
+        FPlayer state = Factions.get().players().get(this.player);
 
         // player has entered into a new faction claim
-        ClaimAccessor claims = Factions.get().getClaims();
+        ClaimAccessor claims = Factions.get().claims();
         if (!claims.isSameClaim(oldChunk, newChunk)) {
             this.displayTerritorialTitle(state, newChunk);
         }
 
         // now we should attempt to claim/unclaim
         if (this.autoClaimState.isEnabled()) {
-            Faction actingFaction = Factions.get().getFactions().findOrDefault(this.player);
+            Faction actingFaction = Factions.get().factions().findOrDefault(this.player);
             AlpineFactions.schedule(() -> Claiming.one(this.player, actingFaction, this.autoClaimState.getFaction()));
         }
 
@@ -86,7 +86,7 @@ public final class PlayerState {
     }
 
     private void displayTerritorialTitle(@NotNull FPlayer state, @NotNull Chunk chunk) {
-        Faction faction = Factions.get().getClaims().getFactionOrDefault(chunk);
+        Faction faction = Factions.get().claims().getFactionOrDefault(chunk);
         TerritorialTitleMode mode = state.getTerritorialTitleMode();
 
         Component description = Optional.ofNullable(faction.getDescription()).orElse(Faction.DEFAULT_DESCRIPTION);

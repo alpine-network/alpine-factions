@@ -31,8 +31,8 @@ final class SetHomeCommand extends FactionsCommand {
         MessageConfig config = MessageConfig.getInstance();
 
         Location location = player.getLocation();
-        Faction faction = Factions.get().getClaims().getFactionOrDefault(location);
-        Faction selfFaction = Factions.get().getFactions().findOrDefault(player);
+        Faction faction = Factions.get().claims().getFactionOrDefault(location);
+        Faction selfFaction = Factions.get().factions().findOrDefault(player);
         if (faction.isWilderness() || !faction.isMember(player.getUniqueId())) {
             config.outsideTerritory.send(player,
                     "faction", FactionHelper.formatRelational(player, selfFaction, false),

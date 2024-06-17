@@ -48,7 +48,7 @@ final class RelationCommand extends FactionsCommand {
             @Arg("relation") @Key(Args.FACTION_RELATION) FactionRelation relation,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        setRelation(sender, target, faction.orElse(Factions.get().getFactions().findOrDefault(sender)), relation);
+        setRelation(sender, target, faction.orElse(Factions.get().factions().findOrDefault(sender)), relation);
     }
 
     @Execute(name = "list")
@@ -58,7 +58,7 @@ final class RelationCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction target = targetFaction.orElse(Factions.get().getFactions().findOrDefault(sender));
+        Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
 
         if (!target.isPermitted(sender, Permissions.MODIFY_RELATIONS)) {
             FactionHelper.missingPermission(sender, target, "manage relations");
@@ -80,7 +80,7 @@ final class RelationCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        Faction target = targetFaction.orElse(Factions.get().getFactions().findOrDefault(sender));
+        Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
 
         if (!target.isPermitted(sender, Permissions.MODIFY_RELATIONS)) {
             FactionHelper.missingPermission(sender, target, "manage relations");
@@ -192,7 +192,7 @@ final class RelationCommand extends FactionsCommand {
                 @Arg("target_faction") @Key(Args.FACTION) Faction targetFaction,
                 @Arg("faction") @Key(Args.FACTION) Optional<Faction> actingFaction
         ) {
-            Faction acting = actingFaction.orElse(Factions.get().getFactions().findOrDefault(sender));
+            Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.NEUTRAL);
         }
     }
@@ -210,7 +210,7 @@ final class RelationCommand extends FactionsCommand {
                 @Arg("target_faction") @Key(Args.FACTION) Faction targetFaction,
                 @Arg("faction") @Key(Args.FACTION) Optional<Faction> actingFaction
         ) {
-            Faction acting = actingFaction.orElse(Factions.get().getFactions().findOrDefault(sender));
+            Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.ENEMY);
         }
     }
@@ -228,7 +228,7 @@ final class RelationCommand extends FactionsCommand {
                 @Arg("target_faction") @Key(Args.FACTION) Faction targetFaction,
                 @Arg("faction") @Key(Args.FACTION) Optional<Faction> actingFaction
         ) {
-            Faction acting = actingFaction.orElse(Factions.get().getFactions().findOrDefault(sender));
+            Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.ALLY);
         }
     }
@@ -246,7 +246,7 @@ final class RelationCommand extends FactionsCommand {
                 @Arg("target_faction") @Key(Args.FACTION) Faction targetFaction,
                 @Arg("faction") @Key(Args.FACTION) Optional<Faction> actingFaction
         ) {
-            Faction acting = actingFaction.orElse(Factions.get().getFactions().findOrDefault(sender));
+            Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.TRUCE);
         }
     }
