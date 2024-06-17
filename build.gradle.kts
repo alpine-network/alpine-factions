@@ -4,6 +4,7 @@ import java.nio.file.StandardCopyOption
 plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("maven-publish")
 }
 
 group = compileGroup()
@@ -35,6 +36,38 @@ dependencies {
 
     compileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.30")
     annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.30")
+}
+
+java {
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+
+            pom {
+                name.set("${rootProject.properties["plugin_name"]}-API")
+                description.set(rootProject.properties["plugin_description"] as String)
+
+                groupId = rootProject.properties["maven_group"] as String
+                artifactId = "${rootProject.properties["maven_artifact"]}-api"
+                version = rootProject.version as String
+                packaging = "jar"
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "AlpineCloud"
+            url = uri("https://lib.alpn.cloud/alpine-public")
+            credentials {
+                username = System.getenv("ALPINE_MAVEN_NAME")
+                password = System.getenv("ALPINE_MAVEN_SECRET")
+            }
+        }
+    }
 }
 
 tasks {
