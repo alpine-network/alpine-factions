@@ -95,7 +95,7 @@ final class FlagCommand extends FactionsCommand {
             @Arg("page") Optional<Integer> page
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FlagRegistry registry = AlpineFactions.getInstance().getFlagRegistry();
+        FlagRegistry registry = AlpineFactions.getInstance().flagRegistry();
 
         Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_FLAGS)) {
@@ -132,7 +132,7 @@ final class FlagCommand extends FactionsCommand {
             @Arg("page") Optional<Integer> page
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        FlagRegistry registry = AlpineFactions.getInstance().getFlagRegistry();
+        FlagRegistry registry = AlpineFactions.getInstance().flagRegistry();
 
         List<FactionFlag> flags = (List) registry.getAll(sender);
         String command = "/f flag list %page%";

@@ -24,7 +24,7 @@ final class FactionPermissionArgumentResolver extends AlpineArgumentResolver<Per
 
     @Override
     protected ParseResult<Permission> parse(Invocation<CommandSender> invocation, Argument<Permission> context, String argument) {
-        PermissionRegistry registry = AlpineFactions.getInstance().getPermissionRegistry();
+        PermissionRegistry registry = AlpineFactions.getInstance().permissionRegistry();
         List<Permission> permissions = registry.getAll();
 
         for (Permission permission : permissions) {
@@ -39,7 +39,7 @@ final class FactionPermissionArgumentResolver extends AlpineArgumentResolver<Per
     @Override
     public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<Permission> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel().toLowerCase();
-        PermissionRegistry registry = AlpineFactions.getInstance().getPermissionRegistry();
+        PermissionRegistry registry = AlpineFactions.getInstance().permissionRegistry();
         List<Permission> permissions = registry.getAll();
 
         return permissions.stream()

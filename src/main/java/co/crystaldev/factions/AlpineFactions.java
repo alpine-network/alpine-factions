@@ -39,25 +39,16 @@ public final class AlpineFactions extends AlpinePlugin implements Factions {
     @Getter
     private final PlayerHandler playerHandler = new PlayerHandler();
 
-    @Getter
-    private final TeleportManager teleportManager = new TeleportManager();
-
-    @Getter
     private final FlagRegistry flagRegistry = new FlagRegistry();
 
-    @Getter
     private final PermissionRegistry permissionRegistry = new PermissionRegistry();
 
-    @Getter
     private final ShowFormatter showFormatter = new ShowFormatter();
 
-    @Getter
     private ClaimAccessor claimAccessor;
 
-    @Getter
     private FactionAccessor factionAccessor;
 
-    @Getter
     private PlayerAccessor playerAccessor;
 
     @Override
@@ -110,6 +101,21 @@ public final class AlpineFactions extends AlpinePlugin implements Factions {
     @Override
     public @NotNull FactionAccessor factions() {
         return this.factionAccessor;
+    }
+
+    @Override
+    public @NotNull FlagRegistry flagRegistry() {
+        return flagRegistry;
+    }
+
+    @Override
+    public @NotNull PermissionRegistry permissionRegistry() {
+        return permissionRegistry;
+    }
+
+    @Override
+    public @NotNull ShowFormatter showFormatter() {
+        return showFormatter;
     }
 
     @NotNull @ApiStatus.Internal

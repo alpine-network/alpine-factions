@@ -23,9 +23,11 @@ public final class TeleportManager {
 
     private static final double MAX_MOVEMENT = 0.5;
 
-    @Getter
-    private static TeleportManager instance;
-    { instance = this; }
+    private static final TeleportManager INSTANCE = new TeleportManager();
+    @NotNull
+    public static TeleportManager getInstance() {
+        return INSTANCE;
+    }
 
     private final Map<UUID, QueuedTeleport> queuedTeleports = new HashMap<>();
 

@@ -88,7 +88,7 @@ final class PermissionCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        PermissionRegistry registry = AlpineFactions.getInstance().getPermissionRegistry();
+        PermissionRegistry registry = AlpineFactions.getInstance().permissionRegistry();
 
         Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
         if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_PERMS)) {
@@ -135,7 +135,7 @@ final class PermissionCommand extends FactionsCommand {
             @Arg("page") Optional<Integer> page
     ) {
         MessageConfig config = MessageConfig.getInstance();
-        PermissionRegistry registry = AlpineFactions.getInstance().getPermissionRegistry();
+        PermissionRegistry registry = AlpineFactions.getInstance().permissionRegistry();
 
         List<Permission> permissions = registry.getAll();
 

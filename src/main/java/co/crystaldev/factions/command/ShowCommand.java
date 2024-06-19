@@ -34,6 +34,6 @@ final class ShowCommand extends FactionsCommand {
     ) {
         Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction resolvedFaction = faction.orElse(senderFaction);
-        Messaging.send(sender, AlpineFactions.getInstance().getShowFormatter().build(sender, resolvedFaction, senderFaction));
+        Messaging.send(sender, AlpineFactions.getInstance().showFormatter().build(sender, resolvedFaction, senderFaction));
     }
 }
