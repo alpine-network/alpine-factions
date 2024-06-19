@@ -247,7 +247,15 @@ public final class FactionHelper {
     public static boolean isPermitted(@NotNull Player player, @NotNull Chunk chunk, @NotNull Permission permission, @NotNull String action) {
         ClaimAccessor claims = Factions.get().claims();
         if (!claims.isClaimed(chunk)) {
-            return true;
+            FactionAccessor factions = Factions.get().factions();
+            Faction wilderness = factions.getWilderness();
+            if (!wilderness.isPermitted(player, permission)) {
+                FactionHelper.missingPermission(player, wilderness, action);
+                return false;
+            }
+            else {
+                return true;
+            }
         }
 
         Claim claim = claims.getClaim(chunk);
