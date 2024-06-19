@@ -61,7 +61,7 @@ publishing {
     repositories {
         maven {
             name = "AlpineCloud"
-            url = uri("https://lib.alpn.cloud/alpine-public")
+            url = uri("https://lib.alpn.cloud/alpine-private")
             credentials {
                 username = System.getenv("ALPINE_MAVEN_NAME")
                 password = System.getenv("ALPINE_MAVEN_SECRET")
