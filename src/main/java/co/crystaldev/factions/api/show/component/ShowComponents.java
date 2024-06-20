@@ -12,6 +12,8 @@ import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -35,15 +37,19 @@ public final class ShowComponents {
         return PlayerHandler.getInstance().isOverriding(ctx.getSender());
     };
 
+    public static final ShowComponent ID = ShowComponent.create(
+            ShowOrder.inserting(),
+            ctx -> {
+                return conf().showId.build("id", ctx.getFaction().getId())
+                        .hoverEvent(HoverEvent.showText(Component.text("Click to copy")))
+                        .clickEvent(ClickEvent.copyToClipboard(ctx.getFaction().getId()));
+            },
+            REQUIRES_OVERRIDE_PREDICATE
+    );
+
     public static final ShowComponent DESCRIPTION = ShowComponent.create(
             ShowOrder.inserting(),
             ctx -> conf().showDesc.build("description", Optional.ofNullable(ctx.getFaction().getDescription()).orElse(Faction.DEFAULT_DESCRIPTION))
-    );
-
-    public static final ShowComponent ID = ShowComponent.create(
-            ShowOrder.inserting(),
-            ctx -> conf().showId.build("id", ctx.getFaction().getId()),
-            REQUIRES_OVERRIDE_PREDICATE
     );
 
     public static final ShowComponent CREATED = ShowComponent.create(
