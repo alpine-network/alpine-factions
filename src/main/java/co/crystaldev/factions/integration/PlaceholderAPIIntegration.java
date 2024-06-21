@@ -63,7 +63,7 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
 
         @Override
         public @NotNull String getAuthor() {
-            return "BestBearr";
+            return "Crystal Development, LLC.";
         }
 
         @Override
@@ -83,21 +83,24 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
 
             switch (identifier) {
                 case "faction":
-                    return legacy(FactionHelper.formatRelational(one, faction, false));
+                case "faction_ampersand":
+                    return legacy(FactionHelper.formatRelational(one, faction, false), "faction".equals(identifier));
                 case "factionname":
                     return faction.getName();
                 case "relationalusername":
+                case "relationalusername_ampersand":
                     if (two == null) {
                         return null;
                     }
-                    return legacy(FactionHelper.formatRelational(one, faction, two.getName()));
+                    return legacy(FactionHelper.formatRelational(one, faction, two.getName()), "relationalusername".equals(identifier));
                 case "relation":
+                case "relation_ampersand":
                     if (two == null) {
                         return null;
                     }
                     FactionRelation relation = selfFaction.relationTo(faction);
                     Component style = Components.stylize(StyleConfig.getInstance().relationalStyles.get(relation), Component.text(""));
-                    return legacy(style);
+                    return legacy(style, "relation".equals(identifier));
                 case "power":
                     return String.valueOf(playerState.getPowerLevel());
                 case "maxpower":
@@ -111,7 +114,8 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
                 case "factionpowerboost":
                     return String.valueOf(faction.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER));
                 case "title":
-                    return member == null ? "" : legacy(member.getTitle());
+                case "title_ampersand":
+                    return member == null ? "" : legacy(member.getTitle(), "title".equals(identifier));
                 case "rank":
                     return (member == null ? Rank.getDefault() : member.getRank()).getId();
                 case "claims":
@@ -132,8 +136,9 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
         }
 
         @NotNull
-        private static String legacy(@NotNull Component component) {
-            return LegacyComponentSerializer.legacySection().serialize(component);
+        private static String legacy(@NotNull Component component, boolean section) {
+            LegacyComponentSerializer serializer = section ? LegacyComponentSerializer.legacySection() : LegacyComponentSerializer.legacyAmpersand();
+            return serializer.serialize(component);
         }
     }
 }
