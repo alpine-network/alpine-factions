@@ -16,7 +16,6 @@ import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.show.ShowFormatter;
 import co.crystaldev.factions.api.show.component.ShowComponents;
-import co.crystaldev.factions.handler.TeleportManager;
 import co.crystaldev.factions.store.claim.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.PlayerStore;

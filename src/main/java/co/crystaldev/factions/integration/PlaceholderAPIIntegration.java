@@ -3,6 +3,7 @@ package co.crystaldev.factions.integration;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.integration.AlpineIntegration;
 import co.crystaldev.alpinecore.framework.integration.AlpineIntegrationEngine;
+import co.crystaldev.alpinecore.util.ChatColor;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.Factions;
@@ -98,9 +99,17 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
                     if (two == null) {
                         return null;
                     }
+                    StyleConfig config = StyleConfig.getInstance();
                     FactionRelation relation = selfFaction.relationTo(faction);
-                    Component style = Components.stylize(StyleConfig.getInstance().relationalStyles.get(relation), Component.text(""));
-                    return legacy(style, "relation".equals(identifier));
+
+                    if (config.relationalStylePlaceholderOverrides.containsKey(relation)) {
+                        char formatChar = "relation".equals(identifier) ? '§' : '&';
+                        return ChatColor.translate(config.relationalStylePlaceholderOverrides.get(relation), formatChar);
+                    }
+
+                    Component style = Components.stylize(config.relationalStyles.get(relation), Component.text("-"));
+                    String legacy = legacy(style, "relation".equals(identifier));
+                    return legacy.substring(0, legacy.length() - 1);
                 case "power":
                     return String.valueOf(playerState.getPowerLevel());
                 case "maxpower":

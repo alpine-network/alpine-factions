@@ -42,4 +42,16 @@ public final class StyleConfig extends AlpineConfig {
         this.factionNameStyles.put("SafeZone", "gold");
         this.factionNameStyles.put("WarZone", "dark_red");
     }
+
+    @Comment({
+            "",
+            "Styles listed here will override the global styles above.",
+            "Different from the other styles in this config, these do",
+            "not get directly processed into a component. This is more",
+            "for interacting with specific plugins via PAPI."
+    })
+    public HashMap<FactionRelation, String> relationalStylePlaceholderOverrides = new LinkedHashMap<>();
+    {
+        this.relationalStylePlaceholderOverrides.put(FactionRelation.SELF, "&a");
+    }
 }
