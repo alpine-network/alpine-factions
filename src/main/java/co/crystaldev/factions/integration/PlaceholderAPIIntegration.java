@@ -65,7 +65,7 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
                         "title", "title_ampersand", "rank", "claims", "worldclaims", "onlinemembers",
                         "offlinemembers", "allmembers", "totalmembers"
                 )
-                .map(v -> "%%alpinefactions_" + v + "%%")
+                .map(v -> "%alpinefactions_" + v + "%")
                 .collect(Collectors.toList());
 
         @Override
