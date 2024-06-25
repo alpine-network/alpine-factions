@@ -25,13 +25,15 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @since 0.1.0
  */
 public final class PlaceholderAPIIntegration extends AlpineIntegration {
+
     PlaceholderAPIIntegration(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -47,6 +49,7 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
     }
 
     public static final class Engine extends AlpineIntegrationEngine {
+
         Engine(AlpinePlugin plugin) {
             super(plugin);
             new Expansion().register();
@@ -54,6 +57,16 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
     }
 
     private static final class Expansion extends PlaceholderExpansion implements Relational {
+
+        private static final List<String> PLACEHOLDERS = Stream.of(
+                        "faction", "faction_ampersand", "factionname", "relationalusername",
+                        "relationalusername_ampersand", "relation", "relation_ampersand", "power",
+                        "maxpower", "powerboost", "factionpower", "factionmaxpower", "factionpowerboost",
+                        "title", "title_ampersand", "rank", "claims", "worldclaims", "onlinemembers",
+                        "offlinemembers", "allmembers", "totalmembers"
+                )
+                .map(v -> "%%alpinefactions_" + v + "%%")
+                .collect(Collectors.toList());
 
         @Override
         public @NotNull String getIdentifier() {
@@ -78,7 +91,12 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
         @Override
         @NotNull
         public List<String> getPlaceholders() {
-            return generatePlaceholders();
+            return PLACEHOLDERS;
+        }
+
+        @Override
+        public boolean persist() {
+            return true;
         }
 
         @Override
@@ -157,25 +175,6 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
         private static String legacy(@NotNull Component component, boolean section) {
             LegacyComponentSerializer serializer = section ? LegacyComponentSerializer.legacySection() : LegacyComponentSerializer.legacyAmpersand();
             return serializer.serialize(component);
-        }
-
-        @NotNull
-        private List<String> generatePlaceholders() {
-            List<String> dynamicPlaceholders = new ArrayList<>();
-
-            String[] identifiers = {
-                    "faction", "faction_ampersand", "factionname", "relationalusername",
-                    "relationalusername_ampersand", "relation", "relation_ampersand", "power",
-                    "maxpower", "powerboost", "factionpower", "factionmaxpower", "factionpowerboost",
-                    "title", "title_ampersand", "rank", "claims", "worldclaims", "onlinemembers",
-                    "offlinemembers", "allmembers", "totalmembers"
-            };
-
-            for (String id : identifiers) {
-                dynamicPlaceholders.add(String.format("%%alpinefactions_%s%%", id));
-            }
-
-            return dynamicPlaceholders;
         }
     }
 }
