@@ -3,6 +3,7 @@ package co.crystaldev.factions.api.show.component;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
+import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.api.show.ShowContext;
 import co.crystaldev.factions.api.show.order.ShowOrder;
 import co.crystaldev.factions.config.FactionConfig;
@@ -19,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -118,6 +120,7 @@ public final class ShowComponents {
                 MessageConfig config = conf();
                 Collection<Component> members = ctx.getFaction().getOnlineMembers()
                         .stream()
+                        .sorted(Member.COMPARATOR)
                         .map(v -> FactionHelper.formatName(v.getOfflinePlayer()))
                         .collect(Collectors.toList());
                 Component joined = members.isEmpty() ? config.none.build() : Components.joinCommas(members);
@@ -133,6 +136,7 @@ public final class ShowComponents {
                 MessageConfig config = conf();
                 Collection<Component> members = ctx.getFaction().getOfflineMembers()
                         .stream()
+                        .sorted(Member.COMPARATOR)
                         .map(v -> FactionHelper.formatName(v.getOfflinePlayer()))
                         .collect(Collectors.toList());
                 Component joined = members.isEmpty() ? config.none.build() : Components.joinCommas(members);

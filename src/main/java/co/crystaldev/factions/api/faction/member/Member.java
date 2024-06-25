@@ -2,6 +2,7 @@ package co.crystaldev.factions.api.faction.member;
 
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.player.FPlayer;
+import com.google.common.collect.ComparisonChain;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.UUID;
 
 /**
@@ -17,6 +19,8 @@ import java.util.UUID;
  */
 @Data
 public final class Member {
+
+    public static final Comparator<Member> COMPARATOR = new MemberComparator();
 
     private final UUID id;
 
@@ -57,5 +61,15 @@ public final class Member {
     @NotNull
     public FPlayer getUser() {
         return Factions.get().players().getById(this.id);
+    }
+
+    private static final class MemberComparator implements Comparator<Member> {
+        @Override
+        public int compare(Member o1, Member o2) {
+            return ComparisonChain.start()
+                    .compare(o1.getRank(), o2.getRank())
+                    .compare(o1.getOfflinePlayer().getName(), o2.getOfflinePlayer().getName(), String::compareToIgnoreCase)
+                    .result();
+        }
     }
 }
