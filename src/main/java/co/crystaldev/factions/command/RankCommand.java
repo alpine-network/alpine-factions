@@ -193,4 +193,36 @@ final class RankCommand extends FactionsCommand {
             setRank(sender, other, Rank.LEADER);
         }
     }
+
+    @Command(name = "factions coleader")
+    @Description("Promote a member to co-leader.")
+    public static final class CoLeader extends FactionsCommand {
+        public CoLeader(AlpinePlugin plugin) {
+            super(plugin);
+        }
+
+        @Execute
+        public void execute(
+                @Context CommandSender sender,
+                @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
+        ) {
+            setRank(sender, other, Rank.COLEADER);
+        }
+    }
+
+    @Command(name = "factions officer")
+    @Description("Promote a member to officer.")
+    public static final class Officer extends FactionsCommand {
+        public Officer(AlpinePlugin plugin) {
+            super(plugin);
+        }
+
+        @Execute
+        public void execute(
+                @Context CommandSender sender,
+                @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
+        ) {
+            setRank(sender, other, Rank.OFFICER);
+        }
+    }
 }
