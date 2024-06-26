@@ -105,12 +105,18 @@ public final class ClaimHelper {
                     conqueredChunkCount++;
                 }
             }
+            else if (claimingFaction == null) {
+                // cannot unclaim a chunk that is not currently claimed
+                iterator.remove();
+            }
         }
 
         // ensure there are still chunks to claim
         if (chunks.isEmpty()) {
-            // claimingFaction is not null in this context
-            // the player's faction has to match this faction
+            if (claimingFaction == null) {
+                claimingFaction = factions.getWilderness();
+            }
+
             messageConfig.landOwned.send(player,
                     "faction", FactionHelper.formatRelational(player, claimingFaction),
                     "faction_name", claimingFaction.getName());
