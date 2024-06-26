@@ -118,7 +118,7 @@ public final class ClaimHelper {
         }
 
         // ensure that the claims can be conquered
-        if (conqueredChunkCount > 0 && canConquer(conqueredFactions, origin.getWorld().getName(), claims)) {
+        if (conqueredChunkCount > 0 && !canConquer(conqueredFactions, origin.getWorld().getName(), claims)) {
             messageConfig.conquerFromEdge.send(player);
             return;
         }
