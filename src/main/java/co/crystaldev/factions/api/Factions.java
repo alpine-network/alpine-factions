@@ -4,6 +4,7 @@ import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.show.ShowFormatter;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,7 +14,7 @@ public interface Factions {
 
     @NotNull
     static Factions get() {
-        return Reference.FACTIONS;
+        return (Factions) Bukkit.getPluginManager().getPlugin("AlpineFactions");
     }
 
     @NotNull
