@@ -75,7 +75,7 @@ public final class CombatEngine extends AlpineEngine {
             damager = (Player) damagerEntity;
         }
 
-        if (damager != null && this.shouldCancelDamage(player, damager)) {
+        if (damager != null && shouldCancelDamage(player, damager)) {
             event.setCancelled(true);
         }
     }
@@ -91,7 +91,7 @@ public final class CombatEngine extends AlpineEngine {
         Player player = (Player) entity;
         Player combuster = (Player) combusterEntity;
 
-        if (this.shouldCancelDamage(player, combuster)) {
+        if (shouldCancelDamage(player, combuster)) {
             event.setCancelled(true);
         }
     }
@@ -118,7 +118,7 @@ public final class CombatEngine extends AlpineEngine {
             }
 
             Player player = (Player) entity;
-            if (this.shouldCancelDamage(player, (Player) source)) {
+            if (shouldCancelDamage(player, (Player) source)) {
                 iterator.remove();
             }
         }
@@ -128,57 +128,62 @@ public final class CombatEngine extends AlpineEngine {
         }
     }
 
-    private boolean shouldCancelDamage(@NotNull Player player, @NotNull Player damager) {
+    private static boolean shouldCancelDamage(@NotNull Player attacker, @NotNull Player target) {
         MessageConfig config = MessageConfig.getInstance();
         FactionAccessor factions = Factions.get().factions();
         ClaimAccessor claims = Factions.get().claims();
 
         // allow overriding players to damage other players
-        if (PlayerHandler.getInstance().isOverriding(damager)) {
+        if (PlayerHandler.getInstance().isOverriding(target)) {
             return false;
         }
 
-        Faction playerFaction = factions.findOrDefault(player);
-        Faction damagerFaction = factions.findOrDefault(damager);
+        Faction attackerFaction = factions.findOrDefault(attacker);
+        Faction targetFaction = factions.findOrDefault(target);
 
-        Faction playerClaimFaction = claims.getFactionOrDefault(player.getLocation());
-        Faction damagerClaimFaction = claims.getFactionOrDefault(damager.getLocation());
+        Faction attackerClaimFaction = claims.getFactionOrDefault(attacker.getLocation());
+        Faction targetClaimFaction = claims.getFactionOrDefault(target.getLocation());
 
         // ensure combat is allowed in both locations
-        if (!playerClaimFaction.getFlagValueOrDefault(FactionFlags.COMBAT) || !damagerClaimFaction.getFlagValueOrDefault(FactionFlags.COMBAT)) {
-            config.combatDisabled.send(damager,
-                    "faction", FactionHelper.formatRelational(damager, damagerClaimFaction, false),
-                    "faction_name", damagerClaimFaction.getName());
+        if (!attackerClaimFaction.getFlagValueOrDefault(FactionFlags.COMBAT) || !targetClaimFaction.getFlagValueOrDefault(FactionFlags.COMBAT)) {
+            config.combatDisabled.send(target,
+                    "faction", FactionHelper.formatRelational(target, targetClaimFaction, false),
+                    "faction_name", targetClaimFaction.getName());
             return true;
         }
 
         // allow player to hurt themselves (bow boosting, potion splash, etc...)
-        if (player.equals(damager)) {
+        if (attacker.equals(target)) {
+            return false;
+        }
+
+        // you should always be able to hit wilderness players
+        if (targetFaction.isWilderness()) {
             return false;
         }
 
         // can't hurt neutral players in their own land
-        if (damagerFaction.isRelation(playerFaction, FactionRelation.NEUTRAL) && playerFaction.equals(playerClaimFaction)) {
-            config.cantHurtNeutral.send(damager,
-                    "player", FactionHelper.formatRelational(damager, playerFaction, player, false),
-                    "player_name", player.getName(),
-                    "attacker", FactionHelper.formatRelational(damager, damagerFaction, damager, false),
-                    "attacker_name", damager.getName());
-            config.attemptedDamage.send(player,
-                    "player", FactionHelper.formatRelational(player, playerFaction, player, false),
-                    "player_name", player.getName(),
-                    "attacker", FactionHelper.formatRelational(player, damagerFaction, damager, false),
-                    "attacker_name", damager.getName());
+        if (targetFaction.isRelation(attackerFaction, FactionRelation.NEUTRAL) && attackerFaction.equals(attackerClaimFaction)) {
+            config.cantHurtNeutral.send(target,
+                    "player", FactionHelper.formatRelational(target, attackerFaction, attacker, false),
+                    "player_name", attacker.getName(),
+                    "attacker", FactionHelper.formatRelational(target, targetFaction, target, false),
+                    "attacker_name", target.getName());
+            config.attemptedDamage.send(attacker,
+                    "player", FactionHelper.formatRelational(attacker, attackerFaction, attacker, false),
+                    "player_name", attacker.getName(),
+                    "attacker", FactionHelper.formatRelational(attacker, targetFaction, target, false),
+                    "attacker_name", target.getName());
             return true;
         }
 
         // can't hurt your own faction members,
-        if (damagerFaction.isFriendly(playerFaction)) {
-            config.cantHurtFriendly.send(damager,
-                    "player", FactionHelper.formatRelational(damager, playerFaction, player, false),
-                    "player_name", player.getName(),
-                    "attacker", FactionHelper.formatRelational(damager, damagerFaction, damager, false),
-                    "attacker_name", damager.getName());
+        if (targetFaction.isFriendly(attackerFaction)) {
+            config.cantHurtFriendly.send(target,
+                    "player", FactionHelper.formatRelational(target, attackerFaction, attacker, false),
+                    "player_name", attacker.getName(),
+                    "attacker", FactionHelper.formatRelational(target, targetFaction, target, false),
+                    "attacker_name", target.getName());
             return true;
         }
 
