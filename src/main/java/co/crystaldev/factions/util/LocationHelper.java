@@ -2,6 +2,7 @@ package co.crystaldev.factions.util;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.Location;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,5 +52,21 @@ public final class LocationHelper {
         y1 = Math.abs(y2 - y1);
         z1 = Math.abs(z2 - z1);
         return Math.sqrt((x1 * x1) + (y1 * y1) + (z1 * z1));
+    }
+
+    public static boolean isChunkWithinBorder(@NotNull WorldBorder border, int x, int z) {
+        return isWithinBorder(border, x << 4, z << 4);
+    }
+
+    public static boolean isWithinBorder(@NotNull WorldBorder border, double x, double z) {
+        Location center = border.getCenter();
+        double size = border.getSize() / 2;
+
+        double minX = center.getX() - size;
+        double minZ = center.getZ() - size;
+        double maxX = center.getX() + size;
+        double maxZ = center.getZ() + size;
+
+        return x >= minX && x <= maxX && z >= minZ && z <= maxZ;
     }
 }

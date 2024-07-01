@@ -19,6 +19,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -34,7 +35,8 @@ import java.util.*;
 public final class ClaimHelper {
     public static void attemptClaim(@NotNull Player player, @NotNull String action,
                                     @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
-                                    @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin) {
+                                    @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin,
+                                    boolean higherLimit) {
         MessageConfig messageConfig = MessageConfig.getInstance();
         FactionConfig factionConfig = FactionConfig.getInstance();
         FactionAccessor factions = Factions.get().factions();
@@ -43,6 +45,9 @@ public final class ClaimHelper {
         Chunk playerChunk = player.getLocation().getChunk();
         int cx = playerChunk.getX();
         int cz = playerChunk.getZ();
+        int maxClaimDistance = (higherLimit ? 2 : 1) * factionConfig.maxClaimDistance;
+        World world = origin.getWorld();
+        WorldBorder border = world.getWorldBorder();
 
         // ensure there are chunks to claim
         if (chunks.isEmpty()) {
@@ -77,12 +82,17 @@ public final class ClaimHelper {
         while (iterator.hasNext()) {
             ChunkCoordinate next = iterator.next();
 
-            if (LocationHelper.distance(next.getX(), next.getZ(), cx, cz) > factionConfig.maxClaimDistance) {
+            if (LocationHelper.distance(next.getX(), next.getZ(), cx, cz) > maxClaimDistance) {
                 messageConfig.claimTooFar.send(player);
                 return;
             }
 
-            Faction faction = claims.getFaction(origin.getWorld().getName(), next.getX(), next.getZ());
+            if (!LocationHelper.isChunkWithinBorder(border, next.getX(), next.getZ())) {
+                iterator.remove();
+                continue;
+            }
+
+            Faction faction = claims.getFaction(world.getName(), next.getX(), next.getZ());
             if (faction != null) {
                 // this chunk is claimed
 
@@ -124,7 +134,7 @@ public final class ClaimHelper {
         }
 
         // ensure that the claims can be conquered
-        if (conqueredChunkCount > 0 && !canConquer(conqueredFactions, origin.getWorld().getName(), claims)) {
+        if (conqueredChunkCount > 0 && !canConquer(conqueredFactions, world.getName(), claims)) {
             messageConfig.conquerFromEdge.send(player);
             return;
         }
@@ -132,7 +142,7 @@ public final class ClaimHelper {
         // call event
         FactionTerritoryUpdateEvent.Type type = claimingFaction == null ? FactionTerritoryUpdateEvent.Type.UNCLAIM : FactionTerritoryUpdateEvent.Type.CLAIM;
         FactionTerritoryUpdateEvent event = AlpineFactions.callEvent(new FactionTerritoryUpdateEvent(
-                actingFaction, player, origin.getWorld(), type, chunks, conqueredFactions, !Bukkit.isPrimaryThread()));
+                actingFaction, player, world, type, chunks, conqueredFactions, !Bukkit.isPrimaryThread()));
         if (event.isCancelled() || chunks.isEmpty()) {
             return;
         }
@@ -140,10 +150,10 @@ public final class ClaimHelper {
         // claim/unclaim the land
         for (ChunkCoordinate chunk : chunks) {
             if (claimingFaction == null) {
-                claims.remove(origin.getWorld().getName(), chunk.getX(), chunk.getZ());
+                claims.remove(world.getName(), chunk.getX(), chunk.getZ());
             }
             else {
-                claims.put(origin.getWorld().getName(), chunk.getX(), chunk.getZ(), claimingFaction);
+                claims.put(world.getName(), chunk.getX(), chunk.getZ(), claimingFaction);
             }
         }
 
@@ -170,7 +180,7 @@ public final class ClaimHelper {
             conqueredFactions.forEach((faction, conquered) -> {
                 ConfigText message = conquered.size() == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
 
-                Chunk chunk = origin.getWorld().getChunkAt(conquered.get(0).getX(), conquered.get(0).getZ());
+                Chunk chunk = world.getChunkAt(conquered.get(0).getX(), conquered.get(0).getZ());
 
                 // notify the conquered faction
                 FactionHelper.broadcast(faction, observer -> {
@@ -285,10 +295,10 @@ public final class ClaimHelper {
             int z = chunk.getZ();
 
             // check surrounding chunks
-            check(nearby, chunks, world, x + 1, z, faction, claims);
-            check(nearby, chunks, world, x - 1, z, faction, claims);
-            check(nearby, chunks, world, x, z + 1, faction, claims);
-            check(nearby, chunks, world, x, z - 1, faction, claims);
+            checkAndAddClaim(nearby, chunks, world, x + 1, z, faction, claims);
+            checkAndAddClaim(nearby, chunks, world, x - 1, z, faction, claims);
+            checkAndAddClaim(nearby, chunks, world, x, z + 1, faction, claims);
+            checkAndAddClaim(nearby, chunks, world, x, z - 1, faction, claims);
         }
 
         // no nearby chunks were found, fill complete
@@ -305,8 +315,8 @@ public final class ClaimHelper {
         }
     }
 
-    private static void check(@NotNull Set<ChunkCoordinate> nearby, @NotNull Set<ChunkCoordinate> filled,
-                              @NotNull String world, int x, int z, @Nullable Faction faction, @NotNull ClaimAccessor claims) {
+    private static void checkAndAddClaim(@NotNull Set<ChunkCoordinate> nearby, @NotNull Set<ChunkCoordinate> filled,
+                                         @NotNull String world, int x, int z, @Nullable Faction faction, @NotNull ClaimAccessor claims) {
         ChunkCoordinate coord = ChunkCoordinate.of(x, z);
         if (filled.contains(coord)) {
             return;

@@ -645,6 +645,9 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText mapCenter = ConfigText.of(
             "<aqua>+</aqua>");
 
+    public ConfigText mapBorder = ConfigText.of(
+            "<black>-</black>");
+
     public String mapCompassStyle = "dark_gray";
 
     public String mapCompassDirectionStyle = "white";

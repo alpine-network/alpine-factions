@@ -45,7 +45,7 @@ public final class Claiming {
         }
 
         // attempt the claim
-        ClaimHelper.attemptClaim(actor, type.toString(), actingFaction, claimingFaction, chunks, origin);
+        ClaimHelper.attemptClaim(actor, type.toString(), actingFaction, claimingFaction, chunks, origin, false);
     }
 
     public static void fill(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
@@ -73,7 +73,7 @@ public final class Claiming {
         }
 
         // attempt to claim
-        ClaimHelper.attemptClaim(actor, "fill", actingFaction, claimingFaction, chunks, origin);
+        ClaimHelper.attemptClaim(actor, "fill", actingFaction, claimingFaction, chunks, origin, true);
     }
 
     public static void one(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
@@ -86,6 +86,6 @@ public final class Claiming {
 
         // attempt to claim
         Set<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(ChunkCoordinate.of(origin.getX(), origin.getZ())));
-        ClaimHelper.attemptClaim(actor, "square", actingFaction, claimingFaction, chunks, origin);
+        ClaimHelper.attemptClaim(actor, "square", actingFaction, claimingFaction, chunks, origin, false);
     }
 }

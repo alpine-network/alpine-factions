@@ -12,6 +12,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Chunk;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -116,6 +117,8 @@ public final class AsciiFactionMap {
     private void populateMap() {
         String world = this.player.getWorld().getName();
         Chunk center = this.player.getLocation().getChunk();
+        WorldBorder border = this.player.getWorld().getWorldBorder();
+        Component borderComponent = this.config.mapBorder.build();
 
         int centerX = center.getX();
         int centerZ = center.getZ();
@@ -133,6 +136,12 @@ public final class AsciiFactionMap {
                 if (centerX == chunkX && centerZ == chunkZ) {
                     // map center marker
                     this.put(this.config.mapCenter.build(), flippedX, z);
+                    continue;
+                }
+
+                if (!LocationHelper.isChunkWithinBorder(border, chunkX, chunkZ)) {
+                    // border
+                    this.put(borderComponent, flippedX, z);
                     continue;
                 }
 
