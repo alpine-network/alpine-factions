@@ -21,6 +21,7 @@ val props = mapOf(
 
 repositories {
     mavenCentral()
+    mavenLocal() // TODO: remove when AlpineCore 0.4.0 releases
     maven("https://repo.codemc.org/repository/nms/")
     maven("https://lib.alpn.cloud/alpine-public/")
     maven("https://repo.panda-lang.org/releases")
@@ -30,7 +31,7 @@ repositories {
 configurations.create("shaded")
 dependencies {
     compileOnly(group = "org.spigotmc", name = "spigot", version = project.property("spigot_version") as String)
-    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.3.6")
+    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.4.0")
 
     compileOnly(group = "me.clip", name = "placeholderapi", version = "2.11.5")
 
