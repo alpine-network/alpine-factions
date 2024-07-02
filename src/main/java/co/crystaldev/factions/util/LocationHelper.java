@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
  */
 @UtilityClass
 public final class LocationHelper {
-    @NotNull
-    public static BlockFace getFacing(@NotNull Location location) {
+
+    public static @NotNull BlockFace getFacing(@NotNull Location location) {
         double yaw = location.getYaw() % 360;
         if (yaw < 0) {
             yaw += 360.0;
@@ -24,8 +24,7 @@ public final class LocationHelper {
         else return BlockFace.EAST;
     }
 
-    @NotNull
-    public static BlockFace getFullFacing(@NotNull Location location) {
+    public static @NotNull BlockFace getFullFacing(@NotNull Location location) {
         double yaw = (location.getYaw() % 360 + 360) % 360;
 
         // fun

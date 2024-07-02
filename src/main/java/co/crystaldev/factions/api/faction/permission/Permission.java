@@ -39,11 +39,13 @@ public final class Permission {
         return this.permission == null || permissible.hasPermission(this.permission);
     }
 
-    @NotNull
-    public static Builder builder(@NotNull String id) {
+    public static @NotNull Builder builder(@NotNull String id) {
         return new Builder(id);
     }
 
+    /**
+     * @since 0.1.0
+     */
     @RequiredArgsConstructor
     public static final class Builder {
         private final String id;
@@ -53,38 +55,32 @@ public final class Permission {
         private Set<Rank> defaultRankPermits;
         private Set<FactionRelation> defaultRelationPermits;
 
-        @NotNull
-        public Builder name(@NotNull String name) {
+        public @NotNull Builder name(@NotNull String name) {
             this.name = name;
             return this;
         }
 
-        @NotNull
-        public Builder description(@NotNull String description) {
+        public @NotNull Builder description(@NotNull String description) {
             this.description = description;
             return this;
         }
 
-        @NotNull
-        public Builder permission(@NotNull String permission) {
+        public @NotNull Builder permission(@NotNull String permission) {
             this.permission = permission;
             return this;
         }
 
-        @NotNull
-        public Builder permit(@NotNull Rank... permittedRanks) {
+        public @NotNull Builder permit(@NotNull Rank... permittedRanks) {
             this.defaultRankPermits = ImmutableSet.copyOf(permittedRanks);
             return this;
         }
 
-        @NotNull
-        public Builder permit(@NotNull FactionRelation... permittedRelations) {
+        public @NotNull Builder permit(@NotNull FactionRelation... permittedRelations) {
             this.defaultRelationPermits = ImmutableSet.copyOf(permittedRelations);
             return this;
         }
 
-        @NotNull
-        public Permission build() {
+        public @NotNull Permission build() {
             Preconditions.checkNotNull(this.id, "id must not be null");
             Preconditions.checkNotNull(this.name, "name must not be null");
             Preconditions.checkNotNull(this.description, "description must not be null");

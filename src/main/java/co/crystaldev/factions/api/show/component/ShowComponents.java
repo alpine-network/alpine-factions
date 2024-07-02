@@ -151,8 +151,7 @@ public final class ShowComponents {
             ALLIES, TRUCES, ONLINE_MEMBERS, OFFLINE_MEMBERS
     };
 
-    @NotNull
-    private static MessageConfig conf() {
+    private static @NotNull MessageConfig conf() {
         return MessageConfig.getInstance();
     }
 }

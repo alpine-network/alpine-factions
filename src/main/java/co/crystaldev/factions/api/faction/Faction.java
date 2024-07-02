@@ -255,8 +255,7 @@ public final class Faction {
 
     // region Relations
 
-    @NotNull
-    public FactionRelation relationTo(@Nullable Faction faction) {
+    public @NotNull FactionRelation relationTo(@Nullable Faction faction) {
         if (faction == null || faction.isWilderness()) {
             return FactionRelation.NEUTRAL;
         }
@@ -273,8 +272,7 @@ public final class Faction {
                 : relationToOther.getWeight() > 0 ? FactionRelation.NEUTRAL : relationToOther;
     }
 
-    @NotNull
-    public FactionRelation relationWishTo(@Nullable Faction faction) {
+    public @NotNull FactionRelation relationWishTo(@Nullable Faction faction) {
         if (faction == null || faction.isWilderness()) {
             return FactionRelation.NEUTRAL;
         }
@@ -315,8 +313,7 @@ public final class Faction {
         this.relationRequests.put(faction.getId(), relation);
     }
 
-    @NotNull
-    public Set<RelatedFaction> getRelatedFactions() {
+    public @NotNull Set<RelatedFaction> getRelatedFactions() {
         Set<RelatedFaction> related = new HashSet<>();
         FactionAccessor factions = Factions.get().factions();
 
@@ -330,8 +327,7 @@ public final class Faction {
         return related;
     }
 
-    @NotNull
-    public Set<RelatedFaction> getRelationWishes() {
+    public @NotNull Set<RelatedFaction> getRelationWishes() {
         Set<RelatedFaction> related = new HashSet<>();
         FactionAccessor factions = Factions.get().factions();
 
@@ -345,8 +341,7 @@ public final class Faction {
         return related;
     }
 
-    @NotNull
-    public Set<Faction> getRelatedFactions(@NotNull FactionRelation relation) {
+    public @NotNull Set<Faction> getRelatedFactions(@NotNull FactionRelation relation) {
         Set<Faction> related = new HashSet<>();
         FactionAccessor factions = Factions.get().factions();
 
@@ -368,8 +363,8 @@ public final class Faction {
 
     // region Permissions & Flags
 
-    @Nullable @SuppressWarnings("unchecked")
-    public <T> T getFlagValue(@NotNull FactionFlag<T> flag) {
+    @SuppressWarnings("unchecked")
+    public <T> @Nullable T getFlagValue(@NotNull FactionFlag<T> flag) {
         FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
             this.markDirty();
             return flag.wrapDefaultValue();
@@ -377,8 +372,8 @@ public final class Faction {
         return flagHolder.getValue();
     }
 
-    @NotNull @SuppressWarnings("unchecked")
-    public <T> T getFlagValueOrDefault(@NotNull FactionFlag<T> flag) {
+    @SuppressWarnings("unchecked")
+    public <T> @NotNull T getFlagValueOrDefault(@NotNull FactionFlag<T> flag) {
         FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
             this.markDirty();
             return flag.wrapDefaultValue();
@@ -498,18 +493,15 @@ public final class Faction {
         this.markDirty();
     }
 
-    @NotNull
-    public Collection<Member> getMembers() {
+    public @NotNull Collection<Member> getMembers() {
         return this.members.values();
     }
 
-    @NotNull
-    public Collection<Member> getRoster() {
+    public @NotNull Collection<Member> getRoster() {
         return this.roster.values();
     }
 
-    @NotNull
-    public Collection<Member> getOnlineMembers() {
+    public @NotNull Collection<Member> getOnlineMembers() {
         List<Member> members = new ArrayList<>();
 
         for (Member member : this.members.values()) {
@@ -521,8 +513,7 @@ public final class Faction {
         return ImmutableSet.copyOf(members);
     }
 
-    @NotNull
-    public Collection<Member> getOfflineMembers() {
+    public @NotNull Collection<Member> getOfflineMembers() {
         List<Member> members = new ArrayList<>();
 
         for (Member member : this.members.values()) {
@@ -575,8 +566,7 @@ public final class Faction {
         return false;
     }
 
-    @Nullable
-    public Member getOwner() {
+    public @Nullable Member getOwner() {
         for (Member member : this.members.values()) {
             if (member.getRank() == Rank.LEADER) {
                 return member;
@@ -635,8 +625,7 @@ public final class Faction {
         this.markDirty();
     }
 
-    @NotNull
-    public Set<MemberInvitation> getInvitations() {
+    public @NotNull Set<MemberInvitation> getInvitations() {
         return new HashSet<>(this.invitees.values());
     }
 
@@ -709,18 +698,15 @@ public final class Faction {
         return this.isOnRoster(player) || this.isMember(player);
     }
 
-    @Nullable
-    public MemberInvitation getInvite(@NotNull UUID player) {
+    public @Nullable MemberInvitation getInvite(@NotNull UUID player) {
         return this.invitees.get(player);
     }
 
-    @Nullable
-    public Member getMember(@NotNull UUID player) {
+    public @Nullable Member getMember(@NotNull UUID player) {
         return this.members.get(player);
     }
 
-    @NotNull
-    public Member getMember(@NotNull OfflinePlayer player) {
+    public @NotNull Member getMember(@NotNull OfflinePlayer player) {
         if (this.isWilderness()) {
             return new Member(player.getUniqueId(), Rank.getDefault());
         }
@@ -734,8 +720,7 @@ public final class Faction {
         }
     }
 
-    @Nullable
-    public Rank getMemberRank(@NotNull UUID player) {
+    public @Nullable Rank getMemberRank(@NotNull UUID player) {
         Member member = this.getMember(player);
         if (member == null) {
             member = this.roster.get(player);
@@ -743,14 +728,12 @@ public final class Faction {
         return member == null ? null : member.getRank();
     }
 
-    @NotNull
-    public Rank getMemberRankOrDefault(@NotNull UUID player, @NotNull Rank defaultRank) {
+    public @NotNull Rank getMemberRankOrDefault(@NotNull UUID player, @NotNull Rank defaultRank) {
         Rank rank = this.getMemberRank(player);
         return rank == null ? defaultRank : rank;
     }
 
-    @NotNull
-    public Rank getMemberRankOrDefault(@NotNull UUID player) {
+    public @NotNull Rank getMemberRankOrDefault(@NotNull UUID player) {
         Rank rank = this.getMemberRank(player);
         return rank == null ? Rank.getDefault() : rank;
     }

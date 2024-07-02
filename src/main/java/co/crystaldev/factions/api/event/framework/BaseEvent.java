@@ -12,25 +12,23 @@ import org.jetbrains.annotations.NotNull;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/21/2024
  */
-@Getter(onMethod = @__(@NotNull)) @NoArgsConstructor
+@Getter @NoArgsConstructor
 public abstract class BaseEvent extends Event {
 
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
-    private final AlpineFactions plugin = AlpineFactions.getInstance();
+    private final @NotNull AlpineFactions plugin = AlpineFactions.getInstance();
 
     public BaseEvent(boolean async) {
         super(async);
     }
 
-    @NotNull
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLER_LIST;
     }
 
-    @NotNull
-    public static HandlerList getHandlerList() {
+    public static @NotNull HandlerList getHandlerList() {
         return HANDLER_LIST;
     }
 }

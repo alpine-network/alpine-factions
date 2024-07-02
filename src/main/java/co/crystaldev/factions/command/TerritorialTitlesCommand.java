@@ -37,8 +37,7 @@ final class TerritorialTitlesCommand extends FactionsCommand {
         });
     }
 
-    @NotNull
-    private static TerritorialTitleMode next(@NotNull TerritorialTitleMode current) {
+    private static @NotNull TerritorialTitleMode next(@NotNull TerritorialTitleMode current) {
         TerritorialTitleMode[] values = TerritorialTitleMode.values();
         int ordinal = current.ordinal() + 1;
         return values[ordinal >= values.length ? 0 : ordinal];

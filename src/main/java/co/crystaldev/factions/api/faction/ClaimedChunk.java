@@ -17,8 +17,7 @@ public final class ClaimedChunk {
     private final int chunkX;
     private final int chunkZ;
 
-    @NotNull
-    public Chunk getChunk() {
+    public @NotNull Chunk getChunk() {
         return Bukkit.getWorld(this.world).getChunkAt(this.chunkX, this.chunkZ);
     }
 }

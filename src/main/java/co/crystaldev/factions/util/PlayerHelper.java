@@ -17,8 +17,7 @@ public final class PlayerHelper {
 
     private static final UUID EMPTY_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
-    @NotNull
-    public static String getName(@Nullable ServerOperator sender) {
+    public static @NotNull String getName(@Nullable ServerOperator sender) {
         if (sender == null) {
             return "< null >";
         }
@@ -34,8 +33,7 @@ public final class PlayerHelper {
         return ((OfflinePlayer) sender).getName();
     }
 
-    @NotNull
-    public static UUID getId(@NotNull ServerOperator operator) {
+    public static @NotNull UUID getId(@NotNull ServerOperator operator) {
         if (operator instanceof OfflinePlayer) {
             return ((OfflinePlayer) operator).getUniqueId();
         }

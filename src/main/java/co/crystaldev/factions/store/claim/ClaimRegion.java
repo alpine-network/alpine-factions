@@ -55,8 +55,7 @@ public final class ClaimRegion {
         this.dirty = true;
     }
 
-    @Nullable
-    public Claim getClaim(int chunkX, int chunkZ) {
+    public @Nullable Claim getClaim(int chunkX, int chunkZ) {
         return this.chunkToClaim.get(getChunkKey(chunkX, chunkZ));
     }
 
@@ -64,8 +63,7 @@ public final class ClaimRegion {
         return this.chunkToClaim.containsKey(getChunkKey(chunkX, chunkZ));
     }
 
-    @Nullable
-    public Claim putClaim(int chunkX, int chunkZ, @NotNull Faction faction) {
+    public @Nullable Claim putClaim(int chunkX, int chunkZ, @NotNull Faction faction) {
         String factionId = faction.getId();
         if (factionId.equals(Faction.WILDERNESS_ID)) {
             return null;
@@ -90,8 +88,7 @@ public final class ClaimRegion {
         return claim;
     }
 
-    @Nullable
-    public Claim removeClaim(int chunkX, int chunkZ) {
+    public @Nullable Claim removeClaim(int chunkX, int chunkZ) {
         Claim claim = this.chunkToClaim.remove(getChunkKey(chunkX, chunkZ));
         if (claim != null) {
             this.modifyCount(claim.getFactionId(), -1);
@@ -99,8 +96,7 @@ public final class ClaimRegion {
         return claim;
     }
 
-    @NotNull
-    public List<ClaimedChunk> getClaims(@NotNull Faction faction) {
+    public @NotNull List<ClaimedChunk> getClaims(@NotNull Faction faction) {
         World world = Bukkit.getWorld(this.worldName);
         List<ClaimedChunk> chunks = new ArrayList<>();
 
@@ -140,8 +136,7 @@ public final class ClaimRegion {
         this.markDirty();
     }
 
-    @NotNull
-    private static String getChunkKey(int chunkX, int chunkZ) {
+    private static @NotNull String getChunkKey(int chunkX, int chunkZ) {
         return chunkX + "," + chunkZ;
     }
 }

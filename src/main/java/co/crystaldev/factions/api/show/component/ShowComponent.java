@@ -15,18 +15,15 @@ import java.util.function.Predicate;
  */
 public interface ShowComponent {
 
-    @NotNull
-    ShowOrder getOrdering();
+    @NotNull ShowOrder getOrdering();
 
-    @NotNull
-    Component buildComponent(@NotNull ShowContext ctx);
+    @NotNull Component buildComponent(@NotNull ShowContext ctx);
 
     default boolean isVisible(@NotNull ShowContext ctx) {
         return true;
     }
 
-    @NotNull
-    static ShowComponent create(
+    static @NotNull ShowComponent create(
             @NotNull ShowOrder order,
             @NotNull Function<ShowContext, @NotNull Component> componentFunction,
             @Nullable Predicate<ShowContext> visibilityPredicate
@@ -34,8 +31,7 @@ public interface ShowComponent {
         return new FunctionalShowComponent(order, componentFunction, visibilityPredicate);
     }
 
-    @NotNull
-    static ShowComponent create(
+    static @NotNull ShowComponent create(
             @NotNull ShowOrder order,
             @NotNull Function<ShowContext, @NotNull Component> componentPredicate
     ) {

@@ -48,7 +48,7 @@ public final class CombatEngine extends AlpineEngine {
             XPotion.WITHER
     );
 
-    CombatEngine(AlpinePlugin plugin) {
+    CombatEngine(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }
 

@@ -158,8 +158,7 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> implement
         }
     }
 
-    @NotNull
-    private static String getKey(@NotNull String worldName, int x, int z) {
+    private static @NotNull String getKey(@NotNull String worldName, int x, int z) {
         return worldName + "_" + ((x >> 5) + "_" + (z >> 5)).hashCode();
     }
 }

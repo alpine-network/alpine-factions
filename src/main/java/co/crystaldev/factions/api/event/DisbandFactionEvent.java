@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @since 0.1.0
  */
+@Getter @Setter
 public final class DisbandFactionEvent extends FactionEntityEvent<CommandSender> implements Cancellable {
 
-    @Getter @Setter
     private boolean cancelled;
 
     public DisbandFactionEvent(@NotNull Faction faction, @NotNull CommandSender entity) {

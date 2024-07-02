@@ -20,7 +20,7 @@ import java.util.List;
  * @since 0.1.0
  */
 public final class PhysicsEngine extends AlpineEngine {
-    PhysicsEngine(AlpinePlugin plugin) {
+    PhysicsEngine(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }
 

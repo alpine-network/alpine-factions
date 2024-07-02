@@ -41,18 +41,15 @@ public final class FPlayer {
         return FactionConfig.getInstance().maxPlayerPower + this.powerBoost;
     }
 
-    @Nullable
-    public Player getPlayer() {
+    public @Nullable Player getPlayer() {
         return Bukkit.getPlayer(this.id);
     }
 
-    @NotNull
-    public OfflinePlayer getOfflinePlayer() {
+    public @NotNull OfflinePlayer getOfflinePlayer() {
         return Bukkit.getOfflinePlayer(this.id);
     }
 
-    @NotNull
-    public TerritorialTitleMode getTerritorialTitleMode() {
+    public @NotNull TerritorialTitleMode getTerritorialTitleMode() {
         return Optional.ofNullable(this.territorialTitleMode).orElse(TerritorialTitleMode.TITLE);
     }
 }

@@ -9,12 +9,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @since 0.1.0
  */
 public final class PlayerEngine extends AlpineEngine {
-    PlayerEngine(AlpinePlugin plugin) {
+    PlayerEngine(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }
 

@@ -18,8 +18,7 @@ public final class ComponentHelper {
      *
      * @return The 'null' component.
      */
-    @NotNull
-    public static Component nil() {
+    public static @NotNull Component nil() {
         return Component.text("< null >");
     }
 
@@ -29,8 +28,7 @@ public final class ComponentHelper {
      * @param serializedComponent The serialized component.
      * @return The component.
      */
-    @NotNull
-    public static Component mini(@NotNull String serializedComponent) {
+    public static @NotNull Component mini(@NotNull String serializedComponent) {
         return AlpineFactions.getInstance().getMiniMessage().deserialize(serializedComponent);
     }
 
@@ -40,8 +38,7 @@ public final class ComponentHelper {
      * @param toSerialize The component to serialize.
      * @return The serialized component.
      */
-    @NotNull
-    public static String mini(@NotNull Component toSerialize) {
+    public static @NotNull String mini(@NotNull Component toSerialize) {
         return AlpineFactions.getInstance().getMiniMessage().serialize(toSerialize);
     }
 
@@ -51,8 +48,7 @@ public final class ComponentHelper {
      * @param serializedComponent The serialized component.
      * @return The component.
      */
-    @NotNull
-    public static Component legacy(@NotNull String serializedComponent) {
+    public static @NotNull Component legacy(@NotNull String serializedComponent) {
         char ch = serializedComponent.contains("§") ? '§' : '&';
         return LegacyComponentSerializer.legacy(ch).deserialize(serializedComponent);
     }
@@ -63,8 +59,7 @@ public final class ComponentHelper {
      * @param component The component.
      * @return The text.
      */
-    @NotNull
-    public static String plain(@NotNull Component component) {
+    public static @NotNull String plain(@NotNull Component component) {
         return PlainTextComponentSerializer.plainText().serialize(component);
     }
 }

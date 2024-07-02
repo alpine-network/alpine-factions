@@ -10,23 +10,19 @@ public interface ShowOrder {
 
     int computeIndex(@NotNull Iterable<ShowComponent> components, int length);
 
-    @NotNull
-    static ShowOrder inserting() {
+    static @NotNull ShowOrder inserting() {
         return new BasicShowOrdering();
     }
 
-    @NotNull
-    static ShowOrder before(@NotNull ShowComponent component) {
+    static @NotNull ShowOrder before(@NotNull ShowComponent component) {
         return new RelativeShowOrdering(component, true);
     }
 
-    @NotNull
-    static ShowOrder after(@NotNull ShowComponent component) {
+    static @NotNull ShowOrder after(@NotNull ShowComponent component) {
         return new RelativeShowOrdering(component, false);
     }
 
-    @NotNull
-    static ShowOrder fixed(int index) {
+    static @NotNull ShowOrder fixed(int index) {
         return new FixedShowOrdering(index);
     }
 }

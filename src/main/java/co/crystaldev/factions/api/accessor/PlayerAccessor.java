@@ -16,16 +16,13 @@ public interface PlayerAccessor {
 
     void save(@NotNull FPlayer player);
 
-    @NotNull
-    FPlayer getById(@NotNull UUID player);
+    @NotNull FPlayer getById(@NotNull UUID player);
 
-    @NotNull
-    default FPlayer get(@NotNull OfflinePlayer player) {
+    default @NotNull FPlayer get(@NotNull OfflinePlayer player) {
         return this.getById(player.getUniqueId());
     }
 
-    @NotNull
-    default FPlayer get(@NotNull ServerOperator player) {
+    default @NotNull FPlayer get(@NotNull ServerOperator player) {
         if (!(player instanceof OfflinePlayer)) {
             throw new IllegalArgumentException();
         }

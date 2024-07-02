@@ -8,10 +8,10 @@ import org.jetbrains.annotations.NotNull;
  * @author BestBearr <crumbygames12@gmail.com>
  * @since 02/22/2024
  */
-@Getter(onMethod = @__(@NotNull))
+@Getter
 public abstract class FactionEntityEvent<T> extends FactionEvent {
 
-    private final T entity;
+    private final @NotNull T entity;
 
     public FactionEntityEvent(@NotNull Faction faction, @NotNull T entity) {
         super(faction);

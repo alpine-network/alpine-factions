@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @since 0.1.0
  */
+@Getter @Setter
 public final class CreateFactionEvent extends FactionEntityEvent<Player> implements Cancellable {
 
-    @Getter @Setter
     private boolean cancelled;
 
     public CreateFactionEvent(@NotNull Faction faction, @NotNull Player entity) {

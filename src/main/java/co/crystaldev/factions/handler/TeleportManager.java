@@ -24,8 +24,7 @@ public final class TeleportManager {
     private static final double MAX_MOVEMENT = 0.5;
 
     private static final TeleportManager INSTANCE = new TeleportManager();
-    @NotNull
-    public static TeleportManager getInstance() {
+    public static @NotNull TeleportManager getInstance() {
         return INSTANCE;
     }
 

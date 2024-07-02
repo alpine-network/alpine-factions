@@ -25,15 +25,13 @@ public final class PermissionRegistry {
         this.registeredPermissions.remove(plugin);
     }
 
-    @NotNull
-    public List<Permission> getAll() {
+    public @NotNull List<Permission> getAll() {
         List<Permission> permissions = new LinkedList<>();
         this.registeredPermissions.forEach((plugin, permSet) -> permissions.addAll(permSet));
         return permissions;
     }
 
-    @NotNull
-    private List<Permission> getPermissions(@NotNull Plugin plugin) {
+    private @NotNull List<Permission> getPermissions(@NotNull Plugin plugin) {
         return this.registeredPermissions.computeIfAbsent(plugin, pl -> new LinkedList<>());
     }
 }

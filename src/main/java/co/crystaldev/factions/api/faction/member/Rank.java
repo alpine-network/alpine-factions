@@ -21,13 +21,12 @@ public enum Rank implements Relational {
 
     private final String id;
 
-    @NotNull
-    public Rank getNextRank() {
+    public @NotNull Rank getNextRank() {
         return values()[Math.max(0, this.ordinal() - 1)];
     }
 
-    @NotNull
-    public Rank getPreviousRank() {
+
+    public @NotNull Rank getPreviousRank() {
         return values()[Math.min(4, this.ordinal() + 1)];
     }
 
@@ -39,8 +38,7 @@ public enum Rank implements Relational {
         return this.ordinal() <= other.ordinal();
     }
 
-    @NotNull
-    public static Rank getDefault() {
+    public static @NotNull Rank getDefault() {
         return RECRUIT;
     }
 }

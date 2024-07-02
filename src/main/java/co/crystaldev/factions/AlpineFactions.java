@@ -117,8 +117,8 @@ public final class AlpineFactions extends AlpinePlugin implements Factions {
         return showFormatter;
     }
 
-    @NotNull @ApiStatus.Internal
-    public <T> T getActivatable(@NotNull Class<T> type) {
+    @ApiStatus.Internal
+    public <T> @NotNull T getActivatable(@NotNull Class<T> type) {
         for (Activatable activatable : this.getActivatables()) {
             if (activatable.getClass().equals(type)) {
                 return (T) activatable;
@@ -127,8 +127,7 @@ public final class AlpineFactions extends AlpinePlugin implements Factions {
         throw new IllegalArgumentException();
     }
 
-    @NotNull
-    public static <T extends Event> T callEvent(@NotNull T event) {
+    public static <T extends Event> @NotNull T callEvent(@NotNull T event) {
         instance.getServer().getPluginManager().callEvent(event);
         return event;
     }

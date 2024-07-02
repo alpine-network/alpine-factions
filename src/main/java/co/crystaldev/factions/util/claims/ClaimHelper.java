@@ -33,6 +33,7 @@ import java.util.*;
  */
 @UtilityClass @ApiStatus.Internal
 public final class ClaimHelper {
+
     public static void attemptClaim(@NotNull Player player, @NotNull String action,
                                     @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
                                     @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin,
@@ -212,8 +213,7 @@ public final class ClaimHelper {
         return false;
     }
 
-    @NotNull
-    public static Set<ChunkCoordinate> square(@NotNull Chunk origin, int radius) {
+    public static @NotNull Set<ChunkCoordinate> square(@NotNull Chunk origin, int radius) {
         radius = Math.min(30, Math.abs(radius) - 1);
 
         int chunkX = origin.getX();
@@ -229,8 +229,7 @@ public final class ClaimHelper {
         return chunks;
     }
 
-    @NotNull
-    public static Set<ChunkCoordinate> line(@NotNull Chunk origin, int length, @NotNull BlockFace facing) {
+    public static @NotNull Set<ChunkCoordinate> line(@NotNull Chunk origin, int length, @NotNull BlockFace facing) {
         length = Math.min(30, Math.abs(length));
 
         int chunkX = origin.getX();
@@ -246,8 +245,7 @@ public final class ClaimHelper {
         return chunks;
     }
 
-    @NotNull
-    public static Set<ChunkCoordinate> circle(@NotNull Chunk origin, int radius) {
+    public static @NotNull Set<ChunkCoordinate> circle(@NotNull Chunk origin, int radius) {
         radius = Math.min(30, Math.abs(radius) - 1);
 
         int chunkX = origin.getX();
@@ -267,8 +265,7 @@ public final class ClaimHelper {
         return chunks;
     }
 
-    @Nullable
-    public static Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
+    public static @Nullable Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
         int max = FactionConfig.getInstance().maxClaimFillVolume;
         World world = origin.getWorld();
         ClaimAccessor claims = Factions.get().claims();
@@ -358,8 +355,7 @@ public final class ClaimHelper {
         return canConquer;
     }
 
-    @NotNull
-    private static Component buildClaimMessage(@NotNull Player recipient, @NotNull Player actor, @NotNull ConfigText message,
+    private static @NotNull Component buildClaimMessage(@NotNull Player recipient, @NotNull Player actor, @NotNull ConfigText message,
                                                @NotNull Chunk origin, @NotNull String action, @NotNull Component claimType,
                                                int amount, @NotNull Faction oldFaction, @NotNull Faction newFaction,
                                                @NotNull Faction playerFaction) {

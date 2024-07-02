@@ -5,12 +5,13 @@ import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
 import co.crystaldev.factions.AlpineFactions;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @since 0.1.0
  */
 public final class PluginEngine extends AlpineEngine {
-    PluginEngine(AlpinePlugin plugin) {
+    PluginEngine(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }
 

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter(onMethod = @__(@NotNull))
 public abstract class FactionEvent extends BaseEvent {
 
-    private final Faction faction;
+    private final @NotNull Faction faction;
 
     public FactionEvent(@NotNull Faction faction) {
         this.faction = faction;

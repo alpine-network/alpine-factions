@@ -26,8 +26,7 @@ public final class FactionDescriptionUpdateEvent extends FactionEntityEvent<Comm
         this.description = description;
     }
 
-    @Nullable
-    public String getPlainDescription() {
+    public @Nullable String getPlainDescription() {
         return this.description == null ? null : ComponentHelper.plain(this.description);
     }
 }

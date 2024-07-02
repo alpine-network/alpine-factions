@@ -28,13 +28,11 @@ public final class ConfigText extends ConfigMessage {
         super(message);
     }
 
-    @NotNull
-    public Component build(@NotNull Object... placeholders) {
+    public @NotNull Component build(@NotNull Object... placeholders) {
         return super.build(AlpineFactions.getInstance(), placeholders);
     }
 
-    @NotNull
-    public String buildString(@NotNull Object... placeholders) {
+    public @NotNull String buildString(@NotNull Object... placeholders) {
         return super.buildString(AlpineFactions.getInstance(), placeholders);
     }
 
@@ -50,13 +48,11 @@ public final class ConfigText extends ConfigMessage {
         Messaging.actionBar(sender, this.build(placeholders));
     }
 
-    @NotNull
-    public static ConfigText of(@NotNull String component) {
+    public static @NotNull ConfigText of(@NotNull String component) {
         return new ConfigText(Collections.singletonList(component));
     }
 
-    @NotNull
-    public static ConfigText of(@NotNull String... component) {
+    public static @NotNull ConfigText of(@NotNull String... component) {
         return new ConfigText(Arrays.asList(component));
     }
 

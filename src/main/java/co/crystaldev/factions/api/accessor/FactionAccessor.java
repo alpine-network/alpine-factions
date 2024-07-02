@@ -23,76 +23,61 @@ public interface FactionAccessor {
 
     // region Get
 
-    @Nullable
-    Faction getById(@NotNull String id);
+    @Nullable Faction getById(@NotNull String id);
 
-    @NotNull
-    default Faction getByIdOrDefault(@NotNull String id) {
+    default @NotNull Faction getByIdOrDefault(@NotNull String id) {
         Faction faction = this.getById(id);
         return faction == null ? this.getWilderness() : faction;
     }
 
-    @Nullable
-    default Faction getByName(@NotNull String name) {
+    default @Nullable Faction getByName(@NotNull String name) {
         return this.find(f -> f.getName().equalsIgnoreCase(name));
     }
 
-    @NotNull
-    Collection<Faction> get();
+    @NotNull Collection<Faction> get();
 
-    @NotNull
-    Faction getWilderness();
+    @NotNull Faction getWilderness();
 
-    @NotNull
-    Faction getWarZone();
+    @NotNull Faction getWarZone();
 
-    @NotNull
-    Faction getSafeZone();
+    @NotNull Faction getSafeZone();
 
     // endregion Get
 
     // region Find
 
-    @Nullable
-    Faction find(@NotNull Predicate<Faction> factionPredicate);
+    @Nullable Faction find(@NotNull Predicate<Faction> factionPredicate);
 
-    @NotNull
-    default Faction findOrDefault(@NotNull Predicate<Faction> factionPredicate) {
+    default @NotNull Faction findOrDefault(@NotNull Predicate<Faction> factionPredicate) {
         Faction f = this.find(factionPredicate);
         return f == null ? this.getWilderness() : f;
     }
 
-    @Nullable
-    default Faction find(@NotNull UUID member) {
+    default @Nullable Faction find(@NotNull UUID member) {
         return this.find(f -> f.isMember(member));
     }
 
-    @NotNull
-    default Faction findOrDefault(@NotNull UUID member) {
+    default @NotNull Faction findOrDefault(@NotNull UUID member) {
         Faction found = this.find(member);
         return found == null ? this.getWilderness() : found;
     }
 
-    @Nullable
-    default Faction find(@NotNull OfflinePlayer member) {
+    default @Nullable Faction find(@NotNull OfflinePlayer member) {
         return this.find(member.getUniqueId());
     }
 
-    @NotNull
-    default Faction findOrDefault(@NotNull OfflinePlayer member) {
+    default @NotNull Faction findOrDefault(@NotNull OfflinePlayer member) {
         return this.findOrDefault(member.getUniqueId());
     }
 
-    @Nullable
-    default Faction find(@NotNull ServerOperator member) {
+    default @Nullable Faction find(@NotNull ServerOperator member) {
         if (member instanceof OfflinePlayer) {
             return this.find(((OfflinePlayer) member).getUniqueId());
         }
         return null;
     }
 
-    @NotNull
-    default Faction findOrDefault(@NotNull ServerOperator member) {
+    default @NotNull Faction findOrDefault(@NotNull ServerOperator member) {
         if (member instanceof OfflinePlayer) {
             return this.findOrDefault(((OfflinePlayer) member).getUniqueId());
         }

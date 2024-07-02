@@ -27,8 +27,7 @@ public final class FlagRegistry {
         this.registeredFlags.remove(plugin);
     }
 
-    @NotNull
-    public Plugin getPluginForFlag(@NotNull FactionFlag<?> flag) {
+    public @NotNull Plugin getPluginForFlag(@NotNull FactionFlag<?> flag) {
         for (Map.Entry<Plugin, Set<FactionFlag<?>>> entry : this.registeredFlags.entrySet()) {
             Plugin plugin = entry.getKey();
             Set<FactionFlag<?>> flags = entry.getValue();
@@ -40,16 +39,14 @@ public final class FlagRegistry {
         throw new IllegalStateException("flag was not registered");
     }
 
-    @NotNull
-    public List<FactionFlag<?>> getAll() {
+    public @NotNull List<FactionFlag<?>> getAll() {
         List<FactionFlag<?>> flags = new ArrayList<>();
         this.registeredFlags.forEach((plugin, flagSet) -> flags.addAll(flagSet));
         flags.sort(Comparator.comparing(FactionFlag::getId));
         return ImmutableList.copyOf(flags);
     }
 
-    @NotNull
-    public List<FactionFlag<?>> getAll(@NotNull Permissible permissible) {
+    public @NotNull List<FactionFlag<?>> getAll(@NotNull Permissible permissible) {
         List<FactionFlag<?>> flags = new ArrayList<>();
         this.registeredFlags.forEach((plugin, flagSet) -> flags.addAll(flagSet));
         flags.removeIf(f -> f.getPermission() != null && !permissible.hasPermission(f.getPermission()));
@@ -57,8 +54,7 @@ public final class FlagRegistry {
         return ImmutableList.copyOf(flags);
     }
 
-    @NotNull
-    private Set<FactionFlag<?>> getFlags(@NotNull Plugin plugin) {
+    private @NotNull Set<FactionFlag<?>> getFlags(@NotNull Plugin plugin) {
         return this.registeredFlags.computeIfAbsent(plugin, pl -> new HashSet<>());
     }
 }

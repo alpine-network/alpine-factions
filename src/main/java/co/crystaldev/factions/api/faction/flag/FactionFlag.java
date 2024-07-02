@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @AllArgsConstructor(access = AccessLevel.PACKAGE) @Getter
 public final class FactionFlag<T> {
+
     private final String id;
     private final String name;
     private final String description;
@@ -26,18 +27,15 @@ public final class FactionFlag<T> {
     private final Class<T> type;
     private final FlagAdapter<T> adapter;
 
-    @NotNull
-    public FlagHolder<T> wrapDefaultValue() {
+    public @NotNull FlagHolder<T> wrapDefaultValue() {
         return new FlagHolder<>(this.type, this.defaultState);
     }
 
-    @NotNull
-    public String getStateDescription() {
+    public @NotNull String getStateDescription() {
         return this.stateDescriptionA;
     }
 
-    @NotNull
-    public String getStateDescription(boolean state) {
+    public @NotNull String getStateDescription(boolean state) {
         return state ? this.stateDescriptionA : this.stateDescriptionB;
     }
 
@@ -53,12 +51,15 @@ public final class FactionFlag<T> {
         return this.permission == null || permissible.hasPermission(this.permission);
     }
 
-    @NotNull
-    public static <T> Builder<T> builder(@NotNull String id, @NotNull Class<T> type, @NotNull FlagAdapter<T> adapter) {
+    public static <T> @NotNull Builder<T> builder(@NotNull String id, @NotNull Class<T> type, @NotNull FlagAdapter<T> adapter) {
         return new Builder<>(id, type, adapter);
     }
 
+    /**
+     * @since 0.1.0
+     */
     public static final class Builder<T> {
+
         private final String id;
         private final Class<T> type;
         private final FlagAdapter<T> adapter;
@@ -76,51 +77,43 @@ public final class FactionFlag<T> {
             this.adapter = adapter;
         }
 
-        @NotNull
-        public Builder<T> name(@NotNull String name) {
+        public @NotNull Builder<T> name(@NotNull String name) {
             this.name = name;
             return this;
         }
 
-        @NotNull
-        public Builder<T> description(@NotNull String description) {
+        public @NotNull Builder<T> description(@NotNull String description) {
             this.description = description;
             return this;
         }
 
-        @NotNull
-        public Builder<T> stateDescription(@NotNull String stateDescriptionA, @NotNull String stateDescriptionB) {
+        public @NotNull Builder<T> stateDescription(@NotNull String stateDescriptionA, @NotNull String stateDescriptionB) {
             this.stateDescriptionA = stateDescriptionA;
             this.stateDescriptionB = stateDescriptionB;
             return this;
         }
 
-        @NotNull
-        public Builder<T> stateDescription(@NotNull String stateDescription) {
+        public @NotNull Builder<T> stateDescription(@NotNull String stateDescription) {
             this.stateDescriptionA = stateDescription;
             return this;
         }
 
-        @NotNull
-        public Builder<T> permission(@NotNull String permission) {
+        public @NotNull Builder<T> permission(@NotNull String permission) {
             this.permission = permission;
             return this;
         }
 
-        @NotNull
-        public Builder<T> visible(boolean visible) {
+        public @NotNull Builder<T> visible(boolean visible) {
             this.visible = visible;
             return this;
         }
 
-        @NotNull
-        public Builder<T> defaultState(@NotNull T state) {
+        public @NotNull Builder<T> defaultState(@NotNull T state) {
             this.defaultState = state;
             return this;
         }
 
-        @NotNull
-        public FactionFlag<T> build() {
+        public @NotNull FactionFlag<T> build() {
             Preconditions.checkNotNull(this.name, "name must not be null");
             Preconditions.checkNotNull(this.description, "description must not be null");
             Preconditions.checkNotNull(this.stateDescriptionA, "stateDescription must not be null");

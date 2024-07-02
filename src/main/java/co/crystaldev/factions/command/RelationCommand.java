@@ -93,8 +93,7 @@ final class RelationCommand extends FactionsCommand {
         Messaging.send(sender, compiledPage);
     }
 
-    @NotNull
-    private static Component relatedFactionToEntry(@NotNull CommandSender sender, @NotNull RelatedFaction entry) {
+    private static @NotNull Component relatedFactionToEntry(@NotNull CommandSender sender, @NotNull RelatedFaction entry) {
         Faction faction = entry.getFaction();
         FactionRelation relation = entry.getRelation();
 

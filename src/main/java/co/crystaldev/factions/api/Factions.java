@@ -12,26 +12,19 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Factions {
 
-    @NotNull
-    static Factions get() {
+    static @NotNull Factions get() {
         return (Factions) Bukkit.getPluginManager().getPlugin("AlpineFactions");
     }
 
-    @NotNull
-    ClaimAccessor claims();
+    @NotNull ClaimAccessor claims();
 
-    @NotNull
-    PlayerAccessor players();
+    @NotNull PlayerAccessor players();
 
-    @NotNull
-    FactionAccessor factions();
+    @NotNull FactionAccessor factions();
 
-    @NotNull
-    FlagRegistry flagRegistry();
+    @NotNull FlagRegistry flagRegistry();
 
-    @NotNull
-    PermissionRegistry permissionRegistry();
+    @NotNull PermissionRegistry permissionRegistry();
 
-    @NotNull
-    ShowFormatter showFormatter();
+    @NotNull ShowFormatter showFormatter();
 }

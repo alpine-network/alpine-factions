@@ -7,6 +7,7 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.store.claim.ClaimStore;
 import co.crystaldev.factions.store.FactionStore;
 import org.bukkit.event.EventHandler;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @since 0.1.0
  */
 public final class FactionManagementEngine extends AlpineEngine {
-    FactionManagementEngine(AlpinePlugin plugin) {
+    FactionManagementEngine(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }
 

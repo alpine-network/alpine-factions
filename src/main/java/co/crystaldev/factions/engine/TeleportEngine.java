@@ -6,6 +6,7 @@ import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
 import co.crystaldev.factions.handler.TeleportManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @since 0.1.0
  */
 public final class TeleportEngine extends AlpineEngine {
-    TeleportEngine(AlpinePlugin plugin) {
+    TeleportEngine(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }
 

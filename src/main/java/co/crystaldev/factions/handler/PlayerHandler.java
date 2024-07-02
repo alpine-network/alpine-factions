@@ -32,8 +32,7 @@ public final class PlayerHandler {
         this.playerStateMap.remove(player.getUniqueId());
     }
 
-    @NotNull
-    public PlayerState getPlayer(@NotNull Player player) {
+    public @NotNull PlayerState getPlayer(@NotNull Player player) {
         return this.playerStateMap.computeIfAbsent(player.getUniqueId(), id -> new PlayerState(player));
     }
 

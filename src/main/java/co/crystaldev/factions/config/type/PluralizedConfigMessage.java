@@ -17,13 +17,11 @@ public final class PluralizedConfigMessage {
 
     private ConfigText plural;
 
-    @NotNull
-    public ConfigText get(int count) {
+    public @NotNull ConfigText get(int count) {
         return count == 1 ? this.single : this.plural;
     }
 
-    @NotNull
-    public static PluralizedConfigMessage of(@NotNull ConfigText single, @NotNull ConfigText plural) {
+    public static @NotNull PluralizedConfigMessage of(@NotNull ConfigText single, @NotNull ConfigText plural) {
         return new PluralizedConfigMessage(single, plural);
     }
 }

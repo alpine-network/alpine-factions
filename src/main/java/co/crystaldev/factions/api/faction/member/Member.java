@@ -35,8 +35,7 @@ public final class Member {
         this.rank = rank;
     }
 
-    @NotNull
-    public Component getTitle() {
+    public @NotNull Component getTitle() {
         return this.title == null ? Component.empty() : this.title;
     }
 
@@ -48,18 +47,15 @@ public final class Member {
         return this.getPlayer() != null;
     }
 
-    @Nullable
-    public Player getPlayer() {
+    public @Nullable Player getPlayer() {
         return Bukkit.getPlayer(this.id);
     }
 
-    @NotNull
-    public OfflinePlayer getOfflinePlayer() {
+    public @NotNull OfflinePlayer getOfflinePlayer() {
         return Bukkit.getOfflinePlayer(this.id);
     }
 
-    @NotNull
-    public FPlayer getUser() {
+    public @NotNull FPlayer getUser() {
         return Factions.get().players().getById(this.id);
     }
 

@@ -60,8 +60,7 @@ public final class Claim {
         this.factionId = faction;
     }
 
-    @NotNull
-    public Faction getFaction() {
+    public @NotNull Faction getFaction() {
         return Factions.get().factions().getByIdOrDefault(this.factionId);
     }
 
@@ -120,14 +119,12 @@ public final class Claim {
         }
     }
 
-    @NotNull
-    public Set<FPlayer> getPlayers() {
+    public @NotNull Set<FPlayer> getPlayers() {
         PlayerAccessor players = Factions.get().players();
         return this.accessedPlayerIds.stream().map(players::getById).collect(Collectors.toSet());
     }
 
-    @NotNull
-    public Set<Faction> getFactions() {
+    public @NotNull Set<Faction> getFactions() {
         FactionAccessor factions = Factions.get().factions();
         return this.accessedFactionIds.stream().map(factions::getById).collect(Collectors.toSet());
     }

@@ -22,12 +22,13 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @since 0.1.0
  */
 public final class InteractionEngine extends AlpineEngine {
-    InteractionEngine(AlpinePlugin plugin) {
+    InteractionEngine(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }
 

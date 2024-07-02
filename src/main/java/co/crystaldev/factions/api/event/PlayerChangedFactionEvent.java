@@ -31,8 +31,7 @@ public final class PlayerChangedFactionEvent extends BaseEvent implements Cancel
         this.offlinePlayer = player;
     }
 
-    @Nullable
-    public Player getPlayer() {
+    public @Nullable Player getPlayer() {
         return this.offlinePlayer.getPlayer();
     }
 }

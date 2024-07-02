@@ -8,8 +8,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @UtilityClass
 public final class StringHelper {
-    @NotNull
-    public static String repeat(@NotNull String string, int count) {
+    public static @NotNull String repeat(@NotNull String string, int count) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < count; i++) {
             stringBuilder.append(string);
@@ -17,8 +16,7 @@ public final class StringHelper {
         return stringBuilder.toString();
     }
 
-    @NotNull
-    public static String pluralize(@NotNull Number num, @NotNull String word) {
+    public static @NotNull String pluralize(@NotNull Number num, @NotNull String word) {
         String pluralized = num.intValue() == 1 ? "" : "s";
         String str = word.contains("%s") ? word.replace("%s", pluralized) : word + pluralized;
         if (str.contains("%d")) {

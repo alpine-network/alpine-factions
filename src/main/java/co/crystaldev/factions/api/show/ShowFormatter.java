@@ -28,8 +28,8 @@ public final class ShowFormatter {
         }
     }
 
-    @NotNull @ApiStatus.Internal
-    public Component build(@NotNull CommandSender sender, @NotNull Faction faction, @NotNull Faction senderFaction) {
+    @ApiStatus.Internal
+    public @NotNull Component build(@NotNull CommandSender sender, @NotNull Faction faction, @NotNull Faction senderFaction) {
         MessageConfig config = MessageConfig.getInstance();
         boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
 

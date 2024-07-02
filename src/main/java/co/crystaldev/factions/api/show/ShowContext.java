@@ -40,18 +40,15 @@ public final class ShowContext {
         return this.getMember().getRank().ordinal() <= rank.ordinal();
     }
 
-    @NotNull
-    public Member getMember() {
+    public @NotNull Member getMember() {
         return this.faction.getMember(this.getPlayer());
     }
 
-    @NotNull
-    public CommandSender getSender() {
+    public @NotNull CommandSender getSender() {
         return this.sender;
     }
 
-    @NotNull
-    public Player getPlayer() {
+    public @NotNull Player getPlayer() {
         return (Player) this.sender;
     }
 }

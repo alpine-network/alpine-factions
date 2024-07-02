@@ -93,8 +93,7 @@ public final class FactionHelper {
         broadcast(faction, (ServerOperator) null, playerFunction);
     }
 
-    @NotNull
-    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull Component component) {
+    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull Component component) {
         if (faction == null) {
             return ComponentHelper.nil();
         }
@@ -108,13 +107,11 @@ public final class FactionHelper {
         return Components.stylize(config.factionNameStyles.get(faction.getName()), name, true);
     }
 
-    @NotNull
-    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull String component) {
+    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull String component) {
         return formatRelational(viewer, faction, Component.text(component));
     }
 
-    @NotNull
-    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction,
+    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction,
                                              @NotNull ServerOperator other, boolean checkEquals) {
         if (faction == null) {
             return ComponentHelper.nil();
@@ -168,20 +165,17 @@ public final class FactionHelper {
         }
     }
 
-    @NotNull
-    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull ServerOperator other) {
+    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull ServerOperator other) {
         return formatRelational(viewer, faction, other, true);
     }
 
-    @NotNull
-    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction) {
+    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction) {
         Faction playerFaction = findFaction(viewer);
         String factionName = Objects.equals(faction, playerFaction) ? "Your faction" : (faction == null ? "< null >" : faction.getName());
         return formatRelational(viewer, faction, factionName);
     }
 
-    @NotNull
-    public static Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, boolean checkEquals) {
+    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, boolean checkEquals) {
         if (checkEquals) {
             return formatRelational(viewer, faction);
         }
@@ -190,8 +184,7 @@ public final class FactionHelper {
         return formatRelational(viewer, faction, factionName);
     }
 
-    @NotNull
-    public static Component formatRelational(@NotNull ServerOperator viewer, @NotNull ServerOperator sender) {
+    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @NotNull ServerOperator sender) {
         if (!(sender instanceof OfflinePlayer)) {
             return Component.text(PlayerHelper.getName(sender));
         }
@@ -218,8 +211,7 @@ public final class FactionHelper {
         }
     }
 
-    @NotNull
-    public static Component formatName(@NotNull ServerOperator operator) {
+    public static @NotNull Component formatName(@NotNull ServerOperator operator) {
         if (!(operator instanceof OfflinePlayer)) {
             return Component.text(PlayerHelper.getName(operator));
         }
@@ -267,14 +259,12 @@ public final class FactionHelper {
         return true;
     }
 
-    @Nullable
-    private static Faction findFaction(@NotNull ServerOperator sender) {
+    private static @Nullable Faction findFaction(@NotNull ServerOperator sender) {
         FactionAccessor factions = Factions.get().factions();
         return sender instanceof OfflinePlayer ? factions.find((OfflinePlayer) sender) : factions.getWilderness();
     }
 
-    @NotNull
-    private static Faction findFactionOrDefault(@NotNull ServerOperator sender) {
+    private static @NotNull Faction findFactionOrDefault(@NotNull ServerOperator sender) {
         FactionAccessor factions = Factions.get().factions();
         return sender instanceof OfflinePlayer ? factions.findOrDefault((OfflinePlayer) sender) : factions.getWilderness();
     }

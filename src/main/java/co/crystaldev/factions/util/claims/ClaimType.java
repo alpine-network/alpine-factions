@@ -30,8 +30,7 @@ public enum ClaimType {
         return name().toLowerCase();
     }
 
-    @Nullable
-    public static ClaimType get(@NotNull String type) {
+    public static @Nullable ClaimType get(@NotNull String type) {
         for (ClaimType value : values()) {
             if (value.aliases.contains(type)) {
                 return value;

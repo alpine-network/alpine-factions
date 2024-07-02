@@ -53,8 +53,7 @@ public final class AsciiFactionMap {
         this.storage = new Component[this.height][MAP_WIDTH];
     }
 
-    @NotNull
-    public Component build() {
+    public @NotNull Component build() {
         this.populateMap();
 
         List<Component> lines = new LinkedList<>();
@@ -195,8 +194,7 @@ public final class AsciiFactionMap {
         this.storage[y][x] = component;
     }
 
-    @NotNull
-    public static Component create(@NotNull Player player, boolean minimal) {
+    public static @NotNull Component create(@NotNull Player player, boolean minimal) {
         AsciiFactionMap map = new AsciiFactionMap(player, minimal);
         return map.build();
     }

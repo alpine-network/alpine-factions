@@ -34,7 +34,7 @@ import java.util.stream.Stream;
  */
 public final class PlaceholderAPIIntegration extends AlpineIntegration {
 
-    PlaceholderAPIIntegration(AlpinePlugin plugin) {
+    PlaceholderAPIIntegration(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }
 
@@ -89,8 +89,7 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
         }
 
         @Override
-        @NotNull
-        public List<String> getPlaceholders() {
+        public @NotNull List<String> getPlaceholders() {
             return PLACEHOLDERS;
         }
 
@@ -171,8 +170,7 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
             }
         }
 
-        @NotNull
-        private static String legacy(@NotNull Component component, boolean section) {
+        private static @NotNull String legacy(@NotNull Component component, boolean section) {
             LegacyComponentSerializer serializer = section ? LegacyComponentSerializer.legacySection() : LegacyComponentSerializer.legacyAmpersand();
             return serializer.serialize(component);
         }

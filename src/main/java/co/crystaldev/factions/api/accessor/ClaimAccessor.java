@@ -21,16 +21,13 @@ public interface ClaimAccessor {
 
     // region Claims
 
-    @NotNull
-    List<ClaimedChunk> getClaims(@NotNull Faction faction, @Nullable String world);
+    @NotNull List<ClaimedChunk> getClaims(@NotNull Faction faction, @Nullable String world);
 
-    @NotNull
-    default List<ClaimedChunk> getClaims(@NotNull Faction faction, @Nullable World world) {
+    default @NotNull List<ClaimedChunk> getClaims(@NotNull Faction faction, @Nullable World world) {
         return this.getClaims(faction, world == null ? null : world.getName());
     }
 
-    @NotNull
-    default List<ClaimedChunk> getClaims(@NotNull Faction faction) {
+    default @NotNull List<ClaimedChunk> getClaims(@NotNull Faction faction) {
         return this.getClaims(faction, (String) null);
     }
 
@@ -48,26 +45,21 @@ public interface ClaimAccessor {
 
     // region Claim
 
-    @Nullable
-    Claim getClaim(@NotNull String worldName, int chunkX, int chunkZ);
+    @Nullable Claim getClaim(@NotNull String worldName, int chunkX, int chunkZ);
 
-    @Nullable
-    default Claim getClaim(@NotNull String worldName, @NotNull ChunkCoordinate chunk) {
+    default @Nullable Claim getClaim(@NotNull String worldName, @NotNull ChunkCoordinate chunk) {
         return this.getClaim(worldName, chunk.getX(), chunk.getZ());
     }
 
-    @Nullable
-    default Claim getClaim(@NotNull Location location) {
+    default @Nullable Claim getClaim(@NotNull Location location) {
         return this.getClaim(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
 
-    @Nullable
-    default Claim getClaim(@NotNull Block block) {
+    default @Nullable Claim getClaim(@NotNull Block block) {
         return this.getClaim(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
     }
 
-    @Nullable
-    default Claim getClaim(@NotNull Chunk chunk) {
+    default @Nullable Claim getClaim(@NotNull Chunk chunk) {
         return this.getClaim(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 
@@ -123,8 +115,7 @@ public interface ClaimAccessor {
 
     // region Faction
 
-    @Nullable
-    default Faction getFaction(@NotNull String worldName, int chunkX, int chunkZ) {
+    default @Nullable Faction getFaction(@NotNull String worldName, int chunkX, int chunkZ) {
         Claim claim = this.getClaim(worldName, chunkX, chunkZ);
         if (claim != null) {
             FactionAccessor factions = Factions.get().factions();
@@ -133,28 +124,23 @@ public interface ClaimAccessor {
         return null;
     }
 
-    @Nullable
-    default Faction getFaction(@NotNull String worldName, @NotNull ChunkCoordinate chunk) {
+    default @Nullable Faction getFaction(@NotNull String worldName, @NotNull ChunkCoordinate chunk) {
         return this.getFaction(worldName, chunk.getX(), chunk.getZ());
     }
 
-    @Nullable
-    default Faction getFaction(@NotNull Location location) {
+    default @Nullable Faction getFaction(@NotNull Location location) {
         return this.getFaction(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
 
-    @Nullable
-    default Faction getFaction(@NotNull Block block) {
+    default @Nullable Faction getFaction(@NotNull Block block) {
         return this.getFaction(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
     }
 
-    @Nullable
-    default Faction getFaction(@NotNull Chunk chunk) {
+    default @Nullable Faction getFaction(@NotNull Chunk chunk) {
         return this.getFaction(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 
-    @NotNull
-    default Faction getFactionOrDefault(@NotNull String worldName, int chunkX, int chunkZ) {
+    default @NotNull Faction getFactionOrDefault(@NotNull String worldName, int chunkX, int chunkZ) {
         FactionAccessor factions = Factions.get().factions();
         Claim claim = this.getClaim(worldName, chunkX, chunkZ);
         Faction fac = null;
@@ -164,23 +150,19 @@ public interface ClaimAccessor {
         return fac == null ? factions.getWilderness() : fac;
     }
 
-    @NotNull
-    default Faction getFactionOrDefault(@NotNull String worldName, @NotNull ChunkCoordinate chunk) {
+    default @NotNull Faction getFactionOrDefault(@NotNull String worldName, @NotNull ChunkCoordinate chunk) {
         return this.getFactionOrDefault(worldName, chunk.getX(), chunk.getZ());
     }
 
-    @NotNull
-    default Faction getFactionOrDefault(@NotNull Location location) {
+    default @NotNull Faction getFactionOrDefault(@NotNull Location location) {
         return this.getFactionOrDefault(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
 
-    @NotNull
-    default Faction getFactionOrDefault(@NotNull Block block) {
+    default @NotNull Faction getFactionOrDefault(@NotNull Block block) {
         return this.getFactionOrDefault(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
     }
 
-    @NotNull
-    default Faction getFactionOrDefault(@NotNull Chunk chunk) {
+    default @NotNull Faction getFactionOrDefault(@NotNull Chunk chunk) {
         return this.getFactionOrDefault(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 
@@ -188,49 +170,39 @@ public interface ClaimAccessor {
 
     // region Claiming
 
-    @Nullable
-    Claim put(@NotNull String worldName, int chunkX, int chunkZ, @NotNull Faction faction);
+    @Nullable Claim put(@NotNull String worldName, int chunkX, int chunkZ, @NotNull Faction faction);
 
-    @Nullable
-    default Claim put(@NotNull String worldName, @NotNull ChunkCoordinate chunk, @NotNull Faction faction) {
+    default @Nullable Claim put(@NotNull String worldName, @NotNull ChunkCoordinate chunk, @NotNull Faction faction) {
         return this.put(worldName, chunk.getX(), chunk.getZ(), faction);
     }
 
-    @Nullable
-    default Claim put(@NotNull Location location, @NotNull Faction faction) {
+    default @Nullable Claim put(@NotNull Location location, @NotNull Faction faction) {
         return this.put(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4, faction);
     }
 
-    @Nullable
-    default Claim put(@NotNull Block block, @NotNull Faction faction) {
+    default @Nullable Claim put(@NotNull Block block, @NotNull Faction faction) {
         return this.put(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4, faction);
     }
 
-    @Nullable
-    default Claim put(@NotNull Chunk chunk, @NotNull Faction faction) {
+    default @Nullable Claim put(@NotNull Chunk chunk, @NotNull Faction faction) {
         return this.put(chunk.getWorld().getName(), chunk.getX(), chunk.getZ(), faction);
     }
 
-    @Nullable
-    Claim remove(@NotNull String worldName, int chunkX, int chunkZ);
+    @Nullable Claim remove(@NotNull String worldName, int chunkX, int chunkZ);
 
-    @Nullable
-    default Claim remove(@NotNull String worldName, @NotNull ChunkCoordinate chunk) {
+    default @Nullable Claim remove(@NotNull String worldName, @NotNull ChunkCoordinate chunk) {
         return this.remove(worldName, chunk.getX(), chunk.getZ());
     }
 
-    @Nullable
-    default Claim remove(@NotNull Location location) {
+    default @Nullable Claim remove(@NotNull Location location) {
         return this.remove(location.getWorld().getName(), location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
 
-    @Nullable
-    default Claim remove(@NotNull Block block) {
+    default @Nullable Claim remove(@NotNull Block block) {
         return this.remove(block.getWorld().getName(), block.getX() >> 4, block.getZ() >> 4);
     }
 
-    @Nullable
-    default Claim remove(@NotNull Chunk chunk) {
+    default @Nullable Claim remove(@NotNull Chunk chunk) {
         return this.remove(chunk.getWorld().getName(), chunk.getX(), chunk.getZ());
     }
 

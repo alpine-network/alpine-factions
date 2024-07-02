@@ -9,6 +9,7 @@ import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.FactionConfig;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @since 0.1.0
  */
 public final class PowerEngine extends AlpineEngine {
-    PowerEngine(AlpinePlugin plugin) {
+    PowerEngine(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }
 
