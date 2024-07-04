@@ -5,15 +5,19 @@ import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -35,6 +39,49 @@ public final class PhysicsEngine extends AlpineEngine {
     public void onPistonRetract(BlockPistonRetractEvent event) {
         if (checkBlocks(event.getBlock(), event.getBlocks(), event.getDirection())) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onEntityExplode(EntityExplodeEvent event) {
+        checkExplosion(event.blockList());
+    }
+
+    @EventHandler
+    public void onEntityExplode(BlockExplodeEvent event) {
+        checkExplosion(event.blockList());
+    }
+
+    private static void checkExplosion(@NotNull List<Block> blockList) {
+        ClaimAccessor claims = Factions.get().claims();
+
+        int lastChunkX = 0, lastChunkZ = 0;
+        boolean checked = false, allowed = false;
+
+        Iterator<Block> iterator = blockList.iterator();
+        while (iterator.hasNext()) {
+            Block block = iterator.next();
+            Chunk chunk = block.getChunk();
+            int chunkX = chunk.getX();
+            int chunkZ = chunk.getZ();
+
+            if (checked && lastChunkX == chunkX && lastChunkZ == chunkZ) {
+                if (!allowed) {
+                    iterator.remove();
+                }
+
+                continue;
+            }
+
+            checked = true;
+            lastChunkX = chunkX;
+            lastChunkZ = chunkZ;
+
+            Faction faction = claims.getFactionOrDefault(block);
+            allowed = faction.getFlagValueOrDefault(FactionFlags.EXPLOSIONS);
+            if (!allowed) {
+                iterator.remove();
+            }
         }
     }
 
