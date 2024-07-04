@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.teleport.TeleportTask;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.event.FactionHomeUpdateEvent;
@@ -9,7 +10,6 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.handler.TeleportManager;
 import co.crystaldev.factions.util.FactionHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
@@ -21,6 +21,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @since 0.1.0
@@ -66,10 +67,14 @@ final class HomeCommand extends FactionsCommand {
             }
         }
 
-        // notify the player
-        config.home.send(player,
-                "faction", FactionHelper.formatRelational(player, faction, false),
-                "faction_name", faction.getName(),
-                "seconds", TeleportManager.getInstance().queueTeleport(player, home));
+        TeleportTask.builder(player, home)
+                .delay(5, TimeUnit.SECONDS)
+                .onInit(ctx -> {
+                    ctx.message(config.home.build(
+                            "faction", FactionHelper.formatRelational(player, faction, false),
+                            "faction_name", faction.getName(),
+                            "seconds", ctx.timeUntilTeleport(TimeUnit.SECONDS)));
+                })
+                .initiate(this.plugin);
     }
 }
