@@ -17,6 +17,7 @@ import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
+import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.ChunkCoordinate;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
@@ -155,7 +156,8 @@ final class AccessCommand extends FactionsCommand {
                     break;
                 }
                 default: {
-                    chunks = ClaimHelper.square(origin, optionalRadius.get());
+                    int maxRadius = PlayerHandler.getInstance().isOverriding(player) ? -1 : 30;
+                    chunks = ClaimHelper.square(origin, optionalRadius.get(), maxRadius);
                 }
             }
         }

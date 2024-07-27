@@ -213,8 +213,8 @@ public final class ClaimHelper {
         return false;
     }
 
-    public static @NotNull Set<ChunkCoordinate> square(@NotNull Chunk origin, int radius) {
-        radius = Math.min(30, Math.abs(radius) - 1);
+    public static @NotNull Set<ChunkCoordinate> square(@NotNull Chunk origin, int radius, int maxRadius) {
+        radius = Math.min(maxRadius < 0 ? 256 : maxRadius, Math.abs(radius) - 1);
 
         int chunkX = origin.getX();
         int chunkZ = origin.getZ();

@@ -4,6 +4,7 @@ import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
+import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.*;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Chunk;
@@ -40,7 +41,8 @@ public final class Claiming {
                 break;
             }
             default: {
-                chunks = ClaimHelper.square(origin, radius);
+                int maxRadius = PlayerHandler.getInstance().isOverriding(actor) ? -1 : 30;
+                chunks = ClaimHelper.square(origin, radius, maxRadius);
             }
         }
 
