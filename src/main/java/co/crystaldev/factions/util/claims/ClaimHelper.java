@@ -83,7 +83,7 @@ public final class ClaimHelper {
         while (iterator.hasNext()) {
             ChunkCoordinate next = iterator.next();
 
-            if (LocationHelper.distance(next.getX(), next.getZ(), cx, cz) > maxClaimDistance) {
+            if (!overriding && LocationHelper.distance(next.getX(), next.getZ(), cx, cz) > maxClaimDistance) {
                 messageConfig.claimTooFar.send(player);
                 return;
             }
