@@ -21,7 +21,6 @@ val props = mapOf(
 
 repositories {
     mavenCentral()
-    mavenLocal() // TODO: remove when AlpineCore 0.4.0 releases
     maven("https://repo.codemc.org/repository/nms/")
     maven("https://lib.alpn.cloud/alpine-public/")
     maven("https://repo.panda-lang.org/releases")
