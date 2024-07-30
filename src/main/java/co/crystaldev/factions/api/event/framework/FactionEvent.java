@@ -5,8 +5,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/21/2024
+ * @since 0.1.0
  */
 @Getter
 public abstract class FactionEvent extends BaseEvent {

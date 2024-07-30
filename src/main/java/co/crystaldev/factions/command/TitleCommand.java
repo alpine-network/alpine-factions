@@ -29,8 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/19/2024
+ * @since 0.1.0
  */
 @Command(name = "factions title")
 @Description("Modify a member title.")

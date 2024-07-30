@@ -9,8 +9,7 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @author BestBearr <crumbygames12@gmail.com>
- * @since 02/21/2024
+ * @since 0.1.0
  */
 @Getter @NoArgsConstructor
 public abstract class BaseEvent extends Event {
