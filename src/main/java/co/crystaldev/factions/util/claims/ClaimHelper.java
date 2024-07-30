@@ -201,13 +201,19 @@ public final class ClaimHelper {
     public static boolean shouldCancelClaim(@NotNull Player player, @Nullable Faction claimingFaction, boolean claiming) {
         MessageConfig config = MessageConfig.getInstance();
 
-        if (claiming && claimingFaction == null) {
-            Faction wilderness = Factions.get().factions().getWilderness();
-            config.landOwned.send(player,
-                    "faction", FactionHelper.formatRelational(player, wilderness),
-                    "faction_name", wilderness.getName()
-            );
-            return true;
+        if (claiming) {
+            if (claimingFaction == null) {
+                Faction wilderness = Factions.get().factions().getWilderness();
+                config.landOwned.send(player,
+                        "faction", FactionHelper.formatRelational(player, wilderness),
+                        "faction_name", wilderness.getName()
+                );
+                return true;
+            }
+            else if (!PlayerHandler.getInstance().isOverriding(player) && !claimingFaction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
+                FactionHelper.missingPermission(player, claimingFaction, "modify territory");
+                return true;
+            }
         }
 
         return false;
