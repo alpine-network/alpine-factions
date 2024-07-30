@@ -58,7 +58,7 @@ public final class InteractionEngine extends AlpineEngine {
 
     @EventHandler
     public void onBlockDamage(BlockDamageEvent event) {
-        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
+        if (event.getInstaBreak() && !FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
             event.setCancelled(true);
         }
     }
