@@ -157,7 +157,7 @@ public final class CombatEngine extends AlpineEngine {
         }
 
         // you should always be able to hit wilderness players
-        if (targetFaction.isWilderness()) {
+        if (attackerFaction.isWilderness()) {
             return false;
         }
 
