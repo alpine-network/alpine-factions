@@ -3,11 +3,13 @@ package co.crystaldev.factions.config.type;
 import co.crystaldev.alpinecore.framework.config.object.ConfigMessage;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
+import co.crystaldev.factions.util.ComponentRateLimiter;
 import de.exlll.configlib.Configuration;
 import de.exlll.configlib.SerializeWith;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -42,6 +44,18 @@ public final class ConfigText extends ConfigMessage {
 
     public void send(@NotNull Collection<CommandSender> senders, @NotNull Object... placeholders) {
         senders.forEach(sender -> this.send(sender, placeholders));
+    }
+
+    public void rateLimitedSend(@NotNull CommandSender sender, @NotNull Object... placeholders) {
+        Component component = this.build(placeholders);
+        if (sender instanceof Player && ComponentRateLimiter.getInstance().isLimited((Player) sender, component)) {
+            return;
+        }
+        Messaging.send(sender, component);
+    }
+
+    public void rateLimitedSend(@NotNull Collection<CommandSender> senders, @NotNull Object... placeholders) {
+        senders.forEach(sender -> this.rateLimitedSend(sender, placeholders));
     }
 
     public void sendActionBar(@NotNull CommandSender sender, @NotNull Object... placeholders) {

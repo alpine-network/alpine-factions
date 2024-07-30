@@ -229,7 +229,7 @@ public final class FactionHelper {
     }
 
     public static void missingPermission(@NotNull CommandSender player, @NotNull Faction faction, @NotNull String action) {
-        MessageConfig.getInstance().missingFactionPerm.send(player,
+        MessageConfig.getInstance().missingFactionPerm.rateLimitedSend(player,
                 "action", action,
                 "faction", formatRelational(player, faction),
                 "faction_name", faction.getName()

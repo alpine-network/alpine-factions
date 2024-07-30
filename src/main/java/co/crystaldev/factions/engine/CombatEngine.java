@@ -145,7 +145,7 @@ public final class CombatEngine extends AlpineEngine {
 
         // ensure combat is allowed in both locations
         if (!attackerClaimFaction.getFlagValueOrDefault(FactionFlags.COMBAT) || !targetClaimFaction.getFlagValueOrDefault(FactionFlags.COMBAT)) {
-            config.combatDisabled.send(target,
+            config.combatDisabled.rateLimitedSend(target,
                     "faction", FactionHelper.formatRelational(target, targetClaimFaction, false),
                     "faction_name", targetClaimFaction.getName());
             return true;
@@ -163,12 +163,12 @@ public final class CombatEngine extends AlpineEngine {
 
         // can't hurt neutral players in their own land
         if (targetFaction.isRelation(attackerFaction, FactionRelation.NEUTRAL) && attackerFaction.equals(attackerClaimFaction)) {
-            config.cantHurtNeutral.send(target,
+            config.cantHurtNeutral.rateLimitedSend(target,
                     "player", FactionHelper.formatRelational(target, attackerFaction, attacker, false),
                     "player_name", attacker.getName(),
                     "attacker", FactionHelper.formatRelational(target, targetFaction, target, false),
                     "attacker_name", target.getName());
-            config.attemptedDamage.send(attacker,
+            config.attemptedDamage.rateLimitedSend(attacker,
                     "player", FactionHelper.formatRelational(attacker, attackerFaction, attacker, false),
                     "player_name", attacker.getName(),
                     "attacker", FactionHelper.formatRelational(attacker, targetFaction, target, false),
@@ -178,7 +178,7 @@ public final class CombatEngine extends AlpineEngine {
 
         // can't hurt your own faction members,
         if (targetFaction.isFriendly(attackerFaction)) {
-            config.cantHurtFriendly.send(target,
+            config.cantHurtFriendly.rateLimitedSend(target,
                     "player", FactionHelper.formatRelational(target, attackerFaction, attacker, false),
                     "player_name", attacker.getName(),
                     "attacker", FactionHelper.formatRelational(target, targetFaction, target, false),

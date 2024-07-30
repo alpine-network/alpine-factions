@@ -60,12 +60,6 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText unknownRelational = ConfigText.of(
             "%error_prefix% No rank or relation was found with the ID <error_highlight>%value%</error_highlight");
 
-    public ConfigText teleport = ConfigText.of(
-            "%prefix% Teleporting...");
-
-    public ConfigText teleportFailed = ConfigText.of(
-            "%error_prefix% Teleportation failed due to movement");
-
     public ConfigText none = ConfigText.of(
             "<gray>None</gray>");
 
