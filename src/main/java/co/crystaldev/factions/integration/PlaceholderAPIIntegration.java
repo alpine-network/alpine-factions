@@ -109,18 +109,18 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
             Member member = faction.getMember(subject.getUniqueId());
 
             switch (identifier) {
+                case "factiondisplayname":
+                case "factiondisplayname_ampersand":
+                    if (two != null) {
+                        String prefix = (member == null ? Rank.getDefault() : member.getRank()).getPrefix();
+                        return legacy(FactionHelper.formatRelational(one, faction, prefix + selfFaction.getName()), "factiondisplayname".equals(identifier));
+                    }
+                    // Fall through if not relational
                 case "faction":
                 case "faction_ampersand":
                     return legacy(FactionHelper.formatRelational(one, faction, false), "faction".equals(identifier));
                 case "factionname":
                     return faction.getName();
-                case "factiondisplayname":
-                case "factiondisplayname_ampersand":
-                    if (two == null) {
-                        return faction.getName();
-                    }
-                    String prefix = (member == null ? Rank.getDefault() : member.getRank()).getPrefix();
-                    return legacy(FactionHelper.formatRelational(one, faction, prefix + selfFaction.getName()), "factiondisplayname".equals(identifier));
                 case "relationalusername":
                 case "relationalusername_ampersand":
                     if (two == null) {
