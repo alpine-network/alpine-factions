@@ -114,6 +114,13 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
                     return legacy(FactionHelper.formatRelational(one, faction, false), "faction".equals(identifier));
                 case "factionname":
                     return faction.getName();
+                case "factiondisplayname":
+                case "factiondisplayname_ampersand":
+                    if (two == null) {
+                        return faction.getName();
+                    }
+                    String prefix = (member == null ? Rank.getDefault() : member.getRank()).getPrefix();
+                    return legacy(FactionHelper.formatRelational(one, faction, prefix + selfFaction.getName()), "factiondisplayname".equals(identifier));
                 case "relationalusername":
                 case "relationalusername_ampersand":
                     if (two == null) {
@@ -123,7 +130,7 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
                 case "relation":
                 case "relation_ampersand":
                     if (two == null) {
-                        return null;
+                        return "";
                     }
                     StyleConfig config = StyleConfig.getInstance();
                     FactionRelation relation = selfFaction.relationTo(faction);
@@ -135,6 +142,7 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
 
                     Component style = Components.stylize(config.relationalStyles.get(relation), Component.text("-"));
                     String legacy = legacy(style, "relation".equals(identifier));
+
                     return legacy.substring(0, legacy.length() - 1);
                 case "power":
                     return String.valueOf(playerState.getPowerLevel());
@@ -153,6 +161,8 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
                     return member == null ? "" : legacy(member.getTitle(), "title".equals(identifier));
                 case "rank":
                     return (member == null ? Rank.getDefault() : member.getRank()).getId();
+                case "rankprefix":
+                    return (member == null ? Rank.getDefault() : member.getRank()).getPrefix();
                 case "claims":
                     return String.valueOf(faction.getClaimCount());
                 case "worldclaims":
