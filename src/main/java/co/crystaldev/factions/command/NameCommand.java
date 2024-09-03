@@ -63,7 +63,7 @@ final class NameCommand extends FactionsCommand {
 
         // ensure there is no other faction with the same name
         Faction other = factions.getByName(name);
-        if (other != null) {
+        if (other != null && !other.equals(faction)) {
             config.factionWithName.send(sender, "faction_name", name);
             return;
         }
