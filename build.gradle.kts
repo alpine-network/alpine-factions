@@ -30,7 +30,7 @@ repositories {
 configurations.create("shaded")
 dependencies {
     compileOnly(group = "org.spigotmc", name = "spigot", version = project.property("spigot_version") as String)
-    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.4.0")
+    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.4.2")
 
     compileOnly(group = "me.clip", name = "placeholderapi", version = "2.11.5")
 

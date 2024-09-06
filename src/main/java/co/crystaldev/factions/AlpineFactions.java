@@ -1,7 +1,6 @@
 package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.alpinecore.framework.Activatable;
 import co.crystaldev.alpinecore.framework.config.AlpinePluginConfig;
 import co.crystaldev.alpinecore.framework.config.object.ConfigMessage;
 import co.crystaldev.factions.api.Factions;
@@ -23,7 +22,6 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -115,16 +113,6 @@ public final class AlpineFactions extends AlpinePlugin implements Factions {
     @Override
     public @NotNull ShowFormatter showFormatter() {
         return showFormatter;
-    }
-
-    @ApiStatus.Internal
-    public <T> @NotNull T getActivatable(@NotNull Class<T> type) {
-        for (Activatable activatable : this.getActivatables()) {
-            if (activatable.getClass().equals(type)) {
-                return (T) activatable;
-            }
-        }
-        throw new IllegalArgumentException();
     }
 
     public static <T extends Event> @NotNull T callEvent(@NotNull T event) {
