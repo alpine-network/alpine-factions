@@ -59,11 +59,11 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
     private static final class Expansion extends PlaceholderExpansion implements Relational {
 
         private static final List<String> PLACEHOLDERS = Stream.of(
-                        "faction", "faction_ampersand", "factionname", "relationalusername",
-                        "relationalusername_ampersand", "relation", "relation_ampersand", "power",
-                        "maxpower", "powerboost", "factionpower", "factionmaxpower", "factionpowerboost",
-                        "title", "title_ampersand", "rank", "claims", "worldclaims", "onlinemembers",
-                        "offlinemembers", "allmembers", "totalmembers"
+                        "factiondisplayname", "factiondisplayname_ampersand", "faction", "faction_ampersand",
+                        "factionname", "relationalusername", "relationalusername_ampersand", "relation", "relationname",
+                        "relation_ampersand", "power", "maxpower", "powerboost", "factionpower", "factionmaxpower",
+                        "factionpowerboost", "title", "title_ampersand", "rank", "claims", "worldclaims",
+                        "onlinemembers", "offlinemembers", "allmembers", "totalmembers"
                 )
                 .map(v -> "%alpinefactions_" + v + "%")
                 .collect(Collectors.toList());
@@ -144,6 +144,11 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
                     String legacy = legacy(style, "relation".equals(identifier));
 
                     return legacy.substring(0, legacy.length() - 1);
+                case "relationname":
+                    if (two == null) {
+                        return "";
+                    }
+                    return selfFaction.relationTo(faction).getId();
                 case "power":
                     return String.valueOf(playerState.getPowerLevel());
                 case "maxpower":
