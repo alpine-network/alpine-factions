@@ -135,6 +135,12 @@ public final class Permissions {
 
     public static final Permission OPEN_DOORS = Permission.builder("open_doors")
             .name("Doors")
+            .description("ability to open doors")
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER, Rank.MEMBER)
+            .build();
+
+    public static final Permission USE_PRESSURE_PLATES = Permission.builder("pressure_plates")
+            .name("Pressure Plates")
             .description("ability to trigger pressure plates")
             .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER, Rank.MEMBER)
             .build();
@@ -167,6 +173,7 @@ public final class Permissions {
             USE_CONTAINERS,
             BUILD,
             OPEN_DOORS,
+            USE_PRESSURE_PLATES,
             USE_SWITCHES
     };
 }
