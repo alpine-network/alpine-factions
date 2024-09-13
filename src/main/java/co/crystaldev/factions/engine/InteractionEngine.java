@@ -131,6 +131,7 @@ public final class InteractionEngine extends AlpineEngine {
 
             // block interaction
             result = MaterialMapping.MATERIAL_EDIT_ON_INTERACT.test(block)
+                    || MaterialMapping.BEDS.test(block)
                     || MaterialMapping.FLOWER_POTS.test(block)
                     || MaterialMapping.CANDLES.test(item)
                     || MaterialMapping.CANDLES.test(block)

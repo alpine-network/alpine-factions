@@ -31,6 +31,10 @@ public final class MaterialMapping {
             .add(types -> types.filter(m -> m.name().endsWith("_SIGN")))
             .build();
 
+    public static final MappedMaterial BEDS = MappedMaterial.builder()
+            .add(types -> types.filter(m -> m.name().endsWith("_BED")))
+            .build();
+
     public static final MappedMaterial DOORS = MappedMaterial.builder()
             .add(types -> types.filter(m -> m.name().endsWith("_DOOR")))
             .add(types -> types.filter(m -> m.name().endsWith("_TRAPDOOR")))
@@ -56,6 +60,7 @@ public final class MaterialMapping {
             XMaterial.CAMPFIRE,
             XMaterial.SOUL_CAMPFIRE,
             XMaterial.DRAGON_EGG,
+            XMaterial.LECTERN,
 
             XMaterial.REPEATER,
             XMaterial.DAYLIGHT_DETECTOR,
