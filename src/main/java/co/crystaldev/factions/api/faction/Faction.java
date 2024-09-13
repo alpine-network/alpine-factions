@@ -267,7 +267,7 @@ public final class Faction {
         FactionRelation relationToOther = this.relationRequests.getOrDefault(faction.getId(), FactionRelation.NEUTRAL);
         FactionRelation relationToSelf = faction.relationRequests.getOrDefault(this.getId(), FactionRelation.NEUTRAL);
 
-        return relationToOther == relationToSelf
+        return relationToOther == relationToSelf || !relationToOther.isFriendly()
                 ? relationToOther
                 : relationToOther.getWeight() > 0 ? FactionRelation.NEUTRAL : relationToOther;
     }
