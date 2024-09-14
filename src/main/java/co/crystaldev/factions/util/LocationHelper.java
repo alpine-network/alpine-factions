@@ -63,8 +63,8 @@ public final class LocationHelper {
 
         double minX = center.getX() - size;
         double minZ = center.getZ() - size;
-        double maxX = center.getX() + size;
-        double maxZ = center.getZ() + size;
+        double maxX = center.getX() + size - 1; // minecraft chunks r dumb
+        double maxZ = center.getZ() + size - 1;
 
         return x >= minX && x <= maxX && z >= minZ && z <= maxZ;
     }
