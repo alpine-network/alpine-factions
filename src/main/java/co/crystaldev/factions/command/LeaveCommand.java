@@ -15,7 +15,11 @@ import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @since 0.1.0
@@ -23,6 +27,9 @@ import org.bukkit.entity.Player;
 @Command(name = "factions leave")
 @Description("Leave your faction.")
 final class LeaveCommand extends FactionsCommand {
+
+    private final Map<CommandSender, Long> confirmationMap = new HashMap<>();
+
     public LeaveCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -48,6 +55,16 @@ final class LeaveCommand extends FactionsCommand {
             }
             else if (faction.getMemberCount() == 1) {
                 // the leader was the only member, disband
+
+                // require a confirmation from the user
+                if (!this.confirmationMap.containsKey(player) || System.currentTimeMillis() - this.confirmationMap.get(player) > 10_000L) {
+                    this.confirmationMap.put(player, System.currentTimeMillis());
+                    config.confirm.send(player);
+                    return;
+                }
+
+                // member confirmed, disband the faction
+                this.confirmationMap.remove(player);
                 faction.disband(player);
                 return;
             }
