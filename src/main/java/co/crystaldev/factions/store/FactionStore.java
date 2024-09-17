@@ -144,6 +144,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
         faction.setDescription(Component.text("Free from PvP and monsters."));
 
         // update the flags
+        faction.setFlagValue(FactionFlags.VERBOSE, false);
         faction.setFlagValue(FactionFlags.PERMANENT, true);
         faction.setFlagValue(FactionFlags.EXPLOSIONS, false);
         faction.setFlagValue(FactionFlags.FIRE_SPREAD, false);
@@ -196,6 +197,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
         faction.setDescription(Component.text("Not the safest place to be."));
 
         // update the flags
+        faction.setFlagValue(FactionFlags.VERBOSE, false);
         faction.setFlagValue(FactionFlags.PERMANENT, true);
         faction.setFlagValue(FactionFlags.EXPLOSIONS, false);
         faction.setFlagValue(FactionFlags.FIRE_SPREAD, false);

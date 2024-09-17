@@ -8,6 +8,7 @@ import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
+import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.config.MessageConfig;
@@ -229,6 +230,10 @@ public final class FactionHelper {
     }
 
     public static void missingPermission(@NotNull CommandSender player, @NotNull Faction faction, @NotNull String action) {
+        if (!faction.getFlagValueOrDefault(FactionFlags.VERBOSE)) {
+            return;
+        }
+
         MessageConfig.getInstance().missingFactionPerm.rateLimitedSend(player,
                 "action", action,
                 "faction", formatRelational(player, faction),

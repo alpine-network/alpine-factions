@@ -187,6 +187,19 @@ public final class FactionFlags {
                     .visible(false)
                     .build();
 
+    public static final FactionFlag<Boolean> VERBOSE =
+            FactionFlag.builder("verbose", Boolean.class, FlagAdapters.BOOLEAN)
+                    .name("Verbose")
+                    .description("Should permission messages be displayed?")
+                    .stateDescription(
+                            "Permission messages will be displayed.",
+                            "Permission message will not be displayed."
+                    )
+                    .permission(PermissionNodes.ADMIN)
+                    .defaultState(true)
+                    .visible(false)
+                    .build();
+
     public static final FactionFlag<?>[] VALUES = {
             OPEN,
             EXPLOSIONS,
@@ -202,6 +215,7 @@ public final class FactionFlags {
             MEMBER_LIMIT_MODIFIER,
             ROSTER_LIMIT_MODIFIER,
             MINIMAL_VISIBILITY,
-            PERMANENT
+            PERMANENT,
+            VERBOSE
     };
 }
