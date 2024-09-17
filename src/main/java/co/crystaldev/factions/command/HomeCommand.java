@@ -36,7 +36,7 @@ final class HomeCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context Player player,
-            @Arg @Key(Args.FACTION) Optional<Faction> targetFaction
+            @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
         MessageConfig config = MessageConfig.getInstance();
 
