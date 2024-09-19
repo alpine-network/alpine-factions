@@ -78,7 +78,7 @@ final class AccessCommand extends FactionsCommand {
 
     @Execute(name = "show", aliases = { "s", "view", "v" })
     public void show(@Context Player player) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         FactionAccessor factions = Factions.get().factions();
         ClaimAccessor claims = Factions.get().claims();
@@ -117,7 +117,7 @@ final class AccessCommand extends FactionsCommand {
     private static void setAccess(@NotNull Player player, @NotNull Object subject, boolean access,
                                       @NotNull Optional<ClaimType> optionalType, @NotNull Optional<Integer> optionalRadius,
                                       @NotNull Component formattedSubject, @NotNull Component subjectName) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
         FactionAccessor factions = Factions.get().factions();
         ClaimAccessor claims = Factions.get().claims();

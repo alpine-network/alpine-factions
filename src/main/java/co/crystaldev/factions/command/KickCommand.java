@@ -40,7 +40,7 @@ final class KickCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(other);
         Faction actingFaction = factions.findOrDefault(sender);

@@ -1,5 +1,6 @@
 package co.crystaldev.factions.util.claims;
 
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.FactionConfig;
@@ -51,14 +52,14 @@ public final class Claiming {
     }
 
     public static void fill(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         Chunk origin = actor.getLocation().getChunk();
         Faction replacedFaction = Factions.get().claims().getFaction(origin);
 
         // do not unclaim fill if faction is wilderness
         boolean claiming = claimingFaction != null;
         if (!claiming && replacedFaction == null) {
-            config.fillLimit.send(actor, "limit", FactionConfig.getInstance().maxClaimFillVolume);
+            config.fillLimit.send(actor, "limit", AlpineFactions.getInstance().getConfiguration(FactionConfig.class).maxClaimFillVolume);
             return;
         }
 
@@ -70,7 +71,7 @@ public final class Claiming {
         // discover chunks to claim
         Set<ChunkCoordinate> chunks = ClaimHelper.fill(origin);
         if (chunks == null) {
-            config.fillLimit.send(actor, "limit", FactionConfig.getInstance().maxClaimFillVolume);
+            config.fillLimit.send(actor, "limit", AlpineFactions.getInstance().getConfiguration(FactionConfig.class).maxClaimFillVolume);
             return;
         }
 

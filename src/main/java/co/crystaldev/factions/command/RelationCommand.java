@@ -57,7 +57,7 @@ final class RelationCommand extends FactionsCommand {
             @Arg("page") Optional<Integer> page,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
 
         if (!target.isPermitted(sender, Permissions.MODIFY_RELATIONS)) {
@@ -79,7 +79,7 @@ final class RelationCommand extends FactionsCommand {
             @Arg("page") Optional<Integer> page,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
 
         if (!target.isPermitted(sender, Permissions.MODIFY_RELATIONS)) {
@@ -97,18 +97,18 @@ final class RelationCommand extends FactionsCommand {
         Faction faction = entry.getFaction();
         FactionRelation relation = entry.getRelation();
 
-        return MessageConfig.getInstance().relationListEntry.build(
+        return AlpineFactions.getInstance().getConfiguration(MessageConfig.class).relationListEntry.build(
                 "faction", FactionHelper.formatRelational(sender, faction, false),
                 "faction_name", faction.getName(),
-                "relation", Components.stylize(StyleConfig.getInstance().relationalStyles.get(relation), Component.text(relation.name().toLowerCase())),
+                "relation", Components.stylize(AlpineFactions.getInstance().getConfiguration(StyleConfig.class).relationalStyles.get(relation), Component.text(relation.name().toLowerCase())),
                 "relation_name", relation.name().toLowerCase()
         );
     }
 
     private static void setRelation(@NotNull CommandSender sender, @NotNull Faction targetFaction,
                                     @NotNull Faction actingFaction, @NotNull FactionRelation relation) {
-        MessageConfig messageConfig = MessageConfig.getInstance();
-        FactionConfig factionConfig = FactionConfig.getInstance();
+        MessageConfig messageConfig = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
+        FactionConfig factionConfig = AlpineFactions.getInstance().getConfiguration(FactionConfig.class);
         boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
 
         if (!actingFaction.isPermitted(sender, Permissions.MODIFY_RELATIONS)) {

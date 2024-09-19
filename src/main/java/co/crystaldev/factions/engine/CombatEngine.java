@@ -2,6 +2,7 @@ package co.crystaldev.factions.engine;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
@@ -128,7 +129,7 @@ public final class CombatEngine extends AlpineEngine {
     }
 
     private static boolean shouldCancelDamage(@NotNull Player attacker, @NotNull Player target) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         ClaimAccessor claims = Factions.get().claims();
 

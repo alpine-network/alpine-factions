@@ -38,8 +38,8 @@ public final class ClaimHelper {
                                     @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
                                     @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin,
                                     boolean higherLimit) {
-        MessageConfig messageConfig = MessageConfig.getInstance();
-        FactionConfig factionConfig = FactionConfig.getInstance();
+        MessageConfig messageConfig = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
+        FactionConfig factionConfig = AlpineFactions.getInstance().getConfiguration(FactionConfig.class);
         FactionAccessor factions = Factions.get().factions();
 
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
@@ -199,7 +199,7 @@ public final class ClaimHelper {
     }
 
     public static boolean shouldCancelClaim(@NotNull Player player, @Nullable Faction claimingFaction, boolean claiming) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
         if (claiming) {
             if (claimingFaction == null) {
@@ -272,7 +272,7 @@ public final class ClaimHelper {
     }
 
     public static @Nullable Set<ChunkCoordinate> fill(@NotNull Chunk origin) {
-        int max = FactionConfig.getInstance().maxClaimFillVolume;
+        int max = AlpineFactions.getInstance().getConfiguration(FactionConfig.class).maxClaimFillVolume;
         World world = origin.getWorld();
         ClaimAccessor claims = Factions.get().claims();
         Set<ChunkCoordinate> chunks = new HashSet<>();

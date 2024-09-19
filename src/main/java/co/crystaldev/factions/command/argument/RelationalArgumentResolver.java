@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command.argument;
 
 import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Rank;
@@ -37,7 +38,7 @@ final class RelationalArgumentResolver extends AlpineArgumentResolver<Relational
             }
         }
 
-        return ParseResult.failure(MessageConfig.getInstance().unknownRelational.buildString("value", argument));
+        return ParseResult.failure(AlpineFactions.getInstance().getConfiguration(MessageConfig.class).unknownRelational.buildString("value", argument));
     }
 
     @Override

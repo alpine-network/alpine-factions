@@ -163,7 +163,7 @@ public final class Faction {
     }
 
     public void disband(@NotNull CommandSender actor) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
         FactionAccessor factions = Factions.get().factions();
         ClaimAccessor claims = Factions.get().claims();
@@ -450,11 +450,11 @@ public final class Faction {
     // region Roster
 
     public int getMemberLimit() {
-        return FactionConfig.getInstance().memberLimit + this.getFlagValueOrDefault(FactionFlags.MEMBER_LIMIT_MODIFIER);
+        return AlpineFactions.getInstance().getConfiguration(FactionConfig.class).memberLimit + this.getFlagValueOrDefault(FactionFlags.MEMBER_LIMIT_MODIFIER);
     }
 
     public int getRosterLimit() {
-        return FactionConfig.getInstance().rosterLimit + this.getFlagValueOrDefault(FactionFlags.ROSTER_LIMIT_MODIFIER);
+        return AlpineFactions.getInstance().getConfiguration(FactionConfig.class).rosterLimit + this.getFlagValueOrDefault(FactionFlags.ROSTER_LIMIT_MODIFIER);
     }
 
     public int getMemberCount() {

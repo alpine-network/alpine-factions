@@ -74,7 +74,7 @@ final class ClaimCommand extends FactionsCommand {
             @Context Player player,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction claimingFaction = faction.orElse(Factions.get().factions().findOrDefault(player));
 
         PlayerState state = PlayerHandler.getInstance().getPlayer(player);

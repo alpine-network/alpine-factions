@@ -13,10 +13,6 @@ import java.util.LinkedHashMap;
  */
 public final class MessageConfig extends AlpineConfig {
 
-    @Getter
-    private static MessageConfig instance;
-    { instance = this; }
-
     @Override
     public String getFileName() {
         return "messages.yml";

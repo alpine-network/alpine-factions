@@ -33,7 +33,7 @@ final class FactionFlagArgumentResolver extends AlpineArgumentResolver<FactionFl
             }
         }
 
-        return ParseResult.failure(MessageConfig.getInstance().unknownFlag.buildString("value", argument));
+        return ParseResult.failure(AlpineFactions.getInstance().getConfiguration(MessageConfig.class).unknownFlag.buildString("value", argument));
     }
 
     @Override

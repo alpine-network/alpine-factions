@@ -66,7 +66,7 @@ final class UnclaimCommand extends FactionsCommand {
 
     @Execute(name = "auto", aliases = "a")
     public void auto(@Context Player player) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         PlayerState state = PlayerHandler.getInstance().getPlayer(player);
         AutoClaimState autoClaim = state.getAutoClaimState();
@@ -92,7 +92,7 @@ final class UnclaimCommand extends FactionsCommand {
             @Arg("world") @Key(Args.WORLD_CLAIM_TYPE) WorldClaimType world,
             @Arg("faction") @Key(Args.FACTION) Faction faction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         if (!faction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
             FactionHelper.missingPermission(player, faction, "modify territory");

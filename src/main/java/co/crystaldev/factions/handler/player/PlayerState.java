@@ -45,7 +45,7 @@ public final class PlayerState {
         Faction faction = Factions.get().factions().findOrDefault(this.player);
         Component motd = faction.getMotd();
 
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         if (!faction.isWilderness()) {
             // Notify the faction the player has joined
             FactionHelper.broadcast(faction, this.player, observer -> {
@@ -68,7 +68,7 @@ public final class PlayerState {
         Faction faction = Factions.get().factions().findOrDefault(this.player);
 
         if (!faction.isWilderness()) {
-            MessageConfig config = MessageConfig.getInstance();
+            MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
             // Notify the faction the player has left
             FactionHelper.broadcast(faction, this.player, observer -> {
                 return config.logout.build(
@@ -101,7 +101,7 @@ public final class PlayerState {
         boolean isElevated = Optional.ofNullable(claims.getClaim(newChunk)).map(claim -> claim.isAccessed(this.player)).orElse(false);
         boolean wasElevated = Optional.ofNullable(claims.getClaim(oldChunk)).map(claim -> claim.isAccessed(this.player)).orElse(false);
         if (isElevated != wasElevated) {
-            MessageConfig config = MessageConfig.getInstance();
+            MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
             ConfigText message = isElevated ? config.elevatedAccess : config.standardAccess;
             AlpineFactions.schedule(() -> message.send(this.player));
         }

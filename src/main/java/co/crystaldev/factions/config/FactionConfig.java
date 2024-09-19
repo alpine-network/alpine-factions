@@ -9,9 +9,6 @@ import lombok.Getter;
  */
 public final class FactionConfig extends AlpineConfig {
 
-    @Getter
-    private static FactionConfig instance;
-    { instance = this; }
 
     @Override
     public String getFileName() {

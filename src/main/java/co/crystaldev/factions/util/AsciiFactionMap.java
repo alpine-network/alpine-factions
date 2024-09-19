@@ -1,6 +1,7 @@
 package co.crystaldev.factions.util;
 
 import co.crystaldev.alpinecore.util.Components;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Faction;
@@ -34,7 +35,7 @@ public final class AsciiFactionMap {
 
     private final Player player;
 
-    private final MessageConfig config = MessageConfig.getInstance();
+    private final MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
     private final ClaimAccessor claims = Factions.get().claims();
 

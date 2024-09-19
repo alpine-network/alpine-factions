@@ -36,7 +36,7 @@ public final class WildernessCommand extends AlpineCommand {
 
     @Execute
     public void execute(@Context Player player) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);
         ClaimAccessor claims = Factions.get().claims();
 

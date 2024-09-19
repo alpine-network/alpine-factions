@@ -34,7 +34,7 @@ final class ListCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> humanPage
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         int page = Math.max(1, humanPage.orElse(1));
 
         // sort factions from greatest to least online members

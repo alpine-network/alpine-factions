@@ -28,6 +28,6 @@ final class OverrideCommand extends FactionsCommand {
     public void execute(@Context Player player) {
         PlayerState state = PlayerHandler.getInstance().getPlayer(player);
         state.setOverriding(!state.isOverriding());
-        MessageConfig.getInstance().stateChange.send(player, "subject", "Override Mode", "state", state.isOverriding());
+        this.plugin.getConfiguration(MessageConfig.class).stateChange.send(player, "subject", "Override Mode", "state", state.isOverriding());
     }
 }

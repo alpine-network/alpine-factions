@@ -42,7 +42,7 @@ final class InviteCommand extends FactionsCommand {
             @Context Player player,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer invitee
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(player);
         Faction inviteeFaction = factions.findOrDefault(invitee);
@@ -98,7 +98,7 @@ final class InviteCommand extends FactionsCommand {
             @Context Player player,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer invitee
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(player);
         Faction inviteeFaction = factions.findOrDefault(invitee);
@@ -129,7 +129,7 @@ final class InviteCommand extends FactionsCommand {
             @Arg("page") Optional<Integer> page,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction resolvedFaction = faction.orElse(factions.findOrDefault(sender));
         Set<MemberInvitation> invitations = resolvedFaction.getInvitations();

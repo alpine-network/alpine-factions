@@ -34,7 +34,7 @@ final class MapCommand extends FactionsCommand {
         state.setAutoFactionMap(true);
 
         // send the status message
-        MessageConfig.getInstance().stateChange.send(player, "subject", "Faction Map", "state", true);
+        this.plugin.getConfiguration(MessageConfig.class).stateChange.send(player, "subject", "Faction Map", "state", true);
 
         // send the map to the player
         Messaging.send(player, AsciiFactionMap.create(player, true));
@@ -46,6 +46,6 @@ final class MapCommand extends FactionsCommand {
         state.setAutoFactionMap(false);
 
         // send the status message
-        MessageConfig.getInstance().stateChange.send(player, "subject", "Faction Map", "state", false);
+        this.plugin.getConfiguration(MessageConfig.class).stateChange.send(player, "subject", "Faction Map", "state", false);
     }
 }

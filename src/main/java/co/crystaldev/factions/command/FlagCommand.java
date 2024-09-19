@@ -46,7 +46,7 @@ final class FlagCommand extends FactionsCommand {
             @Arg("value") String value,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FlagAdapter<?> adapter = flag.getAdapter();
         Object resolvedValue = adapter.deserialize(value);
 
@@ -94,7 +94,7 @@ final class FlagCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction,
             @Arg("page") Optional<Integer> page
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FlagRegistry registry = AlpineFactions.getInstance().flagRegistry();
 
         Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
@@ -131,7 +131,7 @@ final class FlagCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FlagRegistry registry = AlpineFactions.getInstance().flagRegistry();
 
         List<FactionFlag> flags = (List) registry.getAll(sender);

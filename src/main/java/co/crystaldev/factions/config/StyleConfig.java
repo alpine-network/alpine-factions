@@ -12,10 +12,6 @@ import java.util.*;
  */
 public final class StyleConfig extends AlpineConfig {
 
-    @Getter
-    private static StyleConfig instance;
-    { instance = this; }
-
     @Override
     public String getFileName() {
         return "styles.yml";

@@ -45,7 +45,7 @@ final class StatusCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction,
             @Arg("page") Optional<Integer> page
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         FactionAccessor factions = Factions.get().factions();
         Faction target = targetFaction.orElse(factions.findOrDefault(sender));
@@ -83,8 +83,8 @@ final class StatusCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) Optional<OfflinePlayer> targetPlayer
     ) {
-        MessageConfig messageConfig = MessageConfig.getInstance();
-        FactionConfig factionConfig = FactionConfig.getInstance();
+        MessageConfig messageConfig = this.plugin.getConfiguration(MessageConfig.class);
+        FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);
 
         OfflinePlayer target = targetPlayer.orElse(sender instanceof Player ? (Player) sender : null);
         if (target == null) {

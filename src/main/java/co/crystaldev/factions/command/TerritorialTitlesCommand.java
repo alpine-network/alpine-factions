@@ -25,7 +25,7 @@ final class TerritorialTitlesCommand extends FactionsCommand {
 
     @Execute
     public void execute(@Context Player player) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         PlayerAccessor players = Factions.get().players();
         players.wrap(player, state -> {

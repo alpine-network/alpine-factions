@@ -77,7 +77,7 @@ final class AccessAllCommand extends FactionsCommand {
     private static void setAccess(@NotNull CommandSender sender, @NotNull Object subject, boolean access,
                                   @NotNull Faction targetFaction, @NotNull Component formattedSubject,
                                   @NotNull Component subjectName) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         ClaimAccessor claims = Factions.get().claims();
 
         // ensure the player has permission for the faction
