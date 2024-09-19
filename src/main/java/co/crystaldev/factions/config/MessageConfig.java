@@ -658,4 +658,15 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText logout = ConfigText.of(
             "%error_prefix% %player% has logged off");
 
+
+
+    @Comment({
+            "",
+            ">>> Wilderness"
+    })
+    public ConfigText wildTeleport = ConfigText.of(
+            "%prefix% Teleporting you to a random location in wilderness in %seconds% seconds...");
+
+    public ConfigText invalidWildLocation = ConfigText.of(
+            "%error_prefix% Could not find a valid location, try again...");
 }
