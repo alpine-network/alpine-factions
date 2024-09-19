@@ -29,6 +29,7 @@ public final class PlayerHandler {
     }
 
     public void loggedOut(@NotNull Player player) {
+        this.getPlayer(player).onLogout();
         this.playerStateMap.remove(player.getUniqueId());
     }
 

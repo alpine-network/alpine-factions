@@ -645,4 +645,17 @@ public final class MessageConfig extends AlpineConfig {
     public String mapCompassStyle = "dark_gray";
 
     public String mapCompassDirectionStyle = "white";
+
+
+
+    @Comment({
+            "",
+            ">>> Login/Logout"
+    })
+    public ConfigText login = ConfigText.of(
+            "%prefix% %player% has logged in");
+
+    public ConfigText logout = ConfigText.of(
+            "%error_prefix% %player% has logged off");
+
 }

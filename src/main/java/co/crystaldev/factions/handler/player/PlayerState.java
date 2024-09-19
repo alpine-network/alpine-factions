@@ -45,13 +45,35 @@ public final class PlayerState {
         Faction faction = Factions.get().factions().findOrDefault(this.player);
         Component motd = faction.getMotd();
 
+        MessageConfig config = MessageConfig.getInstance();
+        if (!faction.isWilderness()) {
+            // Notify the faction the player has joined
+            FactionHelper.broadcast(faction, this.player, observer -> {
+                return config.login.build(
+                        "player", FactionHelper.formatRelational(observer, faction, this.player));
+            });
+        }
+
+
         if (motd != null) {
-            MessageConfig config = MessageConfig.getInstance();
             Component title = config.motdTitle.build(
                     "faction", FactionHelper.formatRelational(this.player, faction, faction.getName()),
                     "faction_name", faction.getName());
 
             AlpineFactions.schedule(() -> Messaging.send(this.player, Components.joinNewLines(Formatting.title(title), motd)));
+        }
+    }
+
+    public void onLogout() {
+        Faction faction = Factions.get().factions().findOrDefault(this.player);
+
+        if (!faction.isWilderness()) {
+            MessageConfig config = MessageConfig.getInstance();
+            // Notify the faction the player has left
+            FactionHelper.broadcast(faction, this.player, observer -> {
+                return config.logout.build(
+                        "player", FactionHelper.formatRelational(observer, faction, this.player));
+            });
         }
     }
 

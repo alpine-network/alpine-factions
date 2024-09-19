@@ -19,7 +19,7 @@ public final class PlayerEngine extends AlpineEngine {
         super(plugin);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerLogin(PlayerLoginEvent event) {
         PlayerHandler.getInstance().loggedIn(event.getPlayer());
     }
