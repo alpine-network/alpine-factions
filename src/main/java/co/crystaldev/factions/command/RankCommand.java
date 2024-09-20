@@ -97,11 +97,17 @@ final class RankCommand extends FactionsCommand {
         // ensure rank can be applied
         Rank senderRank = targetFaction.getMemberRankOrDefault(actorId);
         Rank memberRank = targetFaction.getMemberRankOrDefault(other.getUniqueId());
+        boolean isPromotion = rank.isSuperior(memberRank);
         boolean leader = rank == Rank.LEADER && (overriding || senderRank == Rank.LEADER && !other.getUniqueId().equals(actorId));
-        if (!overriding && !leader && rank.isSuperiorOrMatching(senderRank)) {
+        if (isPromotion && !overriding && !leader && rank.isSuperiorOrMatching(senderRank)) {
             config.rankTooHigh.send(actor);
             return;
         }
+        if (!isPromotion && !overriding && !leader && !senderRank.isSuperior(memberRank)) {
+            config.rankTooHigh.send(actor);
+            return;
+        }
+
 
         // ensure the rank has changed
         if (rank == memberRank) {
