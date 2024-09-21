@@ -41,6 +41,12 @@ public final class Permissions {
             .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
+    public static final Permission BROADCAST_LOCATION = Permission.builder("broadcast_location")
+            .name("Broadcast Location")
+            .description("ability to broadcast current location")
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
+            .build();
+
     public static final Permission STATUS = Permission.builder("status")
             .name("Status")
             .description("view the state of the faction")
@@ -157,6 +163,7 @@ public final class Permissions {
             MODIFY_MOTD,
             MODIFY_TITLE,
             ALERT,
+            BROADCAST_LOCATION,
             STATUS,
             INVITE_MEMBERS,
             KICK_MEMBERS,

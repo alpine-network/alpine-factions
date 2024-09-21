@@ -3,6 +3,7 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
@@ -29,6 +30,12 @@ final class LocationCommand extends FactionsCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         Faction faction = Factions.get().factions().findOrDefault(player);
+
+        if (!faction.isPermitted(player, Permissions.BROADCAST_LOCATION)) {
+            FactionHelper.missingPermission(player, faction, "broadcast location");
+            return;
+        }
+
         Location location = player.getLocation();
 
         FactionHelper.broadcast(faction, observer -> {
