@@ -32,6 +32,9 @@ public final class FPlayer {
     private int playtime;
 
     @Setter
+    private boolean friendlyFire;
+
+    @Setter
     private TerritorialTitleMode territorialTitleMode = TerritorialTitleMode.TITLE;
 
     public long getEffectivePower() {

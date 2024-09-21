@@ -6,9 +6,11 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
+import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.FactionHelper;
@@ -176,8 +178,15 @@ public final class CombatEngine extends AlpineEngine {
                     "attacker_name", target.getName());
             return true;
         }
+        FPlayer state = Factions.get().players().get(attacker);
+        FPlayer targetState = Factions.get().players().get(target);
 
-        // can't hurt your own faction members,
+        // Allow friendly fire if toggled
+        if (state.isFriendlyFire() && targetState.isFriendlyFire()) {
+            return false;
+        }
+
+        // can't hurt your own faction members
         if (targetFaction.isFriendly(attackerFaction)) {
             config.cantHurtFriendly.rateLimitedSend(target,
                     "player", FactionHelper.formatRelational(target, attackerFaction, attacker, false),
