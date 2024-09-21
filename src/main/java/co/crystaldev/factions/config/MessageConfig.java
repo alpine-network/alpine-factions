@@ -4,7 +4,6 @@ import co.crystaldev.alpinecore.framework.config.AlpineConfig;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.config.type.ConfigText;
 import de.exlll.configlib.Comment;
-import lombok.Getter;
 
 import java.util.LinkedHashMap;
 

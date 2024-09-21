@@ -2,7 +2,6 @@ package co.crystaldev.factions.config;
 
 import co.crystaldev.alpinecore.framework.config.AlpineConfig;
 import de.exlll.configlib.Comment;
-import lombok.Getter;
 
 /**
  * @since 0.1.0

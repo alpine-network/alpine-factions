@@ -3,9 +3,9 @@ package co.crystaldev.factions.config;
 import co.crystaldev.alpinecore.framework.config.AlpineConfig;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import de.exlll.configlib.Comment;
-import lombok.Getter;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * @since 0.1.0
