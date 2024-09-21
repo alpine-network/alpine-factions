@@ -38,21 +38,12 @@ public final class WildernessCommand extends AlpineCommand {
     public void execute(@Context Player player) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);
-        ClaimAccessor claims = Factions.get().claims();
 
         // Get a random location
         Location location = getRandomLocation(player.getWorld(), factionConfig.maxWildDistance, factionConfig.maxWildDistance);
 
-        // Keep getting a location until it is valid
-        int maxTries = 50;
-        int tries = 0;
-        while (claims.getClaim(location.getChunk()) != null && maxTries > tries) {
-            location = getRandomLocation(player.getWorld(), factionConfig.maxWildDistance, factionConfig.maxWildDistance);
-            tries++;
-        }
-
         // If no location can be found, notify player and return
-        if (maxTries <= tries) {
+        if (location == null) {
             Messaging.send(player, config.invalidWildLocation.build());
             return;
         }
@@ -73,11 +64,26 @@ public final class WildernessCommand extends AlpineCommand {
 
     private static Location getRandomLocation(World world, int xRadius, int zRadius) {
         Random random = new Random();
+        ClaimAccessor claims = Factions.get().claims();
 
-        int x = random.nextInt(xRadius * 2) - xRadius;
-        int z = random.nextInt(zRadius * 2) - zRadius;
-        int y = world.getHighestBlockYAt(x, z) + 1;
+        Location location;
+        int maxTries = 50;
+        int tries = 0;
+        // Find location that is valid and not within a claim
+        do {
+            int x = random.nextInt(xRadius * 2) - xRadius;
+            int z = random.nextInt(zRadius * 2) - zRadius;
+            int y = world.getHighestBlockYAt(x, z) + 1;
 
-        return new Location(world, x, y, z);
+            location = new Location(world, x, y, z);
+            tries++;
+        } while (claims.getClaim(location.getChunk()) != null && maxTries > tries);
+
+        // if no valid location can be found, return null
+        if (maxTries <= tries) {
+            return null;
+        }
+
+        return location;
     }
 }

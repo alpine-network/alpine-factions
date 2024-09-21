@@ -664,4 +664,11 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText invalidWildLocation = ConfigText.of(
             "%error_prefix% Could not find a valid location, try again...");
+
+    @Comment({
+            "",
+            ">>> Informational Commands"
+    })
+    public ConfigText locationBroadcast = ConfigText.of(
+            "%prefix% %player% pinged their location near <emphasis>(%world% %x%, %y%, %z%)</emphasis>");
 }
