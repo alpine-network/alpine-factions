@@ -1,8 +1,8 @@
 package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.util.UuidTypeAdapter;
-import co.crystaldev.factions.api.faction.flag.FlagHolder;
 import co.crystaldev.factions.api.faction.Claim;
+import co.crystaldev.factions.api.faction.flag.FlagHolder;
 import co.crystaldev.factions.util.adapter.ComponentTypeAdapter;
 import co.crystaldev.factions.util.adapter.LocationTypeAdapter;
 import com.google.common.reflect.TypeToken;

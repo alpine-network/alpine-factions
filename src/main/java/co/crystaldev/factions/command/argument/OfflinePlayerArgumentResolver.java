@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command.argument;
 
 import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.config.MessageConfig;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
@@ -22,7 +23,7 @@ final class OfflinePlayerArgumentResolver extends AlpineArgumentResolver<Offline
 
     @Override
     protected ParseResult<OfflinePlayer> parse(Invocation<CommandSender> invocation, Argument<OfflinePlayer> context, String argument) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
         OfflinePlayer player = Bukkit.getPlayer(argument);
         if (player == null) {

@@ -4,7 +4,6 @@ import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.event.framework.FactionEntityEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
-import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import lombok.Getter;

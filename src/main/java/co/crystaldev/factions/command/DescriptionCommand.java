@@ -44,7 +44,7 @@ final class DescriptionCommand extends FactionsCommand {
     }
 
     private static void set(@NotNull Faction faction, @NotNull CommandSender sender, @Nullable Component description) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
         // ensure the user has permission
         if (!faction.isPermitted(sender, Permissions.MODIFY_DESCRIPTION)) {

@@ -45,7 +45,7 @@ final class TitleCommand extends FactionsCommand {
             @Join("title") String title
     ) {
         Component parsedComponent = ComponentHelper.legacy(title);
-        int maxLength = FactionConfig.getInstance().maxTitleLength;
+        int maxLength = this.plugin.getConfiguration(FactionConfig.class).maxTitleLength;
 
         int length = title.length();
         while (Components.length(parsedComponent) > maxLength) {
@@ -66,7 +66,7 @@ final class TitleCommand extends FactionsCommand {
     }
 
     private static void set(@NotNull CommandSender sender, @NotNull OfflinePlayer other, @Nullable Component title) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(other);
         Faction actingFaction = factions.findOrDefault(sender);

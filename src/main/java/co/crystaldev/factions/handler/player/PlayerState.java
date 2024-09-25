@@ -8,12 +8,12 @@ import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.player.TerritorialTitleMode;
+import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.util.AsciiFactionMap;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import co.crystaldev.factions.util.claims.Claiming;
-import co.crystaldev.factions.config.MessageConfig;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -45,13 +45,35 @@ public final class PlayerState {
         Faction faction = Factions.get().factions().findOrDefault(this.player);
         Component motd = faction.getMotd();
 
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
+        if (!faction.isWilderness()) {
+            // Notify the faction the player has joined
+            FactionHelper.broadcast(faction, this.player, observer -> {
+                return config.login.build(
+                        "player", FactionHelper.formatRelational(observer, faction, this.player));
+            });
+        }
+
+
         if (motd != null) {
-            MessageConfig config = MessageConfig.getInstance();
             Component title = config.motdTitle.build(
                     "faction", FactionHelper.formatRelational(this.player, faction, faction.getName()),
                     "faction_name", faction.getName());
 
             AlpineFactions.schedule(() -> Messaging.send(this.player, Components.joinNewLines(Formatting.title(title), motd)));
+        }
+    }
+
+    public void onLogout() {
+        Faction faction = Factions.get().factions().findOrDefault(this.player);
+
+        if (!faction.isWilderness()) {
+            MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
+            // Notify the faction the player has left
+            FactionHelper.broadcast(faction, this.player, observer -> {
+                return config.logout.build(
+                        "player", FactionHelper.formatRelational(observer, faction, this.player));
+            });
         }
     }
 
@@ -79,7 +101,7 @@ public final class PlayerState {
         boolean isElevated = Optional.ofNullable(claims.getClaim(newChunk)).map(claim -> claim.isAccessed(this.player)).orElse(false);
         boolean wasElevated = Optional.ofNullable(claims.getClaim(oldChunk)).map(claim -> claim.isAccessed(this.player)).orElse(false);
         if (isElevated != wasElevated) {
-            MessageConfig config = MessageConfig.getInstance();
+            MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
             ConfigText message = isElevated ? config.elevatedAccess : config.standardAccess;
             AlpineFactions.schedule(() -> message.send(this.player));
         }

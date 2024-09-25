@@ -28,7 +28,7 @@ final class SetHomeCommand extends FactionsCommand {
 
     @Execute
     public void execute(@Context Player player) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         Location location = player.getLocation();
         Faction faction = Factions.get().claims().getFactionOrDefault(location);

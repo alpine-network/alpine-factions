@@ -2,19 +2,19 @@ package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
+import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.DisbandFactionEvent;
-import co.crystaldev.factions.api.faction.member.MemberInvitation;
-import co.crystaldev.factions.api.player.FPlayer;
-import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.flag.FlagHolder;
+import co.crystaldev.factions.api.faction.member.Member;
+import co.crystaldev.factions.api.faction.member.MemberInvitation;
+import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.PermissionHolder;
-import co.crystaldev.factions.api.faction.member.Member;
-import co.crystaldev.factions.api.faction.member.Rank;
+import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -163,7 +163,7 @@ public final class Faction {
     }
 
     public void disband(@NotNull CommandSender actor) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
         FactionAccessor factions = Factions.get().factions();
         ClaimAccessor claims = Factions.get().claims();
@@ -450,11 +450,11 @@ public final class Faction {
     // region Roster
 
     public int getMemberLimit() {
-        return FactionConfig.getInstance().memberLimit + this.getFlagValueOrDefault(FactionFlags.MEMBER_LIMIT_MODIFIER);
+        return AlpineFactions.getInstance().getConfiguration(FactionConfig.class).memberLimit + this.getFlagValueOrDefault(FactionFlags.MEMBER_LIMIT_MODIFIER);
     }
 
     public int getRosterLimit() {
-        return FactionConfig.getInstance().rosterLimit + this.getFlagValueOrDefault(FactionFlags.ROSTER_LIMIT_MODIFIER);
+        return AlpineFactions.getInstance().getConfiguration(FactionConfig.class).rosterLimit + this.getFlagValueOrDefault(FactionFlags.ROSTER_LIMIT_MODIFIER);
     }
 
     public int getMemberCount() {

@@ -36,7 +36,7 @@ final class MOTDCommand extends FactionsCommand {
             @Context Player player,
             @Join("name") String motd
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = Factions.get().factions().findOrDefault(player);
 
         // ensure the user has permission
@@ -60,7 +60,7 @@ final class MOTDCommand extends FactionsCommand {
 
     @Execute
     public void view(@Context Player player) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = Factions.get().factions().findOrDefault(player);
 
         Component motd = Optional.ofNullable(faction.getMotd()).orElse(Faction.DEFAULT_MOTD);
@@ -73,7 +73,7 @@ final class MOTDCommand extends FactionsCommand {
 
     @Execute(name = "clear")
     public void clear(@Context Player player) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = Factions.get().factions().findOrDefault(player);
 
         // ensure the user has permission

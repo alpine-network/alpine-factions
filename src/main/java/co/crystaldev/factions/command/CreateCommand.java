@@ -33,8 +33,8 @@ final class CreateCommand extends FactionsCommand {
             @Context Player player,
             @Arg("name") @Key(Args.ALPHANUMERIC) String name
     ) {
-        MessageConfig messageConfig = MessageConfig.getInstance();
-        FactionConfig factionConfig = FactionConfig.getInstance();
+        MessageConfig messageConfig = this.plugin.getConfiguration(MessageConfig.class);
+        FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);
         FactionAccessor factions = Factions.get().factions();
 
         // ensure the player isn't already in a faction

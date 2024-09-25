@@ -34,7 +34,7 @@ final class AlertCommand extends FactionsCommand {
             @Context Player player,
             @Join("message") String message
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = Factions.get().factions().findOrDefault(player);
 
         if (!faction.isPermitted(player, Permissions.ALERT)) {

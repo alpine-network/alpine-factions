@@ -1,7 +1,6 @@
 package co.crystaldev.factions.api.event.framework;
 
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.faction.Faction;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bukkit.event.Event;

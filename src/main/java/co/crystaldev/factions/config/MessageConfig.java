@@ -4,7 +4,6 @@ import co.crystaldev.alpinecore.framework.config.AlpineConfig;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.config.type.ConfigText;
 import de.exlll.configlib.Comment;
-import lombok.Getter;
 
 import java.util.LinkedHashMap;
 
@@ -12,10 +11,6 @@ import java.util.LinkedHashMap;
  * @since 0.1.0
  */
 public final class MessageConfig extends AlpineConfig {
-
-    @Getter
-    private static MessageConfig instance;
-    { instance = this; }
 
     @Override
     public String getFileName() {
@@ -645,4 +640,35 @@ public final class MessageConfig extends AlpineConfig {
     public String mapCompassStyle = "dark_gray";
 
     public String mapCompassDirectionStyle = "white";
+
+
+
+    @Comment({
+            "",
+            ">>> Login/Logout"
+    })
+    public ConfigText login = ConfigText.of(
+            "%prefix% %player% has logged in");
+
+    public ConfigText logout = ConfigText.of(
+            "%error_prefix% %player% has logged off");
+
+
+
+    @Comment({
+            "",
+            ">>> Wilderness"
+    })
+    public ConfigText wildTeleport = ConfigText.of(
+            "%prefix% Teleporting you to a random location in wilderness in %seconds% seconds...");
+
+    public ConfigText invalidWildLocation = ConfigText.of(
+            "%error_prefix% Could not find a valid location, try again...");
+
+    @Comment({
+            "",
+            ">>> Informational Commands"
+    })
+    public ConfigText locationBroadcast = ConfigText.of(
+            "%prefix% %player% pinged their location near <emphasis>(%world% %x%, %y%, %z%)</emphasis>");
 }

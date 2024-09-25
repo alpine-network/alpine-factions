@@ -39,8 +39,8 @@ final class SetPowerCommand extends FactionsCommand {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
             @Arg("power") int power
     ) {
-        MessageConfig messageConfig = MessageConfig.getInstance();
-        FactionConfig factionConfig = FactionConfig.getInstance();
+        MessageConfig messageConfig = this.plugin.getConfiguration(MessageConfig.class);
+        FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);
 
         Faction faction = Factions.get().factions().findOrDefault(other);
 

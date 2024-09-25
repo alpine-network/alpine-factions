@@ -5,6 +5,7 @@ import co.crystaldev.alpinecore.framework.integration.AlpineIntegration;
 import co.crystaldev.alpinecore.framework.integration.AlpineIntegrationEngine;
 import co.crystaldev.alpinecore.util.ChatColor;
 import co.crystaldev.alpinecore.util.Components;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
@@ -135,7 +136,7 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
                     if (two == null) {
                         return "";
                     }
-                    StyleConfig config = StyleConfig.getInstance();
+                    StyleConfig config = AlpineFactions.getInstance().getConfiguration(StyleConfig.class);
                     FactionRelation relation = selfFaction.relationTo(faction);
 
                     if (config.relationalStylePlaceholderOverrides.containsKey(relation)) {

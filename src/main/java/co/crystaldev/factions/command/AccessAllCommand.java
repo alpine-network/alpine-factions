@@ -26,7 +26,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @since 0.1.0
@@ -77,7 +79,7 @@ final class AccessAllCommand extends FactionsCommand {
     private static void setAccess(@NotNull CommandSender sender, @NotNull Object subject, boolean access,
                                   @NotNull Faction targetFaction, @NotNull Component formattedSubject,
                                   @NotNull Component subjectName) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         ClaimAccessor claims = Factions.get().claims();
 
         // ensure the player has permission for the faction

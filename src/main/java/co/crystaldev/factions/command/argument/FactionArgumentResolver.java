@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command.argument;
 
 import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
@@ -43,7 +44,7 @@ final class FactionArgumentResolver extends AlpineArgumentResolver<Faction> {
 
         // faction was not found
         if (faction == null && !foundPlayer) {
-            return ParseResult.failure(MessageConfig.getInstance().unknownFaction.buildString("value", argument));
+            return ParseResult.failure(AlpineFactions.getInstance().getConfiguration(MessageConfig.class).unknownFaction.buildString("value", argument));
         }
 
         return ParseResult.success(Optional.ofNullable(faction).orElse(factions.getWilderness()));

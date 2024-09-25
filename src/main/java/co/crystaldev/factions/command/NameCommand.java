@@ -44,8 +44,8 @@ final class NameCommand extends FactionsCommand {
             @Arg("name") @Key(Args.ALPHANUMERIC) String name,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
-        FactionConfig factionConfig = FactionConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
+        FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = targetFaction.orElseGet(() -> factions.findOrDefault(sender));
 

@@ -38,7 +38,7 @@ final class JoinCommand extends FactionsCommand {
             @Context Player player,
             @Arg("faction") @Key(Args.FACTION) Faction faction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
 
         FactionAccessor factions = Factions.get().factions();
@@ -108,7 +108,7 @@ final class JoinCommand extends FactionsCommand {
             @Arg("faction") @Key(Args.FACTION) Faction faction,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer joiningPlayer
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         FactionAccessor factions = Factions.get().factions();
         Faction otherFaction = factions.find(joiningPlayer);

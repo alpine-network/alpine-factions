@@ -1,6 +1,7 @@
 package co.crystaldev.factions.api.show.component;
 
 import co.crystaldev.alpinecore.util.Components;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Member;
@@ -94,7 +95,7 @@ public final class ShowComponents {
                         ? config.none.build()
                         : Component.text(factions.stream().map(Faction::getName).collect(Collectors.joining(", ")));
 
-                return config.showAllies.build("allies", joined, "ally_count", factions.size(), "max_allies", FactionConfig.getInstance().maxAlliances);
+                return config.showAllies.build("allies", joined, "ally_count", factions.size(), "max_allies", AlpineFactions.getInstance().getConfiguration(FactionConfig.class).maxAlliances);
             },
             MINIMAL_VISIBILITY_PREDICATE
     );
@@ -108,7 +109,7 @@ public final class ShowComponents {
                         ? config.none.build()
                         : Component.text(factions.stream().map(Faction::getName).collect(Collectors.joining(", ")));
 
-                return config.showTruces.build("truces", joined, "truce_count", factions.size(), "max_truces", FactionConfig.getInstance().maxTruces);
+                return config.showTruces.build("truces", joined, "truce_count", factions.size(), "max_truces", AlpineFactions.getInstance().getConfiguration(FactionConfig.class).maxTruces);
             },
             MINIMAL_VISIBILITY_PREDICATE
     );
@@ -152,6 +153,6 @@ public final class ShowComponents {
     };
 
     private static @NotNull MessageConfig conf() {
-        return MessageConfig.getInstance();
+        return AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
     }
 }

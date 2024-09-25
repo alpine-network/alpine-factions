@@ -2,6 +2,7 @@ package co.crystaldev.factions.util;
 
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
@@ -99,7 +100,7 @@ public final class FactionHelper {
             return ComponentHelper.nil();
         }
 
-        StyleConfig config = StyleConfig.getInstance();
+        StyleConfig config = AlpineFactions.getInstance().getConfiguration(StyleConfig.class);
         Faction self = findFactionOrDefault(viewer);
 
         FactionRelation relation = self.relationTo(faction);
@@ -234,7 +235,7 @@ public final class FactionHelper {
             return;
         }
 
-        MessageConfig.getInstance().missingFactionPerm.rateLimitedSend(player,
+        AlpineFactions.getInstance().getConfiguration(MessageConfig.class).missingFactionPerm.rateLimitedSend(player,
                 "action", action,
                 "faction", formatRelational(player, faction),
                 "faction_name", faction.getName()

@@ -1,6 +1,7 @@
 package co.crystaldev.factions.api.show;
 
 import co.crystaldev.alpinecore.util.Components;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.show.component.ShowComponent;
 import co.crystaldev.factions.config.MessageConfig;
@@ -12,7 +13,10 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +34,7 @@ public final class ShowFormatter {
 
     @ApiStatus.Internal
     public @NotNull Component build(@NotNull CommandSender sender, @NotNull Faction faction, @NotNull Faction senderFaction) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
 
         ShowContext context = new ShowContext(sender, faction, senderFaction);

@@ -33,7 +33,7 @@ final class FactionPermissionArgumentResolver extends AlpineArgumentResolver<Per
             }
         }
 
-        return ParseResult.failure(MessageConfig.getInstance().unknownPermission.buildString("value", argument));
+        return ParseResult.failure(AlpineFactions.getInstance().getConfiguration(MessageConfig.class).unknownPermission.buildString("value", argument));
     }
 
     @Override

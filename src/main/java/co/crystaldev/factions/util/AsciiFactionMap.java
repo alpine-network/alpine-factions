@@ -1,6 +1,7 @@
 package co.crystaldev.factions.util;
 
 import co.crystaldev.alpinecore.util.Components;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Faction;
@@ -17,7 +18,10 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @since 0.1.0
@@ -34,7 +38,7 @@ public final class AsciiFactionMap {
 
     private final Player player;
 
-    private final MessageConfig config = MessageConfig.getInstance();
+    private final MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
     private final ClaimAccessor claims = Factions.get().claims();
 

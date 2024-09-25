@@ -2,16 +2,12 @@ package co.crystaldev.factions.config;
 
 import co.crystaldev.alpinecore.framework.config.AlpineConfig;
 import de.exlll.configlib.Comment;
-import lombok.Getter;
 
 /**
  * @since 0.1.0
  */
 public final class FactionConfig extends AlpineConfig {
 
-    @Getter
-    private static FactionConfig instance;
-    { instance = this; }
 
     @Override
     public String getFileName() {
@@ -103,4 +99,10 @@ public final class FactionConfig extends AlpineConfig {
             "The maximum number of faction truces for a faction."
     })
     public int maxTruces = 999;
+
+    @Comment({
+            "",
+            "The maximum blocks that wilderness can teleport a player."
+    })
+    public int maxWildDistance = 2500;
 }

@@ -1,5 +1,6 @@
 package co.crystaldev.factions.api.player;
 
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.config.FactionConfig;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,9 @@ public final class FPlayer {
     private int playtime;
 
     @Setter
+    private boolean friendlyFire;
+
+    @Setter
     private TerritorialTitleMode territorialTitleMode = TerritorialTitleMode.TITLE;
 
     public long getEffectivePower() {
@@ -38,7 +42,7 @@ public final class FPlayer {
     }
 
     public long getMaxPower() {
-        return FactionConfig.getInstance().maxPlayerPower + this.powerBoost;
+        return AlpineFactions.getInstance().getConfiguration(FactionConfig.class).maxPlayerPower + this.powerBoost;
     }
 
     public @Nullable Player getPlayer() {

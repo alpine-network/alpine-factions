@@ -39,7 +39,7 @@ final class DisbandCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Arg("faction") @Key(Args.FACTION) Faction faction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         boolean owner = sender instanceof ConsoleCommandSender
                 || PlayerHandler.getInstance().isOverriding(sender)
                 || sender instanceof OfflinePlayer && faction.getMemberRankOrDefault(((OfflinePlayer) sender).getUniqueId(), Rank.RECRUIT) == Rank.LEADER;

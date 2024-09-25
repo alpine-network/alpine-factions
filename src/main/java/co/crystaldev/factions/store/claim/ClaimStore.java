@@ -9,7 +9,6 @@ import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
-import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -17,7 +17,9 @@ import dev.rollczi.litecommands.annotations.execute.Execute;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @since 0.1.0
@@ -34,7 +36,7 @@ final class ListCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> humanPage
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         int page = Math.max(1, humanPage.orElse(1));
 
         // sort factions from greatest to least online members

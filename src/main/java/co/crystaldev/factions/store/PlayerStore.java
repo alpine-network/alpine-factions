@@ -35,7 +35,7 @@ public final class PlayerStore extends AlpineStore<UUID, FPlayer> implements Pla
     public @NotNull FPlayer getById(@NotNull UUID player) {
         return this.getOrCreate(player, () -> {
             FPlayer fPlayer = new FPlayer(player);
-            fPlayer.setPowerLevel(FactionConfig.getInstance().initialPlayerPower);
+            fPlayer.setPowerLevel(this.plugin.getConfiguration(FactionConfig.class).initialPlayerPower);
             return fPlayer;
         });
     }

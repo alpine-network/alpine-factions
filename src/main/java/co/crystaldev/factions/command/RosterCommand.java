@@ -40,7 +40,7 @@ final class RosterCommand extends FactionsCommand implements Initializable {
 
     @Override
     public boolean init() {
-        return FactionConfig.getInstance().rosterEnabled;
+        return this.plugin.getConfiguration(FactionConfig.class).rosterEnabled;
     }
 
     @Execute(name = "add")
@@ -50,7 +50,7 @@ final class RosterCommand extends FactionsCommand implements Initializable {
             @Arg("rank") @Key(Args.FACTION_RANK) Optional<Rank> rank,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
@@ -119,7 +119,7 @@ final class RosterCommand extends FactionsCommand implements Initializable {
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
@@ -183,7 +183,7 @@ final class RosterCommand extends FactionsCommand implements Initializable {
             @Arg("rank") @Key(Args.FACTION_RANK) Rank rank,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
@@ -233,7 +233,7 @@ final class RosterCommand extends FactionsCommand implements Initializable {
             @Arg("page") Optional<Integer> page,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = targetFaction.orElse(factions.findOrDefault(sender));
 

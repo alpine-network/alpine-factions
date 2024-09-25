@@ -38,7 +38,7 @@ final class HomeCommand extends FactionsCommand {
             @Context Player player,
             @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         Faction faction = targetFaction.orElse(Factions.get().factions().findOrDefault(player));
         if (!faction.isPermitted(player, Permissions.ACCESS_HOME)) {

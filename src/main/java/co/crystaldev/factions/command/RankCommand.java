@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
@@ -55,7 +56,7 @@ final class RankCommand extends FactionsCommand {
             @Context CommandSender sender,
             @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
     ) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = Factions.get().factions().findOrDefault(other);
 
         config.memberRank.send(sender,
@@ -68,7 +69,7 @@ final class RankCommand extends FactionsCommand {
     }
 
     private static void setRank(@NotNull CommandSender actor, @NotNull OfflinePlayer other, @NotNull Rank rank) {
-        MessageConfig config = MessageConfig.getInstance();
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         boolean overriding = PlayerHandler.getInstance().isOverriding(actor);
         UUID actorId = PlayerHelper.getId(actor);
 
@@ -96,11 +97,17 @@ final class RankCommand extends FactionsCommand {
         // ensure rank can be applied
         Rank senderRank = targetFaction.getMemberRankOrDefault(actorId);
         Rank memberRank = targetFaction.getMemberRankOrDefault(other.getUniqueId());
+        boolean isPromotion = rank.isSuperior(memberRank);
         boolean leader = rank == Rank.LEADER && (overriding || senderRank == Rank.LEADER && !other.getUniqueId().equals(actorId));
-        if (!overriding && !leader && rank.isSuperiorOrMatching(senderRank)) {
+        if (isPromotion && !overriding && !leader && rank.isSuperiorOrMatching(senderRank)) {
             config.rankTooHigh.send(actor);
             return;
         }
+        if (!isPromotion && !overriding && !leader && !senderRank.isSuperior(memberRank)) {
+            config.rankTooHigh.send(actor);
+            return;
+        }
+
 
         // ensure the rank has changed
         if (rank == memberRank) {

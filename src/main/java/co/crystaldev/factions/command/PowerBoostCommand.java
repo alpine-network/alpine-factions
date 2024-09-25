@@ -45,7 +45,7 @@ final class PowerBoostCommand extends FactionsCommand {
         state.setPowerBoost(powerboost);
         players.save(state);
 
-        MessageConfig.getInstance().modifyPowerBoost.send(sender,
+        this.plugin.getConfiguration(MessageConfig.class).modifyPowerBoost.send(sender,
                 "player", FactionHelper.formatRelational(sender, faction, other, false),
                 "player_name", other.getName(),
                 "powerboost", powerboost,
