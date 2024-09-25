@@ -26,7 +26,12 @@ final class OfflinePlayerArgumentResolver extends AlpineArgumentResolver<Offline
 
         OfflinePlayer player = Bukkit.getPlayer(argument);
         if (player == null) {
-            player = Bukkit.getOfflinePlayer(argument);
+            for (OfflinePlayer offlinePlayer : Bukkit.getOfflinePlayers()) {
+                if (offlinePlayer.hasPlayedBefore() && offlinePlayer.getName().equalsIgnoreCase(argument)) {
+                    player = offlinePlayer;
+                    break;
+                }
+            }
         }
         if (player == null || !player.hasPlayedBefore()) {
             return ParseResult.failure(config.unknownPlayer.buildString("player_name", argument));
