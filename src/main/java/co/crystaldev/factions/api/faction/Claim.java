@@ -37,6 +37,9 @@ public final class Claim {
     @SerializedName("players")
     private final HashSet<UUID> accessedPlayerIds;
 
+    @Getter
+    private transient final long claimedAt = System.currentTimeMillis();
+
     private Claim(@Nullable String faction, @NotNull HashSet<String> accessedFactionIds, @NotNull HashSet<UUID> accessedPlayerIds) {
         this.factionId = faction;
         this.accessedFactionIds = accessedFactionIds;
