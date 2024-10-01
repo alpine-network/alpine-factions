@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 @Description("Teleports player to a random location.")
 @Permission("alpinefactions.command.wilderness")
 public final class WildernessCommand extends AlpineCommand {
+    // TODO: move to EraCore
     WildernessCommand(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }

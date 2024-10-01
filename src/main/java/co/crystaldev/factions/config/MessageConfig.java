@@ -345,6 +345,9 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText home = ConfigText.of(
             "%prefix% Warping to the home of %faction% in <highlight>%seconds% seconds</highlight> unless you move...");
 
+    public ConfigText homeInstant = ConfigText.of(
+            "%prefix% Warping to the home of %faction%...");
+
     public ConfigText noHome = ConfigText.of(
             "%error_prefix% %faction% does not have a home set");
 

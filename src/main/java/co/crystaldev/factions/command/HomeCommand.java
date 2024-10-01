@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.config.object.ConfigMessage;
 import co.crystaldev.alpinecore.framework.teleport.TeleportTask;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
@@ -10,6 +11,7 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
+import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.util.FactionHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
@@ -70,7 +72,8 @@ final class HomeCommand extends FactionsCommand {
         TeleportTask.builder(player, home)
                 .delay(5, TimeUnit.SECONDS)
                 .onInit(ctx -> {
-                    ctx.message(config.home.build(
+                    ConfigText message = ctx.isInstant() ? config.homeInstant : config.home;
+                    ctx.message(message.build(
                             "faction", FactionHelper.formatRelational(player, faction, false),
                             "faction_name", faction.getName(),
                             "seconds", ctx.timeUntilTeleport(TimeUnit.SECONDS)));

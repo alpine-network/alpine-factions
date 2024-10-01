@@ -48,10 +48,10 @@ public final class PlayerState {
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         if (!faction.isWilderness()) {
             // Notify the faction the player has joined
-            FactionHelper.broadcast(faction, this.player, observer -> {
+            AlpineFactions.schedule(() -> FactionHelper.broadcast(faction, this.player, observer -> {
                 return config.login.build(
-                        "player", FactionHelper.formatRelational(observer, faction, this.player));
-            });
+                        "player", FactionHelper.formatRelational(observer, faction, this.player, false));
+            }), 20L);
         }
 
 
@@ -60,7 +60,7 @@ public final class PlayerState {
                     "faction", FactionHelper.formatRelational(this.player, faction, faction.getName()),
                     "faction_name", faction.getName());
 
-            AlpineFactions.schedule(() -> Messaging.send(this.player, Components.joinNewLines(Formatting.title(title), motd)));
+            AlpineFactions.schedule(() -> Messaging.send(this.player, Components.joinNewLines(Formatting.title(title), motd)), 100L);
         }
     }
 
