@@ -21,7 +21,7 @@ val props = mapOf(
 
 repositories {
     mavenCentral()
-    maven("https://repo.codemc.org/repository/nms/")
+    maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://lib.alpn.cloud/alpine-public/")
     maven("https://repo.panda-lang.org/releases")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
@@ -29,8 +29,8 @@ repositories {
 
 configurations.create("shaded")
 dependencies {
-    compileOnly(group = "org.spigotmc", name = "spigot", version = project.property("spigot_version") as String)
-    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.4.2")
+    compileOnly(group = "com.destroystokyo.paper", name = "paper-api", version = project.property("server_version") as String)
+    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.4.9")
 
     compileOnly(group = "me.clip", name = "placeholderapi", version = "2.11.5")
 
