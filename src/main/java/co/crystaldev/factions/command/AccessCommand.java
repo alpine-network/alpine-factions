@@ -13,7 +13,6 @@ import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.player.FPlayer;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
@@ -25,7 +24,7 @@ import co.crystaldev.factions.util.LocationHelper;
 import co.crystaldev.factions.util.claims.ClaimHelper;
 import co.crystaldev.factions.util.claims.ClaimType;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -53,9 +52,9 @@ final class AccessCommand extends FactionsCommand {
     @Execute(name = "player", aliases = "p")
     public void player(
             @Context Player player,
-            @Arg("faction") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
+            @Arg("faction") @Async OfflinePlayer other,
             @Arg("access") boolean access,
-            @Arg("type") @Key(Args.CLAIM_TYPE) Optional<ClaimType> optionalType,
+            @Arg("type") Optional<ClaimType> optionalType,
             @Arg("radius") Optional<Integer> optionalRadius
     ) {
         Faction otherFaction = Factions.get().factions().findOrDefault(other);
@@ -67,9 +66,9 @@ final class AccessCommand extends FactionsCommand {
     @Execute(name = "faction", aliases = "f")
     public void faction(
             @Context Player player,
-            @Arg("faction") @Key(Args.FACTION) Faction faction,
+            @Arg("faction") Faction faction,
             @Arg("access") boolean access,
-            @Arg("type") @Key(Args.CLAIM_TYPE) Optional<ClaimType> optionalType,
+            @Arg("type") Optional<ClaimType> optionalType,
             @Arg("radius") Optional<Integer> optionalRadius
     ) {
         setAccess(player, faction, access, optionalType, optionalRadius, FactionHelper.formatRelational(player, faction, false),

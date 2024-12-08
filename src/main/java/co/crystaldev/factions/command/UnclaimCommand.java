@@ -7,7 +7,6 @@ import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
@@ -19,7 +18,6 @@ import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.util.claims.Claiming;
 import co.crystaldev.factions.util.claims.WorldClaimType;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -47,7 +45,7 @@ final class UnclaimCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context Player player,
-            @Arg("type") @Key(Args.CLAIM_TYPE) ClaimType type,
+            @Arg("type") ClaimType type,
             @OptionalArg("radius") Optional<Integer> rad
     ) {
         Faction actingFaction = Factions.get().factions().findOrDefault(player);
@@ -91,8 +89,8 @@ final class UnclaimCommand extends FactionsCommand {
     @Execute(name = "all")
     public void all(
             @Context Player player,
-            @Arg("world") @Key(Args.WORLD_CLAIM_TYPE) WorldClaimType world,
-            @Arg("faction") @Key(Args.FACTION) Faction faction
+            @Arg("world") WorldClaimType world,
+            @Arg("faction") Faction faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 

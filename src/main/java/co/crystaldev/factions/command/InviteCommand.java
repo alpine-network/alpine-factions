@@ -7,13 +7,12 @@ import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.MemberInvitation;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -40,7 +39,7 @@ final class InviteCommand extends FactionsCommand {
     @Execute(name = "add")
     public void add(
             @Context Player player,
-            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer invitee
+            @Arg("player") @Async OfflinePlayer invitee
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
@@ -96,7 +95,7 @@ final class InviteCommand extends FactionsCommand {
     @Execute(name = "remove")
     public void remove(
             @Context Player player,
-            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer invitee
+            @Arg("player") @Async OfflinePlayer invitee
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
@@ -127,7 +126,7 @@ final class InviteCommand extends FactionsCommand {
     public void list(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
+            @Arg("faction") Optional<Faction> faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();

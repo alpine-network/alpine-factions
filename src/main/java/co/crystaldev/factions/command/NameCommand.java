@@ -42,7 +42,7 @@ final class NameCommand extends FactionsCommand {
     public void execute(
             @Context CommandSender sender,
             @Arg("name") @Key(Args.ALPHANUMERIC) String name,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
+            @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);

@@ -22,7 +22,7 @@ import java.util.Optional;
  */
 final class FactionArgumentResolver extends AlpineArgumentResolver<Faction> {
     public FactionArgumentResolver() {
-        super(Faction.class, Args.FACTION);
+        super(Faction.class, null);
     }
 
     @Override

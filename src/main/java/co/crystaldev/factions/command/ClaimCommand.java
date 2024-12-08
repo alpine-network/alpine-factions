@@ -4,7 +4,6 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -14,7 +13,6 @@ import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.util.claims.Claiming;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -37,9 +35,9 @@ final class ClaimCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context Player player,
-            @Arg("type") @Key(Args.CLAIM_TYPE) ClaimType type,
+            @Arg("type") ClaimType type,
             @Arg("radius") Optional<Integer> rad,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
+            @Arg("faction") Optional<Faction> faction
     ) {
         FactionAccessor factions = Factions.get().factions();
         Faction claimingFaction = faction.orElse(factions.find(player));
@@ -50,7 +48,7 @@ final class ClaimCommand extends FactionsCommand {
     @Execute(name = "fill", aliases = "f") @Async
     public void fill(
             @Context Player player,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
+            @Arg("faction") Optional<Faction> faction
     ) {
         FactionAccessor factions = Factions.get().factions();
         Faction claimingFaction = faction.orElse(factions.find(player));
@@ -61,7 +59,7 @@ final class ClaimCommand extends FactionsCommand {
     @Execute(name = "one", aliases = "o")
     public void one(
             @Context Player player,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
+            @Arg("faction") Optional<Faction> faction
     ) {
         FactionAccessor factions = Factions.get().factions();
         Faction claimingFaction = faction.orElse(factions.find(player));
@@ -72,7 +70,7 @@ final class ClaimCommand extends FactionsCommand {
     @Execute(name = "auto", aliases = "a")
     public void auto(
             @Context Player player,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
+            @Arg("faction") Optional<Faction> faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction claimingFaction = faction.orElse(Factions.get().factions().findOrDefault(player));

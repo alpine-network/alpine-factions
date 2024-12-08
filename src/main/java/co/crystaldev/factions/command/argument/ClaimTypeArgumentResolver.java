@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  */
 final class ClaimTypeArgumentResolver extends AlpineArgumentResolver<ClaimType> {
     public ClaimTypeArgumentResolver() {
-        super(ClaimType.class, Args.CLAIM_TYPE);
+        super(ClaimType.class, null);
     }
 
     @Override

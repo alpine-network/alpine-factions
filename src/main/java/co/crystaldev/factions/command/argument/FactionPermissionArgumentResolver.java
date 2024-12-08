@@ -19,7 +19,7 @@ import java.util.List;
  */
 final class FactionPermissionArgumentResolver extends AlpineArgumentResolver<Permission> {
     public FactionPermissionArgumentResolver() {
-        super(Permission.class, Args.FACTION_PERMISSION);
+        super(Permission.class, null);
     }
 
     @Override

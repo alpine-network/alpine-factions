@@ -19,7 +19,7 @@ import java.util.List;
  */
 final class FactionFlagArgumentResolver extends AlpineArgumentResolver<FactionFlag> {
     public FactionFlagArgumentResolver() {
-        super(FactionFlag.class, Args.FACTION_FLAG);
+        super(FactionFlag.class, null);
     }
 
     @Override

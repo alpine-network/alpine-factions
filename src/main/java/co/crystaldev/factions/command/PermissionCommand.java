@@ -13,14 +13,12 @@ import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -44,10 +42,10 @@ final class PermissionCommand extends FactionsCommand {
     @Execute(name = "set")
     public void set(
             @Context CommandSender sender,
-            @Arg("permission") @Key(Args.FACTION_PERMISSION) Permission permission,
-            @Arg("relational") @Key(Args.RELATIONAL) Relational relational,
+            @Arg("permission") Permission permission,
+            @Arg("relational") Relational relational,
             @Arg("value") boolean value,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
+            @Arg("faction") Optional<Faction> faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
@@ -85,7 +83,7 @@ final class PermissionCommand extends FactionsCommand {
     @Execute(name = "show")
     public void show(
             @Context CommandSender sender,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
+            @Arg("faction") Optional<Faction> faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         PermissionRegistry registry = AlpineFactions.getInstance().permissionRegistry();

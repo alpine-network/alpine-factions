@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  */
 final class FactionRankArgumentResolver extends AlpineArgumentResolver<Rank> {
     public FactionRankArgumentResolver() {
-        super(Rank.class, Args.FACTION_RANK);
+        super(Rank.class, null);
     }
 
     @Override

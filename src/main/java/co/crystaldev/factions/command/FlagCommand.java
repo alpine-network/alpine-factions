@@ -10,7 +10,6 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FlagAdapter;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
@@ -18,7 +17,6 @@ import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -42,9 +40,9 @@ final class FlagCommand extends FactionsCommand {
     @Execute(name = "set")
     public void set(
             @Context CommandSender sender,
-            @Arg("flag") @Key(Args.FACTION_FLAG) FactionFlag<?> flag,
+            @Arg("flag") FactionFlag flag,
             @Arg("value") String value,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
+            @Arg("faction") Optional<Faction> faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FlagAdapter<?> adapter = flag.getAdapter();
@@ -91,7 +89,7 @@ final class FlagCommand extends FactionsCommand {
     @Execute(name = "show")
     public void show(
             @Context CommandSender sender,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction,
+            @Arg("faction") Optional<Faction> faction,
             @Arg("page") Optional<Integer> page
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);

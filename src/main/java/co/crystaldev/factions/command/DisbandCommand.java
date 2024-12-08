@@ -3,13 +3,11 @@ package co.crystaldev.factions.command;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.FactionHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -37,7 +35,7 @@ final class DisbandCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context CommandSender sender,
-            @Arg("faction") @Key(Args.FACTION) Faction faction
+            @Arg("faction") Faction faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         boolean owner = sender instanceof ConsoleCommandSender

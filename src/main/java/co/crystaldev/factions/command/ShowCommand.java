@@ -5,10 +5,8 @@ import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -30,7 +28,7 @@ final class ShowCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context CommandSender sender,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
+            @Arg("faction") Optional<Faction> faction
     ) {
         Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction resolvedFaction = faction.orElse(senderFaction);

@@ -10,7 +10,6 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.RelatedFaction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
@@ -20,7 +19,6 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -44,9 +42,9 @@ final class RelationCommand extends FactionsCommand {
     @Execute(name = "set")
     public void set(
             @Context CommandSender sender,
-            @Arg("target_faction") @Key(Args.FACTION) Faction target,
-            @Arg("relation") @Key(Args.FACTION_RELATION) FactionRelation relation,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> faction
+            @Arg("target_faction") Faction target,
+            @Arg("relation") FactionRelation relation,
+            @Arg("faction") Optional<Faction> faction
     ) {
         setRelation(sender, target, faction.orElse(Factions.get().factions().findOrDefault(sender)), relation);
     }
@@ -55,7 +53,7 @@ final class RelationCommand extends FactionsCommand {
     public void list(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
+            @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
@@ -77,7 +75,7 @@ final class RelationCommand extends FactionsCommand {
     public void wishes(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
+            @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
@@ -188,8 +186,8 @@ final class RelationCommand extends FactionsCommand {
         @Execute
         public void execute(
                 @Context CommandSender sender,
-                @Arg("target_faction") @Key(Args.FACTION) Faction targetFaction,
-                @Arg("faction") @Key(Args.FACTION) Optional<Faction> actingFaction
+                @Arg("target_faction") Faction targetFaction,
+                @Arg("faction") Optional<Faction> actingFaction
         ) {
             Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.NEUTRAL);
@@ -206,8 +204,8 @@ final class RelationCommand extends FactionsCommand {
         @Execute
         public void execute(
                 @Context CommandSender sender,
-                @Arg("target_faction") @Key(Args.FACTION) Faction targetFaction,
-                @Arg("faction") @Key(Args.FACTION) Optional<Faction> actingFaction
+                @Arg("target_faction") Faction targetFaction,
+                @Arg("faction") Optional<Faction> actingFaction
         ) {
             Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.ENEMY);
@@ -224,8 +222,8 @@ final class RelationCommand extends FactionsCommand {
         @Execute
         public void execute(
                 @Context CommandSender sender,
-                @Arg("target_faction") @Key(Args.FACTION) Faction targetFaction,
-                @Arg("faction") @Key(Args.FACTION) Optional<Faction> actingFaction
+                @Arg("target_faction") Faction targetFaction,
+                @Arg("faction") Optional<Faction> actingFaction
         ) {
             Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.ALLY);
@@ -242,8 +240,8 @@ final class RelationCommand extends FactionsCommand {
         @Execute
         public void execute(
                 @Context CommandSender sender,
-                @Arg("target_faction") @Key(Args.FACTION) Faction targetFaction,
-                @Arg("faction") @Key(Args.FACTION) Optional<Faction> actingFaction
+                @Arg("target_faction") Faction targetFaction,
+                @Arg("faction") Optional<Faction> actingFaction
         ) {
             Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.TRUCE);

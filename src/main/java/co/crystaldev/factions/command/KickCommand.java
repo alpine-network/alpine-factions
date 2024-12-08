@@ -9,14 +9,13 @@ import co.crystaldev.factions.api.event.PlayerChangedFactionEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -38,7 +37,7 @@ final class KickCommand extends FactionsCommand {
     @Execute
     public void execute(
             @Context CommandSender sender,
-            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other
+            @Arg("player") @Async OfflinePlayer other
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();

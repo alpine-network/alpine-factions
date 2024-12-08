@@ -17,6 +17,7 @@ import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.util.FactionHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -43,9 +44,9 @@ final class AccessAllCommand extends FactionsCommand {
     @Execute(name = "player", aliases = "p")
     public void player(
             @Context CommandSender sender,
-            @Arg("faction") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
+            @Arg("faction") @Async OfflinePlayer other,
             @Arg("access") boolean access,
-            @Arg("target_faction") @Key(Args.FACTION) Optional<Faction> targetFaction
+            @Arg("target_faction") Optional<Faction> targetFaction
     ) {
         FactionAccessor factions = Factions.get().factions();
         Faction target = targetFaction.orElse(factions.findOrDefault(sender));
@@ -62,9 +63,9 @@ final class AccessAllCommand extends FactionsCommand {
     @Execute(name = "faction", aliases = "f")
     public void faction(
             @Context CommandSender sender,
-            @Arg("faction") @Key(Args.FACTION) Faction faction,
+            @Arg("faction") Faction faction,
             @Arg("access") boolean access,
-            @Arg("target_faction") @Key(Args.FACTION) Optional<Faction> targetFaction
+            @Arg("target_faction") Optional<Faction> targetFaction
     ) {
         Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
         if (target.isWilderness()) {

@@ -8,7 +8,6 @@ import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
@@ -17,7 +16,7 @@ import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import co.crystaldev.factions.util.PlayerHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -46,9 +45,9 @@ final class RosterCommand extends FactionsCommand implements Initializable {
     @Execute(name = "add")
     public void add(
             @Context CommandSender sender,
-            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
-            @Arg("rank") @Key(Args.FACTION_RANK) Optional<Rank> rank,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
+            @Arg("player") @Async OfflinePlayer other,
+            @Arg("rank") Optional<Rank> rank,
+            @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
@@ -116,8 +115,8 @@ final class RosterCommand extends FactionsCommand implements Initializable {
     @Execute(name = "remove")
     public void remove(
             @Context CommandSender sender,
-            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
+            @Arg("player") @Async OfflinePlayer other,
+            @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
@@ -179,9 +178,9 @@ final class RosterCommand extends FactionsCommand implements Initializable {
     @Execute(name = "setrank")
     public void setRank(
             @Context CommandSender sender,
-            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
-            @Arg("rank") @Key(Args.FACTION_RANK) Rank rank,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
+            @Arg("player") @Async OfflinePlayer other,
+            @Arg("rank") Rank rank,
+            @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
@@ -231,7 +230,7 @@ final class RosterCommand extends FactionsCommand implements Initializable {
     public void list(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page,
-            @Arg("faction") @Key(Args.FACTION) Optional<Faction> targetFaction
+            @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();

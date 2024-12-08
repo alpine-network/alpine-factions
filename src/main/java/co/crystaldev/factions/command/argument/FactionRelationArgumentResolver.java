@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  */
 final class FactionRelationArgumentResolver extends AlpineArgumentResolver<FactionRelation> {
     public FactionRelationArgumentResolver() {
-        super(FactionRelation.class, Args.FACTION_RELATION);
+        super(FactionRelation.class, null);
     }
 
     @Override

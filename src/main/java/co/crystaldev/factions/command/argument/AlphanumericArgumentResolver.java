@@ -18,8 +18,10 @@ final class AlphanumericArgumentResolver extends AlpineArgumentResolver<String> 
 
     @Override
     protected ParseResult<String> parse(Invocation<CommandSender> invocation, Argument<String> context, String argument) {
-        if (argument.matches("^[a-zA-Z0-9]+$"))
+        if (argument.matches("^[a-zA-Z0-9]+$")) {
             return ParseResult.success(argument);
-        return ParseResult.failure(AlpineFactions.getInstance().getConfiguration(MessageConfig.class).alphanumeric.buildString(AlpineFactions.getInstance()));
+        }
+        MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
+        return ParseResult.failure(config.alphanumeric.buildString(AlpineFactions.getInstance()));
     }
 }

@@ -20,15 +20,14 @@ import java.util.Set;
  * @since 0.1.0
  */
 final class RelationalArgumentResolver extends AlpineArgumentResolver<Relational> {
+    public RelationalArgumentResolver() {
+        super(Relational.class, null);
+    }
 
     private static final Set<Relational> RELATIONALS = ImmutableSet.<Relational>builder()
             .add(Rank.values())
             .add(FactionRelation.values())
             .build();
-
-    public RelationalArgumentResolver() {
-        super(Relational.class, Args.RELATIONAL);
-    }
 
     @Override
     protected ParseResult<Relational> parse(Invocation<CommandSender> invocation, Argument<Relational> context, String argument) {

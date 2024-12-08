@@ -14,7 +14,6 @@ import com.google.gson.stream.JsonWriter;
 import lombok.Getter;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -37,30 +36,31 @@ public final class Claim {
     @SerializedName("players")
     private final HashSet<UUID> accessedPlayerIds;
 
+    @SerializedName("attributes")
+    private final HashSet<String> attributes;
+
+    /** This value does not persist after a reload */
     @Getter
     private transient final long claimedAt = System.currentTimeMillis();
 
-    private Claim(@Nullable String faction, @NotNull HashSet<String> accessedFactionIds, @NotNull HashSet<UUID> accessedPlayerIds) {
-        this.factionId = faction;
-        this.accessedFactionIds = accessedFactionIds;
-        this.accessedPlayerIds = accessedPlayerIds;
-    }
-
     public Claim(@NotNull String faction) {
-        this(faction, new HashSet<>(), new HashSet<>());
+        this.factionId = faction;
+        this.accessedFactionIds = new HashSet<>();
+        this.accessedPlayerIds = new HashSet<>();
+        this.attributes = new HashSet<>();
     }
 
     private Claim() {
         // should only get here via Gson
-        this(null, new HashSet<>(), new HashSet<>());
+        this(null);
     }
 
-    public void setFaction(@NotNull String faction) {
-        if (this.factionId.equals(faction)) {
+    public void setFaction(@NotNull String factionId) {
+        if (this.factionId.equals(factionId)) {
             return;
         }
 
-        this.factionId = faction;
+        this.factionId = factionId;
     }
 
     public @NotNull Faction getFaction() {
@@ -74,6 +74,28 @@ public final class Claim {
     public boolean isFaction(@NotNull Faction faction) {
         return this.factionId.equals(faction.getId());
     }
+
+    // region Attribute
+
+    public boolean hasAttribute(@NotNull String attribute) {
+        return this.attributes.contains(attribute);
+    }
+
+    public boolean hasAttributes() {
+        return !this.attributes.isEmpty();
+    }
+
+    public void putAttribute(@NotNull String attribute) {
+        this.attributes.add(attribute);
+    }
+
+    public void removeAttribute(@NotNull String attribute) {
+        this.attributes.remove(attribute);
+    }
+
+    // endregion Attribute
+
+    // region Access
 
     public boolean modifiesAccess() {
         return this.accessedFactionIds != null && !this.accessedFactionIds.isEmpty()
@@ -137,10 +159,12 @@ public final class Claim {
         this.accessedPlayerIds.clear();
     }
 
+    // endregion Access
+
     public static final class Adapter extends TypeAdapter<Claim> {
         @Override
         public void write(JsonWriter jsonWriter, Claim claim) throws IOException {
-            if (!claim.modifiesAccess()) {
+            if (!claim.modifiesAccess() && !claim.hasAttributes()) {
                 jsonWriter.value(claim.factionId);
                 return;
             }

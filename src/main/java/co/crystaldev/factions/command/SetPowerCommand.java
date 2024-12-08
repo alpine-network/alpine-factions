@@ -6,14 +6,13 @@ import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
-import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -36,7 +35,7 @@ final class SetPowerCommand extends FactionsCommand {
     @Permission(PermissionNodes.ADMIN)
     public void execute(
             @Context CommandSender sender,
-            @Arg("player") @Key(Args.OFFLINE_PLAYER) OfflinePlayer other,
+            @Arg("player") @Async OfflinePlayer other,
             @Arg("power") int power
     ) {
         MessageConfig messageConfig = this.plugin.getConfiguration(MessageConfig.class);
