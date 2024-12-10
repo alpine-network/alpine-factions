@@ -119,9 +119,21 @@ public final class Permissions {
             .permit(Rank.values())
             .build();
 
+    public static final Permission ACCESS_WARP = Permission.builder("access_warp")
+            .name("Access Warp")
+            .description("access a faction warp")
+            .permit(Rank.values())
+            .build();
+
     public static final Permission MODIFY_HOME = Permission.builder("modify_home")
             .name("Modify Home")
             .description("set the faction home")
+            .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
+            .build();
+
+    public static final Permission MODIFY_WARP = Permission.builder("modify_warp")
+            .name("Modify Warp")
+            .description("set a faction warp")
             .permit(Rank.LEADER, Rank.COLEADER, Rank.OFFICER)
             .build();
 
@@ -176,7 +188,9 @@ public final class Permissions {
             BANK_WITHDRAW,
             BANK_DEPOSIT,
             ACCESS_HOME,
+            ACCESS_WARP,
             MODIFY_HOME,
+            MODIFY_WARP,
             USE_CONTAINERS,
             BUILD,
             OPEN_DOORS,

@@ -337,7 +337,8 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText unableToDisband = ConfigText.of(
             "%error_prefix% This faction cannot be disbanded");
 
-    public ConfigText setHome = ConfigText.of("%prefix% %actor% set the faction home near <emphasis>(%world% %x%, %y%, %z%)</emphasis>");
+    public ConfigText setHome = ConfigText.of(
+            "%prefix% %actor% set the faction home near <emphasis>(%world% %x%, %y%, %z%)</emphasis>");
 
     public ConfigText unsetHome = ConfigText.of(
             "%prefix% Your faction home was un-set due to it no longer being in your territory");
@@ -356,6 +357,36 @@ public final class MessageConfig extends AlpineConfig {
 
     public ConfigText listEntry = ConfigText.of(
             "%faction% <separator>»</separator> %online%/%members% online, <emphasis>%land%/%power%/%max_power%</emphasis>");
+
+
+
+    @Comment({
+            "",
+            ">>> Warps"
+    })
+    public ConfigText setWarp = ConfigText.of(
+            "%prefix% %actor% set warp <highlight>%warp%</highlight> near <emphasis>(%world% %x%, %y%, %z%)</emphasis>");
+
+    public ConfigText delWarp = ConfigText.of(
+            "%prefix% %actor% removed warp %warp% near <emphasis>(%world% %x%, %y%, %z%)</emphasis>");
+
+    public ConfigText warp = ConfigText.of(
+            "%prefix% Warping to warp <highlight>%warp%</highlight> in <highlight>%seconds% seconds</highlight> unless you move...");
+
+    public ConfigText warpInstant = ConfigText.of(
+            "%prefix% Warping to warp <highlight>%warp%<highlight>...");
+
+    public ConfigText noWarp = ConfigText.of(
+            "%error_prefix% %faction% does not have a warp %warp% set");
+
+    public ConfigText unsetWarp = ConfigText.of(
+            "%prefix% Your faction warp %warp% was un-set due to it no longer being in your territory");
+
+    public ConfigText warpListTitle = ConfigText.of(
+            "%faction% <separator>|</separator> Warps");
+
+    public ConfigText warpListEntry = ConfigText.of(
+            "%warp% <separator>»</separator> %world%, %x%, %y%, %z%");
 
 
 

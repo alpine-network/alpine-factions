@@ -59,7 +59,7 @@ final class HomeCommand extends FactionsCommand {
             FactionHomeUpdateEvent event = AlpineFactions.callEvent(new FactionHomeUpdateEvent(faction, player, null));
             if (!event.isCancelled()) {
                 faction.setHome(event.getLocation());
-                if (event.getLocation() != null) {
+                if (event.getLocation() == null) {
                     FactionHelper.broadcast(faction, config.unsetHome.build());
                 }
                 return;
