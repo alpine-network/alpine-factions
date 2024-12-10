@@ -665,6 +665,9 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText wildTeleport = ConfigText.of(
             "%prefix% Teleporting you to a random location in wilderness in %seconds% seconds...");
 
+    public ConfigText wildTeleportInstant = ConfigText.of(
+            "%prefix% Teleporting you to a random location in wilderness...");
+
     public ConfigText invalidWildLocation = ConfigText.of(
             "%error_prefix% Could not find a valid location, try again...");
 
