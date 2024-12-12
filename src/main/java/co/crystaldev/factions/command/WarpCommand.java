@@ -22,6 +22,7 @@ import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.shortcut.Shortcut;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -63,7 +64,7 @@ final class WarpCommand extends FactionsCommand {
         }
 
         // if password is present, check for it
-        if (factionWarp.hasPassword() && !(factionWarp.isPasswordCorrect(password))) {
+        if (factionWarp.hasPassword() && !(factionWarp.isPasswordCorrect(password)) && faction.getMember(player) != faction.getOwner()) {
             config.warpInvalidPassword.send(player,
                     "faction", FactionHelper.formatRelational(player, faction),
                     "faction_name", faction.getName(),
@@ -109,6 +110,7 @@ final class WarpCommand extends FactionsCommand {
     }
 
     @Execute(name = "add")
+    @Shortcut({ "factions setwarp" })
     public void add(
             @Context Player player,
             @Arg("name") @Key(Args.ALPHANUMERIC) String name,
@@ -164,9 +166,11 @@ final class WarpCommand extends FactionsCommand {
     }
 
     @Execute(name = "remove")
+    @Shortcut({ "factions delwarp" })
     public void remove(
             @Context Player player,
-            @Arg("name") @Key(Args.WARP) String warp
+            @Arg("name") @Key(Args.WARP) String warp,
+            @Arg("password") @Key(Args.ALPHANUMERIC) Optional<String> password
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = Factions.get().factions().findOrDefault(player);
@@ -179,6 +183,15 @@ final class WarpCommand extends FactionsCommand {
             return;
         }
 
+        // if password is present, check for it
+        if (factionWarp.hasPassword() && !(factionWarp.isPasswordCorrect(password)) && faction.getMember(player) != faction.getOwner()) {
+            config.warpInvalidPassword.send(player,
+                    "faction", FactionHelper.formatRelational(player, faction),
+                    "faction_name", faction.getName(),
+                    "warp", warp);
+            return;
+        }
+
         // call warp update event
         FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(faction, player, warp, null,null));
         if (event.isCancelled()) {
@@ -186,7 +199,7 @@ final class WarpCommand extends FactionsCommand {
             return;
         }
 
-        // broacast warp deletion to faction
+        // broadcast warp deletion to faction
         FactionHelper.broadcast(faction, observer -> {
             Component location = factionWarp.hasPassword() && faction.getMember(observer) != faction.getOwner()
                     ? config.warpHidden.build() : config.warpLocation.build(
@@ -207,6 +220,7 @@ final class WarpCommand extends FactionsCommand {
     }
 
     @Execute(name = "list")
+    @Shortcut({ "factions listwarps" })
     public void list(
             @Context Player player,
             @Arg("page") Optional<Integer> page,
