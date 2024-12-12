@@ -83,7 +83,7 @@ public final class Faction {
 
     private final HashMap<String, FactionRelation> relationRequests = new HashMap<>();
 
-    private final HashMap<String, Location> warps = new HashMap<>();
+    private final HashMap<String, Warp> warps = new HashMap<>();
 
     private final Map<String, FlagHolder<?>> flags = new HashMap<>();
 
@@ -200,16 +200,9 @@ public final class Faction {
     // endregion State
 
     // region Warps
-    public void setWarp(@NotNull String warp, @Nullable Location location) {
-        if (location != null) {
-            location = new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY(), location.getBlockZ() + 0.5);
-        }
 
-        if (Objects.equals(location, this.warps.get(warp))) {
-            return;
-        }
-
-        this.warps.put(warp, location);
+    public void addWarp(@NotNull String name, Warp warp) {
+        this.warps.put(name, warp);
         this.markDirty();
     }
 
@@ -218,7 +211,7 @@ public final class Faction {
         this.markDirty();
     }
 
-    public @NotNull Location getWarpLocation(@NotNull String warp) {
+    public @NotNull Warp getWarp(@NotNull String warp) {
         return this.warps.get(warp);
     }
 

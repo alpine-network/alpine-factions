@@ -18,14 +18,17 @@ public final class FactionWarpUpdateEvent extends FactionEntityEvent<Player> imp
 
     private String warpName;
 
+    private String password;
+
     private Location location;
 
     private boolean cancelled;
 
-    public FactionWarpUpdateEvent(@NotNull Faction faction, @NotNull Player entity, @NotNull String warpName, @Nullable Location location) {
+    public FactionWarpUpdateEvent(@NotNull Faction faction, @NotNull Player entity, @NotNull String warpName, @Nullable String password,@Nullable Location location) {
         super(faction, entity);
         this.warpName = warpName;
         this.location = location;
+        this.password = password;
     }
 
     public boolean wasUnset() {

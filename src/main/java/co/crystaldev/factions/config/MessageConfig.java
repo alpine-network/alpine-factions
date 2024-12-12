@@ -379,6 +379,9 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText noWarp = ConfigText.of(
             "%error_prefix% %faction% does not have a warp %warp% set");
 
+    public ConfigText warpInvalidPassword = ConfigText.of(
+            "%error_prefix% Incorrect password supplied for warp <highlight>%warp%</highlight>");
+
     public ConfigText unsetWarp = ConfigText.of(
             "%prefix% Your faction warp %warp% was un-set due to it no longer being in your territory");
 
@@ -386,7 +389,19 @@ public final class MessageConfig extends AlpineConfig {
             "%faction% <separator>|</separator> Warps");
 
     public ConfigText warpListEntry = ConfigText.of(
-            "%warp% <separator>»</separator> %world%, %x%, %y%, %z%");
+            "%warp% <separator>»</separator> <emphasis>Password: %status% - Location: %location%<emphasis>");
+
+    public ConfigText warpHasPassword = ConfigText.of(
+            "<green>Yes</green>");
+
+    public ConfigText warpNoPassword = ConfigText.of(
+            "<red>No</red>");
+
+    public ConfigText warpListHidden = ConfigText.of(
+            "<red><i>Hidden</i></red>");
+
+    public ConfigText warpListLocation = ConfigText.of(
+            "%x%, %y%, %z%, %world%");
 
 
 
