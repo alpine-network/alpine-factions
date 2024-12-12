@@ -365,10 +365,10 @@ public final class MessageConfig extends AlpineConfig {
             ">>> Warps"
     })
     public ConfigText setWarp = ConfigText.of(
-            "%prefix% %actor% set warp <highlight>%warp%</highlight> near <emphasis>(%world% %x%, %y%, %z%)</emphasis>");
+            "%prefix% %actor% set warp <highlight>%warp%</highlight> near <emphasis>(%location%)</emphasis>");
 
     public ConfigText delWarp = ConfigText.of(
-            "%prefix% %actor% removed warp %warp% near <emphasis>(%world% %x%, %y%, %z%)</emphasis>");
+            "%prefix% %actor% removed warp %warp% near <emphasis>(%location%)</emphasis>");
 
     public ConfigText warp = ConfigText.of(
             "%prefix% Warping to warp <highlight>%warp%</highlight> in <highlight>%seconds% seconds</highlight> unless you move...");
@@ -397,10 +397,10 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText warpNoPassword = ConfigText.of(
             "<red>No</red>");
 
-    public ConfigText warpListHidden = ConfigText.of(
+    public ConfigText warpHidden = ConfigText.of(
             "<red><i>Hidden</i></red>");
 
-    public ConfigText warpListLocation = ConfigText.of(
+    public ConfigText warpLocation = ConfigText.of(
             "%x%, %y%, %z%, %world%");
 
 

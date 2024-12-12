@@ -9,7 +9,6 @@ import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.FactionWarpUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.Warp;
-import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.command.framework.FactionsCommand;
@@ -45,7 +44,6 @@ final class WarpCommand extends FactionsCommand {
     //    - /f warp <tab> shows current warps and subcommands
     //    - Argument resolver won't let you tab other faction warps
     //  - add subcommands (e.g. setwarp, delwarp)
-    //  - add warp passwords (Warp class)
 
     @Execute
     public void teleport(
@@ -56,6 +54,7 @@ final class WarpCommand extends FactionsCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(player);
+        Warp factionWarp = faction.getWarp(warp);
 
         // ensure player has access to warp
         if (!faction.isPermitted(player, Permissions.ACCESS_WARP)) {
@@ -63,10 +62,8 @@ final class WarpCommand extends FactionsCommand {
             return;
         }
 
-        Warp factionWarp = faction.getWarp(warp);
-
         // if password is present, check for it
-        if (factionWarp.hasPassword() && !(factionWarp.getPassword().equals(password.orElse(null)))) {
+        if (factionWarp.hasPassword() && !(factionWarp.isPasswordCorrect(password))) {
             config.warpInvalidPassword.send(player,
                     "faction", FactionHelper.formatRelational(player, faction),
                     "faction_name", faction.getName(),
@@ -119,8 +116,8 @@ final class WarpCommand extends FactionsCommand {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        Location location = player.getLocation();
-        Faction faction = Factions.get().claims().getFactionOrDefault(location);
+        Location warpLocation = player.getLocation();
+        Faction faction = Factions.get().claims().getFactionOrDefault(warpLocation);
         Faction selfFaction = Factions.get().factions().findOrDefault(player);
 
         // ensure claim is not wilderness and player's faction
@@ -138,25 +135,31 @@ final class WarpCommand extends FactionsCommand {
         }
 
         // call warp update event with new warp
-        FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(selfFaction, player, name, password.orElse(null), location));
+        FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(selfFaction, player, name, password.orElse(null), warpLocation));
         if (event.isCancelled()) {
             config.operationCancelled.send(player);
             return;
         }
 
         // set the faction warp
-        faction.addWarp(name, new Warp(location, password.orElse(null), System.currentTimeMillis()));
+        faction.addWarp(name, new Warp(warpLocation, password.orElse(null), System.currentTimeMillis()));
+
+        Warp factionWarp = faction.getWarp(name);
 
         // broadcast set warp to faction
         FactionHelper.broadcast(faction, observer -> {
+            Component location = factionWarp.hasPassword() && faction.getMember(observer) != faction.getOwner()
+                    ? config.warpHidden.build() : config.warpLocation.build(
+                    "world", warpLocation.getWorld().getName(),
+                    "x", warpLocation.getBlockX(),
+                    "y", warpLocation.getBlockY(),
+                    "z", warpLocation.getBlockZ());
+
             return config.setWarp.build(
                     "actor", FactionHelper.formatRelational(observer, faction, player),
                     "actor_name", player.getName(),
                     "warp", name,
-                    "world", location.getWorld().getName(),
-                    "x", location.getBlockX(),
-                    "y", location.getBlockY(),
-                    "z", location.getBlockZ());
+                    "location", location);
         });
     }
 
@@ -168,7 +171,8 @@ final class WarpCommand extends FactionsCommand {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = targetFaction.orElse(Factions.get().factions().findOrDefault(player));
-        Location warpLocation = faction.getWarp(warp).getLocation();
+        Warp factionWarp = faction.getWarp(warp);
+        Location warpLocation = factionWarp.getLocation();
 
         // ensure player can modify warps
         if (!faction.isPermitted(player, Permissions.MODIFY_WARP)) {
@@ -185,14 +189,18 @@ final class WarpCommand extends FactionsCommand {
 
         // broacast warp deletion to faction
         FactionHelper.broadcast(faction, observer -> {
+            Component location = factionWarp.hasPassword() && faction.getMember(observer) != faction.getOwner()
+                    ? config.warpHidden.build() : config.warpLocation.build(
+                    "world", warpLocation.getWorld().getName(),
+                    "x", warpLocation.getBlockX(),
+                    "y", warpLocation.getBlockY(),
+                    "z", warpLocation.getBlockZ());
+
             return config.delWarp.build(
                     "actor", FactionHelper.formatRelational(observer, faction, player),
                     "actor_name", player.getName(),
                     "warp", warp,
-                    "world", player.getWorld().getName(),
-                    "x", warpLocation.getBlockX(),
-                    "y", warpLocation.getBlockY(),
-                    "z", warpLocation.getBlockZ());
+                    "location", location);
         });
 
         // delete warp from faction
@@ -220,8 +228,8 @@ final class WarpCommand extends FactionsCommand {
             Warp factionWarp = faction.getWarp(warp);
             Location warpLocation = factionWarp.getLocation();
 
-            Component location = factionWarp.hasPassword() && faction.getMember(player) == faction.getOwner()
-                    ? config.warpListHidden.build() : config.warpListLocation.build(
+            Component location = factionWarp.hasPassword() && faction.getMember(player) != faction.getOwner()
+                    ? config.warpHidden.build() : config.warpLocation.build(
                     "world", warpLocation.getWorld().getName(),
                     "x", warpLocation.getBlockX(),
                     "y", warpLocation.getBlockY(),
