@@ -55,6 +55,11 @@ public final class Member {
         return Bukkit.getOfflinePlayer(this.id);
     }
 
+    public boolean hasJoinedServer() {
+        OfflinePlayer player = this.getOfflinePlayer();
+        return player != null && player.hasPlayedBefore();
+    }
+
     public @NotNull FPlayer getUser() {
         return Factions.get().players().getById(this.id);
     }

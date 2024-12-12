@@ -505,7 +505,7 @@ public final class Faction {
         List<Member> members = new ArrayList<>();
 
         for (Member member : this.members.values()) {
-            if (member.isOnline()) {
+            if (member.isOnline() && member.hasJoinedServer()) {
                 members.add(member);
             }
         }
@@ -517,7 +517,7 @@ public final class Faction {
         List<Member> members = new ArrayList<>();
 
         for (Member member : this.members.values()) {
-            if (!member.isOnline()) {
+            if (!member.isOnline() && member.hasJoinedServer()) {
                 members.add(member);
             }
         }
