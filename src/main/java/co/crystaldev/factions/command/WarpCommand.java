@@ -166,11 +166,10 @@ final class WarpCommand extends FactionsCommand {
     @Execute(name = "remove")
     public void remove(
             @Context Player player,
-            @Arg("name") @Key(Args.WARP) String warp,
-            @Arg("faction") Optional<Faction> targetFaction
+            @Arg("name") @Key(Args.WARP) String warp
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = targetFaction.orElse(Factions.get().factions().findOrDefault(player));
+        Faction faction = Factions.get().factions().findOrDefault(player);
         Warp factionWarp = faction.getWarp(warp);
         Location warpLocation = factionWarp.getLocation();
 
