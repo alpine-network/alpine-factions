@@ -9,6 +9,7 @@ import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
+import co.crystaldev.factions.config.type.ConfigText;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -52,9 +53,10 @@ public final class WildernessCommand extends AlpineCommand {
         // Teleport the player
         TeleportTask.builder(player, location)
                 .delay(5, TimeUnit.SECONDS)
-                .onInit(ctx -> {
+                .onApply(ctx -> {
+                    ConfigText message = ctx.isInstant() ? config.wildTeleportInstant : config.wildTeleport;
                     // Notify the player
-                    ctx.message(config.wildTeleport.build(
+                    ctx.message(message.build(
                             "seconds", ctx.timeUntilTeleport(TimeUnit.SECONDS)));
                 })
                 .initiate(this.plugin);

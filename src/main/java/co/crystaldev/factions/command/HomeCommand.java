@@ -68,7 +68,7 @@ final class HomeCommand extends FactionsCommand {
 
         TeleportTask.builder(player, home)
                 .delay(5, TimeUnit.SECONDS)
-                .onInit(ctx -> {
+                .onApply(ctx -> {
                     ConfigText message = ctx.isInstant() ? config.homeInstant : config.home;
                     ctx.message(message.build(
                             "faction", FactionHelper.formatRelational(player, faction, false),
