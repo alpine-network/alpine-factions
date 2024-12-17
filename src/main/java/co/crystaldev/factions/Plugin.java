@@ -7,6 +7,6 @@ import org.jetbrains.annotations.ApiStatus;
  * @since 0.2.0
  */
 @ApiStatus.Internal
-final class Plugin extends JavaPlugin {
+public final class Plugin extends JavaPlugin {
     // NO OP
 }
