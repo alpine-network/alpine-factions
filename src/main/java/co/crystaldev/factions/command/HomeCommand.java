@@ -1,13 +1,13 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.framework.teleport.TeleportTask;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.event.FactionHomeUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.util.FactionHelper;
@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Command(name = "factions home")
 @Description("Warp to the faction home.")
-final class HomeCommand extends FactionsCommand {
+final class HomeCommand extends AlpineCommand {
     public HomeCommand(AlpinePlugin plugin) {
         super(plugin);
     }

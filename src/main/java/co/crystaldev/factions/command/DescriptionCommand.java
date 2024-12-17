@@ -1,12 +1,12 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.event.FactionDescriptionUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.PlayerHelper;
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
  */
 @Command(name = "factions description", aliases = "factions desc")
 @Description("Modify your faction's description.")
-final class DescriptionCommand extends FactionsCommand {
+final class DescriptionCommand extends AlpineCommand {
     public DescriptionCommand(AlpinePlugin plugin) {
         super(plugin);
     }

@@ -1,10 +1,10 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -20,7 +20,7 @@ import org.bukkit.entity.Player;
  */
 @Command(name = "factions location", aliases = { "factions loc", "factions coordinates", "factions coord" })
 @Description("Send current location to faction members.")
-final class LocationCommand extends FactionsCommand {
+final class LocationCommand extends AlpineCommand {
     public LocationCommand(AlpinePlugin plugin) {
         super(plugin);
     }

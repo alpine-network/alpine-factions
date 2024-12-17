@@ -1,11 +1,11 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -20,7 +20,7 @@ import java.util.Optional;
  */
 @Command(name = "factions show", aliases = { "factions faction", "factions who", "factions f" })
 @Description("Display information on a specific faction.")
-final class ShowCommand extends FactionsCommand {
+final class ShowCommand extends AlpineCommand {
     public ShowCommand(AlpinePlugin plugin) {
         super(plugin);
     }

@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.api.Factions;
@@ -8,7 +9,6 @@ import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.api.player.FPlayer;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
@@ -33,7 +33,7 @@ import java.util.*;
  */
 @Command(name = "factions status")
 @Description("View the status of your faction's members.")
-final class StatusCommand extends FactionsCommand {
+final class StatusCommand extends AlpineCommand {
     public StatusCommand(AlpinePlugin plugin) {
         super(plugin);
     }

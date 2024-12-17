@@ -1,10 +1,10 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.util.ComponentHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -17,7 +17,7 @@ import org.bukkit.command.CommandSender;
  */
 @Command(name = "factions version")
 @Description("Display plugin versioning information.")
-final class VersionCommand extends FactionsCommand {
+final class VersionCommand extends AlpineCommand {
     public VersionCommand(AlpinePlugin plugin) {
         super(plugin);
     }

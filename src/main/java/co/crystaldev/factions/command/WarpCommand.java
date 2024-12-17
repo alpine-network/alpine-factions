@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.framework.teleport.TeleportTask;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
@@ -11,7 +12,6 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.Warp;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.util.FactionHelper;
@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Command(name = "factions warp")
 @Description("Warp to the faction warp.")
-final class WarpCommand extends FactionsCommand {
+final class WarpCommand extends AlpineCommand {
     public WarpCommand(AlpinePlugin plugin) {
         super(plugin);
     }

@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
@@ -8,7 +9,6 @@ import co.crystaldev.factions.api.event.FactionNameUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.command.argument.Args;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
@@ -30,7 +30,7 @@ import java.util.Optional;
  */
 @Command(name = "factions name")
 @Description("Rename your faction.")
-final class NameCommand extends FactionsCommand {
+final class NameCommand extends AlpineCommand {
 
     private final Map<CommandSender, Long> confirmationMap = new HashMap<>();
 

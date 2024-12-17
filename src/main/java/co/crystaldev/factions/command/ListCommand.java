@@ -1,10 +1,10 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
@@ -26,7 +26,7 @@ import java.util.Optional;
  */
 @Command(name = "factions list")
 @Description("List all factions.")
-final class ListCommand extends FactionsCommand {
+final class ListCommand extends AlpineCommand {
     public ListCommand(AlpinePlugin plugin) {
         super(plugin);
     }

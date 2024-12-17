@@ -1,12 +1,12 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.factions.PermissionNodes;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
@@ -26,7 +26,7 @@ import org.bukkit.command.CommandSender;
  */
 @Command(name = "factions setpower")
 @Description("Modify a player power.")
-final class SetPowerCommand extends FactionsCommand {
+final class SetPowerCommand extends AlpineCommand {
     public SetPowerCommand(AlpinePlugin plugin) {
         super(plugin);
     }

@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
@@ -13,7 +14,6 @@ import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
@@ -34,7 +34,7 @@ import java.util.Optional;
  */
 @Command(name = "factions permission", aliases = { "factions perm" })
 @Description("Manage faction permissions.")
-final class PermissionCommand extends FactionsCommand {
+final class PermissionCommand extends AlpineCommand {
     public PermissionCommand(AlpinePlugin plugin) {
         super(plugin);
     }

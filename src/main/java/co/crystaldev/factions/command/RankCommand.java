@@ -1,13 +1,13 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -33,7 +33,7 @@ import java.util.UUID;
  */
 @Command(name = "factions rank")
 @Description("Manage faction ranks.")
-final class RankCommand extends FactionsCommand {
+final class RankCommand extends AlpineCommand {
 
     private static final Map<CommandSender, Long> CONFIRMATION_MAP = new HashMap<>();
 
@@ -152,7 +152,7 @@ final class RankCommand extends FactionsCommand {
 
     @Command(name = "factions promote")
     @Description("Promote a faction member.")
-    public static final class Promote extends FactionsCommand {
+    public static final class Promote extends AlpineCommand {
         public Promote(AlpinePlugin plugin) {
             super(plugin);
         }
@@ -169,7 +169,7 @@ final class RankCommand extends FactionsCommand {
 
     @Command(name = "factions demote")
     @Description("Demote a faction member.")
-    public static final class Demote extends FactionsCommand {
+    public static final class Demote extends AlpineCommand {
         public Demote(AlpinePlugin plugin) {
             super(plugin);
         }
@@ -186,7 +186,7 @@ final class RankCommand extends FactionsCommand {
 
     @Command(name = "factions leader")
     @Description("Promote a new faction leader.")
-    public static final class Leader extends FactionsCommand {
+    public static final class Leader extends AlpineCommand {
         public Leader(AlpinePlugin plugin) {
             super(plugin);
         }
@@ -202,7 +202,7 @@ final class RankCommand extends FactionsCommand {
 
     @Command(name = "factions coleader")
     @Description("Promote a member to co-leader.")
-    public static final class CoLeader extends FactionsCommand {
+    public static final class CoLeader extends AlpineCommand {
         public CoLeader(AlpinePlugin plugin) {
             super(plugin);
         }
@@ -218,7 +218,7 @@ final class RankCommand extends FactionsCommand {
 
     @Command(name = "factions officer")
     @Description("Promote a member to officer.")
-    public static final class Officer extends FactionsCommand {
+    public static final class Officer extends AlpineCommand {
         public Officer(AlpinePlugin plugin) {
             super(plugin);
         }

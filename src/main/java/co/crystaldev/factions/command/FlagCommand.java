@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
@@ -10,7 +11,6 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FlagAdapter;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
@@ -32,7 +32,7 @@ import java.util.Optional;
  */
 @Command(name = "factions flag")
 @Description("Modify faction flags.")
-final class FlagCommand extends FactionsCommand {
+final class FlagCommand extends AlpineCommand {
     public FlagCommand(AlpinePlugin plugin) {
         super(plugin);
     }

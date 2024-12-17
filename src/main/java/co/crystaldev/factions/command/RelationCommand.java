@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
@@ -10,7 +11,6 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.RelatedFaction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.StyleConfig;
@@ -34,7 +34,7 @@ import java.util.Optional;
  */
 @Command(name = "factions relation")
 @Description("Manage faction relations.")
-final class RelationCommand extends FactionsCommand {
+final class RelationCommand extends AlpineCommand {
     public RelationCommand(AlpinePlugin plugin) {
         super(plugin);
     }
@@ -178,7 +178,7 @@ final class RelationCommand extends FactionsCommand {
 
     @Command(name = "factions neutral")
     @Description("Declare neutrality between factions.")
-    public static final class Neutral extends FactionsCommand {
+    public static final class Neutral extends AlpineCommand {
         public Neutral(AlpinePlugin plugin) {
             super(plugin);
         }
@@ -196,7 +196,7 @@ final class RelationCommand extends FactionsCommand {
 
     @Command(name = "factions enemy")
     @Description("Declare a faction as an enemy.")
-    public static final class Enemy extends FactionsCommand {
+    public static final class Enemy extends AlpineCommand {
         public Enemy(AlpinePlugin plugin) {
             super(plugin);
         }
@@ -214,7 +214,7 @@ final class RelationCommand extends FactionsCommand {
 
     @Command(name = "factions ally")
     @Description("Declare an alliance between factions.")
-    public static final class Ally extends FactionsCommand {
+    public static final class Ally extends AlpineCommand {
         public Ally(AlpinePlugin plugin) {
             super(plugin);
         }
@@ -232,7 +232,7 @@ final class RelationCommand extends FactionsCommand {
 
     @Command(name = "factions truce")
     @Description("Declare a truce between factions.")
-    public static final class Truce extends FactionsCommand {
+    public static final class Truce extends AlpineCommand {
         public Truce(AlpinePlugin plugin) {
             super(plugin);
         }

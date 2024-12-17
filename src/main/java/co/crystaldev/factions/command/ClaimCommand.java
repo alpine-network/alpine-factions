@@ -1,10 +1,10 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.AutoClaimState;
@@ -27,7 +27,7 @@ import java.util.Optional;
  */
 @Command(name = "factions claim")
 @Description("Claim faction territory.")
-final class ClaimCommand extends FactionsCommand {
+final class ClaimCommand extends AlpineCommand {
     public ClaimCommand(AlpinePlugin plugin) {
         super(plugin);
     }

@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
@@ -13,7 +14,6 @@ import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.player.FPlayer;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  */
 @Command(name = "factions access")
 @Description("Manage chunk access.")
-final class AccessCommand extends FactionsCommand {
+final class AccessCommand extends AlpineCommand {
     public AccessCommand(AlpinePlugin plugin) {
         super(plugin);
     }

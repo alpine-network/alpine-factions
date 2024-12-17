@@ -1,13 +1,13 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.MemberInvitation;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
@@ -31,7 +31,7 @@ import java.util.Set;
  */
 @Command(name = "factions invite", aliases = "factions inv")
 @Description("Manage faction membership invitations.")
-final class InviteCommand extends FactionsCommand {
+final class InviteCommand extends AlpineCommand {
     public InviteCommand(AlpinePlugin plugin) {
         super(plugin);
     }

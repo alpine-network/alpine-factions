@@ -1,12 +1,12 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
  */
 @Command(name = "factions alert")
 @Description("Notify the faction.")
-final class AlertCommand extends FactionsCommand {
+final class AlertCommand extends AlpineCommand {
     public AlertCommand(AlpinePlugin plugin) {
         super(plugin);
     }

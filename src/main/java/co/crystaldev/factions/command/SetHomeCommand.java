@@ -1,12 +1,12 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.event.FactionHomeUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -21,7 +21,7 @@ import org.bukkit.entity.Player;
  */
 @Command(name = "factions sethome")
 @Description("Set the faction home to your current location.")
-final class SetHomeCommand extends FactionsCommand {
+final class SetHomeCommand extends AlpineCommand {
     public SetHomeCommand(AlpinePlugin plugin) {
         super(plugin);
     }

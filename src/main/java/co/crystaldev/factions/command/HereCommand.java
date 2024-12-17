@@ -1,11 +1,11 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  */
 @Command(name = "factions here", aliases = { "factions h" })
 @Description("Display information on a the faction who owns the chunk you're in.")
-final class HereCommand extends FactionsCommand {
+final class HereCommand extends AlpineCommand {
     public HereCommand(AlpinePlugin plugin) {
         super(plugin);
     }

@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
@@ -8,7 +9,6 @@ import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.event.PlayerChangedFactionEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Command(name = "factions leave")
 @Description("Leave your faction.")
-final class LeaveCommand extends FactionsCommand {
+final class LeaveCommand extends AlpineCommand {
 
     private final Map<CommandSender, Long> confirmationMap = new HashMap<>();
 

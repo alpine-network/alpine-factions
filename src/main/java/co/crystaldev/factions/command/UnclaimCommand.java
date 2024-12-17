@@ -1,13 +1,13 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -37,7 +37,7 @@ import java.util.Optional;
  */
 @Command(name = "factions unclaim")
 @Description("Unclaim faction territory.")
-final class UnclaimCommand extends FactionsCommand {
+final class UnclaimCommand extends AlpineCommand {
     public UnclaimCommand(AlpinePlugin plugin) {
         super(plugin);
     }

@@ -1,8 +1,8 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.factions.PermissionNodes;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.PlayerState;
@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
  */
 @Command(name = "factions override", aliases = "factions admin")
 @Description("Override factions permission checks.")
-final class OverrideCommand extends FactionsCommand {
+final class OverrideCommand extends AlpineCommand {
     public OverrideCommand(AlpinePlugin plugin) {
         super(plugin);
     }

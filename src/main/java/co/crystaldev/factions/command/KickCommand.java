@@ -1,6 +1,7 @@
 package co.crystaldev.factions.command;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
@@ -9,7 +10,6 @@ import co.crystaldev.factions.api.event.PlayerChangedFactionEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permissions;
-import co.crystaldev.factions.command.framework.FactionsCommand;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.FactionHelper;
@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
  */
 @Command(name = "factions kick")
 @Description("Remove a member from the faction.")
-final class KickCommand extends FactionsCommand {
+final class KickCommand extends AlpineCommand {
     public KickCommand(AlpinePlugin plugin) {
         super(plugin);
     }
