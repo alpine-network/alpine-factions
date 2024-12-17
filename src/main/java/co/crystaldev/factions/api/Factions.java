@@ -1,10 +1,10 @@
 package co.crystaldev.factions.api;
 
+import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.show.ShowFormatter;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,7 +13,8 @@ import org.jetbrains.annotations.NotNull;
 public interface Factions {
 
     static @NotNull Factions get() {
-        return (Factions) Bukkit.getPluginManager().getPlugin("AlpineFactions");
+        // TODO: do not expose in api
+        return AlpineFactions.getInstance();
     }
 
     @NotNull ClaimAccessor claims();
