@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @since 0.1.0
  */
-public final class AlpineFactions extends AlpinePlugin implements Factions {
+public abstract class AlpineFactions extends AlpinePlugin implements Factions {
 
     @Getter
     private static AlpineFactions instance;
@@ -72,17 +72,6 @@ public final class AlpineFactions extends AlpinePlugin implements Factions {
     public void onStop() {
         this.getActivatable(ClaimStore.class).saveClaims();
         this.getActivatable(FactionStore.class).saveFactions();
-    }
-
-    @Override
-    public void setupVariables(@NotNull VariableConsumer variableConsumer) {
-        variableConsumer.addVariable("prefix", "<info>Factions</info> <separator>»</separator><text>");
-        variableConsumer.addVariable("error_prefix", "<error>Factions</error> <separator>»</separator><text>");
-    }
-
-    @Override
-    public void setupAlpineConfig(@NotNull AlpinePluginConfig config) {
-        config.noPages = ConfigMessage.of("%error_prefix% No pages available to display");
     }
 
     @Override

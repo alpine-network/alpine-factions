@@ -11,7 +11,7 @@ public final class FactionConfig extends AlpineConfig {
 
     @Override
     public String getFileName() {
-        return "factions_config.yml";
+        return "fconfig.yml";
     }
 
     @Comment({

@@ -1,4 +1,4 @@
-main: co.crystaldev.factions.AlpineFactions
+main: co.crystaldev.factions.Plugin
 name: ${pluginName}
 description: ${pluginDescription}
 version: ${pluginVersionRaw}

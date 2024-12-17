@@ -14,7 +14,7 @@ public final class StyleConfig extends AlpineConfig {
 
     @Override
     public String getFileName() {
-        return "styles.yml";
+        return "fstyles.yml";
     }
 
     @Comment({
