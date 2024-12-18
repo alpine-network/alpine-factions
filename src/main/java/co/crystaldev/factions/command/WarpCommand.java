@@ -230,6 +230,12 @@ final class WarpCommand extends AlpineCommand {
         FactionAccessor factions = Factions.get().factions();
         Faction faction = targetFaction.orElse(factions.findOrDefault(player));
 
+        // ensure player has access to warps
+        if (!faction.isPermitted(player, Permissions.ACCESS_WARP)) {
+            FactionHelper.missingPermission(player, faction, "access warp");
+            return;
+        }
+
         Component title = config.warpListTitle.build(
                 "faction", FactionHelper.formatRelational(player, faction, false),
                 "faction_name", faction.getName()
