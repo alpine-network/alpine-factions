@@ -13,10 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +38,7 @@ public final class ShowFormatter {
         Set<Component> components = this.components.stream()
                 .filter(v -> overriding || v.isVisible(context))
                 .map(v -> v.buildComponent(context))
+                .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
         Component title = config.showTitle.build("faction", FactionHelper.formatRelational(sender, faction, false),

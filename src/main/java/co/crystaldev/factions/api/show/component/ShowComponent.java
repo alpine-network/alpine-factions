@@ -16,7 +16,7 @@ public interface ShowComponent {
 
     @NotNull ShowOrder getOrdering();
 
-    @NotNull Component buildComponent(@NotNull ShowContext ctx);
+    @Nullable Component buildComponent(@NotNull ShowContext ctx);
 
     default boolean isVisible(@NotNull ShowContext ctx) {
         return true;
@@ -24,7 +24,7 @@ public interface ShowComponent {
 
     static @NotNull ShowComponent create(
             @NotNull ShowOrder order,
-            @NotNull Function<ShowContext, @NotNull Component> componentFunction,
+            @NotNull Function<ShowContext, @Nullable Component> componentFunction,
             @Nullable Predicate<ShowContext> visibilityPredicate
     ) {
         return new FunctionalShowComponent(order, componentFunction, visibilityPredicate);
@@ -32,7 +32,7 @@ public interface ShowComponent {
 
     static @NotNull ShowComponent create(
             @NotNull ShowOrder order,
-            @NotNull Function<ShowContext, @NotNull Component> componentPredicate
+            @NotNull Function<ShowContext, @Nullable Component> componentPredicate
     ) {
         return new FunctionalShowComponent(order, componentPredicate, null);
     }
