@@ -1,8 +1,6 @@
 package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
-import co.crystaldev.alpinecore.framework.config.AlpinePluginConfig;
-import co.crystaldev.alpinecore.framework.config.object.ConfigMessage;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.FlagRegistry;
 import co.crystaldev.factions.api.PermissionRegistry;
@@ -19,10 +17,13 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.PlayerStore;
 import co.crystaldev.factions.store.claim.ClaimStore;
+import com.google.common.collect.ImmutableSet;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Set;
 
 /**
  * @since 0.1.0
@@ -72,6 +73,11 @@ public abstract class AlpineFactions extends AlpinePlugin implements Factions {
     public void onStop() {
         this.getActivatable(ClaimStore.class).saveClaims();
         this.getActivatable(FactionStore.class).saveFactions();
+    }
+
+    @Override
+    protected @NotNull Set<Class<?>> getScannablePackages() {
+        return ImmutableSet.of(AlpineFactions.class, this.getClass());
     }
 
     @Override
