@@ -99,10 +99,4 @@ public final class FactionConfig extends AlpineConfig {
             "The maximum number of faction truces for a faction."
     })
     public int maxTruces = 999;
-
-    @Comment({
-            "",
-            "The maximum blocks that wilderness can teleport a player."
-    })
-    public int maxWildDistance = 2500;
 }

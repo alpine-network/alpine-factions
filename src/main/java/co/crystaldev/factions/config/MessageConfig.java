@@ -703,19 +703,6 @@ public final class MessageConfig extends AlpineConfig {
 
     @Comment({
             "",
-            ">>> Wilderness"
-    })
-    public ConfigText wildTeleport = ConfigText.of(
-            "<info>»</info> Teleporting you to a random location in wilderness in %seconds% seconds...");
-
-    public ConfigText wildTeleportInstant = ConfigText.of(
-            "<info>»</info> Teleporting you to a random location in wilderness...");
-
-    public ConfigText invalidWildLocation = ConfigText.of(
-            "<error>»</error> Could not find a valid location, try again...");
-
-    @Comment({
-            "",
             ">>> Informational Commands"
     })
     public ConfigText locationBroadcast = ConfigText.of(
