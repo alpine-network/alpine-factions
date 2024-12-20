@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -99,6 +100,10 @@ public final class ClaimRegion {
     public @NotNull List<ClaimedChunk> getClaims(@NotNull Faction faction) {
         World world = Bukkit.getWorld(this.worldName);
         List<ClaimedChunk> chunks = new ArrayList<>();
+
+        if (world == null) {
+            return Collections.emptyList();
+        }
 
         this.chunkToClaim.forEach((key, claim) -> {
             if (!claim.getFactionId().equals(faction.getId()))

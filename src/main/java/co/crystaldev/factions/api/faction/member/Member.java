@@ -52,7 +52,8 @@ public final class Member {
     }
 
     public @NotNull OfflinePlayer getOfflinePlayer() {
-        return Bukkit.getOfflinePlayer(this.id);
+        Player player = Bukkit.getPlayer(this.id);
+        return player != null ? player : Bukkit.getOfflinePlayer(this.id);
     }
 
     public boolean hasJoinedServer() {
