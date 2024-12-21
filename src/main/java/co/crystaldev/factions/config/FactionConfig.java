@@ -54,6 +54,12 @@ public final class FactionConfig extends AlpineConfig {
 
     @Comment({
             "",
+            "The maximum power per faction."
+    })
+    public int maxFactionPower = 3000;
+
+    @Comment({
+            "",
             "The maximum power per player."
     })
     public int maxPlayerPower = 100;

@@ -238,7 +238,7 @@ public final class Faction {
             powerLevel += user.getEffectivePower();
         }
 
-        return powerLevel;
+        return Math.min(powerLevel, this.getPowerLevelLimit());
     }
 
     public long getMaxPowerLevel() {
@@ -252,7 +252,12 @@ public final class Faction {
             powerLevel += user.getMaxPower();
         }
 
-        return powerLevel + this.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER);
+        return Math.min(powerLevel + this.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER), this.getPowerLevelLimit());
+    }
+
+    private long getPowerLevelLimit() {
+        FactionConfig config = AlpineFactions.getInstance().getConfiguration(FactionConfig.class);
+        return config.maxFactionPower;
     }
 
     public int getClaimCount(@Nullable World world) {
