@@ -238,7 +238,7 @@ public final class Faction {
             powerLevel += user.getEffectivePower();
         }
 
-        return Math.min(powerLevel, this.getPowerLevelLimit());
+        return Math.min(powerLevel, this.getPowerLevelLimit()) + this.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER);
     }
 
     public long getMaxPowerLevel() {
@@ -252,7 +252,7 @@ public final class Faction {
             powerLevel += user.getMaxPower();
         }
 
-        return Math.min(powerLevel + this.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER), this.getPowerLevelLimit());
+        return Math.min(powerLevel, this.getPowerLevelLimit()) + this.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER);
     }
 
     private long getPowerLevelLimit() {
