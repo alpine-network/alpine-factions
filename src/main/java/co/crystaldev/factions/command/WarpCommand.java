@@ -59,7 +59,7 @@ final class WarpCommand extends AlpineCommand {
 
         // ensure player has access to warp
         if (!faction.isPermitted(player, Permissions.ACCESS_WARP)) {
-            FactionHelper.missingPermission(player, faction, "access warp");
+            FactionHelper.missingPermission(player, faction, "access warps");
             return;
         }
 
@@ -132,7 +132,7 @@ final class WarpCommand extends AlpineCommand {
 
         // ensure player can modify warps
         if (!faction.isPermitted(player, Permissions.MODIFY_WARP)) {
-            FactionHelper.missingPermission(player, faction, "modify warp");
+            FactionHelper.missingPermission(player, faction, "modify warps");
             return;
         }
 
@@ -179,7 +179,7 @@ final class WarpCommand extends AlpineCommand {
 
         // ensure player can modify warps
         if (!faction.isPermitted(player, Permissions.MODIFY_WARP)) {
-            FactionHelper.missingPermission(player, faction, "modify warp");
+            FactionHelper.missingPermission(player, faction, "modify warps");
             return;
         }
 
@@ -220,7 +220,7 @@ final class WarpCommand extends AlpineCommand {
     }
 
     @Execute(name = "list")
-    @Shortcut({ "factions listwarps" })
+    @Shortcut({ "factions listwarps", "factions warps" })
     public void list(
             @Context Player player,
             @Arg("page") Optional<Integer> page,
@@ -232,7 +232,7 @@ final class WarpCommand extends AlpineCommand {
 
         // ensure player has access to warps
         if (!faction.isPermitted(player, Permissions.ACCESS_WARP)) {
-            FactionHelper.missingPermission(player, faction, "access warp");
+            FactionHelper.missingPermission(player, faction, "access warps");
             return;
         }
 
