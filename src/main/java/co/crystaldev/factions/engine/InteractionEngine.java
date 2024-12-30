@@ -5,6 +5,7 @@ import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
 import co.crystaldev.alpinecore.util.ItemHelper;
 import co.crystaldev.alpinecore.util.MaterialHelper;
 import co.crystaldev.factions.api.faction.permission.Permissions;
+import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.MaterialMapping;
 import com.cryptomorin.xseries.XMaterial;
@@ -51,6 +52,10 @@ public final class InteractionEngine extends AlpineEngine {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        if (this.plugin.getConfiguration(FactionConfig.class).silkSpawnerIgnoreTerritory && MaterialMapping.SPAWNERS.test(event.getBlock())) {
+            return;
+        }
+
         if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
             event.setCancelled(true);
         }

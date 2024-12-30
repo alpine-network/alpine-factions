@@ -105,4 +105,10 @@ public final class FactionConfig extends AlpineConfig {
             "The maximum number of faction truces for a faction."
     })
     public int maxTruces = 999;
+
+    @Comment({
+            "",
+            "Whether spawners can be mined in all territories."
+    })
+    public boolean silkSpawnerIgnoreTerritory = true;
 }

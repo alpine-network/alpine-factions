@@ -50,6 +50,11 @@ public final class MaterialMapping {
             .add(types -> types.filter(m -> m.name().endsWith("_PRESSURE_PLATE")))
             .build();
 
+    public static final MappedMaterial SPAWNERS = MappedMaterial.of(
+            XMaterial.SPAWNER,
+            XMaterial.TRIAL_SPAWNER
+    );
+
     public static final MappedMaterial MATERIAL_EDIT_ON_INTERACT = MappedMaterial.of(
             XMaterial.NOTE_BLOCK,
             XMaterial.CHISELED_BOOKSHELF,
