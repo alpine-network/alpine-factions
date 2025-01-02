@@ -23,7 +23,7 @@ repositories {
     mavenCentral()
     maven("https://lib.alpn.cloud/alpine-public/")
     maven("https://lib.alpn.cloud/snapshots/")
-    maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.panda-lang.org/releases")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 }
