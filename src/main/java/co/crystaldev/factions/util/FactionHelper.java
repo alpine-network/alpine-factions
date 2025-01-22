@@ -265,6 +265,18 @@ public final class FactionHelper {
         return true;
     }
 
+    public static boolean isPermitted(@NotNull Player player, @NotNull Chunk chunk, @NotNull Permission permission) {
+        ClaimAccessor claims = Factions.get().claims();
+        if (!claims.isClaimed(chunk)) {
+            FactionAccessor factions = Factions.get().factions();
+            Faction wilderness = factions.getWilderness();
+            return wilderness.isPermitted(player, permission);
+        }
+
+        Claim claim = claims.getClaim(chunk);
+        return claim == null || claim.isPermitted(player, permission);
+    }
+
     private static @Nullable Faction findFaction(@NotNull ServerOperator sender) {
         FactionAccessor factions = Factions.get().factions();
         return sender instanceof OfflinePlayer ? factions.find((OfflinePlayer) sender) : factions.getWilderness();
