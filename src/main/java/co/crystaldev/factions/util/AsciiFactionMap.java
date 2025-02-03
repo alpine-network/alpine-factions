@@ -76,7 +76,7 @@ public final class AsciiFactionMap {
                 "world", this.player.getWorld().getName(),
                 "chunk_x", chunk.getX(),
                 "chunk_z", chunk.getZ(),
-                "faction", FactionHelper.formatRelational(this.player, faction, faction.getName()),
+                "faction", RelationHelper.formatLiteralFactionName(this.player, faction),
                 "faction_name", faction.getName()
         )));
     }
@@ -101,7 +101,7 @@ public final class AsciiFactionMap {
 
             Component component = this.config.mapLegendFormat.build(
                     "character", marker.character,
-                    "faction", FactionHelper.formatRelational(this.player, faction, faction.getName()),
+                    "faction", RelationHelper.formatLiteralFactionName(this.player, faction),
                     "faction_name", faction.getName()
             );
 
@@ -155,7 +155,7 @@ public final class AsciiFactionMap {
                     boolean overflow = this.factionColorMap.size() >= KEY_CHARS.length;
                     FactionMarker marker = this.factionColorMap.computeIfAbsent(faction, fac -> {
                         char ch = overflow ? '#' : KEY_CHARS[this.factionColorMap.size()];
-                        Style style = FactionHelper.formatRelational(this.player, fac, Component.text("")).style();
+                        Style style = RelationHelper.formatComponent(this.player, fac, Component.text("")).style();
                         Component symbol = overflow
                                 ? Component.text("#").decorate(TextDecoration.OBFUSCATED)
                                 : Component.text(ch);

@@ -7,6 +7,8 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.PermissionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -31,8 +33,9 @@ final class LocationCommand extends AlpineCommand {
 
         Faction faction = Factions.get().factions().findOrDefault(player);
 
-        if (!faction.isPermitted(player, Permissions.BROADCAST_LOCATION)) {
-            FactionHelper.missingPermission(player, faction, "broadcast location");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+                Permissions.BROADCAST_LOCATION, "broadcast location");
+        if (!permitted) {
             return;
         }
 
@@ -40,7 +43,7 @@ final class LocationCommand extends AlpineCommand {
 
         FactionHelper.broadcast(faction, observer -> {
             return config.locationBroadcast.build(
-                    "player", FactionHelper.formatRelational(observer, faction, player, false),
+                    "player", RelationHelper.formatLiteralPlayerName(observer, player),
                     "world", player.getWorld().getName(),
                     "x", location.getBlockX(),
                     "y", location.getBlockY(),

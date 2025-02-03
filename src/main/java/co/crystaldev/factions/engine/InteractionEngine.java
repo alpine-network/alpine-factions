@@ -6,8 +6,8 @@ import co.crystaldev.alpinecore.util.ItemHelper;
 import co.crystaldev.alpinecore.util.MaterialHelper;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.FactionConfig;
-import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.MaterialMapping;
+import co.crystaldev.factions.util.PermissionHelper;
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -35,7 +35,12 @@ public final class InteractionEngine extends AlpineEngine {
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlockPlaced().getChunk(), Permissions.BUILD, "edit the terrain")) {
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(
+                event.getPlayer(),
+                event.getBlockPlaced().getChunk(),
+                Permissions.BUILD,
+                "edit the terrain");
+        if (!permitted) {
             event.setCancelled(true);
         }
     }
@@ -43,7 +48,12 @@ public final class InteractionEngine extends AlpineEngine {
     @EventHandler
     public void onBlockPlace(BlockMultiPlaceEvent event) {
         for (BlockState state : event.getReplacedBlockStates()) {
-            if (!FactionHelper.isPermitted(event.getPlayer(), state.getChunk(), Permissions.BUILD, "edit the terrain")) {
+            boolean permitted = PermissionHelper.checkPermissionAndNotify(
+                    event.getPlayer(),
+                    state.getChunk(),
+                    Permissions.BUILD,
+                    "edit the terrain");
+            if (!permitted) {
                 event.setCancelled(true);
                 return;
             }
@@ -56,28 +66,48 @@ public final class InteractionEngine extends AlpineEngine {
             return;
         }
 
-        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(
+                event.getPlayer(),
+                event.getBlock().getChunk(),
+                Permissions.BUILD,
+                "edit the terrain");
+        if (!permitted) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onBlockDamage(BlockDamageEvent event) {
-        if (event.getInstaBreak() && !FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
+        boolean permitted = event.getInstaBreak() && PermissionHelper.checkPermissionAndNotify(
+                event.getPlayer(),
+                event.getBlock().getChunk(),
+                Permissions.BUILD,
+                "edit the terrain");
+        if (!permitted) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
-        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(
+                event.getPlayer(),
+                event.getBlock().getChunk(),
+                Permissions.BUILD,
+                "edit the terrain");
+        if (!permitted) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onHangingPlace(HangingPlaceEvent event) {
-        if (!FactionHelper.isPermitted(event.getPlayer(), event.getBlock().getChunk(), Permissions.BUILD, "edit the terrain")) {
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(
+                event.getPlayer(),
+                event.getBlock().getChunk(),
+                Permissions.BUILD,
+                "edit the terrain");
+        if (!permitted) {
             event.setCancelled(true);
         }
     }
@@ -89,7 +119,12 @@ public final class InteractionEngine extends AlpineEngine {
             return;
         }
 
-        if (!FactionHelper.isPermitted((Player) remover, event.getEntity().getLocation().getChunk(), Permissions.BUILD, "edit the terrain")) {
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(
+                remover,
+                event.getEntity().getChunk(),
+                Permissions.BUILD,
+                "edit the terrain");
+        if (!permitted) {
             event.setCancelled(true);
         }
     }
@@ -105,29 +140,45 @@ public final class InteractionEngine extends AlpineEngine {
 
         if (event.hasBlock()) {
             // containers
-            boolean result = MaterialMapping.CONTAINERS.test(block);
-            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.USE_CONTAINERS, "use containers")) {
+            boolean result = MaterialMapping.CONTAINERS.test(block) && !PermissionHelper.checkPermissionAndNotify(
+                    event.getPlayer(),
+                    block.getChunk(),
+                    Permissions.USE_CONTAINERS,
+                    "use containers");
+            if (result) {
                 event.setCancelled(true);
                 return;
             }
 
             // doors
-            result = MaterialMapping.DOORS.test(block);
-            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.OPEN_DOORS, "open doors")) {
+            result = MaterialMapping.DOORS.test(block) && !PermissionHelper.checkPermissionAndNotify(
+                    event.getPlayer(),
+                    block.getChunk(),
+                    Permissions.OPEN_DOORS,
+                    "open doors");
+            if (result) {
                 event.setCancelled(true);
                 return;
             }
 
             // pressure plates
-            result = MaterialMapping.PRESSURE_PLATES.test(block);
-            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.USE_PRESSURE_PLATES, "use pressure plates")) {
+            result = MaterialMapping.PRESSURE_PLATES.test(block) && !PermissionHelper.checkPermissionAndNotify(
+                    event.getPlayer(),
+                    block.getChunk(),
+                    Permissions.USE_PRESSURE_PLATES,
+                    "use pressure plates");
+            if (result) {
                 event.setCancelled(true);
                 return;
             }
 
             // buttons/levers
-            result = MaterialMapping.SWITCHES.test(block);
-            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.USE_SWITCHES, "use switches")) {
+            result = MaterialMapping.SWITCHES.test(block) && !PermissionHelper.checkPermissionAndNotify(
+                    event.getPlayer(),
+                    block.getChunk(),
+                    Permissions.USE_SWITCHES,
+                    "use switches");
+            if (result) {
                 event.setCancelled(true);
                 return;
             }
@@ -142,15 +193,24 @@ public final class InteractionEngine extends AlpineEngine {
                     || ItemHelper.AXES.test(item) && MaterialMapping.STRIPPED_LOGS.test(block)
                     || ItemHelper.HOES.test(item) && MaterialHelper.getType(block) == XMaterial.FARMLAND
                     || ItemHelper.SHOVELS.test(item) && MaterialHelper.getType(block) == XMaterial.DIRT_PATH;
-            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.BUILD, "edit the terrain")) {
+            result = result && !PermissionHelper.checkPermissionAndNotify(
+                    event.getPlayer(),
+                    block.getChunk(),
+                    Permissions.BUILD,
+                    "edit the terrain");
+            if (result) {
                 event.setCancelled(true);
                 return;
             }
         }
 
         if (event.hasItem() && block != null) {
-            boolean result = MaterialMapping.MATERIAL_EDIT_TOOLS.test(item);
-            if (result && !FactionHelper.isPermitted(player, block.getLocation().getChunk(), Permissions.BUILD, "edit the terrain")) {
+            boolean result = MaterialMapping.MATERIAL_EDIT_TOOLS.test(item) && !PermissionHelper.checkPermissionAndNotify(
+                    event.getPlayer(),
+                    block.getChunk(),
+                    Permissions.BUILD,
+                    "edit the terrain");
+            if (result) {
                 event.setCancelled(true);
             }
         }
@@ -162,7 +222,12 @@ public final class InteractionEngine extends AlpineEngine {
         Location location = event.getBlockClicked().getLocation().clone();
         location.add(face.getModX(), face.getModY(), face.getModZ());
 
-        if (!FactionHelper.isPermitted(event.getPlayer(), location.getChunk(), Permissions.BUILD, "edit the terrain")) {
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(
+                event.getPlayer(),
+                location,
+                Permissions.BUILD,
+                "edit the terrain");
+        if (!permitted) {
             event.setCancelled(true);
         }
     }
@@ -173,7 +238,12 @@ public final class InteractionEngine extends AlpineEngine {
         Location location = event.getBlockClicked().getLocation().clone();
         location.add(face.getModX(), face.getModY(), face.getModZ());
 
-        if (!FactionHelper.isPermitted(event.getPlayer(), location.getChunk(), Permissions.BUILD, "edit the terrain")) {
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(
+                event.getPlayer(),
+                location,
+                Permissions.BUILD,
+                "edit the terrain");
+        if (!permitted) {
             event.setCancelled(true);
         }
     }

@@ -6,8 +6,8 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.show.component.ShowComponent;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.RelationHelper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.ApiStatus;
@@ -41,7 +41,8 @@ public final class ShowFormatter {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
 
-        Component title = config.showTitle.build("faction", FactionHelper.formatRelational(sender, faction, false),
+        Component title = config.showTitle.build(
+                "faction", RelationHelper.formatLiteralFactionName(sender, faction),
                 "faction_name", faction.getName());
         return Components.joinNewLines(Formatting.title(title), Components.joinNewLines(components));
     }

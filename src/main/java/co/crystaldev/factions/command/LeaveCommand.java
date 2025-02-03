@@ -11,6 +11,7 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -84,13 +85,13 @@ final class LeaveCommand extends AlpineCommand {
             }
 
             return config.memberLeave.build(
-                    "player", FactionHelper.formatRelational(observer, faction, player),
+                    "player", RelationHelper.formatPlayerName(observer, player),
                     "player_name", player.getName());
         });
 
         // notify the player
         Messaging.send(player, config.leave.build(
-                "faction", FactionHelper.formatRelational(player, faction),
+                "faction", RelationHelper.formatFactionName(player, faction),
                 "faction_name", faction.getName()
         ));
 

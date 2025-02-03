@@ -11,6 +11,8 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.PermissionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -40,8 +42,9 @@ final class HomeCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         Faction faction = targetFaction.orElse(Factions.get().factions().findOrDefault(player));
-        if (!faction.isPermitted(player, Permissions.ACCESS_HOME)) {
-            FactionHelper.missingPermission(player, faction, "access home");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+                Permissions.ACCESS_HOME, "teleport home");
+        if (!permitted) {
             return;
         }
 
@@ -49,7 +52,7 @@ final class HomeCommand extends AlpineCommand {
         Location home = faction.getHome();
         if (home == null) {
             config.noHome.send(player,
-                    "faction", FactionHelper.formatRelational(player, faction),
+                    "faction", RelationHelper.formatFactionName(player, faction),
                     "faction_name", faction.getName());
             return;
         }
@@ -71,7 +74,7 @@ final class HomeCommand extends AlpineCommand {
                 .onApply(ctx -> {
                     ConfigText message = ctx.isInstant() ? config.homeInstant : config.home;
                     ctx.message(message.build(
-                            "faction", FactionHelper.formatRelational(player, faction, false),
+                            "faction", RelationHelper.formatLiteralFactionName(player, faction),
                             "faction_name", faction.getName(),
                             "seconds", ctx.timeUntilTeleport(TimeUnit.SECONDS)));
                 })

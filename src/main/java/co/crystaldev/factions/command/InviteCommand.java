@@ -11,6 +11,8 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.PermissionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -44,19 +46,19 @@ final class InviteCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(player);
-        Faction inviteeFaction = factions.findOrDefault(invitee);
 
-        if (!faction.isPermitted(player, Permissions.INVITE_MEMBERS)) {
-            FactionHelper.missingPermission(player, faction, "invite members");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+                Permissions.INVITE_MEMBERS, "invite members");
+        if (!permitted) {
             return;
         }
 
         // you can't invite an existing member!
         if (faction.isMember(invitee.getUniqueId())) {
             config.inviteFail.send(player,
-                    "player", FactionHelper.formatRelational(player, faction, invitee),
+                    "player", RelationHelper.formatPlayerName(player, invitee),
                     "player_name", invitee.getName(),
-                    "faction", FactionHelper.formatRelational(player, faction),
+                    "faction", RelationHelper.formatFactionName(player, faction),
                     "faction_name", faction.getName());
             return;
         }
@@ -74,20 +76,20 @@ final class InviteCommand extends AlpineCommand {
             }
 
             return config.invite.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, player),
+                    "actor", RelationHelper.formatPlayerName(observer, player),
                     "actor_name", player.getName(),
 
-                    "invitee", FactionHelper.formatRelational(observer, inviteeFaction, invitee),
+                    "invitee", RelationHelper.formatPlayerName(observer, invitee),
                     "invitee_name", invitee.getName()
             );
         });
 
         // notify the invitee
         Messaging.attemptSend(invitee, config.invited.build(
-                "actor", FactionHelper.formatRelational(invitee, faction, player),
+                "actor", RelationHelper.formatPlayerName(invitee, player),
                 "actor_name", player.getName(),
 
-                "faction", FactionHelper.formatRelational(invitee, faction, false),
+                "faction", RelationHelper.formatLiteralFactionName(invitee, faction),
                 "faction_name", faction.getName()
         ));
     }
@@ -100,10 +102,10 @@ final class InviteCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(player);
-        Faction inviteeFaction = factions.findOrDefault(invitee);
 
-        if (!faction.isPermitted(player, Permissions.INVITE_MEMBERS)) {
-            FactionHelper.missingPermission(player, faction, "invite members");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+                Permissions.INVITE_MEMBERS, "invite members");
+        if (!permitted) {
             return;
         }
 
@@ -113,10 +115,10 @@ final class InviteCommand extends AlpineCommand {
         // notify the faction
         FactionHelper.broadcast(faction, observer -> {
             return config.inviteRevoke.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, player),
+                    "actor", RelationHelper.formatPlayerName(observer, player),
                     "actor_name", player.getName(),
 
-                    "invitee", FactionHelper.formatRelational(observer, inviteeFaction, invitee),
+                    "invitee", RelationHelper.formatPlayerName(observer, invitee),
                     "invitee_name", invitee.getName()
             );
         });
@@ -133,27 +135,26 @@ final class InviteCommand extends AlpineCommand {
         Faction resolvedFaction = faction.orElse(factions.findOrDefault(sender));
         Set<MemberInvitation> invitations = resolvedFaction.getInvitations();
 
-        if (!resolvedFaction.isPermitted(sender, Permissions.INVITE_MEMBERS)) {
-            FactionHelper.missingPermission(sender, resolvedFaction, "invite members");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, resolvedFaction,
+                Permissions.INVITE_MEMBERS, "invite members");
+        if (!permitted) {
             return;
         }
 
         Component title = config.inviteListTitle.build(
-                "faction", FactionHelper.formatRelational(sender, resolvedFaction, false),
+                "faction", RelationHelper.formatLiteralFactionName(sender, resolvedFaction),
                 "faction_name", resolvedFaction.getName()
         );
         String command = "/f invite list %page% " + resolvedFaction.getName();
         Messaging.send(sender, Formatting.page(title, invitations, command, page.orElse(1), 10, invite -> {
             OfflinePlayer invitee = Bukkit.getOfflinePlayer(invite.getPlayerId());
             OfflinePlayer inviter = Bukkit.getOfflinePlayer(invite.getInviterId());
-            Faction inviteeFaction = factions.findOrDefault(invite.getPlayerId());
-            Faction inviterFaction = factions.findOrDefault(invite.getInviterId());
 
             return config.inviteListEntry.build(
-                    "player", FactionHelper.formatRelational(sender, inviteeFaction, invitee),
+                    "player", RelationHelper.formatPlayerName(sender, invitee),
                     "player_name", invitee.getName(),
 
-                    "inviter", FactionHelper.formatRelational(sender, inviterFaction, inviter),
+                    "inviter", RelationHelper.formatPlayerName(sender, inviter),
                     "inviter_name", inviter.getName()
             );
         }));

@@ -14,6 +14,8 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.AutoClaimState;
 import co.crystaldev.factions.handler.player.PlayerState;
 import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.PermissionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.util.claims.Claiming;
 import co.crystaldev.factions.util.claims.WorldClaimType;
@@ -75,7 +77,7 @@ final class UnclaimCommand extends AlpineCommand {
         if (autoClaim.isEnabled()) {
             Faction wilderness = Factions.get().factions().getWilderness();
             config.enableAutoUnclaim.send(player,
-                    "faction", FactionHelper.formatRelational(player, wilderness),
+                    "faction", RelationHelper.formatFactionName(player, wilderness),
                     "faction_name", wilderness.getName());
 
             // attempt to unclaim the chunk the player is standing in
@@ -94,8 +96,9 @@ final class UnclaimCommand extends AlpineCommand {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        if (!faction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
-            FactionHelper.missingPermission(player, faction, "modify territory");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+                Permissions.MODIFY_TERRITORY, "modify territory");
+        if (!permitted) {
             return;
         }
 
@@ -127,19 +130,19 @@ final class UnclaimCommand extends AlpineCommand {
         Faction playerFaction = Factions.get().factions().findOrDefault(player);
         FactionHelper.broadcast(faction, player, observer -> {
             return message.build(
-                    "actor", FactionHelper.formatRelational(observer, playerFaction, player),
+                    "actor", RelationHelper.formatPlayerName(observer, player),
                     "actor_name", player.getName(),
 
-                    "faction", FactionHelper.formatRelational(observer, faction),
+                    "faction", RelationHelper.formatFactionName(observer, faction),
                     "faction_name", faction.getName(),
                     "amount", foundClaims.size(),
                     "claim_type", config.unclaimed.build(),
                     "world", worldName,
 
-                    "old_faction", FactionHelper.formatRelational(observer, faction),
+                    "old_faction", RelationHelper.formatFactionName(observer, faction),
                     "old_faction_name", faction.getName(),
 
-                    "new_faction", FactionHelper.formatRelational(observer, wilderness),
+                    "new_faction", RelationHelper.formatFactionName(observer, wilderness),
                     "new_faction_name", wilderness.getName()
             );
         });

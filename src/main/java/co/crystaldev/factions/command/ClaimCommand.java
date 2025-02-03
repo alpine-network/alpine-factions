@@ -9,7 +9,7 @@ import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.handler.player.AutoClaimState;
 import co.crystaldev.factions.handler.player.PlayerState;
-import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import co.crystaldev.factions.util.claims.ClaimType;
 import co.crystaldev.factions.util.claims.Claiming;
 import dev.rollczi.litecommands.annotations.argument.Arg;
@@ -81,7 +81,7 @@ final class ClaimCommand extends AlpineCommand {
 
         if (autoClaim.isEnabled()) {
             config.enableAutoClaim.send(player,
-                    "faction", FactionHelper.formatRelational(player, claimingFaction),
+                    "faction", RelationHelper.formatFactionName(player, claimingFaction),
                     "faction_name", claimingFaction.getName());
 
             // attempt to claim the chunk the player is standing in

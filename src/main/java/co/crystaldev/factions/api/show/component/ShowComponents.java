@@ -10,8 +10,8 @@ import co.crystaldev.factions.api.show.order.ShowOrder;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.RelationHelper;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -121,7 +121,7 @@ public final class ShowComponents {
                 Collection<Component> members = ctx.getFaction().getOnlineMembers()
                         .stream()
                         .sorted(Member.COMPARATOR)
-                        .map(v -> FactionHelper.formatName(v.getOfflinePlayer()))
+                        .map(v -> RelationHelper.formatPlayerName(v.getOfflinePlayer()))
                         .collect(Collectors.toList());
                 Component joined = members.isEmpty() ? config.none.build() : Components.joinCommas(members);
                 Component count = (members.isEmpty() ? config.memberCountOffline : config.memberCountOnline).build(
@@ -137,7 +137,7 @@ public final class ShowComponents {
                 Collection<Component> members = ctx.getFaction().getOfflineMembers()
                         .stream()
                         .sorted(Member.COMPARATOR)
-                        .map(v -> FactionHelper.formatName(v.getOfflinePlayer()))
+                        .map(v -> RelationHelper.formatPlayerName(v.getOfflinePlayer()))
                         .collect(Collectors.toList());
                 Component joined = members.isEmpty() ? config.none.build() : Components.joinCommas(members);
                 Component count = config.memberCountOffline.build("online_count", members.size(),

@@ -6,7 +6,7 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.PermissionHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -42,7 +42,7 @@ final class DisbandCommand extends AlpineCommand {
                 || PlayerHandler.getInstance().isOverriding(sender)
                 || sender instanceof OfflinePlayer && faction.getMemberRankOrDefault(((OfflinePlayer) sender).getUniqueId(), Rank.RECRUIT) == Rank.LEADER;
         if (!owner) {
-            FactionHelper.missingPermission(sender, faction, "disband");
+            PermissionHelper.notify(sender, faction, "disband");
             return;
         }
 

@@ -12,7 +12,7 @@ import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import com.cryptomorin.xseries.XPotion;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.entity.*;
@@ -129,56 +129,56 @@ public final class CombatEngine extends AlpineEngine {
         }
     }
 
-    private static boolean shouldCancelDamage(@NotNull Player attacker, @NotNull Player target) {
+    private static boolean shouldCancelDamage(@NotNull Player hurtPlayer, @NotNull Player attackingPlayer) {
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         ClaimAccessor claims = Factions.get().claims();
 
         // allow overriding players to damage other players
-        if (PlayerHandler.getInstance().isOverriding(target)) {
+        if (PlayerHandler.getInstance().isOverriding(attackingPlayer)) {
             return false;
         }
 
-        Faction attackerFaction = factions.findOrDefault(attacker);
-        Faction targetFaction = factions.findOrDefault(target);
+        Faction hurtFaction = factions.findOrDefault(hurtPlayer);
+        Faction attackingFaction = factions.findOrDefault(attackingPlayer);
 
-        Faction attackerClaimFaction = claims.getFactionOrDefault(attacker.getLocation());
-        Faction targetClaimFaction = claims.getFactionOrDefault(target.getLocation());
+        Faction hurtFactionAt = claims.getFactionOrDefault(hurtPlayer.getLocation());
+        Faction attackingFactionAt = claims.getFactionOrDefault(attackingPlayer.getLocation());
 
         // ensure combat is allowed in both locations
-        if (!attackerClaimFaction.getFlagValueOrDefault(FactionFlags.COMBAT) || !targetClaimFaction.getFlagValueOrDefault(FactionFlags.COMBAT)) {
-            config.combatDisabled.rateLimitedSend(target,
-                    "faction", FactionHelper.formatRelational(target, targetClaimFaction, false),
-                    "faction_name", targetClaimFaction.getName());
+        if (!hurtFactionAt.getFlagValueOrDefault(FactionFlags.COMBAT) || !attackingFactionAt.getFlagValueOrDefault(FactionFlags.COMBAT)) {
+            config.combatDisabled.rateLimitedSend(attackingPlayer,
+                    "faction", RelationHelper.formatLiteralFactionName(attackingPlayer, attackingFactionAt),
+                    "faction_name", attackingFactionAt.getName());
             return true;
         }
 
         // allow player to hurt themselves (bow boosting, potion splash, etc...)
-        if (attacker.equals(target)) {
+        if (hurtPlayer.equals(attackingPlayer)) {
             return false;
         }
 
         // you should always be able to hit wilderness players
-        if (attackerFaction.isWilderness()) {
+        if (hurtFaction.isWilderness()) {
             return false;
         }
 
         // can't hurt neutral players in their own land
-        if (targetFaction.isRelation(attackerFaction, FactionRelation.NEUTRAL) && attackerFaction.equals(attackerClaimFaction)) {
-            config.cantHurtNeutral.rateLimitedSend(target,
-                    "player", FactionHelper.formatRelational(target, attackerFaction, attacker, false),
-                    "player_name", attacker.getName(),
-                    "attacker", FactionHelper.formatRelational(target, targetFaction, target, false),
-                    "attacker_name", target.getName());
-            config.attemptedDamage.rateLimitedSend(attacker,
-                    "player", FactionHelper.formatRelational(attacker, attackerFaction, attacker, false),
-                    "player_name", attacker.getName(),
-                    "attacker", FactionHelper.formatRelational(attacker, targetFaction, target, false),
-                    "attacker_name", target.getName());
+        if (attackingFaction.isRelation(hurtFaction, FactionRelation.NEUTRAL) && hurtFaction.equals(hurtFactionAt)) {
+            config.cantHurtNeutral.rateLimitedSend(attackingPlayer,
+                    "player", RelationHelper.formatLiteralPlayerName(attackingPlayer, hurtPlayer),
+                    "player_name", hurtPlayer.getName(),
+                    "attacker", RelationHelper.formatLiteralPlayerName(attackingPlayer, attackingPlayer),
+                    "attacker_name", attackingPlayer.getName());
+            config.attemptedDamage.rateLimitedSend(hurtPlayer,
+                    "player", RelationHelper.formatLiteralPlayerName(hurtPlayer, hurtPlayer),
+                    "player_name", hurtPlayer.getName(),
+                    "attacker", RelationHelper.formatLiteralPlayerName(hurtPlayer, attackingPlayer),
+                    "attacker_name", attackingPlayer.getName());
             return true;
         }
-        FPlayer state = Factions.get().players().get(attacker);
-        FPlayer targetState = Factions.get().players().get(target);
+        FPlayer state = Factions.get().players().get(hurtPlayer);
+        FPlayer targetState = Factions.get().players().get(attackingPlayer);
 
         // Allow friendly fire if toggled
         if (state.isFriendlyFire() && targetState.isFriendlyFire()) {
@@ -186,12 +186,12 @@ public final class CombatEngine extends AlpineEngine {
         }
 
         // can't hurt your own faction members
-        if (targetFaction.isFriendly(attackerFaction)) {
-            config.cantHurtFriendly.rateLimitedSend(target,
-                    "player", FactionHelper.formatRelational(target, attackerFaction, attacker, false),
-                    "player_name", attacker.getName(),
-                    "attacker", FactionHelper.formatRelational(target, targetFaction, target, false),
-                    "attacker_name", target.getName());
+        if (attackingFaction.isFriendly(hurtFaction)) {
+            config.cantHurtFriendly.rateLimitedSend(attackingPlayer,
+                    "player", RelationHelper.formatLiteralPlayerName(attackingPlayer, hurtPlayer),
+                    "player_name", hurtPlayer.getName(),
+                    "attacker", RelationHelper.formatLiteralPlayerName(attackingPlayer, attackingPlayer),
+                    "attacker_name", attackingPlayer.getName());
             return true;
         }
 

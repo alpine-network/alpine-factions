@@ -5,12 +5,11 @@ import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.factions.PermissionNodes;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
-import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -41,15 +40,13 @@ final class SetPowerCommand extends AlpineCommand {
         MessageConfig messageConfig = this.plugin.getConfiguration(MessageConfig.class);
         FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);
 
-        Faction faction = Factions.get().factions().findOrDefault(other);
-
         PlayerAccessor players = Factions.get().players();
         FPlayer state = players.get(other);
         state.setPowerLevel(Math.max(0, Math.min(factionConfig.maxPlayerPower, power)));
         players.save(state);
 
         messageConfig.modifyPower.send(sender,
-                "player", FactionHelper.formatRelational(sender, faction, other, false),
+                "player", RelationHelper.formatLiteralFactionName(sender, other),
                 "player_name", other.getName(),
                 "power_indicator", Formatting.progress(state.getEffectivePower() / (double) state.getMaxPower()),
                 "power", state.getEffectivePower(),

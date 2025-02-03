@@ -15,9 +15,7 @@ import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Formatting;
-import co.crystaldev.factions.util.PlayerHelper;
+import co.crystaldev.factions.util.*;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -50,8 +48,9 @@ final class PermissionCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
-        if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_PERMS)) {
-            FactionHelper.missingPermission(sender, resolvedFaction, "modify permissions");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, resolvedFaction,
+                Permissions.MODIFY_PERMS, "modify permissions");
+        if (!permitted) {
             return;
         }
 
@@ -68,7 +67,7 @@ final class PermissionCommand extends AlpineCommand {
 
         FactionHelper.broadcast(resolvedFaction, sender, observer -> {
             return config.updatedPermissionValue.build(
-                    "actor", FactionHelper.formatRelational(observer, resolvedFaction, sender),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
                     "actor_name", PlayerHelper.getName(sender),
 
                     "permission_id", permission.getId(),
@@ -89,14 +88,15 @@ final class PermissionCommand extends AlpineCommand {
         PermissionRegistry registry = AlpineFactions.getInstance().permissionRegistry();
 
         Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
-        if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_PERMS)) {
-            FactionHelper.missingPermission(sender, resolvedFaction, "modify permissions");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, resolvedFaction,
+                Permissions.MODIFY_PERMS, "modify permissions");
+        if (!permitted) {
             return;
         }
 
         List<Permission> permissions = registry.getAll();
         Component title = config.permissionStateListTitle.build(
-                "faction", FactionHelper.formatRelational(sender, resolvedFaction, false),
+                "faction", RelationHelper.formatLiteralFactionName(sender, resolvedFaction),
                 "faction_name", resolvedFaction.getName());
         Component compiledTitle = Components.joinNewLines(
                 Formatting.applyTitlePadding(title),

@@ -10,6 +10,8 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.PermissionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import com.cryptomorin.xseries.XSound;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -37,8 +39,9 @@ final class AlertCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = Factions.get().factions().findOrDefault(player);
 
-        if (!faction.isPermitted(player, Permissions.ALERT)) {
-            FactionHelper.missingPermission(player, faction, "alert");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+                Permissions.ALERT, "alert");
+        if (!permitted) {
             return;
         }
 
@@ -49,7 +52,7 @@ final class AlertCommand extends AlpineCommand {
             XSound.ENTITY_PLAYER_LEVELUP.play(observer);
 
             return config.alertMessage.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, player, false),
+                    "actor", RelationHelper.formatLiteralPlayerName(observer, player),
                     "actor_name", player.getName(),
                     "alert", parsedAlert
             );
@@ -61,7 +64,7 @@ final class AlertCommand extends AlpineCommand {
             Player observer = member.getPlayer();
             if (observer != null) {
                 Component subtitle = config.alertSubtitle.build(
-                        "actor", FactionHelper.formatRelational(observer, faction, player, false),
+                        "actor", RelationHelper.formatLiteralPlayerName(observer, player),
                         "actor_name", player.getName(),
                         "alert", parsedAlert
                 );

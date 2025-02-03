@@ -11,9 +11,7 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.ComponentHelper;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.PlayerHelper;
+import co.crystaldev.factions.util.*;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -68,15 +66,15 @@ final class TitleCommand extends AlpineCommand {
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(other);
-        Faction actingFaction = factions.findOrDefault(sender);
 
         if (faction.isWilderness()) {
-            config.playerNotInFaction.send(sender, "player", FactionHelper.formatRelational(sender, faction, other));
+            config.playerNotInFaction.send(sender, "player", other.getName());
             return;
         }
 
-        if (!faction.isPermitted(sender, Permissions.MODIFY_TITLE)) {
-            FactionHelper.missingPermission(sender, faction, "modify titles");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
+                Permissions.MODIFY_TITLE, "modify titles");
+        if (!permitted) {
             return;
         }
 
@@ -90,9 +88,9 @@ final class TitleCommand extends AlpineCommand {
             member.setTitle(event.getTitle());
 
             FactionHelper.broadcast(faction, sender, observer -> config.titleChange.build(
-                    "actor", FactionHelper.formatRelational(observer, actingFaction, sender),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
                     "actor_name", PlayerHelper.getName(sender),
-                    "player", FactionHelper.formatRelational(observer, faction, other, false),
+                    "player", RelationHelper.formatLiteralPlayerName(observer, other),
                     "player_name", other.getName(),
                     "title", title == null ? "none" : title
             ));

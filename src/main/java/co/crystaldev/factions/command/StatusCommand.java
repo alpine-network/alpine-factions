@@ -13,8 +13,9 @@ import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.PermissionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -51,14 +52,15 @@ final class StatusCommand extends AlpineCommand {
         Faction senderFaction = factions.findOrDefault(sender);
 
         if (!PlayerHandler.getInstance().isOverriding(sender) && !Objects.equals(target, senderFaction)) {
-            FactionHelper.missingPermission(sender, target, "status");
+            PermissionHelper.notify(sender, target, "view member statuses");
             return;
         }
 
         List<Member> members = new LinkedList<>(target.getMembers());
         members.sort(Comparator.comparing(Member::isOnline));
 
-        Component title = config.factionStatusTitle.build("faction", FactionHelper.formatRelational(sender, target, false),
+        Component title = config.factionStatusTitle.build(
+                "faction", RelationHelper.formatLiteralFactionName(sender, target),
                 "faction_name", target.getName());
         String command = "/f status " + target.getName() + " %page%";
         Component compiledPage = Formatting.page(title, members, command, page.orElse(1), 10, member -> {
@@ -67,7 +69,7 @@ final class StatusCommand extends AlpineCommand {
 
             ConfigText text = member.isOnline() ? config.factionStatusOnlineEntry : config.factionStatusOfflineEntry;
             return text.build(
-                    "player", FactionHelper.formatRelational(sender, target, player, false),
+                    "player", RelationHelper.formatLiteralPlayerName(sender, player),
                     "player_name", player.getName(),
                     "power_boost", state.getPowerBoost(),
                     "power", state.getEffectivePower(),
@@ -91,9 +93,8 @@ final class StatusCommand extends AlpineCommand {
         }
 
         FPlayer state = Factions.get().players().get(target);
-        Faction faction = Factions.get().factions().findOrDefault(target);
         Component title = messageConfig.memberStatusTitle.build(
-                "player", FactionHelper.formatRelational(sender, faction, target, false),
+                "player", RelationHelper.formatLiteralPlayerName(sender, target),
                 "player_name", target.getName());
         Component body = messageConfig.memberStatusBody.build(
                 "power_indicator", Formatting.progress(state.getEffectivePower() / (double) factionConfig.maxPlayerPower),

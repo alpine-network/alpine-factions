@@ -17,10 +17,7 @@ import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.ChunkCoordinate;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Formatting;
-import co.crystaldev.factions.util.LocationHelper;
+import co.crystaldev.factions.util.*;
 import co.crystaldev.factions.util.claims.ClaimHelper;
 import co.crystaldev.factions.util.claims.ClaimType;
 import dev.rollczi.litecommands.annotations.argument.Arg;
@@ -57,9 +54,8 @@ final class AccessCommand extends AlpineCommand {
             @Arg("type") Optional<ClaimType> optionalType,
             @Arg("radius") Optional<Integer> optionalRadius
     ) {
-        Faction otherFaction = Factions.get().factions().findOrDefault(other);
         setAccess(player, other, access, optionalType, optionalRadius,
-                FactionHelper.formatRelational(player, otherFaction, other, false),
+                RelationHelper.formatLiteralPlayerName(player, other),
                 Component.text(other.getName()));
     }
 
@@ -71,7 +67,8 @@ final class AccessCommand extends AlpineCommand {
             @Arg("type") Optional<ClaimType> optionalType,
             @Arg("radius") Optional<Integer> optionalRadius
     ) {
-        setAccess(player, faction, access, optionalType, optionalRadius, FactionHelper.formatRelational(player, faction, false),
+        setAccess(player, faction, access, optionalType, optionalRadius,
+                RelationHelper.formatLiteralFactionName(player, faction),
                 Component.text(faction.getName()));
     }
 
@@ -95,11 +92,15 @@ final class AccessCommand extends AlpineCommand {
                     .collect(Collectors.toSet()));
 
         Set<Faction> permittedFactions = claim == null ? null : claim.getFactions();
-        Component compiledFactions = claim == null || permittedFactions.isEmpty()
-                ? config.none.build()
-                : Components.joinCommas(permittedFactions.stream()
-                    .map(v -> FactionHelper.formatRelational(player, v, false))
-                    .collect(Collectors.toSet()));
+        Component compiledFactions;
+        if (claim == null || permittedFactions.isEmpty()) {
+            compiledFactions = config.none.build();
+        }
+        else {
+            compiledFactions = permittedFactions.stream()
+                    .map(v -> RelationHelper.formatLiteralFactionName(player, v))
+                    .collect(Component.toComponent(Component.text(", ")));
+        }
 
         Messaging.send(player, Components.joinNewLines(
                 Formatting.title(config.accessViewTitle.build(
@@ -107,7 +108,7 @@ final class AccessCommand extends AlpineCommand {
                         "chunk_x", location.getBlockX() >> 4,
                         "chunk_z", location.getBlockZ() >> 4)),
                 config.accessViewBody.build(
-                        "faction", FactionHelper.formatRelational(player, claimedFaction, false),
+                        "faction", RelationHelper.formatLiteralFactionName(player, claimedFaction),
                         "players", compiledPlayers,
                         "factions", compiledFactions)
         ));
@@ -126,14 +127,16 @@ final class AccessCommand extends AlpineCommand {
 
         // ensure the origin chunk is claimed
         if (claim == null) {
-            FactionHelper.missingPermission(player, factions.getWilderness(), "grant access");
+            PermissionHelper.notify(player, factions.getWilderness(), "grant access");
             return;
         }
 
         // ensure the player has permission for the faction
         Faction claimedFaction = claim.getFaction();
-        if (!claimedFaction.isPermitted(player, Permissions.MODIFY_ACCESS)) {
-            FactionHelper.missingPermission(player, claimedFaction, "grant access");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, claimedFaction,
+                Permissions.MODIFY_ACCESS, "grant access");
+        if (!permitted) {
+            PermissionHelper.notify(player, claimedFaction, "grant access");
             return;
         }
 

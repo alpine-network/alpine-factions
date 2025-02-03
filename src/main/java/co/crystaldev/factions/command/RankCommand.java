@@ -11,9 +11,7 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.ComponentHelper;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.PlayerHelper;
+import co.crystaldev.factions.util.*;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -59,9 +57,9 @@ final class RankCommand extends AlpineCommand {
         Faction faction = Factions.get().factions().findOrDefault(other);
 
         config.memberRank.send(sender,
-                "faction", FactionHelper.formatRelational(sender, faction, false),
+                "faction", RelationHelper.formatLiteralFactionName(sender, faction),
                 "faction_name", faction.getName(),
-                "player", FactionHelper.formatRelational(sender, faction, other, false),
+                "player", RelationHelper.formatLiteralPlayerName(sender, other),
                 "player_name", other.getName(),
                 "rank", faction.getMemberRankOrDefault(other.getUniqueId()).getId()
         );
@@ -78,13 +76,14 @@ final class RankCommand extends AlpineCommand {
 
         if (targetFaction.isWilderness()) {
             config.playerNotInFaction.send(actor,
-                    "player", FactionHelper.formatRelational(actor, targetFaction, other),
+                    "player", RelationHelper.formatPlayerName(actor, other),
                     "player_name", other.getName());
             return;
         }
 
-        if (!targetFaction.isPermitted(actor, Permissions.MODIFY_RELATIONS)) {
-            FactionHelper.missingPermission(actor, targetFaction, "modify relations");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(actor, targetFaction,
+                Permissions.MODIFY_RELATIONS, "modify relations");
+        if (!permitted) {
             return;
         }
 
@@ -111,7 +110,7 @@ final class RankCommand extends AlpineCommand {
         // ensure the rank has changed
         if (rank == memberRank) {
             config.unableToUpdateRank.send(actor,
-                    "player", FactionHelper.formatRelational(actor, targetFaction, other),
+                    "player", RelationHelper.formatPlayerName(actor, other),
                     "player_name", other.getName());
             return;
         }
@@ -138,11 +137,11 @@ final class RankCommand extends AlpineCommand {
 
             ConfigText text = leader ? config.leader : (rank.isSuperior(memberRank) ? config.promote : config.demote);
             return text.build(
-                    "actor", FactionHelper.formatRelational(observer, senderFaction, actor),
+                    "actor", RelationHelper.formatPlayerName(observer, actor),
                     "actor_name", PlayerHelper.getName(actor),
-                    "faction", FactionHelper.formatRelational(observer, targetFaction),
+                    "faction", RelationHelper.formatFactionName(observer, targetFaction),
                     "faction_name", targetFaction.getName(),
-                    "player", FactionHelper.formatRelational(observer, targetFaction, other),
+                    "player", RelationHelper.formatPlayerName(observer, other),
                     "player_name", other.getName(),
                     "new_rank", rank.getId(),
                     "old_rank", memberRank.getId()
@@ -220,6 +219,22 @@ final class RankCommand extends AlpineCommand {
     @Description("Promote a member to officer.")
     public static final class Officer extends AlpineCommand {
         public Officer(AlpinePlugin plugin) {
+            super(plugin);
+        }
+
+        @Execute
+        public void execute(
+                @Context CommandSender sender,
+                @Arg("player") @Async OfflinePlayer other
+        ) {
+            setRank(sender, other, Rank.OFFICER);
+        }
+    }
+
+    @Command(name = "factions mod")
+    @Description("Promote a member to officer.")
+    public static final class Mod extends AlpineCommand {
+        public Mod(AlpinePlugin plugin) {
             super(plugin);
         }
 

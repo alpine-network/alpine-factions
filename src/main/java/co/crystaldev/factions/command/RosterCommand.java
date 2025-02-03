@@ -12,9 +12,7 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Formatting;
-import co.crystaldev.factions.util.PlayerHelper;
+import co.crystaldev.factions.util.*;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -54,17 +52,18 @@ final class RosterCommand extends AlpineCommand implements Initializable {
         Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
-        if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {
-            FactionHelper.missingPermission(sender, faction, "manage roster");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
+                Permissions.MODIFY_ROSTER, "manage roster");
+        if (!permitted) {
             return;
         }
 
         // ensure the roster isn't full
         if (faction.getRosterCount() >= faction.getRosterLimit()) {
             config.rosterFull.send(sender,
-                    "player", FactionHelper.formatRelational(sender, faction, other),
+                    "player", RelationHelper.formatPlayerName(sender, other),
                     "player_name", PlayerHelper.getName(other),
-                    "faction", FactionHelper.formatRelational(sender, faction),
+                    "faction", RelationHelper.formatFactionName(sender, faction),
                     "faction_name", faction.getName());
             return;
         }
@@ -72,9 +71,9 @@ final class RosterCommand extends AlpineCommand implements Initializable {
         // ensure the player isn't on the roster
         if (faction.isOnRoster(other.getUniqueId())) {
             config.alreadyOnRoster.send(sender,
-                    "player", FactionHelper.formatRelational(sender, faction, other),
+                    "player", RelationHelper.formatPlayerName(sender, other),
                     "player_name", PlayerHelper.getName(other),
-                    "faction", FactionHelper.formatRelational(sender, faction),
+                    "faction", RelationHelper.formatFactionName(sender, faction),
                     "faction_name", faction.getName());
             return;
         }
@@ -93,11 +92,11 @@ final class RosterCommand extends AlpineCommand implements Initializable {
         // notify faction
         FactionHelper.broadcast(faction, sender, observer -> {
             return config.rosterAdd.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, sender),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
                     "actor_name", PlayerHelper.getName(sender),
-                    "player", FactionHelper.formatRelational(observer, faction, other),
+                    "player", RelationHelper.formatPlayerName(observer, other),
                     "player_name", PlayerHelper.getName(other),
-                    "faction", FactionHelper.formatRelational(observer, faction),
+                    "faction", RelationHelper.formatFactionName(observer, faction),
                     "faction_name", faction.getName(),
                     "rank", parsedRank.getId()
             );
@@ -105,9 +104,9 @@ final class RosterCommand extends AlpineCommand implements Initializable {
 
         // notify enlistee
         Messaging.attemptSend(other, config.rosterAdded.build(
-                "faction", FactionHelper.formatRelational(other, faction, false),
+                "faction", RelationHelper.formatLiteralFactionName(other, faction),
                 "faction_name", faction.getName(),
-                "actor", FactionHelper.formatRelational(other, faction, sender),
+                "actor", RelationHelper.formatPlayerName(other, sender),
                 "actor_name", PlayerHelper.getName(sender)
         ));
     }
@@ -123,17 +122,18 @@ final class RosterCommand extends AlpineCommand implements Initializable {
         Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
-        if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {
-            FactionHelper.missingPermission(sender, faction, "manage roster");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
+                Permissions.MODIFY_ROSTER, "manage roster");
+        if (!permitted) {
             return;
         }
 
         // ensure the player isn't on the roster
         if (!faction.isOnRoster(other.getUniqueId())) {
             config.notOnRoster.send(sender,
-                    "player", FactionHelper.formatRelational(sender, faction, other),
+                    "player", RelationHelper.formatPlayerName(sender, other),
                     "player_name", PlayerHelper.getName(other),
-                    "faction", FactionHelper.formatRelational(sender, faction),
+                    "faction", RelationHelper.formatFactionName(sender, faction),
                     "faction_name", faction.getName());
             return;
         }
@@ -153,11 +153,11 @@ final class RosterCommand extends AlpineCommand implements Initializable {
             }
 
             return config.rosterRemove.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, sender),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
                     "actor_name", PlayerHelper.getName(sender),
-                    "player", FactionHelper.formatRelational(observer, faction, other),
+                    "player", RelationHelper.formatPlayerName(observer, other),
                     "player_name", PlayerHelper.getName(other),
-                    "faction", FactionHelper.formatRelational(observer, faction),
+                    "faction", RelationHelper.formatFactionName(observer, faction),
                     "faction_name", faction.getName(),
                     "rank", parsedRank.getId()
             );
@@ -168,9 +168,9 @@ final class RosterCommand extends AlpineCommand implements Initializable {
 
         // notify enlistee
         Messaging.attemptSend(other, config.rosterRemoved.build(
-                "faction", FactionHelper.formatRelational(other, faction, false),
+                "faction", RelationHelper.formatLiteralFactionName(other, faction),
                 "faction_name", faction.getName(),
-                "actor", FactionHelper.formatRelational(other, faction, sender),
+                "actor", RelationHelper.formatPlayerName(other, sender),
                 "actor_name", PlayerHelper.getName(sender)
         ));
     }
@@ -187,17 +187,18 @@ final class RosterCommand extends AlpineCommand implements Initializable {
         Faction senderFaction = Factions.get().factions().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
-        if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {
-            FactionHelper.missingPermission(sender, faction, "manage roster");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
+                Permissions.MODIFY_ROSTER, "manage roster");
+        if (!permitted) {
             return;
         }
 
         // ensure the player isn't on the roster
         if (!faction.isOnRoster(other.getUniqueId())) {
             config.notOnRoster.send(sender,
-                    "player", FactionHelper.formatRelational(sender, faction, other),
+                    "player", RelationHelper.formatPlayerName(sender, other),
                     "player_name", PlayerHelper.getName(other),
-                    "faction", FactionHelper.formatRelational(sender, faction),
+                    "faction", RelationHelper.formatFactionName(sender, faction),
                     "faction_name", faction.getName());
             return;
         }
@@ -217,9 +218,9 @@ final class RosterCommand extends AlpineCommand implements Initializable {
         // notify the faction
         FactionHelper.broadcast(faction, sender, observer -> {
             return config.rosterSetRank.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, sender),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
                     "actor_name", PlayerHelper.getName(sender),
-                    "player", FactionHelper.formatRelational(observer, faction, other),
+                    "player", RelationHelper.formatPlayerName(observer, other),
                     "player_name", PlayerHelper.getName(other),
                     "rank", rank.getId()
             );
@@ -236,20 +237,21 @@ final class RosterCommand extends AlpineCommand implements Initializable {
         FactionAccessor factions = Factions.get().factions();
         Faction faction = targetFaction.orElse(factions.findOrDefault(sender));
 
-        if (!faction.isPermitted(sender, Permissions.MODIFY_ROSTER)) {
-            FactionHelper.missingPermission(sender, faction, "manage roster");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
+                Permissions.MODIFY_ROSTER, "manage roster");
+        if (!permitted) {
             return;
         }
 
         Component title = config.rosterListTitle.build(
-                "faction", FactionHelper.formatRelational(sender, faction, false),
+                "faction", RelationHelper.formatLiteralFactionName(sender, faction),
                 "faction_name", faction.getName()
         );
         String command = "/f roster list %page% " + faction.getName();
         Messaging.send(sender, Formatting.page(title, faction.getRoster(), command, page.orElse(1), 10, member -> {
             OfflinePlayer player = member.getOfflinePlayer();
             return config.rosterListEntry.build(
-                    "player", FactionHelper.formatRelational(sender, faction, player, false),
+                    "player", RelationHelper.formatLiteralPlayerName(sender, player),
                     "player_name", player.getName(),
                     "rank", member.getRank().getId()
             );

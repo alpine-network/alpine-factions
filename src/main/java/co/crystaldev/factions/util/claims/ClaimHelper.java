@@ -11,9 +11,7 @@ import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
-import co.crystaldev.factions.util.ChunkCoordinate;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.LocationHelper;
+import co.crystaldev.factions.util.*;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -63,7 +61,7 @@ public final class ClaimHelper {
         // ensure the claiming faction has enough power to claim this land
         if (!overriding && claimingFaction != null && claimingFaction.getRemainingClaims() < chunks.size()) {
             messageConfig.insufficientPower.send(player,
-                    "faction", FactionHelper.formatRelational(player, claimingFaction),
+                    "faction", RelationHelper.formatFactionName(player, claimingFaction),
                     "faction_name", claimingFaction.getName());
             return;
         }
@@ -106,7 +104,7 @@ public final class ClaimHelper {
                     // owning faction is strong enough to keep this claim
 
                     messageConfig.conquerFail.send(player,
-                            "faction", FactionHelper.formatRelational(player, faction),
+                            "faction", RelationHelper.formatFactionName(player, faction),
                             "faction_name", faction.getName());
                     return;
                 }
@@ -129,7 +127,7 @@ public final class ClaimHelper {
             }
 
             messageConfig.landOwned.send(player,
-                    "faction", FactionHelper.formatRelational(player, claimingFaction),
+                    "faction", RelationHelper.formatFactionName(player, claimingFaction),
                     "faction_name", claimingFaction.getName());
             return;
         }
@@ -205,14 +203,14 @@ public final class ClaimHelper {
             if (claimingFaction == null) {
                 Faction wilderness = Factions.get().factions().getWilderness();
                 config.landOwned.send(player,
-                        "faction", FactionHelper.formatRelational(player, wilderness),
+                        "faction", RelationHelper.formatFactionName(player, wilderness),
                         "faction_name", wilderness.getName()
                 );
                 return true;
             }
-            else if (!PlayerHandler.getInstance().isOverriding(player) && !claimingFaction.isPermitted(player, Permissions.MODIFY_TERRITORY)) {
-                FactionHelper.missingPermission(player, claimingFaction, "modify territory");
-                return true;
+            else {
+                return !PermissionHelper.checkPermissionAndNotify(player, claimingFaction,
+                        Permissions.MODIFY_TERRITORY, "modify territory");
             }
         }
 
@@ -374,12 +372,12 @@ public final class ClaimHelper {
 
                 "claim_type", claimType,
 
-                "actor", FactionHelper.formatRelational(recipient, playerFaction, actor),
+                "actor", RelationHelper.formatPlayerName(recipient, actor),
                 "actor_name", actor.getName(),
 
-                "old_faction", FactionHelper.formatRelational(recipient, oldFaction),
+                "old_faction", RelationHelper.formatFactionName(recipient, oldFaction),
                 "old_faction_name", oldFaction.getName(),
-                "new_faction", FactionHelper.formatRelational(recipient, newFaction),
+                "new_faction", RelationHelper.formatFactionName(recipient, newFaction),
                 "new_faction_name", newFaction.getName()
         );
     }

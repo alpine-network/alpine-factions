@@ -13,6 +13,7 @@ import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.util.AsciiFactionMap;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.RelationHelper;
 import co.crystaldev.factions.util.claims.Claiming;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -50,17 +51,20 @@ public final class PlayerState {
             // Notify the faction the player has joined
             AlpineFactions.schedule(() -> FactionHelper.broadcast(faction, this.player, observer -> {
                 return config.login.build(
-                        "player", FactionHelper.formatRelational(observer, faction, this.player, false));
+                        "player", RelationHelper.formatLiteralPlayerName(observer, this.player));
             }), 20L);
         }
 
 
         if (motd != null) {
             Component title = config.motdTitle.build(
-                    "faction", FactionHelper.formatRelational(this.player, faction, faction.getName()),
+                    "faction", RelationHelper.formatLiteralFactionName(this.player, faction),
                     "faction_name", faction.getName());
 
-            AlpineFactions.schedule(() -> Messaging.send(this.player, Components.joinNewLines(Formatting.title(title), motd)), 100L);
+            AlpineFactions.schedule(() -> {
+                Component builtMotd = Components.joinNewLines(Formatting.title(title), motd);
+                Messaging.send(this.player, builtMotd);
+            }, 100L);
         }
     }
 
@@ -72,7 +76,7 @@ public final class PlayerState {
             // Notify the faction the player has left
             FactionHelper.broadcast(faction, this.player, observer -> {
                 return config.logout.build(
-                        "player", FactionHelper.formatRelational(observer, faction, this.player));
+                        "player", RelationHelper.formatPlayerName(observer, this.player));
             });
         }
     }
@@ -114,12 +118,12 @@ public final class PlayerState {
         Component description = Optional.ofNullable(faction.getDescription()).orElse(Faction.DEFAULT_DESCRIPTION);
 
         if (mode == TerritorialTitleMode.TITLE) {
-            Messaging.title(this.player, FactionHelper.formatRelational(this.player, faction, faction.getName()),
+            Messaging.title(this.player, RelationHelper.formatLiteralFactionName(this.player, faction),
                     Component.text("").color(NamedTextColor.GRAY).append(description));
         }
         else {
             Component desc = Components.joinSpaces(Component.text(faction.getName() + ":"), description);
-            desc = FactionHelper.formatRelational(this.player, faction, desc);
+            desc = RelationHelper.formatComponent(this.player, faction, desc);
 
             if (mode == TerritorialTitleMode.ACTION_BAR) {
                 Messaging.actionBar(this.player, desc);

@@ -8,9 +8,7 @@ import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.ComponentHelper;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.*;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -40,8 +38,9 @@ final class MOTDCommand extends AlpineCommand {
         Faction faction = Factions.get().factions().findOrDefault(player);
 
         // ensure the user has permission
-        if (!faction.isPermitted(player, Permissions.MODIFY_MOTD)) {
-            FactionHelper.missingPermission(player, faction, "modify motd");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+                Permissions.MODIFY_MOTD, "modify motd");
+        if (!permitted) {
             return;
         }
 
@@ -52,7 +51,7 @@ final class MOTDCommand extends AlpineCommand {
         // notify the faction
         FactionHelper.broadcast(faction, player, observer -> {
             return config.motd.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, player),
+                    "actor", RelationHelper.formatPlayerName(observer, player),
                     "actor_name", player.getName(),
                     "motd", formatted);
         });
@@ -65,7 +64,7 @@ final class MOTDCommand extends AlpineCommand {
 
         Component motd = Optional.ofNullable(faction.getMotd()).orElse(Faction.DEFAULT_MOTD);
         Component title = config.motdTitle.build(
-                "faction", FactionHelper.formatRelational(player, faction, faction.getName()),
+                "faction", RelationHelper.formatLiteralFactionName(player, faction),
                 "faction_name", faction.getName());
 
         Messaging.send(player, Components.joinNewLines(Formatting.title(title), motd));
@@ -77,8 +76,9 @@ final class MOTDCommand extends AlpineCommand {
         Faction faction = Factions.get().factions().findOrDefault(player);
 
         // ensure the user has permission
-        if (!faction.isPermitted(player, Permissions.MODIFY_MOTD)) {
-            FactionHelper.missingPermission(player, faction, "modify motd");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+                Permissions.MODIFY_MOTD, "modify motd");
+        if (!permitted) {
             return;
         }
 
@@ -88,7 +88,7 @@ final class MOTDCommand extends AlpineCommand {
         // notify the faction
         FactionHelper.broadcast(faction, player, observer -> {
             return config.motd.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, player),
+                    "actor", RelationHelper.formatPlayerName(observer, player),
                     "actor_name", player.getName(),
                     "motd", Faction.DEFAULT_MOTD);
         });

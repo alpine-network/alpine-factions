@@ -9,7 +9,9 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.PermissionHelper;
 import co.crystaldev.factions.util.PlayerHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -47,8 +49,9 @@ final class DescriptionCommand extends AlpineCommand {
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
         // ensure the user has permission
-        if (!faction.isPermitted(sender, Permissions.MODIFY_DESCRIPTION)) {
-            FactionHelper.missingPermission(sender, faction, "modify description");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
+                Permissions.MODIFY_DESCRIPTION, "modify description");
+        if (!permitted) {
             return;
         }
 
@@ -66,7 +69,7 @@ final class DescriptionCommand extends AlpineCommand {
         // notify the faction
         FactionHelper.broadcast(faction, sender, observer -> {
             return config.description.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, sender),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
                     "actor_name", PlayerHelper.getName(sender),
                     "description", newDescription == null ? Faction.DEFAULT_DESCRIPTION : newDescription);
         });

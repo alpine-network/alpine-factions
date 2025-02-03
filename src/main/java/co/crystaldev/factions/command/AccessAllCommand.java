@@ -13,7 +13,8 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
-import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.PermissionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -49,12 +50,13 @@ final class AccessAllCommand extends AlpineCommand {
         FactionAccessor factions = Factions.get().factions();
         Faction target = targetFaction.orElse(factions.findOrDefault(sender));
         if (target.isWilderness()) {
-            FactionHelper.missingPermission(sender, target, "grant access");
+            PermissionHelper.notify(sender, target, "grant access");
             return;
         }
 
         Faction otherFaction = factions.findOrDefault(other);
-        setAccess(sender, other, access, target, FactionHelper.formatRelational(sender, otherFaction, other, false),
+        setAccess(sender, other, access, target,
+                RelationHelper.formatLiteralPlayerName(sender, other),
                 Component.text(other.getName()));
     }
 
@@ -67,11 +69,12 @@ final class AccessAllCommand extends AlpineCommand {
     ) {
         Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
         if (target.isWilderness()) {
-            FactionHelper.missingPermission(sender, target, "grant access");
+            PermissionHelper.notify(sender, target, "grant access");
             return;
         }
 
-        setAccess(sender, faction, access, target, FactionHelper.formatRelational(sender, faction, false),
+        setAccess(sender, faction, access, target,
+                RelationHelper.formatLiteralFactionName(sender, faction),
                 Component.text(faction.getName()));
     }
 
@@ -83,7 +86,7 @@ final class AccessAllCommand extends AlpineCommand {
 
         // ensure the player has permission for the faction
         if (!targetFaction.isPermitted(sender, Permissions.MODIFY_ACCESS)) {
-            FactionHelper.missingPermission(sender, targetFaction, "grant access");
+            PermissionHelper.notify(sender, targetFaction, "grant access");
             return;
         }
 

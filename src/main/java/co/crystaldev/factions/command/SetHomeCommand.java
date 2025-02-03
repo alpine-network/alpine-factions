@@ -9,6 +9,8 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.PermissionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -35,13 +37,14 @@ final class SetHomeCommand extends AlpineCommand {
         Faction selfFaction = Factions.get().factions().findOrDefault(player);
         if (faction.isWilderness() || !faction.isMember(player.getUniqueId())) {
             config.outsideTerritory.send(player,
-                    "faction", FactionHelper.formatRelational(player, selfFaction, false),
+                    "faction", RelationHelper.formatLiteralFactionName(player, selfFaction),
                     "faction_name", faction.getName());
             return;
         }
 
-        if (!faction.isPermitted(player, Permissions.MODIFY_HOME)) {
-            FactionHelper.missingPermission(player, faction, "modify home");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+                Permissions.MODIFY_HOME, "modify home");
+        if (!permitted) {
             return;
         }
 
@@ -61,7 +64,7 @@ final class SetHomeCommand extends AlpineCommand {
 
         FactionHelper.broadcast(faction, observer -> {
             return config.setHome.build(
-                    "actor", FactionHelper.formatRelational(observer, faction, player),
+                    "actor", RelationHelper.formatPlayerName(observer, player),
                     "actor_name", player.getName(),
                     "world", player.getWorld().getName(),
                     "x", newLocation.getBlockX(),

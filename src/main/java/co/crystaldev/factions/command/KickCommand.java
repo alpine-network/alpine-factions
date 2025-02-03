@@ -13,7 +13,9 @@ import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.PermissionHelper;
 import co.crystaldev.factions.util.PlayerHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -42,20 +44,20 @@ final class KickCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(other);
-        Faction actingFaction = factions.findOrDefault(sender);
         boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
 
         // ensure player is in a faction
         if (faction.isWilderness()) {
             config.playerNotInFaction.send(sender,
-                    "player", FactionHelper.formatRelational(sender, factions.getWilderness(), other),
+                    "player", RelationHelper.formatPlayerName(sender, other),
                     "player_name", other.getName());
             return;
         }
 
         // ensure the sender has permission to kick the player
-        if (!overriding && !faction.isPermitted(sender, Permissions.KICK_MEMBERS)) {
-            FactionHelper.missingPermission(sender, faction, "kick members");
+        boolean permitted = overriding || !PermissionHelper.checkPermissionAndNotify(sender, faction,
+                Permissions.KICK_MEMBERS, "kick members");
+        if (!permitted) {
             return;
         }
 
@@ -67,7 +69,7 @@ final class KickCommand extends AlpineCommand {
 
             if (memberRank.isSuperiorOrMatching(senderRank)) {
                 config.cantKick.send(sender,
-                        "player", FactionHelper.formatRelational(sender, faction, other),
+                        "player", RelationHelper.formatPlayerName(sender, other),
                         "player_name", other.getName());
                 return;
             }
@@ -87,10 +89,10 @@ final class KickCommand extends AlpineCommand {
             }
 
             return config.kick.build(
-                    "actor", FactionHelper.formatRelational(observer, actingFaction, sender),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
                     "actor_name", PlayerHelper.getName(sender),
 
-                    "player", FactionHelper.formatRelational(observer, faction, other),
+                    "player", RelationHelper.formatPlayerName(observer, other),
                     "player_name", other.getName()
             );
         });
@@ -100,10 +102,10 @@ final class KickCommand extends AlpineCommand {
 
         // notify the player
         Messaging.attemptSend(other, config.kicked.build(
-                "actor", FactionHelper.formatRelational(other, actingFaction, sender),
+                "actor", RelationHelper.formatPlayerName(other, sender),
                 "actor_name", PlayerHelper.getName(sender),
 
-                "faction", FactionHelper.formatRelational(other, faction),
+                "faction", RelationHelper.formatFactionName(other, faction),
                 "faction_name", faction.getName()
         ));
     }

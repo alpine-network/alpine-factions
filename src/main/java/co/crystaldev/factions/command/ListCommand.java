@@ -7,8 +7,8 @@ import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.ComponentHelper;
-import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -49,7 +49,7 @@ final class ListCommand extends AlpineCommand {
             String factionName = wilderness ? "Factionless" : faction.getName();
             Component formattedFactionName = wilderness
                     ? ComponentHelper.mini("<gray>Factionless</gray>")
-                    : FactionHelper.formatRelational(sender, faction, faction.getName());
+                    : RelationHelper.formatLiteralFactionName(sender, faction);
 
             boolean infinite = faction.hasInfinitePower();
             int land = faction.getClaimCount();

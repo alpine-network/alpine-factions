@@ -8,8 +8,8 @@ import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -45,7 +45,7 @@ final class PowerBoostCommand extends AlpineCommand {
         players.save(state);
 
         this.plugin.getConfiguration(MessageConfig.class).modifyPowerBoost.send(sender,
-                "player", FactionHelper.formatRelational(sender, faction, other, false),
+                "player", RelationHelper.formatLiteralPlayerName(sender, other),
                 "player_name", other.getName(),
                 "powerboost", powerboost,
                 "power_indicator", Formatting.progress(state.getEffectivePower() / (double) state.getMaxPower()),

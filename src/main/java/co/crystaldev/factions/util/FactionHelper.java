@@ -1,33 +1,17 @@
 package co.crystaldev.factions.util;
 
-import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
-import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.Factions;
-import co.crystaldev.factions.api.accessor.ClaimAccessor;
-import co.crystaldev.factions.api.accessor.FactionAccessor;
-import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.Faction;
-import co.crystaldev.factions.api.faction.FactionRelation;
-import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.member.Member;
-import co.crystaldev.factions.api.faction.permission.Permission;
-import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.config.StyleConfig;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Chunk;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -93,197 +77,5 @@ public final class FactionHelper {
 
     public static void broadcast(@NotNull Faction faction, @NotNull Function<Player, Component> playerFunction) {
         broadcast(faction, (ServerOperator) null, playerFunction);
-    }
-
-    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull Component component) {
-        if (faction == null) {
-            return ComponentHelper.nil();
-        }
-
-        StyleConfig config = AlpineFactions.getInstance().getConfiguration(StyleConfig.class);
-        Faction self = findFactionOrDefault(viewer);
-
-        FactionRelation relation = self.relationTo(faction);
-
-        Component name = Components.stylize(config.relationalStyles.get(relation), component);
-        return Components.stylize(config.factionNameStyles.get(faction.getName()), name, true);
-    }
-
-    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull String component) {
-        return formatRelational(viewer, faction, Component.text(component));
-    }
-
-    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction,
-                                             @NotNull ServerOperator other, boolean checkEquals) {
-        if (faction == null) {
-            return ComponentHelper.nil();
-        }
-
-        // if player is console, do not bother parsing
-        if (other instanceof ConsoleCommandSender) {
-            return Component.text("@console").color(NamedTextColor.YELLOW);
-        }
-
-        // if it was a non-player object, do not bother parsing
-        if (!(other instanceof OfflinePlayer)) {
-            return Component.text(other.toString());
-        }
-
-        OfflinePlayer player = (OfflinePlayer) other;
-
-        // player is not a member of this faction, just colorize their name without a rank or title
-        if (!faction.isWilderness() && !faction.isMember(player.getUniqueId())) {
-            return formatRelational(viewer, faction, player.getName());
-        }
-
-        if (checkEquals && viewer.equals(player)) {
-            // do not display full name, title, and rank for yourself
-
-            return formatRelational(viewer, faction, "You");
-        }
-        else if (viewer instanceof OfflinePlayer && faction.isMember(((OfflinePlayer) viewer).getUniqueId())) {
-            // both the viewer and player are in the same faction, display their title instead of their faction
-
-            Member member = faction.getMember(player);
-            return formatRelational(viewer, faction, Components.join(
-                    Component.text(member.getRank().getPrefix()),
-                    member.getTitle(),
-                    member.hasTitle() ? Component.space() : Component.empty(),
-                    Component.text(player.getName())
-            ));
-        }
-        else {
-            // viewer and player are in different factions, display their faction name and rank only
-
-            Member member = faction.getMember(player);
-            Faction playerFaction = findFactionOrDefault(player);
-
-            return formatRelational(viewer, faction, Components.join(
-                    Component.text(member.getRank().getPrefix()),
-                    Component.text(playerFaction.getName()),
-                    Component.space(),
-                    Component.text(player.getName())
-            ));
-        }
-    }
-
-    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, @NotNull ServerOperator other) {
-        return formatRelational(viewer, faction, other, true);
-    }
-
-    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction) {
-        Faction playerFaction = findFaction(viewer);
-        String factionName = Objects.equals(faction, playerFaction) ? "Your faction" : (faction == null ? "< null >" : faction.getName());
-        return formatRelational(viewer, faction, factionName);
-    }
-
-    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @Nullable Faction faction, boolean checkEquals) {
-        if (checkEquals) {
-            return formatRelational(viewer, faction);
-        }
-
-        String factionName = faction == null ? "< null >" : faction.getName();
-        return formatRelational(viewer, faction, factionName);
-    }
-
-    public static @NotNull Component formatRelational(@NotNull ServerOperator viewer, @NotNull ServerOperator sender) {
-        if (!(sender instanceof OfflinePlayer)) {
-            return Component.text(PlayerHelper.getName(sender));
-        }
-
-        OfflinePlayer player = (OfflinePlayer) sender;
-
-        Faction viewerFaction = Factions.get().factions().findOrDefault(viewer);
-        Faction playerFaction = Factions.get().factions().findOrDefault(player);
-        Member member = playerFaction.getMember(player.getUniqueId());
-
-        if (!playerFaction.isWilderness() && playerFaction.equals(viewerFaction)) {
-            return formatRelational(viewer, playerFaction, Components.join(
-                    Component.text(member.getRank().getPrefix()),
-                    member.getTitle(),
-                    member.hasTitle() ? Component.space() : Component.empty(),
-                    Component.text(player.getName())
-            ));
-        }
-        else {
-            return formatRelational(viewer, playerFaction, Components.join(
-                    Component.text(member.getRank().getPrefix()),
-                    Component.text(player.getName())
-            ));
-        }
-    }
-
-    public static @NotNull Component formatName(@NotNull ServerOperator operator) {
-        if (!(operator instanceof OfflinePlayer)) {
-            return Component.text(PlayerHelper.getName(operator));
-        }
-
-        OfflinePlayer player = (OfflinePlayer) operator;
-        Faction faction = Factions.get().factions().findOrDefault(operator);
-        Member member = faction.getMember(player.getUniqueId());
-
-        return Components.join(
-                Component.text(member.getRank().getPrefix()),
-                member.getTitle(),
-                member.hasTitle() ? Component.space() : Component.empty(),
-                Component.text(player.getName())
-        );
-    }
-
-    public static void missingPermission(@NotNull CommandSender player, @NotNull Faction faction, @NotNull String action) {
-        if (!faction.getFlagValueOrDefault(FactionFlags.VERBOSE)) {
-            return;
-        }
-
-        AlpineFactions.getInstance().getConfiguration(MessageConfig.class).missingFactionPerm.rateLimitedSend(player,
-                "action", action,
-                "faction", formatRelational(player, faction),
-                "faction_name", faction.getName()
-        );
-    }
-
-    public static boolean isPermitted(@NotNull Player player, @NotNull Chunk chunk, @NotNull Permission permission, @NotNull String action) {
-        ClaimAccessor claims = Factions.get().claims();
-        if (!claims.isClaimed(chunk)) {
-            FactionAccessor factions = Factions.get().factions();
-            Faction wilderness = factions.getWilderness();
-            if (!wilderness.isPermitted(player, permission)) {
-                FactionHelper.missingPermission(player, wilderness, action);
-                return false;
-            }
-            else {
-                return true;
-            }
-        }
-
-        Claim claim = claims.getClaim(chunk);
-        if (claim != null && !claim.isPermitted(player, permission)) {
-            FactionHelper.missingPermission(player, claim.getFaction(), action);
-            return false;
-        }
-
-        return true;
-    }
-
-    public static boolean isPermitted(@NotNull Player player, @NotNull Chunk chunk, @NotNull Permission permission) {
-        ClaimAccessor claims = Factions.get().claims();
-        if (!claims.isClaimed(chunk)) {
-            FactionAccessor factions = Factions.get().factions();
-            Faction wilderness = factions.getWilderness();
-            return wilderness.isPermitted(player, permission);
-        }
-
-        Claim claim = claims.getClaim(chunk);
-        return claim == null || claim.isPermitted(player, permission);
-    }
-
-    private static @Nullable Faction findFaction(@NotNull ServerOperator sender) {
-        FactionAccessor factions = Factions.get().factions();
-        return sender instanceof OfflinePlayer ? factions.find((OfflinePlayer) sender) : factions.getWilderness();
-    }
-
-    private static @NotNull Faction findFactionOrDefault(@NotNull ServerOperator sender) {
-        FactionAccessor factions = Factions.get().factions();
-        return sender instanceof OfflinePlayer ? factions.findOrDefault((OfflinePlayer) sender) : factions.getWilderness();
     }
 }

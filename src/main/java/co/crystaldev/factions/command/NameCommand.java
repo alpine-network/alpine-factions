@@ -12,7 +12,9 @@ import co.crystaldev.factions.command.argument.Args;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.PermissionHelper;
 import co.crystaldev.factions.util.PlayerHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -50,8 +52,9 @@ final class NameCommand extends AlpineCommand {
         Faction faction = targetFaction.orElseGet(() -> factions.findOrDefault(sender));
 
         // ensure the user has permission
-        if (!faction.isPermitted(sender, Permissions.MODIFY_NAME)) {
-            FactionHelper.missingPermission(sender, faction, "modify name");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender,
+                Permissions.MODIFY_NAME, "modify name");
+        if (!permitted) {
             return;
         }
 
@@ -100,7 +103,7 @@ final class NameCommand extends AlpineCommand {
         // notify the faction
         FactionHelper.broadcast(faction, sender, observer -> {
             return config.rename.build(
-                    "actor", FactionHelper.formatRelational(observer, sender),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
                     "actor_name", PlayerHelper.getName(sender),
                     "faction_name", name);
         });

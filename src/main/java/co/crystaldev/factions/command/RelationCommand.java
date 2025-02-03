@@ -18,6 +18,8 @@ import co.crystaldev.factions.config.type.ConfigText;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.Formatting;
+import co.crystaldev.factions.util.PermissionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -58,13 +60,15 @@ final class RelationCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
 
-        if (!target.isPermitted(sender, Permissions.MODIFY_RELATIONS)) {
-            FactionHelper.missingPermission(sender, target, "manage relations");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, target,
+                Permissions.MODIFY_RELATIONS, "manage relations");
+        if (!permitted) {
             return;
         }
 
         String command = "/f relation list %page% " + target.getName();
-        Component title = config.relationListTitle.build("faction", FactionHelper.formatRelational(sender, target, false),
+        Component title = config.relationListTitle.build(
+                "faction", RelationHelper.formatLiteralFactionName(sender, target),
                 "faction_name", target.getName());
         Component compiledPage = Formatting.page(title, target.getRelatedFactions(),
                 command, page.orElse(1), 10, entry -> relatedFactionToEntry(sender, entry));
@@ -80,8 +84,9 @@ final class RelationCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
 
-        if (!target.isPermitted(sender, Permissions.MODIFY_RELATIONS)) {
-            FactionHelper.missingPermission(sender, target, "manage relations");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, target,
+                Permissions.MODIFY_RELATIONS, "manage relations");
+        if (!permitted) {
             return;
         }
 
@@ -96,7 +101,7 @@ final class RelationCommand extends AlpineCommand {
         FactionRelation relation = entry.getRelation();
 
         return AlpineFactions.getInstance().getConfiguration(MessageConfig.class).relationListEntry.build(
-                "faction", FactionHelper.formatRelational(sender, faction, false),
+                "faction", RelationHelper.formatLiteralFactionName(sender, faction),
                 "faction_name", faction.getName(),
                 "relation", Components.stylize(AlpineFactions.getInstance().getConfiguration(StyleConfig.class).relationalStyles.get(relation), Component.text(relation.name().toLowerCase())),
                 "relation_name", relation.name().toLowerCase()
@@ -109,21 +114,22 @@ final class RelationCommand extends AlpineCommand {
         FactionConfig factionConfig = AlpineFactions.getInstance().getConfiguration(FactionConfig.class);
         boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
 
-        if (!actingFaction.isPermitted(sender, Permissions.MODIFY_RELATIONS)) {
-            FactionHelper.missingPermission(sender, actingFaction, "manage relations");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, actingFaction,
+                Permissions.MODIFY_RELATIONS, "manage relations");
+        if (!permitted) {
             return;
         }
 
         if (actingFaction.equals(targetFaction)) {
             messageConfig.relationSelf.send(sender,
-                    "faction", FactionHelper.formatRelational(sender, targetFaction, false),
+                    "faction", RelationHelper.formatLiteralFactionName(sender, targetFaction),
                     "faction_name", targetFaction.getName());
             return;
         }
 
         if (actingFaction.isRelationWish(targetFaction, relation)) {
             messageConfig.alreadyRelation.send(sender,
-                    "faction", FactionHelper.formatRelational(sender, targetFaction, false),
+                    "faction", RelationHelper.formatLiteralFactionName(sender, targetFaction),
                     "faction_name", targetFaction.getName());
             return;
         }
@@ -161,7 +167,7 @@ final class RelationCommand extends AlpineCommand {
         ConfigText targetMessage = (wish ? messageConfig.relationWishes : messageConfig.relationDeclarations).get(relation);
         FactionHelper.broadcast(targetFaction, observer -> {
             return targetMessage.build(
-                    "faction", FactionHelper.formatRelational(observer, actingFaction, false),
+                    "faction", RelationHelper.formatLiteralFactionName(observer, actingFaction),
                     "faction_name", actingFaction.getName()
             );
         });
@@ -170,7 +176,7 @@ final class RelationCommand extends AlpineCommand {
         ConfigText actingMessage = (wish ? messageConfig.relationRequest : messageConfig.relationDeclarations).get(relation);
         FactionHelper.broadcast(actingFaction, sender, observer -> {
             return actingMessage.build(
-                    "faction", FactionHelper.formatRelational(observer, targetFaction, false),
+                    "faction", RelationHelper.formatLiteralFactionName(observer, targetFaction),
                     "faction_name", targetFaction.getName()
             );
         });

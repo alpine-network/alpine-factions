@@ -16,7 +16,7 @@ import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.StyleConfig;
-import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.clip.placeholderapi.expansion.Relational;
 import net.kyori.adventure.text.Component;
@@ -26,15 +26,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @since 0.1.0
  */
 public final class PlaceholderAPIIntegration extends AlpineIntegration {
-
     PlaceholderAPIIntegration(@NotNull AlpinePlugin plugin) {
         super(plugin);
     }
@@ -59,15 +58,30 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
 
     private static final class Expansion extends PlaceholderExpansion implements Relational {
 
-        private static final List<String> PLACEHOLDERS = Stream.of(
-                        "factiondisplayname", "factiondisplayname_ampersand", "faction", "faction_ampersand",
-                        "factionname", "relationalusername", "relationalusername_ampersand", "relation", "relationname",
-                        "relation_ampersand", "power", "maxpower", "powerboost", "factionpower", "factionmaxpower",
-                        "factionpowerboost", "title", "title_ampersand", "rank", "claims", "worldclaims",
-                        "onlinemembers", "offlinemembers", "allmembers", "totalmembers"
-                )
-                .map(v -> "%alpinefactions_" + v + "%")
-                .collect(Collectors.toList());
+        private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("#,###");
+
+        private static final List<String> PLACEHOLDERS = Arrays.asList(
+                "%alpinefactions_factiondisplayname%",  // REL - Formats the player's faction name
+                "%alpinefactions_faction%",             // The player's faction name
+                "%alpinefactions_factionname%",         // The player's non-stylized faction name
+                "%alpinefactions_relationalusername%",  // REL - The player's IGN formatted relationally
+                "%alpinefactions_relation%",            // REL - The formatting for the faction relation
+                "%alpinefactions_relationname%",        // REL - The name of the relation with the other faction
+                "%alpinefactions_power%",               // The player's power level
+                "%alpinefactions_maxpower%",            // The player's maximum power level
+                "%alpinefactions_powerboost%",          // The player's power boost modifier
+                "%alpinefactions_factionpower%",        // The power level of the player's faction
+                "%alpinefactions_factionmaxpower%",     // The max power level for the player's faction
+                "%alpinefactions_factionpowerboost%",   // The power boost modifier for the player's faction
+                "%alpinefactions_title%",               // The player's current faction title
+                "%alpinefactions_rank%",                // The player's rank in the faction
+                "%alpinefactions_claims%",              // The total number of claimed chunks the faction has
+                "%alpinefactions_worldclaims%",         // The total number of claimed chunks the faction has in the world
+                "%alpinefactions_onlinemembers%",       // The number of online members in the player's faction
+                "%alpinefactions_offlinemembers%",      // The number of offline members in the player's faction
+                "%alpinefactions_allmembers%",          // The number of members in the player's faction
+                "%alpinefactions_totalmembers%"         // The number of members in the player's faction roster
+        );
 
         @Override
         public @NotNull String getIdentifier() {
@@ -85,11 +99,6 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
         }
 
         @Override
-        public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
-            return this.onPlaceholderRequest(player, null, params);
-        }
-
-        @Override
         public @NotNull List<String> getPlaceholders() {
             return PLACEHOLDERS;
         }
@@ -100,98 +109,94 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
         }
 
         @Override
-        public String onPlaceholderRequest(Player one, Player two, String identifier) {
+        public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
+            return this.onPlaceholderRequest(player, null, params);
+        }
+
+        @Override
+        public String onPlaceholderRequest(Player primary, Player relational, String identifier) {
             FactionAccessor factions = Factions.get().factions();
 
-            Player subject = two == null ? one : two;
-            Faction selfFaction = factions.findOrDefault(one);
-            Faction faction = two == null ? factions.findOrDefault(one) : factions.findOrDefault(two);
-            FPlayer playerState = Factions.get().players().get(subject);
-            Member member = faction.getMember(subject.getUniqueId());
+            Faction primaryFaction = factions.findOrDefault(primary);
+            Faction relationalFaction = relational == null ? factions.findOrDefault(primary) : factions.findOrDefault(relational);
+
+            FPlayer primaryState = Factions.get().players().get(primary);
+            Member primaryMember = primaryFaction.getMember(primary.getUniqueId());
 
             switch (identifier) {
                 case "factiondisplayname":
-                case "factiondisplayname_ampersand":
-                    if (two != null) {
-                        String prefix = (member == null ? Rank.getDefault() : member.getRank()).getPrefix();
-                        if (faction.isWilderness()) {
-                            prefix = "";
-                        }
-                        return legacy(FactionHelper.formatRelational(one, faction, prefix + selfFaction.getName()), "factiondisplayname".equals(identifier));
+                    if (relational != null) {
+                        String prefix = relationalFaction.isWilderness() ? ""
+                                : (primaryMember == null ? Rank.getDefault() : primaryMember.getRank()).getPrefix();
+                        return legacy(RelationHelper.formatComponent(primary, relationalFaction, prefix + primaryFaction.getName()));
                     }
                     // Fall through if not relational
                 case "faction":
-                case "faction_ampersand":
-                    return legacy(FactionHelper.formatRelational(one, faction, false), "faction".equals(identifier));
+                    return legacy(RelationHelper.formatLiteralFactionName(primary, relationalFaction));
                 case "factionname":
-                    return faction.getName();
+                    return relationalFaction.getName();
                 case "relationalusername":
-                case "relationalusername_ampersand":
-                    if (two == null) {
+                    if (relational == null) {
                         return null;
                     }
-                    return legacy(FactionHelper.formatRelational(one, faction, two.getName()), "relationalusername".equals(identifier));
+                    return legacy(RelationHelper.formatComponent(primary, relationalFaction, relational.getName()));
                 case "relation":
-                case "relation_ampersand":
-                    if (two == null) {
+                    if (relational == null) {
                         return "";
                     }
                     StyleConfig config = AlpineFactions.getInstance().getConfiguration(StyleConfig.class);
-                    FactionRelation relation = selfFaction.relationTo(faction);
+                    FactionRelation relation = primaryFaction.relationTo(relationalFaction);
 
                     if (config.relationalStylePlaceholderOverrides.containsKey(relation)) {
-                        char formatChar = "relation".equals(identifier) ? '§' : '&';
-                        return ChatColor.translate(config.relationalStylePlaceholderOverrides.get(relation), formatChar);
+                        return ChatColor.translate(config.relationalStylePlaceholderOverrides.get(relation));
                     }
 
                     Component style = Components.stylize(config.relationalStyles.get(relation), Component.text("-"));
-                    String legacy = legacy(style, "relation".equals(identifier));
+                    String legacy = legacy(style);
 
                     return legacy.substring(0, legacy.length() - 1);
                 case "relationname":
-                    if (two == null) {
+                    if (relational == null) {
                         return "";
                     }
-                    return selfFaction.relationTo(faction).getId();
+                    return primaryFaction.relationTo(relationalFaction).getId();
                 case "power":
-                    return String.valueOf(playerState.getPowerLevel());
+                    return NUMBER_FORMAT.format(primaryState.getPowerLevel());
                 case "maxpower":
-                    return String.valueOf(playerState.getMaxPower());
+                    return NUMBER_FORMAT.format(primaryState.getMaxPower());
                 case "powerboost":
-                    return String.valueOf(playerState.getPowerBoost());
+                    return NUMBER_FORMAT.format(primaryState.getPowerBoost());
                 case "factionpower":
-                    return String.valueOf(faction.getPowerLevel());
+                    return NUMBER_FORMAT.format(primaryFaction.getPowerLevel());
                 case "factionmaxpower":
-                    return String.valueOf(faction.getMaxPowerLevel());
+                    return NUMBER_FORMAT.format(primaryFaction.getMaxPowerLevel());
                 case "factionpowerboost":
-                    return String.valueOf(faction.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER));
+                    return NUMBER_FORMAT.format(primaryFaction.getFlagValueOrDefault(FactionFlags.POWER_MODIFIER));
                 case "title":
-                case "title_ampersand":
-                    return member == null ? "" : legacy(member.getTitle(), "title".equals(identifier));
+                    return primaryMember == null ? "" : legacy(primaryMember.getTitle());
                 case "rank":
-                    return (member == null ? Rank.getDefault() : member.getRank()).getId();
+                    return (primaryMember == null ? Rank.getDefault() : primaryMember.getRank()).getId();
                 case "rankprefix":
-                    return (member == null ? Rank.getDefault() : member.getRank()).getPrefix();
+                    return (primaryMember == null ? Rank.getDefault() : primaryMember.getRank()).getPrefix();
                 case "claims":
-                    return String.valueOf(faction.getClaimCount());
+                    return NUMBER_FORMAT.format(primaryFaction.getClaimCount());
                 case "worldclaims":
-                    return String.valueOf(faction.getClaimCount(subject.getWorld()));
+                    return NUMBER_FORMAT.format(primaryFaction.getClaimCount(primary.getWorld()));
                 case "onlinemembers":
-                    return String.valueOf(faction.countOnlineMembers());
+                    return NUMBER_FORMAT.format(primaryFaction.countOnlineMembers());
                 case "offlinemembers":
-                    return String.valueOf(faction.countOfflineMembers());
+                    return NUMBER_FORMAT.format(primaryFaction.countOfflineMembers());
                 case "allmembers":
-                    return String.valueOf(faction.countMembers());
+                    return NUMBER_FORMAT.format(primaryFaction.countMembers());
                 case "totalmembers":
-                    return String.valueOf(faction.countTotalMembers());
+                    return NUMBER_FORMAT.format(primaryFaction.countTotalMembers());
                 default:
                     return null;
             }
         }
 
-        private static @NotNull String legacy(@NotNull Component component, boolean section) {
-            LegacyComponentSerializer serializer = section ? LegacyComponentSerializer.legacySection() : LegacyComponentSerializer.legacyAmpersand();
-            return serializer.serialize(component);
+        private static @NotNull String legacy(@NotNull Component component) {
+            return LegacyComponentSerializer.legacySection().serialize(component);
         }
     }
 }

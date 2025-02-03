@@ -12,10 +12,7 @@ import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FlagAdapter;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
-import co.crystaldev.factions.util.ComponentHelper;
-import co.crystaldev.factions.util.FactionHelper;
-import co.crystaldev.factions.util.Formatting;
-import co.crystaldev.factions.util.PlayerHelper;
+import co.crystaldev.factions.util.*;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -54,8 +51,9 @@ final class FlagCommand extends AlpineCommand {
         }
 
         Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
-        if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_FLAGS)) {
-            FactionHelper.missingPermission(sender, resolvedFaction, "modify flags");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, resolvedFaction,
+                Permissions.MODIFY_FLAGS, "modify flags");
+        if (!permitted) {
             return;
         }
 
@@ -67,14 +65,14 @@ final class FlagCommand extends AlpineCommand {
         }
 
         Object newValue = event.getValue();
-        resolvedFaction.setFlagValue((FactionFlag) flag, newValue);
+        resolvedFaction.setFlagValue(flag, newValue);
 
         String stateDescription = flag.getType().equals(Boolean.class)
                 ? flag.getStateDescription((Boolean) newValue)
                 : flag.getStateDescription();
         FactionHelper.broadcast(resolvedFaction, sender, observer -> {
             return config.updatedFlagValue.build(
-                    "actor", FactionHelper.formatRelational(observer, resolvedFaction, sender),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
                     "actor_name", PlayerHelper.getName(sender),
 
                     "flag_id", flag.getId(),
@@ -96,14 +94,16 @@ final class FlagCommand extends AlpineCommand {
         FlagRegistry registry = AlpineFactions.getInstance().flagRegistry();
 
         Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
-        if (!resolvedFaction.isPermitted(sender, Permissions.MODIFY_FLAGS)) {
-            FactionHelper.missingPermission(sender, resolvedFaction, "modify flags");
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, resolvedFaction,
+                Permissions.MODIFY_FLAGS, "modify flags");
+        if (!permitted) {
             return;
         }
 
         List<FactionFlag> flags = (List) registry.getAll(sender);
         String command = "/f flag show " + resolvedFaction.getName() + " %page%";
-        Component title = config.flagStateListTitle.build("faction", FactionHelper.formatRelational(sender, resolvedFaction, false),
+        Component title = config.flagStateListTitle.build(
+                "faction", RelationHelper.formatLiteralFactionName(sender, resolvedFaction),
                 "faction_name", resolvedFaction.getName());
         Component compiledPage = Formatting.page(title, flags, command, page.orElse(1), 10, flag -> {
             Object resolvedState = resolvedFaction.getFlagValueOrDefault(flag);

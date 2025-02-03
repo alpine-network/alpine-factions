@@ -12,6 +12,7 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.FactionHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.async.Async;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -52,12 +53,12 @@ final class JoinCommand extends AlpineCommand {
         // ensure the player is even invited
         if (!overriding && !faction.canJoin(player.getUniqueId())) {
             config.notInvited.send(player,
-                    "faction", FactionHelper.formatRelational(player, faction),
+                    "faction", RelationHelper.formatFactionName(player, faction),
                     "faction_name", faction.getName());
 
             // notify the faction of this attempt
             FactionHelper.broadcast(faction, observer -> config.attemptedMemberJoin.build(
-                    "player", FactionHelper.formatRelational(observer, factions.getWilderness(), player),
+                    "player", RelationHelper.formatPlayerName(observer, player),
                     "player_name", player.getName()
             ));
             return;
@@ -66,7 +67,7 @@ final class JoinCommand extends AlpineCommand {
         // ensure the faction is not full
         if (!overriding && faction.getMemberCount() >= faction.getMemberLimit()) {
             config.fullFaction.send(player,
-                    "faction", FactionHelper.formatRelational(player, faction),
+                    "faction", RelationHelper.formatFactionName(player, faction),
                     "faction_name", faction.getName(),
                     "limit", faction.getMemberLimit());
             return;
@@ -89,13 +90,13 @@ final class JoinCommand extends AlpineCommand {
             }
 
             return config.memberJoin.build(
-                    "player", FactionHelper.formatRelational(observer, faction, player),
+                    "player", RelationHelper.formatPlayerName(observer, player),
                     "player_name", player.getName());
         });
 
         // notify the new member
         Messaging.send(player, config.join.build(
-                "faction", FactionHelper.formatRelational(player, faction, false),
+                "faction", RelationHelper.formatLiteralFactionName(player, faction),
                 "faction_name", faction.getName()
         ));
     }
@@ -122,7 +123,7 @@ final class JoinCommand extends AlpineCommand {
         // ensure the player is not in a faction
         if (otherFaction != null) {
             config.playerAlreadyInFaction.send(player,
-                    "player", FactionHelper.formatRelational(player, otherFaction, joiningPlayer),
+                    "player", RelationHelper.formatPlayerName(player, joiningPlayer),
                     "player_name", joiningPlayer.getName());
             return;
         }
@@ -130,10 +131,10 @@ final class JoinCommand extends AlpineCommand {
         // ensure the player is even invited
         if (!faction.canJoin(joiningPlayer.getUniqueId())) {
             config.playerNotInvited.send(player,
-                    "player", FactionHelper.formatRelational(player, wilderness, joiningPlayer),
+                    "player", RelationHelper.formatPlayerName(player, joiningPlayer),
                     "player_name", joiningPlayer.getName(),
 
-                    "faction", FactionHelper.formatRelational(player, faction, false),
+                    "faction", RelationHelper.formatLiteralFactionName(player, faction),
                     "faction_name", faction.getName());
             return;
         }
@@ -141,7 +142,7 @@ final class JoinCommand extends AlpineCommand {
         // ensure the faction is not full
         if (faction.getMemberCount() >= faction.getMemberLimit()) {
             config.fullFaction.send(player,
-                    "faction", FactionHelper.formatRelational(player, faction),
+                    "faction", RelationHelper.formatFactionName(player, faction),
                     "faction_name", faction.getName(),
                     "limit", faction.getMemberLimit());
             return;
@@ -164,19 +165,19 @@ final class JoinCommand extends AlpineCommand {
             }
 
             return config.memberForceJoin.build(
-                    "inviter", FactionHelper.formatRelational(observer, actingFaction, player),
+                    "inviter", RelationHelper.formatPlayerName(observer, player),
                     "inviter_name", player.getName(),
 
-                    "player", FactionHelper.formatRelational(observer, wilderness, joiningPlayer),
+                    "player", RelationHelper.formatPlayerName(observer, joiningPlayer),
                     "player_name", joiningPlayer.getName());
         });
 
         // notify the new member
         Messaging.attemptSend(joiningPlayer, config.forceJoin.build(
-                "actor", FactionHelper.formatRelational(joiningPlayer, actingFaction, player),
+                "actor", RelationHelper.formatPlayerName(joiningPlayer, player),
                 "actor_name", player.getName(),
 
-                "faction", FactionHelper.formatRelational(joiningPlayer, faction, false),
+                "faction", RelationHelper.formatLiteralFactionName(joiningPlayer, faction),
                 "faction_name", faction.getName()
         ));
     }

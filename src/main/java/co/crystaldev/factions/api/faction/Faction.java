@@ -21,6 +21,7 @@ import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.ComponentHelper;
 import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.PlayerHelper;
+import co.crystaldev.factions.util.RelationHelper;
 import com.google.common.collect.ImmutableSet;
 import lombok.Getter;
 import lombok.Setter;
@@ -181,9 +182,9 @@ public final class Faction {
         // notify the faction
         FactionHelper.broadcast(this, actor, observer -> {
             return config.disband.build(
-                    "actor", FactionHelper.formatRelational(observer, actingFaction, actor),
+                    "actor", RelationHelper.formatPlayerName(observer, actor),
                     "actor_name", PlayerHelper.getName(actor),
-                    "faction", FactionHelper.formatRelational(observer, this),
+                    "faction", RelationHelper.formatFactionName(observer, this),
                     "faction_name", this.getName()
             );
         });
