@@ -3,6 +3,8 @@ package co.crystaldev.factions.util;
 import lombok.experimental.UtilityClass;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.ServerOperator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,5 +42,19 @@ public final class PlayerHelper {
         else {
             return EMPTY_UUID;
         }
+    }
+
+    public static boolean isVanished(@Nullable Player player) {
+        if (player == null) {
+            return false;
+        }
+
+        for (MetadataValue value : player.getMetadata("vanished")) {
+            if (value.asBoolean()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -2,6 +2,7 @@ package co.crystaldev.factions.api.faction.member;
 
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.player.FPlayer;
+import co.crystaldev.factions.util.PlayerHelper;
 import com.google.common.collect.ComparisonChain;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
@@ -44,7 +45,7 @@ public final class Member {
     }
 
     public boolean isOnline() {
-        return this.getPlayer() != null;
+        return this.getPlayer() != null && !PlayerHelper.isVanished(this.getPlayer());
     }
 
     public @Nullable Player getPlayer() {
