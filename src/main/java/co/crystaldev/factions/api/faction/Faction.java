@@ -381,6 +381,24 @@ public final class Faction {
             }
 
             Faction other = factions.getById(factionId);
+            if (other != null && other.relationTo(this) == relation) {
+                related.add(other);
+            }
+        });
+
+        return ImmutableSet.copyOf(related);
+    }
+
+    public @NotNull Set<Faction> getRelationWishes(@NotNull FactionRelation relation) {
+        Set<Faction> related = new HashSet<>();
+        FactionAccessor factions = Factions.get().factions();
+
+        this.relationRequests.forEach((factionId, type) -> {
+            if (type != relation) {
+                return;
+            }
+
+            Faction other = factions.getById(factionId);
             if (other != null) {
                 related.add(other);
             }
