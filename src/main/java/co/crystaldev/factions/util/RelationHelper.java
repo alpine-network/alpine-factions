@@ -188,6 +188,25 @@ public final class RelationHelper {
     }
 
     public static @NotNull Component formatComponent(
+            @NotNull Faction observer,
+            @NotNull Object factionOrPlayer,
+            @NotNull Component component
+    ) {
+        Faction observerFaction = getFaction(observer);
+        Faction otherFaction = getFaction(factionOrPlayer);
+        FactionRelation relation = observerFaction.relationTo(otherFaction);
+        return applyStyle(component, otherFaction, relation);
+    }
+
+    public static @NotNull Component formatComponent(
+            @NotNull Faction observer,
+            @NotNull Object factionOrPlayer,
+            @NotNull String component
+    ) {
+        return formatComponent(observer, factionOrPlayer, Component.text(component));
+    }
+
+    public static @NotNull Component formatComponent(
             @NotNull ServerOperator observer,
             @NotNull Object factionOrPlayer,
             @NotNull Component component

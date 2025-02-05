@@ -286,7 +286,7 @@ public final class Faction {
     // region Relations
 
     public @NotNull FactionRelation relationTo(@Nullable Faction faction) {
-        if (faction == null || faction.isWilderness()) {
+        if (faction == null || this.isWilderness() || faction.isWilderness()) {
             return FactionRelation.NEUTRAL;
         }
 
@@ -303,7 +303,7 @@ public final class Faction {
     }
 
     public @NotNull FactionRelation relationWishTo(@Nullable Faction faction) {
-        if (faction == null || faction.isWilderness()) {
+        if (faction == null || this.isWilderness() || faction.isWilderness()) {
             return FactionRelation.NEUTRAL;
         }
 
@@ -461,7 +461,7 @@ public final class Faction {
         }
         else {
             Faction other = Factions.get().factions().find(player);
-            return this.isPermitted(this.relationTo(other), permission);
+            return this.isPermitted(this.relationWishTo(other), permission);
         }
     }
 

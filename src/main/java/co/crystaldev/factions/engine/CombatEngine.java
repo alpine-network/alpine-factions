@@ -106,7 +106,7 @@ public final class CombatEngine extends AlpineEngine {
         }
 
         // ensure the effect was bad
-        if (potion.getEffects().stream().anyMatch(p -> BAD_EFFECTS.contains(XPotion.matchXPotion(p.getType())))) {
+        if (potion.getEffects().stream().noneMatch(p -> BAD_EFFECTS.contains(XPotion.matchXPotion(p.getType())))) {
             return;
         }
 

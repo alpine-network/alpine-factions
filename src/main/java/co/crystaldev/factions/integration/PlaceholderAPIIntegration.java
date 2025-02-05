@@ -109,57 +109,25 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
         }
 
         @Override
-        public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
-            return this.onPlaceholderRequest(player, null, params);
-        }
-
-        @Override
-        public String onPlaceholderRequest(Player primary, Player relational, String identifier) {
+        public @Nullable String onPlaceholderRequest(Player primary, @NotNull String identifier) {
             FactionAccessor factions = Factions.get().factions();
 
             Faction primaryFaction = factions.findOrDefault(primary);
-            Faction relationalFaction = relational == null ? factions.findOrDefault(primary) : factions.findOrDefault(relational);
-
             FPlayer primaryState = Factions.get().players().get(primary);
             Member primaryMember = primaryFaction.getMember(primary.getUniqueId());
 
             switch (identifier) {
-                case "factiondisplayname":
-                    if (relational != null) {
-                        String prefix = relationalFaction.isWilderness() ? ""
-                                : (primaryMember == null ? Rank.getDefault() : primaryMember.getRank()).getPrefix();
-                        return legacy(RelationHelper.formatComponent(primary, relationalFaction, prefix + primaryFaction.getName()));
-                    }
-                    // Fall through if not relational
                 case "faction":
-                    return legacy(RelationHelper.formatLiteralFactionName(primary, relationalFaction));
+                    return legacy(RelationHelper.formatLiteralFactionName(primary, primaryFaction));
                 case "factionname":
-                    return relationalFaction.getName();
-                case "relationalusername":
-                    if (relational == null) {
-                        return null;
-                    }
-                    return legacy(RelationHelper.formatComponent(primary, relationalFaction, relational.getName()));
+                    return primaryFaction.getName();
                 case "relation":
-                    if (relational == null) {
-                        return "";
-                    }
                     StyleConfig config = AlpineFactions.getInstance().getConfiguration(StyleConfig.class);
-                    FactionRelation relation = primaryFaction.relationTo(relationalFaction);
-
-                    if (config.relationalStylePlaceholderOverrides.containsKey(relation)) {
-                        return ChatColor.translate(config.relationalStylePlaceholderOverrides.get(relation));
-                    }
-
-                    Component style = Components.stylize(config.relationalStyles.get(relation), Component.text("-"));
-                    String legacy = legacy(style);
-
+                    String style = config.relationalStyles.get(FactionRelation.SELF);
+                    String legacy = legacy(Components.stylize(style, Component.text("-")));
                     return legacy.substring(0, legacy.length() - 1);
                 case "relationname":
-                    if (relational == null) {
-                        return "";
-                    }
-                    return primaryFaction.relationTo(relationalFaction).getId();
+                    return "self";
                 case "power":
                     return NUMBER_FORMAT.format(primaryState.getPowerLevel());
                 case "maxpower":
@@ -192,6 +160,41 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
                     return NUMBER_FORMAT.format(primaryFaction.countTotalMembers());
                 default:
                     return null;
+            }
+        }
+
+        @Override
+        public String onPlaceholderRequest(Player primary, Player relational, String identifier) {
+            FactionAccessor factions = Factions.get().factions();
+            Faction primaryFaction = factions.findOrDefault(primary);
+            Faction relationalFaction = factions.findOrDefault(relational);
+
+            switch (identifier) {
+                case "factiondisplayname":
+                    Member member = primaryFaction.getMember(primary.getUniqueId());
+                    String prefix = primaryFaction.isWilderness() ? ""
+                            : (member == null ? Rank.getDefault() : member.getRank()).getPrefix();
+                    return legacy(RelationHelper.formatComponent(relationalFaction, primaryFaction,
+                            prefix + primaryFaction.getName()));
+                case "faction":
+                    return legacy(RelationHelper.formatLiteralFactionName(relationalFaction, primaryFaction));
+                case "relationalusername":
+                    return legacy(RelationHelper.formatComponent(primary, relationalFaction, relational.getName()));
+                case "relation":
+                    StyleConfig config = AlpineFactions.getInstance().getConfiguration(StyleConfig.class);
+                    FactionRelation relation = primaryFaction.relationTo(relationalFaction);
+                    String style = config.relationalStyles.get(relation);
+
+                    // Apply styling to a template string so we can extract it
+                    String legacy = legacy(Components.stylize(style, Component.text("-")));
+
+                    // Remove the template string
+                    return legacy.substring(0, legacy.length() - 1);
+                case "relationname":
+                    return primaryFaction.relationTo(relationalFaction).getId();
+                default:
+                    // format using other placeholders
+                    return this.onPlaceholderRequest(primary, identifier);
             }
         }
 
