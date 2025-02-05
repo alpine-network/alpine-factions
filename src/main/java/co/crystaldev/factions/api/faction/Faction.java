@@ -461,7 +461,7 @@ public final class Faction {
         }
         else {
             Faction other = Factions.get().factions().find(player);
-            return this.isPermitted(this.relationWishTo(other), permission);
+            return this.isPermitted(this.relationTo(other), permission);
         }
     }
 
