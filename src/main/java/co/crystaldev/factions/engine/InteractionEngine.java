@@ -82,7 +82,7 @@ public final class InteractionEngine extends AlpineEngine {
 
     @EventHandler
     public void onBlockDamage(BlockDamageEvent event) {
-        boolean permitted = event.getInstaBreak() && PermissionHelper.checkPermissionAndNotify(
+        boolean permitted = event.getInstaBreak() || PermissionHelper.checkPermissionAndNotify(
                 event.getPlayer(),
                 event.getBlock().getChunk(),
                 Permissions.BUILD,
