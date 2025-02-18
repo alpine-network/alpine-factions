@@ -297,9 +297,19 @@ public final class Faction {
         FactionRelation relationToOther = this.relationRequests.getOrDefault(faction.getId(), FactionRelation.NEUTRAL);
         FactionRelation relationToSelf = faction.relationRequests.getOrDefault(this.getId(), FactionRelation.NEUTRAL);
 
-        return relationToOther == relationToSelf
-                ? relationToOther
-                : relationToOther.getWeight() > 0 ? FactionRelation.NEUTRAL : relationToOther;
+        if (relationToOther == relationToSelf) {
+            return relationToOther;
+        }
+        else if (relationToOther == FactionRelation.ENEMY || relationToSelf == FactionRelation.ENEMY) {
+            // If either declares ENEMY, the other faction remains neutral
+            return relationToOther == FactionRelation.ENEMY ? FactionRelation.ENEMY : FactionRelation.NEUTRAL;
+        }
+        else if (relationToOther.getWeight() > 1 && relationToSelf.getWeight() > 1) {
+            return relationToOther.getWeight() < relationToSelf.getWeight() ? relationToOther : relationToSelf;
+        }
+        else {
+            return FactionRelation.NEUTRAL;
+        }
     }
 
     public @NotNull FactionRelation relationWishTo(@Nullable Faction faction) {

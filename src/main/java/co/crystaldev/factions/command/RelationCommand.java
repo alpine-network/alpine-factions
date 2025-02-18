@@ -153,7 +153,6 @@ final class RelationCommand extends AlpineCommand {
         }
 
         // set the relation wish internally
-        FactionRelation previousRelation = actingFaction.relationWishTo(targetFaction);
         actingFaction.setRelation(targetFaction, relation);
 
         // if override mode is enabled, force set this relation
@@ -163,7 +162,8 @@ final class RelationCommand extends AlpineCommand {
         }
 
         // notify the target faction
-        boolean wish = !force && !targetFaction.isRelation(actingFaction, relation) && relation.getWeight() > previousRelation.getWeight();
+        boolean wish = !force && !targetFaction.isRelation(actingFaction, relation)
+                && relation.getWeight() > targetFaction.relationWishTo(actingFaction).getWeight();
         ConfigText targetMessage = (wish ? messageConfig.relationWishes : messageConfig.relationDeclarations).get(relation);
         FactionHelper.broadcast(targetFaction, observer -> {
             return targetMessage.build(
