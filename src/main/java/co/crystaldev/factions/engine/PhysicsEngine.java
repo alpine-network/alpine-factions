@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
@@ -28,26 +29,26 @@ public final class PhysicsEngine extends AlpineEngine {
         super(plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPistonExtend(BlockPistonExtendEvent event) {
         if (checkBlocks(event.getBlock(), event.getBlocks(), event.getDirection())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPistonRetract(BlockPistonRetractEvent event) {
         if (checkBlocks(event.getBlock(), event.getBlocks(), event.getDirection())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityExplode(EntityExplodeEvent event) {
         checkExplosion(event.blockList());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityExplode(BlockExplodeEvent event) {
         checkExplosion(event.blockList());
     }

@@ -16,6 +16,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
@@ -33,7 +34,7 @@ public final class InteractionEngine extends AlpineEngine {
         super(plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event) {
         boolean permitted = PermissionHelper.checkPermissionAndNotify(
                 event.getPlayer(),
@@ -46,7 +47,7 @@ public final class InteractionEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockMultiPlaceEvent event) {
         for (BlockState state : event.getReplacedBlockStates()) {
             boolean permitted = PermissionHelper.checkPermissionAndNotify(
@@ -62,7 +63,7 @@ public final class InteractionEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event) {
         if (this.plugin.getConfiguration(FactionConfig.class).silkSpawnerIgnoreTerritory
                 && MaterialMapping.SPAWNERS.test(event.getBlock())) {
@@ -80,7 +81,7 @@ public final class InteractionEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockDamage(BlockDamageEvent event) {
         boolean permitted = event.getInstaBreak() || PermissionHelper.checkPermissionAndNotify(
                 event.getPlayer(),
@@ -93,7 +94,7 @@ public final class InteractionEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onSignChange(SignChangeEvent event) {
         boolean permitted = PermissionHelper.checkPermissionAndNotify(
                 event.getPlayer(),
@@ -106,7 +107,7 @@ public final class InteractionEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onHangingPlace(HangingPlaceEvent event) {
         boolean permitted = PermissionHelper.checkPermissionAndNotify(
                 event.getPlayer(),
@@ -119,7 +120,7 @@ public final class InteractionEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onHangingDestroy(HangingBreakByEntityEvent event) {
         Entity remover = event.getRemover();
         if (!(remover instanceof Player)) {
@@ -137,7 +138,7 @@ public final class InteractionEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Block block = event.getClickedBlock();
@@ -230,7 +231,7 @@ public final class InteractionEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
         BlockFace face = event.getBlockFace();
         Location location = event.getBlockClicked().getLocation().clone();
@@ -247,7 +248,7 @@ public final class InteractionEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBucketFill(PlayerBucketFillEvent event) {
         BlockFace face = event.getBlockFace();
         Location location = event.getBlockClicked().getLocation().clone();

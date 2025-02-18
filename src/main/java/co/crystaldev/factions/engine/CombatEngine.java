@@ -6,6 +6,7 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.NeutralFactionCombatEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
@@ -17,6 +18,7 @@ import com.cryptomorin.xseries.XPotion;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -54,7 +56,7 @@ public final class CombatEngine extends AlpineEngine {
         super(plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerHitPlayer(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player)) {
@@ -81,7 +83,7 @@ public final class CombatEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCombust(EntityCombustByEntityEvent event) {
         Entity entity = event.getEntity();
         Entity combusterEntity = event.getCombuster();
@@ -97,7 +99,7 @@ public final class CombatEngine extends AlpineEngine {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPotionSplash(PotionSplashEvent event) {
         ThrownPotion potion = event.getPotion();
         ProjectileSource source = potion.getShooter();
@@ -165,22 +167,27 @@ public final class CombatEngine extends AlpineEngine {
 
         // can't hurt neutral players in their own land
         if (attackingFaction.isRelation(hurtFaction, FactionRelation.NEUTRAL) && hurtFaction.equals(hurtFactionAt)) {
-            config.cantHurtNeutral.rateLimitedSend(attackingPlayer,
-                    "player", RelationHelper.formatLiteralPlayerName(attackingPlayer, hurtPlayer),
-                    "player_name", hurtPlayer.getName(),
-                    "attacker", RelationHelper.formatLiteralPlayerName(attackingPlayer, attackingPlayer),
-                    "attacker_name", attackingPlayer.getName());
-            config.attemptedDamage.rateLimitedSend(hurtPlayer,
-                    "player", RelationHelper.formatLiteralPlayerName(hurtPlayer, hurtPlayer),
-                    "player_name", hurtPlayer.getName(),
-                    "attacker", RelationHelper.formatLiteralPlayerName(hurtPlayer, attackingPlayer),
-                    "attacker_name", attackingPlayer.getName());
-            return true;
+            NeutralFactionCombatEvent event = AlpineFactions.callEvent(
+                    new NeutralFactionCombatEvent(hurtFaction, hurtPlayer,
+                            attackingFaction, attackingPlayer));
+            if (event.isCancelled()) {
+                config.cantHurtNeutral.rateLimitedSend(attackingPlayer,
+                        "player", RelationHelper.formatLiteralPlayerName(attackingPlayer, hurtPlayer),
+                        "player_name", hurtPlayer.getName(),
+                        "attacker", RelationHelper.formatLiteralPlayerName(attackingPlayer, attackingPlayer),
+                        "attacker_name", attackingPlayer.getName());
+                config.attemptedDamage.rateLimitedSend(hurtPlayer,
+                        "player", RelationHelper.formatLiteralPlayerName(hurtPlayer, hurtPlayer),
+                        "player_name", hurtPlayer.getName(),
+                        "attacker", RelationHelper.formatLiteralPlayerName(hurtPlayer, attackingPlayer),
+                        "attacker_name", attackingPlayer.getName());
+                return true;
+            }
         }
+
+        // allow friendly fire if toggled
         FPlayer state = Factions.get().players().get(hurtPlayer);
         FPlayer targetState = Factions.get().players().get(attackingPlayer);
-
-        // Allow friendly fire if toggled
         if (state.isFriendlyFire() && targetState.isFriendlyFire()) {
             return false;
         }
