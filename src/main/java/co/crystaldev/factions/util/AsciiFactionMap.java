@@ -4,7 +4,9 @@ import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
+import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.map.FactionMapFormatter;
 import co.crystaldev.factions.config.MessageConfig;
 import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -27,6 +29,8 @@ import java.util.Map;
  * @since 0.1.0
  */
 public final class AsciiFactionMap {
+
+    private static final FactionMapFormatter MAP_FORMATTER = Factions.get().mapFormatter();
 
     private static final char[] KEY_CHARS = "\\/#?ç¬£$%=&^ABCDEFGHJKLMNOPQRSTUVWXYZÄÖÜÆØÅ1234567890abcdeghjmnopqrsuvwxyÿzäöüæøåâêîûô".toCharArray();
 
@@ -148,11 +152,12 @@ public final class AsciiFactionMap {
                     continue;
                 }
 
-                Faction faction = this.claims.getFaction(world, chunkX, chunkZ);
-                if (faction != null) {
+                Claim claim = this.claims.getClaim(world, chunkX, chunkZ);
+                if (claim != null) {
                     // chunk is claimed
 
                     boolean overflow = this.factionColorMap.size() >= KEY_CHARS.length;
+                    Faction faction = claim.getFaction();
                     FactionMarker marker = this.factionColorMap.computeIfAbsent(faction, fac -> {
                         char ch = overflow ? '#' : KEY_CHARS[this.factionColorMap.size()];
                         Style style = RelationHelper.formatComponent(this.player, fac, Component.text("")).style();
@@ -164,7 +169,12 @@ public final class AsciiFactionMap {
                         return new FactionMarker(style, ch == '\\' ? "\\\\" : Character.toString(ch), symbol, overflow);
                     });
 
-                    this.put(marker.symbol, flippedX, z);
+                    Component symbol = MAP_FORMATTER.formatClaim(claim, faction, marker.character);
+                    if (symbol == null) {
+                        symbol = marker.symbol;
+                    }
+
+                    this.put(symbol, flippedX, z);
                 }
                 else {
                     // wilderness

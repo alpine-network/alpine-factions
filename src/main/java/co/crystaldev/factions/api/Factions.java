@@ -4,6 +4,7 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
+import co.crystaldev.factions.api.map.FactionMapFormatter;
 import co.crystaldev.factions.api.show.ShowFormatter;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,4 +29,6 @@ public interface Factions {
     @NotNull PermissionRegistry permissionRegistry();
 
     @NotNull ShowFormatter showFormatter();
+
+    @NotNull FactionMapFormatter mapFormatter();
 }

@@ -14,10 +14,10 @@ public final class ClaimedChunk {
     private final Claim claim;
 
     private final String world;
-    private final int chunkX;
-    private final int chunkZ;
+    private final int x;
+    private final int z;
 
     public @NotNull Chunk getChunk() {
-        return Bukkit.getWorld(this.world).getChunkAt(this.chunkX, this.chunkZ);
+        return Bukkit.getWorld(this.world).getChunkAt(this.x, this.z);
     }
 }

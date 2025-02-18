@@ -199,7 +199,7 @@ final class AccessCommand extends AlpineCommand {
             // set access
             for (ClaimedChunk chunk : claimedChunks) {
                 setAccess(chunk.getClaim(), subject, access);
-                claims.save(world, chunk.getChunkX(), chunk.getChunkZ());
+                claims.save(world, chunk.getX(), chunk.getZ());
             }
 
             // notify

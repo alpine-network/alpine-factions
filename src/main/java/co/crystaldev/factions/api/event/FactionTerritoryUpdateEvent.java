@@ -45,12 +45,12 @@ public final class FactionTerritoryUpdateEvent extends FactionEntityEvent<Player
     }
 
     public boolean contains(@NotNull Location location) {
-        int cx = location.getBlockX() >> 4;
-        int cz = location.getBlockZ() >> 4;
-
         if (!this.world.equals(location.getWorld())) {
             return false;
         }
+
+        int cx = location.getBlockX() >> 4;
+        int cz = location.getBlockZ() >> 4;
 
         for (ChunkCoordinate chunk : this.chunks) {
             if (chunk.getX() == cx && chunk.getZ() == cz) {

@@ -4,7 +4,10 @@ import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
+import co.crystaldev.factions.api.event.FactionTerritoryFinalizedEvent;
 import co.crystaldev.factions.api.event.FactionTerritoryUpdateEvent;
+import co.crystaldev.factions.api.faction.Claim;
+import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.FactionConfig;
@@ -139,7 +142,8 @@ public final class ClaimHelper {
         }
 
         // call event
-        FactionTerritoryUpdateEvent.Type type = claimingFaction == null ? FactionTerritoryUpdateEvent.Type.UNCLAIM : FactionTerritoryUpdateEvent.Type.CLAIM;
+        FactionTerritoryUpdateEvent.Type type = claimingFaction == null
+                ? FactionTerritoryUpdateEvent.Type.UNCLAIM : FactionTerritoryUpdateEvent.Type.CLAIM;
         FactionTerritoryUpdateEvent event = AlpineFactions.callEvent(new FactionTerritoryUpdateEvent(
                 actingFaction, player, world, type, chunks, conqueredFactions, !Bukkit.isPrimaryThread()));
         if (event.isCancelled() || chunks.isEmpty()) {
@@ -147,33 +151,43 @@ public final class ClaimHelper {
         }
 
         // claim/unclaim the land
+        Set<ClaimedChunk> claimedChunks = new HashSet<>();
         for (ChunkCoordinate chunk : chunks) {
             if (claimingFaction == null) {
                 claims.remove(world.getName(), chunk.getX(), chunk.getZ());
             }
             else {
-                claims.put(world.getName(), chunk.getX(), chunk.getZ(), claimingFaction);
+                Claim newClaim = claims.put(world.getName(), chunk.getX(), chunk.getZ(), claimingFaction);
+                if (newClaim != null) {
+                    claimedChunks.add(new ClaimedChunk(newClaim, world.getName(), chunk.getX(), chunk.getZ()));
+                }
             }
+        }
+
+        // apply attributes to claimed chunks
+        if (!claimedChunks.isEmpty()) {
+            AlpineFactions.callEvent(new FactionTerritoryFinalizedEvent(
+                    actingFaction, player, world, claimedChunks, !Bukkit.isPrimaryThread()));
         }
 
         // notify the claiming faction
         Faction wilderness = factions.getWilderness();
-        int claimedChunks = chunks.size() - conqueredChunkCount;
-        if (claimedChunks > 0) {
+        int chunkCount = chunks.size() - conqueredChunkCount;
+        if (chunkCount > 0) {
             Faction oldFaction = claimingFaction == null ? actingFaction : wilderness;
             Faction newFaction = claimingFaction == null ? wilderness : actingFaction;
 
-            Component claimType = (claimingFaction == null ? messageConfig.unclaimed : messageConfig.claimed).build();
+            Component claimAction = (claimingFaction == null ? messageConfig.unclaimed : messageConfig.claimed).build();
             FactionHelper.broadcast(actingFaction, player, observer -> {
-                ConfigText message = claimedChunks == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
-                return buildClaimMessage(observer, player, message, origin, action, claimType, claimedChunks, oldFaction,
-                        newFaction, playerFaction);
+                ConfigText message = chunkCount == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
+                return buildClaimMessage(observer, player, message, origin, action, claimAction,
+                        chunkCount, oldFaction, newFaction);
             });
         }
 
         // notify the conquered/pillaged factions
         if (conqueredChunkCount > 0) {
-            Component claimType = (claimingFaction == null ? messageConfig.pillaged : messageConfig.conquered).build();
+            Component claimAction = (claimingFaction == null ? messageConfig.pillaged : messageConfig.conquered).build();
             Faction newFaction = claimingFaction == null ? wilderness : claimingFaction;
 
             conqueredFactions.forEach((faction, conquered) -> {
@@ -183,14 +197,14 @@ public final class ClaimHelper {
 
                 // notify the conquered faction
                 FactionHelper.broadcast(faction, observer -> {
-                    return buildClaimMessage(observer, player, message, chunk, action, claimType, conquered.size(),
-                            faction, newFaction, playerFaction);
+                    return buildClaimMessage(observer, player, message, chunk, action, claimAction,
+                            conquered.size(), faction, newFaction);
                 });
 
                 // notify the new faction
                 FactionHelper.broadcast(actingFaction, player, observer -> {
-                    return buildClaimMessage(observer, player, message, chunk, action, claimType, conquered.size(), faction,
-                            newFaction, playerFaction);
+                    return buildClaimMessage(observer, player, message, chunk, action, claimAction,
+                            conquered.size(), faction, newFaction);
                 });
             });
         }
@@ -361,8 +375,7 @@ public final class ClaimHelper {
 
     private static @NotNull Component buildClaimMessage(@NotNull Player recipient, @NotNull Player actor, @NotNull ConfigText message,
                                                @NotNull Chunk origin, @NotNull String action, @NotNull Component claimType,
-                                               int amount, @NotNull Faction oldFaction, @NotNull Faction newFaction,
-                                               @NotNull Faction playerFaction) {
+                                               int amount, @NotNull Faction oldFaction, @NotNull Faction newFaction) {
         return message.build(
                 "world", origin.getWorld().getName(),
                 "amount", amount,

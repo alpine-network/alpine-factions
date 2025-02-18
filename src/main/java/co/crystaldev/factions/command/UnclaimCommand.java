@@ -123,7 +123,7 @@ final class UnclaimCommand extends AlpineCommand {
         }
 
         // unclaim all chunks
-        foundClaims.forEach(claim -> claims.remove(claim.getWorld(), claim.getChunkX(), claim.getChunkZ()));
+        foundClaims.forEach(claim -> claims.remove(claim.getWorld(), claim.getX(), claim.getZ()));
 
         // notify
         Faction wilderness = Factions.get().factions().getWilderness();

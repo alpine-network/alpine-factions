@@ -6,6 +6,7 @@ import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.player.FPlayer;
+import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
 public final class Claim {
 
     @Getter
-    @SerializedName("faction")
+    @SerializedName("owner")
     private String factionId;
 
     @SerializedName("factions")
@@ -36,12 +37,12 @@ public final class Claim {
     @SerializedName("players")
     private final HashSet<UUID> accessedPlayerIds;
 
-    @SerializedName("attributes")
+    @SerializedName("attribs")
     private final HashSet<String> attributes;
 
-    /** This value does not persist after a reload */
     @Getter
-    private transient final long claimedAt = System.currentTimeMillis();
+    @SerializedName("created")
+    private final long claimedAt = System.currentTimeMillis();
 
     public Claim(@NotNull String faction) {
         this.factionId = faction;
@@ -163,14 +164,17 @@ public final class Claim {
 
     public static final class Adapter extends TypeAdapter<Claim> {
         @Override
-        public void write(JsonWriter jsonWriter, Claim claim) throws IOException {
-            if (!claim.modifiesAccess() && !claim.hasAttributes()) {
-                jsonWriter.value(claim.factionId);
-                return;
+        public void write(JsonWriter jsonWriter, Claim claim) {
+            if (!claim.modifiesAccess()) {
+                JsonObject obj = new JsonObject();
+                obj.addProperty("owner", claim.getFaction().getId());
+                obj.addProperty("created", claim.getClaimedAt());
+                Reference.GSON.toJson(obj, jsonWriter);
             }
-
-            // AlpineCore gson instance
-            Reference.GSON.toJson(claim, Claim.class, jsonWriter);
+            else {
+                // AlpineCore gson instance
+                Reference.GSON.toJson(claim, Claim.class, jsonWriter);
+            }
         }
 
         @Override

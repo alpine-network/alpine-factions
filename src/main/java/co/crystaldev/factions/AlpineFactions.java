@@ -11,6 +11,7 @@ import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
+import co.crystaldev.factions.api.map.FactionMapFormatter;
 import co.crystaldev.factions.api.show.ShowFormatter;
 import co.crystaldev.factions.api.show.component.ShowComponents;
 import co.crystaldev.factions.handler.PlayerHandler;
@@ -42,6 +43,8 @@ public abstract class AlpineFactions extends AlpinePlugin implements Factions {
     private final PermissionRegistry permissionRegistry = new PermissionRegistry();
 
     private final ShowFormatter showFormatter = new ShowFormatter();
+
+    private final FactionMapFormatter mapFormatter = new FactionMapFormatter();
 
     private ClaimAccessor claimAccessor;
 
@@ -108,6 +111,11 @@ public abstract class AlpineFactions extends AlpinePlugin implements Factions {
     @Override
     public @NotNull ShowFormatter showFormatter() {
         return showFormatter;
+    }
+
+    @Override
+    public @NotNull FactionMapFormatter mapFormatter() {
+        return this.mapFormatter;
     }
 
     public static <T extends Event> @NotNull T callEvent(@NotNull T event) {

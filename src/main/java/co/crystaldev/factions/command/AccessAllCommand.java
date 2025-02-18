@@ -104,7 +104,7 @@ final class AccessAllCommand extends AlpineCommand {
             // set access
             ClaimedChunk chunk = chunks.get(0);
             setAccess(chunk.getClaim(), subject, access);
-            claims.save(chunk.getWorld(), chunk.getChunkX(), chunk.getChunkZ());
+            claims.save(chunk.getWorld(), chunk.getX(), chunk.getZ());
 
             // notify
             ConfigText message = access ? config.accessGrantedSingle : config.accessRevokedSingle;
@@ -125,7 +125,7 @@ final class AccessAllCommand extends AlpineCommand {
 
                 // set access
                 setAccess(claim, subject, access);
-                claims.save(chunk.getWorld(), chunk.getChunkX(), chunk.getChunkZ());
+                claims.save(chunk.getWorld(), chunk.getX(), chunk.getZ());
             }
 
             // notify

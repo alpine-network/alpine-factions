@@ -191,7 +191,7 @@ public final class Faction {
 
         // remove all claims
         for (ClaimedChunk claim : claims.getClaims(this)) {
-            claims.remove(claim.getWorld(), claim.getChunkX(), claim.getChunkZ());
+            claims.remove(claim.getWorld(), claim.getX(), claim.getZ());
         }
 
         // remove the faction from the registry
