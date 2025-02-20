@@ -83,6 +83,11 @@ public final class InteractionEngine extends AlpineEngine {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockDamage(BlockDamageEvent event) {
+        if (this.plugin.getConfiguration(FactionConfig.class).silkSpawnerIgnoreTerritory
+                && MaterialMapping.SPAWNERS.test(event.getBlock())) {
+            return;
+        }
+
         boolean permitted = event.getInstaBreak() || PermissionHelper.checkPermissionAndNotify(
                 event.getPlayer(),
                 event.getBlock().getChunk(),
