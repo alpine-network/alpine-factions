@@ -55,7 +55,7 @@ final class KickCommand extends AlpineCommand {
         }
 
         // ensure the sender has permission to kick the player
-        boolean permitted = overriding || !PermissionHelper.checkPermissionAndNotify(sender, faction,
+        boolean permitted = overriding || PermissionHelper.checkPermissionAndNotify(sender, faction,
                 Permissions.KICK_MEMBERS, "kick members");
         if (!permitted) {
             return;
