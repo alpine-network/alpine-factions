@@ -40,7 +40,6 @@ final class FactionWarpArgumentResolver extends AlpineArgumentResolver<String> {
         String current = context.getCurrent().lastLevel();
         Faction faction = Factions.get().factions().findOrDefault(invocation.sender());
         return faction.getWarps().stream()
-                .map(String::toLowerCase)
                 .filter(v -> v.startsWith(current))
                 .collect(SuggestionResult.collector());
     }
