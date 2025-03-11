@@ -10,11 +10,14 @@ import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,6 +42,18 @@ public final class PhysicsEngine extends AlpineEngine {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPistonRetract(BlockPistonRetractEvent event) {
         if (checkBlocks(event.getBlock(), event.getBlocks(), event.getDirection())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getDamager() instanceof TNTPrimed) || !(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        Faction faction = Factions.get().claims().getFactionOrDefault(event.getEntity().getLocation());
+        if (!faction.getFlagValueOrDefault(FactionFlags.EXPLOSIONS)) {
             event.setCancelled(true);
         }
     }
