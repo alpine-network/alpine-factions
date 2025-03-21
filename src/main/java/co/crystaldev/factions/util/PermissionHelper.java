@@ -35,21 +35,26 @@ public final class PermissionHelper {
     }
 
     public static boolean isPermitted(@NotNull ServerOperator player, @NotNull Chunk chunk,
-                                      @NotNull Permission permission, boolean allowWilderness) {
+                                      @NotNull Permission permission, boolean bypassWilderness) {
         // Always disallow invalid locations
         if (chunk.getWorld() == null) {
             return false;
         }
 
         // Bypass checking wilderness claims if requested
-        ClaimAccessor claims = Factions.get().claims();
+        Factions factions = Factions.get();
+        ClaimAccessor claims = factions.claims();
         boolean isWilderness = !claims.isClaimed(chunk) || claims.getFactionOrDefault(chunk).isWilderness();
-        if (allowWilderness && isWilderness) {
+        if (bypassWilderness && isWilderness) {
             return true;
         }
 
+        // Check the permission
+        // Fallback to wilderness faction if chunk is not claimed
         Claim claim = claims.getClaim(chunk);
-        return claim == null || claim.isPermitted((OfflinePlayer) player, permission);
+        Faction wilderness = factions.factions().getWilderness();
+        return claim == null ? wilderness.isPermitted(player, permission)
+                : claim.isPermitted((OfflinePlayer) player, permission);
     }
 
     public static boolean isPermitted(@NotNull ServerOperator player, @NotNull Chunk chunk,
@@ -58,8 +63,8 @@ public final class PermissionHelper {
     }
 
     public static boolean isPermitted(@NotNull ServerOperator player, @NotNull Location location,
-                                      @NotNull Permission permission, boolean allowWilderness) {
-        return isPermitted(player, location.getChunk(), permission, allowWilderness);
+                                      @NotNull Permission permission, boolean bypassWilderness) {
+        return isPermitted(player, location.getChunk(), permission, bypassWilderness);
     }
 
     public static boolean isPermitted(@NotNull ServerOperator player, @NotNull Location location,
@@ -68,8 +73,8 @@ public final class PermissionHelper {
     }
 
     public static boolean isPermitted(@NotNull ServerOperator player, @NotNull Block block,
-                                      @NotNull Permission permission, boolean allowWilderness) {
-        return isPermitted(player, block.getChunk(), permission, allowWilderness);
+                                      @NotNull Permission permission, boolean bypassWilderness) {
+        return isPermitted(player, block.getChunk(), permission, bypassWilderness);
     }
 
     public static boolean isPermitted(@NotNull ServerOperator player, @NotNull Block block,
@@ -97,8 +102,8 @@ public final class PermissionHelper {
 
     public static boolean checkPermissionAndNotify(@NotNull ServerOperator player, @NotNull Chunk chunk,
                                                    @NotNull Permission permission, @NotNull String message,
-                                                   boolean allowWilderness) {
-        boolean permitted = isPermitted(player, chunk, permission, allowWilderness);
+                                                   boolean bypassWilderness) {
+        boolean permitted = isPermitted(player, chunk, permission, bypassWilderness);
         if (!permitted) {
             ClaimAccessor claims = Factions.get().claims();
             notify(player, claims.getFactionOrDefault(chunk), message);
@@ -113,8 +118,8 @@ public final class PermissionHelper {
 
     public static boolean checkPermissionAndNotify(@NotNull ServerOperator player, @NotNull Location location,
                                                    @NotNull Permission permission, @NotNull String message,
-                                                   boolean allowWilderness) {
-        return checkPermissionAndNotify(player, location.getChunk(), permission, message, allowWilderness);
+                                                   boolean bypassWilderness) {
+        return checkPermissionAndNotify(player, location.getChunk(), permission, message, bypassWilderness);
     }
 
     public static boolean checkPermissionAndNotify(@NotNull ServerOperator player, @NotNull Location location,
@@ -124,8 +129,8 @@ public final class PermissionHelper {
 
     public static boolean checkPermissionAndNotify(@NotNull ServerOperator player, @NotNull Block block,
                                                    @NotNull Permission permission, @NotNull String message,
-                                                   boolean allowWilderness) {
-        return checkPermissionAndNotify(player, block.getChunk(), permission, message, allowWilderness);
+                                                   boolean bypassWilderness) {
+        return checkPermissionAndNotify(player, block.getChunk(), permission, message, bypassWilderness);
     }
 
     public static boolean checkPermissionAndNotify(@NotNull ServerOperator player, @NotNull Block block,
