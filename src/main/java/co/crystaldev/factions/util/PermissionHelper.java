@@ -9,9 +9,7 @@ import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.config.MessageConfig;
 import lombok.experimental.UtilityClass;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
@@ -37,7 +35,13 @@ public final class PermissionHelper {
     public static boolean isPermitted(@NotNull ServerOperator player, @NotNull Chunk chunk,
                                       @NotNull Permission permission, boolean bypassWilderness) {
         // Always disallow invalid locations
-        if (chunk.getWorld() == null) {
+        World world = chunk.getWorld();
+        if (world == null) {
+            return false;
+        }
+
+        // Do not allow players to interact outside the border
+        if (!LocationHelper.isChunkWithinBorder(world.getWorldBorder(), chunk.getX(), chunk.getZ())) {
             return false;
         }
 
