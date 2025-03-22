@@ -42,12 +42,6 @@ final class WarpCommand extends AlpineCommand {
         super(plugin);
     }
 
-    // TODO:
-    //  - change way tabbing works
-    //    - /f warp <tab> shows current warps and subcommands
-    //    - Argument resolver won't let you tab other faction warps
-    //  - add subcommands (e.g. setwarp, delwarp)
-
     @Execute
     public void teleport(
             @Context Player player,
