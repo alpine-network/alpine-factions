@@ -38,7 +38,6 @@ public final class AsciiFactionMap {
 
     private static final int MAP_WIDTH = 49;
     private static final int MAP_HEIGHT = 17;
-    private static final int MINIMAL_MAP_HEIGHT = 8;
 
     private final Player player;
 
@@ -57,7 +56,11 @@ public final class AsciiFactionMap {
     private AsciiFactionMap(@NotNull Player player, boolean minimal) {
         this.player = player;
         this.minimal = minimal;
-        this.height = minimal ? MINIMAL_MAP_HEIGHT : MAP_HEIGHT;
+
+        // Map size handled through MapHeightCommand (clamps are in place)
+        int minimalMapSize = Factions.get().players().get(player).getAutoMapHeight();
+
+        this.height = minimal ? minimalMapSize : MAP_HEIGHT;
         this.storage = new Component[this.height][MAP_WIDTH];
     }
 

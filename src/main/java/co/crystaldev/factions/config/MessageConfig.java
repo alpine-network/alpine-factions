@@ -513,6 +513,9 @@ public final class MessageConfig extends AlpineConfig {
     public ConfigText stateChange = ConfigText.of(
             "<info>»</info> <highlight>%subject%:</highlight> <emphasis>%state%</emphasis>");
 
+    public ConfigText mapHeightChange = ConfigText.of(
+            "<info>»</info> Set automatic faction map height to <highlight>%size% rows</highlight>");
+
     public ConfigText modifyPower = ConfigText.of(
             "<info>»</info> Set power for %player% to <highlight>%power% power</highlight>",
             "    %power_indicator% <highlight>%power%/%maxpower%</highlight>");
