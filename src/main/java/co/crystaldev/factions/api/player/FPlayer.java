@@ -35,7 +35,7 @@ public final class FPlayer {
     private boolean friendlyFire;
 
     @Setter
-    private int autoMapHeight;
+    private int autoMapHeight = 8;
 
     @Setter
     private TerritorialTitleMode territorialTitleMode = TerritorialTitleMode.TITLE;

@@ -7,6 +7,7 @@ import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.map.FactionMapFormatter;
+import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.MessageConfig;
 import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -58,7 +59,13 @@ public final class AsciiFactionMap {
         this.minimal = minimal;
 
         // Map size handled through MapHeightCommand (clamps are in place)
-        int minimalMapSize = Factions.get().players().get(player).getAutoMapHeight();
+        FPlayer fPlayer = Factions.get().players().get(player);
+        int minimalMapSize = fPlayer.getAutoMapHeight();
+
+        // TODO: temp cuz i fucked up in 0.4.5
+        if (minimalMapSize < 8) {
+            fPlayer.setAutoMapHeight(8);
+        }
 
         this.height = minimal ? minimalMapSize : MAP_HEIGHT;
         this.storage = new Component[this.height][MAP_WIDTH];
