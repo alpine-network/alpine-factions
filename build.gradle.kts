@@ -78,6 +78,7 @@ allprojects {
 
             from("${project.layout.projectDirectory}/resources/plugin.yml") {
                 into("/")
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
             }
         }
         withType<Jar> {
