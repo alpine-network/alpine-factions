@@ -58,6 +58,9 @@ allprojects {
         withType<ProcessResources> {
             duplicatesStrategy = DuplicatesStrategy.INCLUDE
             inputs.properties(props)
+            filesMatching("factions.yml") {
+                expand(props)
+            }
             filesMatching("plugin.yml") {
                 expand(props)
             }
@@ -76,9 +79,8 @@ allprojects {
             archiveFileName.set("$pluginName$suffix-$version.jar")
             archiveClassifier.set("")
 
-            from("${project.layout.projectDirectory}/resources/plugin.yml") {
-                into("/")
-                duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            if (project == rootProject) {
+                relocate("factions.yml", "plugin.yml")
             }
         }
         withType<Jar> {
