@@ -1,44 +1,132 @@
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.gradle.jvm.tasks.Jar
 
 plugins {
     id("java")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.0.0-beta11"
     id("maven-publish")
 }
 
-group = compileGroup()
-version = compileVersion(true)
-
+val mavenGroup: String by project.properties
+val mavenArtifact: String by project.properties
+val pluginName: String by project.properties
+val pluginDescription: String by project.properties
+val serverVersion: String by project.properties
 val props = mapOf(
-    "mavenArtifact" to rootProject.property("maven_artifact") as String,
-    "pluginName" to rootProject.property("plugin_name") as String,
-    "pluginDescription" to rootProject.property("plugin_description") as String,
-    "pluginVersion" to compileVersion(true),
-    "pluginVersionRaw" to compileVersion(false),
-    "pluginGroup" to compileGroup(),
+    "mavenArtifact" to mavenArtifact,
+    "pluginName" to pluginName,
+    "pluginDescription" to pluginDescription,
+    "pluginGroup" to "${mavenGroup}.${mavenArtifact}",
+    "pluginVersion" to version,
 )
 
-repositories {
-    mavenCentral()
-    maven("https://lib.alpn.cloud/alpine-public/")
-    maven("https://lib.alpn.cloud/snapshots/")
-    maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://repo.panda-lang.org/releases")
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+group = props["pluginGroup"]!!
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-configurations.create("shaded")
-dependencies {
-    compileOnly(group = "com.destroystokyo.paper", name = "paper-api", version = project.property("server_version") as String)
-    compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.4.10-SNAPSHOT")
+/* Subprojects */
+allprojects {
+    apply(plugin = "java")
 
-    compileOnly(group = "me.clip", name = "placeholderapi", version = "2.11.5")
+    repositories {
+        mavenCentral()
+        maven("https://lib.alpn.cloud/alpine-public/")
+        maven("https://lib.alpn.cloud/snapshots/")
+        maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://repo.panda-lang.org/releases")
+        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    }
 
-    compileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.30")
-    annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.30")
+    dependencies {
+        compileOnly(group = "com.destroystokyo.paper", name = "paper-api", version = serverVersion)
+        compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.4.10-SNAPSHOT")
+
+        compileOnly(group = "me.clip", name = "placeholderapi", version = "2.11.5")
+
+        compileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.36")
+        annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.36")
+    }
+
+    tasks {
+        withType<JavaCompile> {
+            options.encoding = "UTF-8"
+        }
+
+        withType<ProcessResources> {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            inputs.properties(props)
+            filesMatching("plugin.yml") {
+                expand(props)
+            }
+        }
+
+        getByName("compileTestJava") {
+            this.enabled = false
+        }
+
+        // shadow
+        withType<ShadowJar> {
+            dependsOn("jar")
+            outputs.upToDateWhen { false }
+
+            val suffix = if (project.name == "simple") "Simple" else ""
+            archiveFileName.set("$pluginName$suffix-$version.jar")
+            archiveClassifier.set("")
+
+            from("${project.layout.projectDirectory}/resources/plugin.yml") {
+                into("/")
+            }
+        }
+        withType<Jar> {
+            archiveClassifier.set("dev")
+        }
+        build {
+            dependsOn(shadowJar)
+        }
+
+        // replaceTokens
+        register("replaceTokens") {
+            doLast {
+                // Define the temporary directory where the files will be copied to
+                val tempSrcDir = project.layout.buildDirectory.dir("tempSrc").get().asFile
+                if (tempSrcDir.exists())
+                    tempSrcDir.deleteRecursively()
+
+                // Copy all Java files from 'src/main/java' to the temporary directory
+                copy {
+                    from("src/main/java")
+                    into(tempSrcDir)
+                }
+
+                val javaFiles = project.fileTree(tempSrcDir) {
+                    include("**/*.java")
+                }
+
+                javaFiles.forEach { file ->
+                    var content = file.readText()
+                    props.forEach {
+                        val token = "{{ ${it.key} }}"
+                        if (content.contains(token)) {
+                            content = content.replace(token, it.value as String)
+                            file.writeText(content)
+                        }
+                    }
+                }
+            }
+        }
+        withType<JavaCompile> {
+            dependsOn("replaceTokens")
+
+            // Change the Java compilation source to the modified files in the temp directory
+            source = fileTree("${project.layout.buildDirectory.get()}/tempSrc")
+        }
+    }
 }
 
+/* Publishing */
 java {
     withSourcesJar()
 }
@@ -49,11 +137,11 @@ publishing {
             from(components["java"])
 
             pom {
-                name.set("${rootProject.properties["plugin_name"]}")
-                description.set(rootProject.properties["plugin_description"] as String)
+                name.set(pluginName)
+                description.set(pluginDescription)
 
-                groupId = rootProject.properties["maven_group"] as String
-                artifactId = "${rootProject.properties["maven_artifact"]}"
+                groupId = mavenGroup
+                artifactId = mavenArtifact
                 version = rootProject.version as String
                 packaging = "jar"
             }
@@ -69,91 +157,4 @@ publishing {
             }
         }
     }
-}
-
-tasks {
-    java {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    withType<JavaCompile> {
-        options.encoding = "UTF-8"
-    }
-
-    register("replaceTokens") {
-        doLast {
-            // Define the temporary directory where the files will be copied to
-            val tempSrcDir = File(project.buildDir, "tempSrc")
-            if (tempSrcDir.exists())
-                tempSrcDir.deleteRecursively()
-
-            // Copy all Java files from 'src/main/java' to the temporary directory
-            copy {
-                from("src/main/java")
-                into(tempSrcDir)
-            }
-
-            val javaFiles = project.fileTree(tempSrcDir) {
-                include("**/*.java")
-            }
-
-            javaFiles.forEach { file ->
-                var content = file.readText()
-                props.forEach {
-                    val token = "{{ ${it.key} }}"
-                    if (content.contains(token)) {
-                        content = content.replace(token, it.value)
-                        file.writeText(content)
-                    }
-                }
-            }
-        }
-    }
-
-    compileJava {
-        dependsOn("replaceTokens")
-
-        // Change the Java compilation source to the modified files in the temp directory
-        source = fileTree("${buildDir}/tempSrc")
-    }
-
-    processResources {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
-        inputs.properties(props)
-        filesMatching("plugin.yml") {
-            expand(props)
-        }
-    }
-
-    // shadow
-    shadowJar {
-        configurations = listOf(project.configurations["shaded"])
-        archiveClassifier.set("dev-shadow")
-        archiveFileName.set("${rootProject.property("plugin_name")}-${compileVersion(true)}.jar")
-
-        doLast {
-            val input = archiveFile.get()
-            val outputDir = File(rootProject.rootDir, "builds")
-            val outputFile = File(outputDir, input.asFile.name)
-            outputDir.mkdirs()
-            Files.copy(input.asFile.toPath(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING)
-        }
-    }
-
-    jar {
-        archiveClassifier.set("dev")
-    }
-}
-
-fun compileGroup(): String {
-    return "${project.properties["maven_group"]}.${project.properties["maven_artifact"]}"
-}
-
-fun compileVersion(prerelease: Boolean): String {
-    val major = rootProject.properties["version_major"]
-    val minor = rootProject.properties["version_minor"]
-    val patch = rootProject.properties["version_patch"]
-    val preRelease = rootProject.properties["version_pre_release"]
-    return "${major}.${minor}.${patch}${if (!prerelease || preRelease == "none") "" else preRelease}"
 }

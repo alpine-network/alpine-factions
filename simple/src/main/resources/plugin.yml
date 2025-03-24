@@ -1,10 +1,9 @@
-main: co.crystaldev.factions.Plugin
-name: ${pluginName}
+main: co.crystaldev.factions.SimpleFactions
+name: ${pluginName}Simple
 description: ${pluginDescription}
 version: ${pluginVersion}
 authors: [ BestBearr ]
 api-version: 1.13
 depend:
   - AlpineCore
-softdepend:
-  - PlaceholderAPI
+  - AlpineFactions
