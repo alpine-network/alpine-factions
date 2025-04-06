@@ -1,30 +1,38 @@
 package co.crystaldev.factions;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
+import co.crystaldev.alpinecore.framework.storage.driver.AlpineDriver;
+import co.crystaldev.alpinecore.framework.storage.driver.FlatfileDriver;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.FlagRegistry;
 import co.crystaldev.factions.api.PermissionRegistry;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
+import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.api.faction.flag.FactionFlags;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.map.FactionMapFormatter;
+import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.api.show.ShowFormatter;
 import co.crystaldev.factions.api.show.component.ShowComponents;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.store.FactionStore;
 import co.crystaldev.factions.store.PlayerStore;
+import co.crystaldev.factions.store.claim.ClaimRegion;
 import co.crystaldev.factions.store.claim.ClaimStore;
 import com.google.common.collect.ImmutableSet;
+import com.google.gson.Gson;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @since 0.1.0
@@ -81,6 +89,30 @@ public abstract class AlpineFactions extends AlpinePlugin implements Factions {
     @Override
     protected @NotNull Set<Class<?>> getScannablePackages() {
         return ImmutableSet.of(AlpineFactions.class, this.getClass());
+    }
+
+    public @NotNull AlpineDriver<String, ClaimRegion> buildClaimStorageDriver(@NotNull Gson gson) {
+        return FlatfileDriver.<String, ClaimRegion>builder()
+                .directory(new File(this.getDataFolder(), "regions"))
+                .gson(gson)
+                .dataType(ClaimRegion.class)
+                .build(this);
+    }
+
+    public @NotNull AlpineDriver<String, Faction> buildFactionStorageDriver(@NotNull Gson gson) {
+        return FlatfileDriver.<String, Faction>builder()
+                .directory(new File(this.getDataFolder(), "factions"))
+                .gson(gson)
+                .dataType(Faction.class)
+                .build(this);
+    }
+
+    public @NotNull AlpineDriver<UUID, FPlayer> buildPlayerStorageDriver(@NotNull Gson gson) {
+        return FlatfileDriver.<UUID, FPlayer>builder()
+                .directory(new File(this.getDataFolder(), "players"))
+                .gson(gson)
+                .dataType(FPlayer.class)
+                .build(this);
     }
 
     @Override

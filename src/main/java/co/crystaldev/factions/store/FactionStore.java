@@ -2,7 +2,6 @@ package co.crystaldev.factions.store;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.storage.AlpineStore;
-import co.crystaldev.alpinecore.framework.storage.driver.FlatfileDriver;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.Relational;
@@ -16,7 +15,6 @@ import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,11 +28,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
     private final Map<String, Faction> registeredFactions = new ConcurrentHashMap<>();
 
     FactionStore(@NotNull AlpinePlugin plugin) {
-        super(plugin, FlatfileDriver.<String, Faction>builder()
-                .directory(new File(AlpineFactions.getInstance().getDataFolder(), "factions"))
-                .gson(Reference.GSON)
-                .dataType(Faction.class)
-                .build(plugin));
+        super(plugin, ((AlpineFactions) plugin).buildFactionStorageDriver(Reference.GSON));
 
         // load factions into memory
         try {

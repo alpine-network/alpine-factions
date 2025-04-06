@@ -2,7 +2,6 @@ package co.crystaldev.factions.store;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.storage.AlpineStore;
-import co.crystaldev.alpinecore.framework.storage.driver.FlatfileDriver;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
@@ -10,7 +9,6 @@ import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.FactionConfig;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.util.UUID;
 
 /**
@@ -19,11 +17,7 @@ import java.util.UUID;
 public final class PlayerStore extends AlpineStore<UUID, FPlayer> implements PlayerAccessor {
 
     PlayerStore(@NotNull AlpinePlugin plugin) {
-        super(plugin, FlatfileDriver.<UUID, FPlayer>builder()
-                .directory(new File(AlpineFactions.getInstance().getDataFolder(), "players"))
-                .gson(Reference.GSON)
-                .dataType(FPlayer.class)
-                .build(plugin));
+        super(plugin, ((AlpineFactions) plugin).buildPlayerStorageDriver(Reference.GSON));
     }
 
     @Override

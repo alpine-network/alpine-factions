@@ -2,7 +2,6 @@ package co.crystaldev.factions.store.claim;
 
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.storage.AlpineStore;
-import co.crystaldev.alpinecore.framework.storage.driver.FlatfileDriver;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
@@ -12,7 +11,6 @@ import co.crystaldev.factions.api.faction.Faction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,11 +23,7 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> implement
     private final Map<String, ClaimRegion> claimStorage = new ConcurrentHashMap<>();
 
     ClaimStore(@NotNull AlpinePlugin plugin) {
-        super(plugin, FlatfileDriver.<String, ClaimRegion>builder()
-                .directory(new File(AlpineFactions.getInstance().getDataFolder(), "regions"))
-                .gson(Reference.GSON)
-                .dataType(ClaimRegion.class)
-                .build(plugin));
+        super(plugin, ((AlpineFactions) plugin).buildClaimStorageDriver(Reference.GSON));
 
         Collection<ClaimRegion> regions = this.loadAllEntries(ex -> {
             Reference.LOGGER.info("Unable to read claim region", ex);
