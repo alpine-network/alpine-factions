@@ -80,6 +80,7 @@ public final class ClaimRegion {
             // replace the faction
             claim.setFaction(factionId);
             claim.clearAccess();
+            claim.clearAttributes();
             return claim;
         }
 
