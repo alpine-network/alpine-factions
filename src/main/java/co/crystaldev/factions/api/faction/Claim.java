@@ -94,6 +94,14 @@ public final class Claim {
         this.attributes.remove(attribute);
     }
 
+    public @NotNull Set<String> getAttributes() {
+        return this.attributes;
+    }
+
+    public void clearAttributes() {
+        this.attributes.clear();
+    }
+
     // endregion Attribute
 
     // region Access
