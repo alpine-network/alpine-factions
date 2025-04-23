@@ -6,10 +6,10 @@ import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.map.FactionMapFormatter;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.MessageConfig;
-import lombok.AllArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -61,9 +61,8 @@ public final class AsciiFactionMap {
         // Map size handled through MapHeightCommand (clamps are in place)
         FPlayer fPlayer = Factions.get().players().get(player);
         int minimalMapSize = fPlayer.getAutoMapHeight();
-
-        // TODO: temp cuz i fucked up in 0.4.5
         if (minimalMapSize < 8) {
+            minimalMapSize = 8;
             fPlayer.setAutoMapHeight(8);
         }
 
@@ -114,7 +113,7 @@ public final class AsciiFactionMap {
             }
 
             Component component = this.config.mapLegendFormat.build(
-                    "character", marker.character,
+                    "character", marker.displayCharacter,
                     "faction", RelationHelper.formatLiteralFactionName(this.player, faction),
                     "faction_name", faction.getName()
             );
@@ -136,6 +135,7 @@ public final class AsciiFactionMap {
         Chunk center = this.player.getLocation().getChunk();
         WorldBorder border = this.player.getWorld().getWorldBorder();
         Component borderComponent = this.config.mapBorder.build();
+        Faction playerFaction = Factions.get().factions().findOrDefault(this.player);
 
         int centerX = center.getX();
         int centerZ = center.getZ();
@@ -169,17 +169,26 @@ public final class AsciiFactionMap {
                     boolean overflow = this.factionColorMap.size() >= KEY_CHARS.length;
                     Faction faction = claim.getFaction();
                     FactionMarker marker = this.factionColorMap.computeIfAbsent(faction, fac -> {
-                        char ch = overflow ? '#' : KEY_CHARS[this.factionColorMap.size()];
+
+                        // get the relation between the factions
+                        FactionRelation relation = playerFaction.relationTo(faction);
                         Style style = RelationHelper.formatComponent(this.player, fac, Component.text("")).style();
+
+                        // create the symbol to represent the faction
+                        char ch = overflow ? '#' : KEY_CHARS[this.factionColorMap.size()];
                         Component symbol = overflow
                                 ? Component.text("#").decorate(TextDecoration.OBFUSCATED)
                                 : Component.text(ch);
-                        symbol = symbol.style(style).hoverEvent(HoverEvent.showText(Component.text(fac.getName()).style(style)));
 
-                        return new FactionMarker(style, ch == '\\' ? "\\\\" : Character.toString(ch), symbol, overflow);
+                        // set the hover event to the faction's name
+                        symbol = symbol.style(style).hoverEvent(
+                                HoverEvent.showText(Component.text(fac.getName()).style(style)));
+
+                        return new FactionMarker(style, relation, ch, symbol, overflow);
                     });
 
-                    Component symbol = MAP_FORMATTER.formatClaim(claim, faction, marker.character);
+                    Component symbol = MAP_FORMATTER.formatClaim(claim, faction, marker.relation,
+                            marker.character, marker.symbol);
                     if (symbol == null) {
                         symbol = marker.symbol;
                     }
@@ -223,11 +232,22 @@ public final class AsciiFactionMap {
         return map.build();
     }
 
-    @AllArgsConstructor
     private static final class FactionMarker {
         private final Style style;
-        private final String character;
+        private final FactionRelation relation;
+        private final char character;
+        private final String displayCharacter;
         private final Component symbol;
         private final boolean overflown;
+
+        private FactionMarker(@NotNull Style style, @NotNull FactionRelation relation, char character,
+                              @NotNull Component symbol, boolean overflown) {
+            this.style = style;
+            this.relation = relation;
+            this.character = character;
+            this.displayCharacter = character == '\\' ? "\\\\" : Character.toString(character);
+            this.symbol = symbol;
+            this.overflown = overflown;
+        }
     }
 }

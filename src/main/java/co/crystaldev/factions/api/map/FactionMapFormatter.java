@@ -2,6 +2,7 @@ package co.crystaldev.factions.api.map;
 
 import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.faction.FactionRelation;
 import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,10 +21,11 @@ public final class FactionMapFormatter {
         this.transformers.add(transformer);
     }
 
-    public @Nullable Component formatClaim(@NotNull Claim claim, @NotNull Faction faction, @NotNull String symbol) {
+    public @Nullable Component formatClaim(@NotNull Claim claim, @NotNull Faction faction, @NotNull FactionRelation relation,
+                                           char character, @NotNull Component symbol) {
         if (!this.transformers.isEmpty()) {
             for (ClaimFormatter transformer : this.transformers) {
-                Component transformed = transformer.transform(claim, faction, symbol);
+                Component transformed = transformer.transform(claim, faction, relation, character, symbol);
                 if (transformed != null) {
                     return transformed;
                 }
