@@ -6,7 +6,6 @@ import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.player.FPlayer;
-import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
@@ -173,16 +172,9 @@ public final class Claim {
     public static final class Adapter extends TypeAdapter<Claim> {
         @Override
         public void write(JsonWriter jsonWriter, Claim claim) {
-            if (!claim.modifiesAccess()) {
-                JsonObject obj = new JsonObject();
-                obj.addProperty("owner", claim.getFaction().getId());
-                obj.addProperty("created", claim.getClaimedAt());
-                Reference.GSON.toJson(obj, jsonWriter);
-            }
-            else {
-                // AlpineCore gson instance
-                Reference.GSON.toJson(claim, Claim.class, jsonWriter);
-            }
+
+            // AlpineCore gson instance
+            Reference.GSON.toJson(claim, Claim.class, jsonWriter);
         }
 
         @Override
