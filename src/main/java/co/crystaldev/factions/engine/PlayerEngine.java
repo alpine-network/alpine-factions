@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -32,6 +33,20 @@ public final class PlayerEngine extends AlpineEngine {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onPlayerMove(PlayerMoveEvent event) {
+        Chunk from = event.getFrom().getChunk();
+        Chunk to = event.getTo().getChunk();
+
+        // player did not change chunks
+        if (from.equals(to)) {
+            return;
+        }
+
+        PlayerState state = PlayerHandler.getInstance().getPlayer(event.getPlayer());
+        state.onMoveChunk(from, to);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    private void onPlayerTeleport(PlayerTeleportEvent event) {
         Chunk from = event.getFrom().getChunk();
         Chunk to = event.getTo().getChunk();
 
