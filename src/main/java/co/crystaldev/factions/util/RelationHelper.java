@@ -225,6 +225,18 @@ public final class RelationHelper {
         return formatComponent(observer, factionOrPlayer, Component.text(component));
     }
 
+    public static @NotNull Component applyStyle(@NotNull Component value, @Nullable Faction faction, @NotNull FactionRelation relation) {
+        StyleConfig config = AlpineFactions.getInstance().getConfiguration(StyleConfig.class);
+        String nameStyle = config.factionNameStyles.get(faction == null ? "" : faction.getName());
+        if (nameStyle != null) {
+            return Components.stylize(nameStyle, value);
+        }
+        else {
+            String style = config.relationalStyles.get(relation);
+            return Components.stylize(style, value);
+        }
+    }
+
     // endregion Faction
 
     private static @NotNull Rank getRank(@NotNull ServerOperator player, @NotNull Faction faction) {
@@ -243,18 +255,6 @@ public final class RelationHelper {
         else {
             Member member = faction.getMember((OfflinePlayer) player);
             return member.hasTitle() ? member.getTitle() : null;
-        }
-    }
-
-    private static @NotNull Component applyStyle(@NotNull Component value, @Nullable Faction faction, @NotNull FactionRelation relation) {
-        StyleConfig config = AlpineFactions.getInstance().getConfiguration(StyleConfig.class);
-        String nameStyle = config.factionNameStyles.get(faction == null ? "" : faction.getName());
-        if (nameStyle != null) {
-            return Components.stylize(nameStyle, value);
-        }
-        else {
-            String style = config.relationalStyles.get(relation);
-            return Components.stylize(style, value);
         }
     }
 
