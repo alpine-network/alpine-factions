@@ -10,7 +10,6 @@ import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.config.type.ConfigText;
-import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.PermissionHelper;
 import co.crystaldev.factions.util.RelationHelper;
 import dev.rollczi.litecommands.annotations.argument.Arg;
@@ -63,7 +62,7 @@ final class HomeCommand extends AlpineCommand {
             if (!event.isCancelled()) {
                 faction.setHome(event.getLocation());
                 if (event.getLocation() == null) {
-                    FactionHelper.broadcast(faction, config.unsetHome.build());
+                    faction.audience().sendMessage(config.unsetHome.build());
                 }
                 return;
             }
