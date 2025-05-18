@@ -34,7 +34,7 @@ public final class FactionHelper {
         for (Member member : faction.getMembers()) {
             Player player = member.getPlayer();
             if (player != null) {
-                if (subjects  != null) {
+                if (subjects != null) {
                     subjects.remove(player);
                 }
 
