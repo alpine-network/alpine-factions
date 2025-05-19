@@ -86,8 +86,8 @@ final class WarpCommand extends AlpineCommand {
             if (!event.isCancelled()) {
                 // delete warp and notify
                 faction.delWarp(warp);
-                FactionHelper.broadcast(faction, config.unsetWarp.build(
-                            "warp", warp));
+                faction.audience().sendMessage(config.unsetWarp.build(
+                        "warp", warp));
                 return;
             }
         }

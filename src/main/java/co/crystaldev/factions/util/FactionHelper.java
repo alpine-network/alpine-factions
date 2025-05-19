@@ -20,6 +20,10 @@ import java.util.function.Function;
 @UtilityClass
 public final class FactionHelper {
 
+    /**
+     * @deprecated in favor of {@link Faction#audience()}
+     */
+    @Deprecated
     public static void broadcast(@NotNull Faction faction, @NotNull Component component) {
         for (Member member : faction.getMembers()) {
             Player player = member.getPlayer();

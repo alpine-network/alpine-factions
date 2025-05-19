@@ -1,5 +1,6 @@
 package co.crystaldev.factions.api.faction;
 
+import co.crystaldev.alpinecore.Reference;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.Relational;
@@ -26,6 +27,7 @@ import com.google.common.collect.ImmutableSet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -38,14 +40,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @since 0.1.0
  */
 @SuppressWarnings("unused")
 @ToString
-public final class Faction {
+public final class Faction implements Audience {
 
     public static final String WILDERNESS_ID = "factions_wilderness";
 
@@ -806,6 +811,80 @@ public final class Faction {
     }
 
     // endregion Members
+
+    // region Audiences
+
+    /**
+     * Get an {@link Audience} that represents this faction.
+     *
+     * @return the audience
+     */
+    public Audience audience() {
+        return this.audience(m -> true);
+    }
+
+    /**
+     * Get a filtered {@link Audience} that represents this faction.
+     *
+     * @param filter the filter to compare members against
+     * @return the audience
+     */
+    public Audience audience(@NotNull Predicate<Member> filter) {
+        return Reference.AUDIENCES.filter(sender -> {
+            if (!(sender instanceof Player))
+                return false;
+
+            Player player = (Player) sender;
+            Member member = this.getMember(player.getUniqueId());
+            if (member == null)
+                return false;
+
+            return filter.test(member);
+        });
+    }
+
+    /**
+     * Get a filtered {@link Audience} that represents this faction and its relations.
+     *
+     * @param relations the faction relation types
+     * @return the audience
+     */
+    public Audience audience(FactionRelation... relations) {
+        return this.audience((f, m) -> true, relations);
+    }
+
+    /**
+     * Get an {@link Audience} that represents this faction and its relations.
+     *
+     * @param filter the filter to compare members against
+     * @param relations the faction relation types
+     * @return the audience
+     */
+    public Audience audience(@NotNull BiPredicate<Faction, Member> filter, @NotNull FactionRelation @NotNull... relations) {
+        List<Faction> related = Arrays.stream(relations)
+                .map(this::getRelatedFactions)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        related.add(this);
+        return Reference.AUDIENCES.filter(sender -> {
+            if (!(sender instanceof Player))
+                return false;
+
+            Player player = (Player) sender;
+
+            for (Faction faction : related) {
+                Member member = faction.getMember(player.getUniqueId());
+                if (member == null)
+                    continue;
+
+                return filter.test(faction, member);
+            }
+
+            return false;
+        });
+    }
+
+    // endregion Audiences
 
     public void markDirty() {
         this.dirty = true;
