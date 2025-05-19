@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("unused")
 @ToString
-public final class Faction implements Audience {
+public final class Faction {
 
     public static final String WILDERNESS_ID = "factions_wilderness";
 
