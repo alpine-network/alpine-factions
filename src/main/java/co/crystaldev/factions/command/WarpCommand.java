@@ -45,13 +45,12 @@ final class WarpCommand extends AlpineCommand {
     @Execute
     public void teleport(
             @Context Player player,
-            @Arg("warp") @Key(Args.WARP) String warp,
+            @Arg("warp") Warp warp,
             @Arg("password") @Key(Args.ALPHANUMERIC) Optional<String> password
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.get().factions();
         Faction faction = factions.findOrDefault(player);
-        Warp factionWarp = faction.getWarp(warp);
 
         // ensure player has access to warp
         boolean permitted = PermissionHelper.checkPermissionAndNotify(player,
@@ -61,7 +60,7 @@ final class WarpCommand extends AlpineCommand {
         }
 
         // if password is present, check for it
-        if (factionWarp.hasPassword() && !(factionWarp.isPasswordCorrect(password)) && faction.getMember(player) != faction.getOwner()) {
+        if (warp.hasPassword() && !(warp.isPasswordCorrect(password)) && faction.getMember(player) != faction.getOwner()) {
             config.warpInvalidPassword.send(player,
                     "faction", RelationHelper.formatFactionName(player, faction),
                     "faction_name", faction.getName(),
@@ -69,7 +68,7 @@ final class WarpCommand extends AlpineCommand {
             return;
         }
 
-        Location warpLocation = factionWarp.getLocation();
+        Location warpLocation = warp.getLocation();
 
         // ensure the faction has a warp (only called if target faction is defined)
         if (warpLocation == null) {
@@ -82,12 +81,12 @@ final class WarpCommand extends AlpineCommand {
 
         // ensure warp is still in the faction's own territory
         if (!Factions.get().claims().getFactionOrDefault(warpLocation).equals(faction)) {
-            FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(faction, player, warp, null, null));
+            FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(faction, player, warp, null, true));
             if (!event.isCancelled()) {
                 // delete warp and notify
                 faction.delWarp(warp);
                 faction.audience().sendMessage(config.unsetWarp.build(
-                        "warp", warp));
+                        "warp", warp.getName()));
                 return;
             }
         }
@@ -100,7 +99,7 @@ final class WarpCommand extends AlpineCommand {
                     ctx.message(message.build(
                             "faction", RelationHelper.formatLiteralFactionName(player, faction),
                             "faction_name", faction.getName(),
-                            "warp", warp,
+                            "warp", warp.getName(),
                             "seconds", ctx.timeUntilTeleport(TimeUnit.SECONDS)));
                 })
                 .initiate(this.plugin);
@@ -110,13 +109,13 @@ final class WarpCommand extends AlpineCommand {
     @Shortcut({ "factions setwarp" })
     public void add(
             @Context Player player,
-            @Arg("name") @Key(Args.ALPHANUMERIC) String name,
+            @Arg("name") @Key(Args.ALPHANUMERIC) String warpName,
             @Arg("password") @Key(Args.ALPHANUMERIC) Optional<String> password
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        Location warpLocation = player.getLocation();
-        Faction faction = Factions.get().claims().getFactionOrDefault(warpLocation);
+        Location location = player.getLocation();
+        Faction faction = Factions.get().claims().getFactionOrDefault(location);
         Faction selfFaction = Factions.get().factions().findOrDefault(player);
 
         // ensure claim is not wilderness and player's faction
@@ -135,31 +134,33 @@ final class WarpCommand extends AlpineCommand {
         }
 
         // call warp update event with new warp
-        FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(selfFaction, player, name, password.orElse(null), warpLocation));
+        long currentTime = System.currentTimeMillis();
+        Warp warp = Warp.of(warpName, location, password.orElse(null),
+                currentTime, currentTime);
+
+        FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(selfFaction, player, null, warp, false));
         if (event.isCancelled()) {
             config.operationCancelled.send(player);
             return;
         }
 
         // set the faction warp
-        faction.addWarp(name, new Warp(warpLocation, password.orElse(null), System.currentTimeMillis()));
-
-        Warp factionWarp = faction.getWarp(name);
+        faction.addWarp(warp);
 
         // broadcast set warp to faction
         FactionHelper.broadcast(faction, observer -> {
-            Component location = factionWarp.hasPassword() && faction.getMember(observer) != faction.getOwner()
+            Component locComponent = warp.hasPassword() && faction.getMember(observer) != faction.getOwner()
                     ? config.warpHidden.build() : config.warpLocation.build(
-                    "world", warpLocation.getWorld().getName(),
-                    "x", warpLocation.getBlockX(),
-                    "y", warpLocation.getBlockY(),
-                    "z", warpLocation.getBlockZ());
+                    "world", location.getWorld().getName(),
+                    "x", location.getBlockX(),
+                    "y", location.getBlockY(),
+                    "z", location.getBlockZ());
 
             return config.setWarp.build(
                     "actor", RelationHelper.formatPlayerName(observer, player),
                     "actor_name", player.getName(),
-                    "warp", name,
-                    "location", location);
+                    "warp", warpName,
+                    "location", locComponent);
         });
     }
 
@@ -167,13 +168,12 @@ final class WarpCommand extends AlpineCommand {
     @Shortcut({ "factions delwarp" })
     public void remove(
             @Context Player player,
-            @Arg("name") @Key(Args.WARP) String warp,
+            @Arg("warp") Warp warp,
             @Arg("password") @Key(Args.ALPHANUMERIC) Optional<String> password
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = Factions.get().factions().findOrDefault(player);
-        Warp factionWarp = faction.getWarp(warp);
-        Location warpLocation = factionWarp.getLocation();
+        Location warpLocation = warp.getLocation();
 
         // ensure player can modify warps
         boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
@@ -183,7 +183,7 @@ final class WarpCommand extends AlpineCommand {
         }
 
         // if password is present, check for it
-        if (factionWarp.hasPassword() && !(factionWarp.isPasswordCorrect(password)) && faction.getMember(player) != faction.getOwner()) {
+        if (warp.hasPassword() && !(warp.isPasswordCorrect(password)) && faction.getMember(player) != faction.getOwner()) {
             config.warpInvalidPassword.send(player,
                     "faction", RelationHelper.formatFactionName(player, faction),
                     "faction_name", faction.getName(),
@@ -192,7 +192,7 @@ final class WarpCommand extends AlpineCommand {
         }
 
         // call warp update event
-        FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(faction, player, warp, null,null));
+        FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(faction, player, warp, null, true));
         if (event.isCancelled()) {
             config.operationCancelled.send(player);
             return;
@@ -200,7 +200,7 @@ final class WarpCommand extends AlpineCommand {
 
         // broadcast warp deletion to faction
         FactionHelper.broadcast(faction, observer -> {
-            Component location = factionWarp.hasPassword() && faction.getMember(observer) != faction.getOwner()
+            Component location = warp.hasPassword() && faction.getMember(observer) != faction.getOwner()
                     ? config.warpHidden.build() : config.warpLocation.build(
                     "world", warpLocation.getWorld().getName(),
                     "x", warpLocation.getBlockX(),
@@ -210,7 +210,7 @@ final class WarpCommand extends AlpineCommand {
             return config.delWarp.build(
                     "actor", RelationHelper.formatPlayerName(observer, player),
                     "actor_name", player.getName(),
-                    "warp", warp,
+                    "warp", warp.getName(),
                     "location", location);
         });
 
@@ -244,10 +244,9 @@ final class WarpCommand extends AlpineCommand {
         String command = "/f warp list %page% " + faction.getName();
 
         Messaging.send(player, Formatting.page(title, faction.getWarps(), command, page.orElse(1), 10, warp -> {
-            Warp factionWarp = faction.getWarp(warp);
-            Location warpLocation = factionWarp.getLocation();
+            Location warpLocation = warp.getLocation();
 
-            Component location = factionWarp.hasPassword() && faction.getMember(player) != faction.getOwner()
+            Component location = warp.hasPassword() && faction.getMember(player) != faction.getOwner()
                     ? config.warpHidden.build() : config.warpLocation.build(
                     "world", warpLocation.getWorld().getName(),
                     "x", warpLocation.getBlockX(),
@@ -255,8 +254,8 @@ final class WarpCommand extends AlpineCommand {
                     "z", warpLocation.getBlockZ());
 
             return config.warpListEntry.build(
-                    "warp", warp,
-                    "status", factionWarp.hasPassword() ? config.warpHasPassword.build() : config.warpNoPassword.build(),
+                    "warp", warp.getName(),
+                    "status", warp.hasPassword() ? config.warpHasPassword.build() : config.warpNoPassword.build(),
                     "location", location
             );
         }));

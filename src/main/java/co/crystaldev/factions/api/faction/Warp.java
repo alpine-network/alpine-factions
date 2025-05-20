@@ -1,5 +1,6 @@
 package co.crystaldev.factions.api.faction;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -10,19 +11,24 @@ import java.util.Optional;
 /**
  * @since 0.1.0
  */
+@AllArgsConstructor(staticName = "of")
 @Getter
 public final class Warp {
 
-    private final @NotNull Location location;
+    private final @NotNull String name;
 
-    private final @Nullable String password;
+    private @NotNull Location location;
+
+    private @Nullable String password;
 
     private final long createdAt;
 
-    public Warp(@NotNull Location location, @Nullable String password, long createdAt) {
+    private long updatedAt;
+
+    public void updateWarp(Location location, String password) {
         this.location = location;
         this.password = password;
-        this.createdAt = createdAt;
+        this.updatedAt = System.currentTimeMillis();
     }
 
     public boolean isPasswordCorrect(String input) {
@@ -38,6 +44,6 @@ public final class Warp {
     }
 
     public boolean hasPassword() {
-        return password != null;
+        return this.password != null;
     }
 }
