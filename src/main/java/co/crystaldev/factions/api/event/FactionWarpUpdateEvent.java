@@ -2,9 +2,9 @@ package co.crystaldev.factions.api.event;
 
 import co.crystaldev.factions.api.event.framework.FactionEntityEvent;
 import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.faction.Warp;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.jetbrains.annotations.NotNull;
@@ -13,25 +13,24 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @since 0.1.0
  */
-@Getter @Setter
+@Getter
 public final class FactionWarpUpdateEvent extends FactionEntityEvent<Player> implements Cancellable {
 
-    private String warpName;
+    private final Warp oldWarp;
 
-    private String password;
+    private final Warp newWarp;
 
-    private Location location;
+    private final boolean unset;
 
+    @Setter
     private boolean cancelled;
 
-    public FactionWarpUpdateEvent(@NotNull Faction faction, @NotNull Player entity, @NotNull String warpName, @Nullable String password,@Nullable Location location) {
+    public FactionWarpUpdateEvent(@NotNull Faction faction, @NotNull Player entity,
+                                  @Nullable Warp warp, @Nullable Warp newWarp,
+                                  boolean unset) {
         super(faction, entity);
-        this.warpName = warpName;
-        this.location = location;
-        this.password = password;
-    }
-
-    public boolean wasUnset() {
-        return this.location == null;
+        this.oldWarp = warp;
+        this.newWarp = newWarp;
+        this.unset = unset;
     }
 }
