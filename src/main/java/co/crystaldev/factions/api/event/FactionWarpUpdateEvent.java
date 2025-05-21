@@ -29,4 +29,8 @@ public final class FactionWarpUpdateEvent extends FactionEntityEvent<Player> imp
         this.oldWarp = warp;
         this.newWarp = newWarp;
     }
+
+    public boolean wasUnset() {
+        return this.newWarp == null;
+    }
 }
