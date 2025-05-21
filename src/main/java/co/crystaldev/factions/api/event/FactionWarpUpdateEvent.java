@@ -20,17 +20,13 @@ public final class FactionWarpUpdateEvent extends FactionEntityEvent<Player> imp
 
     private final Warp newWarp;
 
-    private final boolean unset;
-
     @Setter
     private boolean cancelled;
 
     public FactionWarpUpdateEvent(@NotNull Faction faction, @NotNull Player entity,
-                                  @Nullable Warp warp, @Nullable Warp newWarp,
-                                  boolean unset) {
+                                  @Nullable Warp warp, @Nullable Warp newWarp) {
         super(faction, entity);
         this.oldWarp = warp;
         this.newWarp = newWarp;
-        this.unset = unset;
     }
 }

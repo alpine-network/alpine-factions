@@ -81,7 +81,7 @@ final class WarpCommand extends AlpineCommand {
 
         // ensure warp is still in the faction's own territory
         if (!Factions.get().claims().getFactionOrDefault(warpLocation).equals(faction)) {
-            FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(faction, player, warp, null, true));
+            FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(faction, player, warp, null));
             if (!event.isCancelled()) {
                 // delete warp and notify
                 faction.delWarp(warp);
@@ -134,11 +134,11 @@ final class WarpCommand extends AlpineCommand {
         }
 
         // call warp update event with new warp
-        long currentTime = System.currentTimeMillis();
-        Warp warp = Warp.of(warpName, location, password.orElse(null),
-                currentTime, currentTime);
+        Warp oldWarp = faction.getWarpByName(warpName);
+        Warp warp = Warp.of(warpName, location, password.orElse(null), System.currentTimeMillis());
 
-        FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(selfFaction, player, null, warp, false));
+        // oldWarp is null, if non-existent
+        FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(selfFaction, player, oldWarp, warp));
         if (event.isCancelled()) {
             config.operationCancelled.send(player);
             return;
@@ -192,7 +192,7 @@ final class WarpCommand extends AlpineCommand {
         }
 
         // call warp update event
-        FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(faction, player, warp, null, true));
+        FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(faction, player, warp, null));
         if (event.isCancelled()) {
             config.operationCancelled.send(player);
             return;
