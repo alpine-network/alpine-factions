@@ -89,7 +89,7 @@ public final class Faction {
 
     private final HashMap<String, FactionRelation> relationRequests = new HashMap<>();
 
-    private final HashSet<Warp> warps = new HashSet<>();
+    private final HashSet<Warp> facWarps = new HashSet<>();
 
     private final Map<String, FlagHolder<?>> flags = new HashMap<>();
 
@@ -207,7 +207,7 @@ public final class Faction {
 
     // region Warps
     public void addWarp(@NotNull Warp warp) {
-        for (Warp existing : this.warps) {
+        for (Warp existing : this.facWarps) {
             // update existing warp
             if (existing.getName().equals(warp.getName())) {
                 existing.updateWarp(warp.getLocation(), warp.getPassword());
@@ -217,27 +217,27 @@ public final class Faction {
         }
 
         // add warp if non-existent
-        this.warps.add(warp);
+        this.facWarps.add(warp);
         this.markDirty();
     }
 
     public void delWarp(@NotNull Warp warp) {
-        this.warps.remove(warp);
+        this.facWarps.remove(warp);
         this.markDirty();
     }
 
     public boolean hasWarp(@NotNull Warp warp) {
-        return this.warps.contains(warp);
+        return this.facWarps.contains(warp);
     }
 
     public @Nullable Warp getWarpByName(@NotNull String warp) {
-        return this.warps.stream().filter(w -> w.getName().equals(warp))
+        return this.facWarps.stream().filter(w -> w.getName().equals(warp))
                 .findFirst()
                 .orElse(null);
     }
 
     public @NotNull Set<Warp> getWarps() {
-        return this.warps;
+        return this.facWarps;
     }
 
     // endregion Warps
