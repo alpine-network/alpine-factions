@@ -3,8 +3,8 @@ import org.gradle.jvm.tasks.Jar
 
 plugins {
     id("java")
-    id("com.gradleup.shadow") version "9.0.0-beta11"
     id("maven-publish")
+    alias(libs.plugins.shadow)
 }
 
 val mavenGroup: String by project.properties
@@ -40,14 +40,15 @@ allprojects {
         maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     }
 
+    val libs = rootProject.libs
     dependencies {
         compileOnly(group = "com.destroystokyo.paper", name = "paper-api", version = serverVersion)
-        compileOnly(group = "co.crystaldev", name = "alpinecore", version = "0.4.10-SNAPSHOT")
+        compileOnly(libs.alpinecore)
 
-        compileOnly(group = "me.clip", name = "placeholderapi", version = "2.11.5")
+        compileOnly(libs.placeholderapi)
 
-        compileOnly(group = "org.projectlombok", name = "lombok", version = "1.18.36")
-        annotationProcessor(group = "org.projectlombok", name = "lombok", version = "1.18.36")
+        compileOnly(libs.lombok)
+        annotationProcessor(libs.lombok)
     }
 
     tasks {

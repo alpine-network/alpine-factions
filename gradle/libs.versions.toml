@@ -1,0 +1,13 @@
+[versions]
+alpinecore = "0.4.10-SNAPSHOT"
+lombok = "1.18.36"
+placeholderapi = "2.11.5"
+shadow = "9.0.0-beta11"
+
+[libraries]
+alpinecore = { group = "co.crystaldev", name = "alpinecore", version.ref = "alpinecore"}
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+placeholderapi = { group = "me.clip", name = "placeholderapi", version.ref = "placeholderapi" }
+
+[plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
