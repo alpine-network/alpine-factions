@@ -12,10 +12,4 @@ public final class Args {
      * @see AlphanumericArgumentResolver
      */
     public static final String ALPHANUMERIC = "factions:alphanumeric_argument_resolver";
-
-    /**
-     * Represents an warp {@link String} argument.
-     * @see FactionWarpArgumentResolver
-     */
-    public static final String WARP = "factions:warp_argument_resolver";
 }

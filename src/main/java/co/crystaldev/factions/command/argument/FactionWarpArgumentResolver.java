@@ -4,6 +4,7 @@ import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.Faction;
+import co.crystaldev.factions.api.faction.Warp;
 import co.crystaldev.factions.config.MessageConfig;
 import dev.rollczi.litecommands.argument.Argument;
 import dev.rollczi.litecommands.argument.parser.ParseResult;
@@ -15,18 +16,22 @@ import org.bukkit.command.CommandSender;
 /**
  * @since 0.1.0
  */
-final class FactionWarpArgumentResolver extends AlpineArgumentResolver<String> {
+final class FactionWarpArgumentResolver extends AlpineArgumentResolver<Warp> {
     public FactionWarpArgumentResolver() {
-        super(String.class, Args.WARP);
+        super(Warp.class, null);
     }
 
     @Override
-    protected ParseResult<String> parse(Invocation<CommandSender> invocation, Argument<String> context, String argument) {
+    protected ParseResult<Warp> parse(Invocation<CommandSender> invocation, Argument<Warp> context, String argument) {
         Faction faction = Factions.get().factions().findOrDefault(invocation.sender());
 
-        for (String warp : faction.getWarps()) {
-            if (argument.matches(warp)) {
-                return ParseResult.success(warp);
+        Warp argWarp = faction.getWarpByName(argument);
+
+        if (argWarp != null) {
+            for (Warp warp : faction.getWarps()) {
+                if (argument.matches(warp.getName())) {
+                    return ParseResult.success(warp);
+                }
             }
         }
 
@@ -36,10 +41,12 @@ final class FactionWarpArgumentResolver extends AlpineArgumentResolver<String> {
     }
 
     @Override
-    public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<String> argument, SuggestionContext context) {
+    public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<Warp> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel();
         Faction faction = Factions.get().factions().findOrDefault(invocation.sender());
-        return faction.getWarps().stream()
+        return faction.getWarps()
+                .stream()
+                .map(Warp::getName)
                 .filter(v -> v.startsWith(current))
                 .collect(SuggestionResult.collector());
     }
