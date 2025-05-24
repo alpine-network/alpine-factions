@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public final class AsciiFactionMap {
 
-    private static final FactionMapFormatter MAP_FORMATTER = Factions.get().mapFormatter();
+    private static final FactionMapFormatter MAP_FORMATTER = Factions.mapFormatter();
 
     private static final char[] KEY_CHARS = "\\/#?ç¬£$%=&^ABCDEFGHJKLMNOPQRSTUVWXYZÄÖÜÆØÅ1234567890abcdeghjmnopqrsuvwxyÿzäöüæøåâêîûô".toCharArray();
 
@@ -44,7 +44,7 @@ public final class AsciiFactionMap {
 
     private final MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
-    private final ClaimAccessor claims = Factions.get().claims();
+    private final ClaimAccessor claims = Factions.claims();
 
     private final Map<Faction, FactionMarker> factionColorMap = new LinkedHashMap<>();
 
@@ -59,7 +59,7 @@ public final class AsciiFactionMap {
         this.minimal = minimal;
 
         // Map size handled through MapHeightCommand (clamps are in place)
-        FPlayer fPlayer = Factions.get().players().get(player);
+        FPlayer fPlayer = Factions.players().get(player);
         int minimalMapSize = fPlayer.getAutoMapHeight();
         if (minimalMapSize < 8) {
             minimalMapSize = 8;
@@ -135,7 +135,7 @@ public final class AsciiFactionMap {
         Chunk center = this.player.getLocation().getChunk();
         WorldBorder border = this.player.getWorld().getWorldBorder();
         Component borderComponent = this.config.mapBorder.build();
-        Faction playerFaction = Factions.get().factions().findOrDefault(this.player);
+        Faction playerFaction = Factions.registry().findOrDefault(this.player);
 
         int centerX = center.getX();
         int centerZ = center.getZ();

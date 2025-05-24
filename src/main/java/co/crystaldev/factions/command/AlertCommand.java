@@ -37,7 +37,7 @@ final class AlertCommand extends AlpineCommand {
             @Join("message") String message
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = Factions.get().factions().findOrDefault(player);
+        Faction faction = Factions.registry().findOrDefault(player);
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
                 Permissions.ALERT, "alert");

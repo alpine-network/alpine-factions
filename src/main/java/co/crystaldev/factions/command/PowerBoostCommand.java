@@ -37,9 +37,9 @@ final class PowerBoostCommand extends AlpineCommand {
             @Arg("player") @Async OfflinePlayer other,
             @Arg("powerboost") int powerboost
     ) {
-        Faction faction = Factions.get().factions().findOrDefault(other);
+        Faction faction = Factions.registry().findOrDefault(other);
 
-        PlayerAccessor players = Factions.get().players();
+        PlayerAccessor players = Factions.players();
         FPlayer state = players.get(other);
         state.setPowerBoost(powerboost);
         players.save(state);

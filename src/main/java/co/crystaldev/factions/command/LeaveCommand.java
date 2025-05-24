@@ -38,7 +38,7 @@ final class LeaveCommand extends AlpineCommand {
     @Execute
     public void execute(@Context Player player) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction faction = factions.find(player);
 
         // ensure the player is in a faction

@@ -39,7 +39,7 @@ final class ClaimCommand extends AlpineCommand {
             @Arg("radius") Optional<Integer> rad,
             @Arg("faction") Optional<Faction> faction
     ) {
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction claimingFaction = faction.orElse(factions.find(player));
         Faction actingFaction = faction.orElse(factions.findOrDefault(player));
         Claiming.mode(player, actingFaction, claimingFaction, type, Math.max(rad.orElse(1), 1));
@@ -50,7 +50,7 @@ final class ClaimCommand extends AlpineCommand {
             @Context Player player,
             @Arg("faction") Optional<Faction> faction
     ) {
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction claimingFaction = faction.orElse(factions.find(player));
         Faction actingFaction = faction.orElse(factions.findOrDefault(player));
         Claiming.fill(player, actingFaction, claimingFaction);
@@ -61,7 +61,7 @@ final class ClaimCommand extends AlpineCommand {
             @Context Player player,
             @Arg("faction") Optional<Faction> faction
     ) {
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction claimingFaction = faction.orElse(factions.find(player));
         Faction actingFaction = faction.orElse(factions.findOrDefault(player));
         Claiming.one(player, actingFaction, claimingFaction);
@@ -73,7 +73,7 @@ final class ClaimCommand extends AlpineCommand {
             @Arg("faction") Optional<Faction> faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction claimingFaction = faction.orElse(Factions.get().factions().findOrDefault(player));
+        Faction claimingFaction = faction.orElse(Factions.registry().findOrDefault(player));
 
         PlayerState state = PlayerHandler.getInstance().getPlayer(player);
         AutoClaimState autoClaim = state.getAutoClaimState();

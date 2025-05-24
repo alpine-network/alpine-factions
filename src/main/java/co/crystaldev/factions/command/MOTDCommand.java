@@ -35,7 +35,7 @@ final class MOTDCommand extends AlpineCommand {
             @Join("name") String motd
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = Factions.get().factions().findOrDefault(player);
+        Faction faction = Factions.registry().findOrDefault(player);
 
         // ensure the user has permission
         boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
@@ -60,7 +60,7 @@ final class MOTDCommand extends AlpineCommand {
     @Execute
     public void view(@Context Player player) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = Factions.get().factions().findOrDefault(player);
+        Faction faction = Factions.registry().findOrDefault(player);
 
         Component motd = Optional.ofNullable(faction.getMotd()).orElse(Faction.DEFAULT_MOTD);
         Component title = config.motdTitle.build(
@@ -73,7 +73,7 @@ final class MOTDCommand extends AlpineCommand {
     @Execute(name = "clear")
     public void clear(@Context Player player) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = Factions.get().factions().findOrDefault(player);
+        Faction faction = Factions.registry().findOrDefault(player);
 
         // ensure the user has permission
         boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,

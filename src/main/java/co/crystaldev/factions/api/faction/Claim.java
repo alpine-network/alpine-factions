@@ -64,7 +64,7 @@ public final class Claim {
     }
 
     public @NotNull Faction getFaction() {
-        return Factions.get().factions().getByIdOrDefault(this.factionId);
+        return Factions.registry().getByIdOrDefault(this.factionId);
     }
 
     public void setFaction(@NotNull Faction faction) {
@@ -127,7 +127,7 @@ public final class Claim {
     }
 
     public boolean isPermitted(@NotNull OfflinePlayer player, @NotNull Permission permission) {
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction faction = factions.getById(this.factionId);
         Faction playerFaction = factions.findOrDefault(player);
 
@@ -153,12 +153,12 @@ public final class Claim {
     }
 
     public @NotNull Set<FPlayer> getPlayers() {
-        PlayerAccessor players = Factions.get().players();
+        PlayerAccessor players = Factions.players();
         return this.accessedPlayerIds.stream().map(players::getById).collect(Collectors.toSet());
     }
 
     public @NotNull Set<Faction> getFactions() {
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         return this.accessedFactionIds.stream().map(factions::getById).collect(Collectors.toSet());
     }
 

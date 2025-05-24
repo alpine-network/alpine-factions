@@ -3,7 +3,6 @@ package co.crystaldev.factions.integration;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.integration.AlpineIntegration;
 import co.crystaldev.alpinecore.framework.integration.AlpineIntegrationEngine;
-import co.crystaldev.alpinecore.util.ChatColor;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.Reference;
@@ -110,10 +109,10 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
 
         @Override
         public @Nullable String onPlaceholderRequest(Player primary, @NotNull String identifier) {
-            FactionAccessor factions = Factions.get().factions();
+            FactionAccessor factions = Factions.registry();
 
             Faction primaryFaction = factions.findOrDefault(primary);
-            FPlayer primaryState = Factions.get().players().get(primary);
+            FPlayer primaryState = Factions.players().get(primary);
             Member primaryMember = primaryFaction.getMember(primary.getUniqueId());
 
             switch (identifier) {
@@ -165,7 +164,7 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
 
         @Override
         public String onPlaceholderRequest(Player primary, Player relational, String identifier) {
-            FactionAccessor factions = Factions.get().factions();
+            FactionAccessor factions = Factions.registry();
             Faction primaryFaction = factions.findOrDefault(primary);
             Faction relationalFaction = factions.findOrDefault(relational);
 

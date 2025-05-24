@@ -3,9 +3,9 @@ package co.crystaldev.factions;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.storage.driver.AlpineDriver;
 import co.crystaldev.alpinecore.framework.storage.driver.FlatfileDriver;
-import co.crystaldev.factions.api.Factions;
-import co.crystaldev.factions.api.FlagRegistry;
-import co.crystaldev.factions.api.PermissionRegistry;
+import co.crystaldev.factions.api.FactionsProvider;
+import co.crystaldev.factions.api.registry.FlagRegistry;
+import co.crystaldev.factions.api.registry.PermissionRegistry;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
+import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -37,7 +38,7 @@ import java.util.UUID;
 /**
  * @since 0.1.0
  */
-public abstract class AlpineFactions extends AlpinePlugin implements Factions {
+public abstract class AlpineFactions extends AlpinePlugin implements FactionsProvider {
 
     @Getter
     private static AlpineFactions instance;
@@ -78,12 +79,16 @@ public abstract class AlpineFactions extends AlpinePlugin implements Factions {
         this.claimAccessor = this.getActivatable(ClaimStore.class);
         this.factionAccessor = this.getActivatable(FactionStore.class);
         this.playerAccessor = this.getActivatable(PlayerStore.class);
+
+        this.getServer().getServicesManager().register(FactionsProvider.class, this, this, ServicePriority.Normal);
     }
 
     @Override
     public void onStop() {
         this.getActivatable(ClaimStore.class).saveClaims();
         this.getActivatable(FactionStore.class).saveFactions();
+
+        this.getServer().getServicesManager().unregisterAll(this);
     }
 
     @Override
@@ -126,23 +131,23 @@ public abstract class AlpineFactions extends AlpinePlugin implements Factions {
     }
 
     @Override
-    public @NotNull FactionAccessor factions() {
+    public @NotNull FactionAccessor registry() {
         return this.factionAccessor;
     }
 
     @Override
-    public @NotNull FlagRegistry flagRegistry() {
-        return flagRegistry;
+    public @NotNull FlagRegistry flags() {
+        return this.flagRegistry;
     }
 
     @Override
-    public @NotNull PermissionRegistry permissionRegistry() {
-        return permissionRegistry;
+    public @NotNull PermissionRegistry permissions() {
+        return this.permissionRegistry;
     }
 
     @Override
     public @NotNull ShowFormatter showFormatter() {
-        return showFormatter;
+        return this.showFormatter;
     }
 
     @Override

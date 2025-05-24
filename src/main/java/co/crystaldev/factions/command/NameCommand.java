@@ -48,7 +48,7 @@ final class NameCommand extends AlpineCommand {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction faction = targetFaction.orElseGet(() -> factions.findOrDefault(sender));
 
         // ensure the user has permission

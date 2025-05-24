@@ -41,7 +41,7 @@ final class JoinCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         boolean overriding = PlayerHandler.getInstance().isOverriding(player);
 
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction otherFaction = factions.findOrDefault(player);
 
         // ensure the player is not in a faction
@@ -110,7 +110,7 @@ final class JoinCommand extends AlpineCommand {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction otherFaction = factions.find(joiningPlayer);
         Faction actingFaction = factions.findOrDefault(player);
         Faction wilderness = factions.getWilderness();

@@ -50,19 +50,19 @@ final class UnclaimCommand extends AlpineCommand {
             @Arg("type") ClaimType type,
             @OptionalArg("radius") Optional<Integer> rad
     ) {
-        Faction actingFaction = Factions.get().factions().findOrDefault(player);
+        Faction actingFaction = Factions.registry().findOrDefault(player);
         Claiming.mode(player, actingFaction, null, type, Math.max(rad.orElse(1), 1));
     }
 
     @Execute(name = "fill", aliases = "f")  @Async
     public void fill(@Context Player player) {
-        Faction actingFaction = Factions.get().factions().findOrDefault(player);
+        Faction actingFaction = Factions.registry().findOrDefault(player);
         Claiming.fill(player, actingFaction, null);
     }
 
     @Execute(name = "one", aliases = "o")
     public void one(@Context Player player) {
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Claiming.one(player, factions.findOrDefault(player), null);
     }
 
@@ -75,7 +75,7 @@ final class UnclaimCommand extends AlpineCommand {
         autoClaim.toggle(null);
 
         if (autoClaim.isEnabled()) {
-            Faction wilderness = Factions.get().factions().getWilderness();
+            Faction wilderness = Factions.registry().getWilderness();
             config.enableAutoUnclaim.send(player,
                     "faction", RelationHelper.formatFactionName(player, wilderness),
                     "faction_name", wilderness.getName());
@@ -103,7 +103,7 @@ final class UnclaimCommand extends AlpineCommand {
         }
 
         // fetch all chunks
-        ClaimAccessor claims = Factions.get().claims();
+        ClaimAccessor claims = Factions.claims();
         List<ClaimedChunk> foundClaims;
         ConfigText message;
         String worldName;
@@ -126,8 +126,8 @@ final class UnclaimCommand extends AlpineCommand {
         foundClaims.forEach(claim -> claims.remove(claim.getWorld(), claim.getX(), claim.getZ()));
 
         // notify
-        Faction wilderness = Factions.get().factions().getWilderness();
-        Faction playerFaction = Factions.get().factions().findOrDefault(player);
+        Faction wilderness = Factions.registry().getWilderness();
+        Faction playerFaction = Factions.registry().findOrDefault(player);
         FactionHelper.broadcast(faction, player, observer -> {
             return message.build(
                     "actor", RelationHelper.formatPlayerName(observer, player),

@@ -6,7 +6,7 @@ import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
-import co.crystaldev.factions.api.PermissionRegistry;
+import co.crystaldev.factions.api.registry.PermissionRegistry;
 import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.event.FactionPermissionUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
@@ -47,7 +47,7 @@ final class PermissionCommand extends AlpineCommand {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.registry().findOrDefault(sender));
         boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, resolvedFaction,
                 Permissions.MODIFY_PERMS, "modify permissions");
         if (!permitted) {
@@ -85,9 +85,9 @@ final class PermissionCommand extends AlpineCommand {
             @Arg("faction") Optional<Faction> faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        PermissionRegistry registry = AlpineFactions.getInstance().permissionRegistry();
+        PermissionRegistry registry = AlpineFactions.getInstance().permissions();
 
-        Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.registry().findOrDefault(sender));
         boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, resolvedFaction,
                 Permissions.MODIFY_PERMS, "modify permissions");
         if (!permitted) {
@@ -133,7 +133,7 @@ final class PermissionCommand extends AlpineCommand {
             @Arg("page") Optional<Integer> page
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        PermissionRegistry registry = AlpineFactions.getInstance().permissionRegistry();
+        PermissionRegistry registry = AlpineFactions.getInstance().permissions();
 
         List<Permission> permissions = registry.getAll();
 

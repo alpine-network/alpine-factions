@@ -37,7 +37,7 @@ public final class MapHeightCommand extends AlpineCommand {
 
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        PlayerAccessor players = Factions.get().players();
+        PlayerAccessor players = Factions.players();
         FPlayer state = players.get(player);
 
         state.setAutoMapHeight(size);

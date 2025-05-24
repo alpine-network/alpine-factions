@@ -173,8 +173,8 @@ public final class Faction {
     public void disband(@NotNull CommandSender actor) {
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
-        FactionAccessor factions = Factions.get().factions();
-        ClaimAccessor claims = Factions.get().claims();
+        FactionAccessor factions = Factions.registry();
+        ClaimAccessor claims = Factions.claims();
         Faction actingFaction = factions.findOrDefault(actor);
 
         // call event
@@ -282,7 +282,7 @@ public final class Faction {
     }
 
     public int getClaimCount(@Nullable World world) {
-        return Factions.get().claims().countClaims(this, world);
+        return Factions.claims().countClaims(this, world);
     }
 
     public int getClaimCount() {
@@ -375,7 +375,7 @@ public final class Faction {
 
     public @NotNull Set<RelatedFaction> getRelatedFactions() {
         Set<RelatedFaction> related = new HashSet<>();
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
 
         this.relationRequests.forEach((factionId, type) -> {
             Faction other = factions.getById(factionId);
@@ -389,7 +389,7 @@ public final class Faction {
 
     public @NotNull Set<RelatedFaction> getRelationWishes() {
         Set<RelatedFaction> related = new HashSet<>();
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
 
         this.relationRequests.forEach((factionId, type) -> {
             Faction other = factions.getById(factionId);
@@ -403,7 +403,7 @@ public final class Faction {
 
     public @NotNull Set<Faction> getRelatedFactions(@NotNull FactionRelation relation) {
         Set<Faction> related = new HashSet<>();
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
 
         this.relationRequests.forEach((factionId, type) -> {
             if (type != relation) {
@@ -421,7 +421,7 @@ public final class Faction {
 
     public @NotNull Set<Faction> getRelationWishes(@NotNull FactionRelation relation) {
         Set<Faction> related = new HashSet<>();
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
 
         this.relationRequests.forEach((factionId, type) -> {
             if (type != relation) {
@@ -490,7 +490,7 @@ public final class Faction {
             return this.isPermitted(this.getMember(offlinePlayer).getRank(), permission);
         }
         else {
-            Faction other = Factions.get().factions().find(player);
+            Faction other = Factions.registry().find(player);
             return this.isPermitted(this.relationWishTo(other), permission);
         }
     }
@@ -668,7 +668,7 @@ public final class Faction {
             }
             else {
                 // move replacement owner into this faction
-                Faction faction = Factions.get().factions().find(owner);
+                Faction faction = Factions.registry().find(owner);
                 if (faction != null) {
                     faction.removeMember(owner);
                 }

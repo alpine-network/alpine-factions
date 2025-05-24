@@ -27,7 +27,7 @@ final class FactionArgumentResolver extends AlpineArgumentResolver<Faction> {
 
     @Override
     protected ParseResult<Faction> parse(Invocation<CommandSender> invocation, Argument<Faction> context, String argument) {
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         boolean foundPlayer = false;
 
         // attempt to find faction by its name
@@ -54,7 +54,7 @@ final class FactionArgumentResolver extends AlpineArgumentResolver<Faction> {
     public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<Faction> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel().toLowerCase();
 
-        return Factions.get().factions().get()
+        return Factions.registry().all()
                 .stream()
                 .map(Faction::getName)
                 .filter(v -> v.toLowerCase().startsWith(current))

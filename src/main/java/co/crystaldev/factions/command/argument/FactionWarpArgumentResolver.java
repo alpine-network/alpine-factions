@@ -23,7 +23,7 @@ final class FactionWarpArgumentResolver extends AlpineArgumentResolver<Warp> {
 
     @Override
     protected ParseResult<Warp> parse(Invocation<CommandSender> invocation, Argument<Warp> context, String argument) {
-        Faction faction = Factions.get().factions().findOrDefault(invocation.sender());
+        Faction faction = Factions.registry().findOrDefault(invocation.sender());
 
         Warp argWarp = faction.getWarpByName(argument);
 
@@ -43,7 +43,7 @@ final class FactionWarpArgumentResolver extends AlpineArgumentResolver<Warp> {
     @Override
     public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<Warp> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel();
-        Faction faction = Factions.get().factions().findOrDefault(invocation.sender());
+        Faction faction = Factions.registry().findOrDefault(invocation.sender());
         return faction.getWarps()
                 .stream()
                 .map(Warp::getName)

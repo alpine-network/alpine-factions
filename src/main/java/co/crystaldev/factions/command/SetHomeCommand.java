@@ -33,8 +33,8 @@ final class SetHomeCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         Location location = player.getLocation();
-        Faction faction = Factions.get().claims().getFactionOrDefault(location);
-        Faction selfFaction = Factions.get().factions().findOrDefault(player);
+        Faction faction = Factions.claims().getFactionOrDefault(location);
+        Faction selfFaction = Factions.registry().findOrDefault(player);
         if (faction.isWilderness() || !faction.isMember(player.getUniqueId())) {
             config.outsideTerritory.send(player,
                     "faction", RelationHelper.formatLiteralFactionName(player, selfFaction),

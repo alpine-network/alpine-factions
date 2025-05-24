@@ -52,7 +52,7 @@ public final class PhysicsEngine extends AlpineEngine {
             return;
         }
 
-        Faction faction = Factions.get().claims().getFactionOrDefault(event.getEntity().getLocation());
+        Faction faction = Factions.claims().getFactionOrDefault(event.getEntity().getLocation());
         if (!faction.getFlagValueOrDefault(FactionFlags.EXPLOSIONS)) {
             event.setCancelled(true);
         }
@@ -69,7 +69,7 @@ public final class PhysicsEngine extends AlpineEngine {
     }
 
     private static void checkExplosion(@NotNull List<Block> blockList) {
-        ClaimAccessor claims = Factions.get().claims();
+        ClaimAccessor claims = Factions.claims();
 
         int lastChunkX = 0, lastChunkZ = 0;
         boolean checked = false, allowed = false;
@@ -102,7 +102,7 @@ public final class PhysicsEngine extends AlpineEngine {
     }
 
     private static boolean checkBlocks(@NotNull Block sourceBlock, @NotNull List<Block> blocks, @NotNull BlockFace facing) {
-        ClaimAccessor claims = Factions.get().claims();
+        ClaimAccessor claims = Factions.claims();
         Faction sourceFaction = claims.getFactionOrDefault(sourceBlock);
 
         Chunk lastChunk = null;

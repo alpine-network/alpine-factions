@@ -2,7 +2,7 @@ package co.crystaldev.factions.command.argument;
 
 import co.crystaldev.alpinecore.framework.command.AlpineArgumentResolver;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.api.FlagRegistry;
+import co.crystaldev.factions.api.registry.FlagRegistry;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import co.crystaldev.factions.config.MessageConfig;
 import dev.rollczi.litecommands.argument.Argument;
@@ -24,7 +24,7 @@ final class FactionFlagArgumentResolver extends AlpineArgumentResolver<FactionFl
 
     @Override
     protected ParseResult<FactionFlag> parse(Invocation<CommandSender> invocation, Argument<FactionFlag> context, String argument) {
-        FlagRegistry registry = AlpineFactions.getInstance().flagRegistry();
+        FlagRegistry registry = AlpineFactions.getInstance().flags();
         List<FactionFlag<?>> flags = registry.getAll(invocation.sender());
 
         for (FactionFlag<?> flag : flags) {
@@ -39,7 +39,7 @@ final class FactionFlagArgumentResolver extends AlpineArgumentResolver<FactionFl
     @Override
     public SuggestionResult suggest(Invocation<CommandSender> invocation, Argument<FactionFlag> argument, SuggestionContext context) {
         String current = context.getCurrent().lastLevel().toLowerCase();
-        FlagRegistry registry = AlpineFactions.getInstance().flagRegistry();
+        FlagRegistry registry = AlpineFactions.getInstance().flags();
         List<FactionFlag<?>> flags = registry.getAll(invocation.sender());
 
         return flags.stream()

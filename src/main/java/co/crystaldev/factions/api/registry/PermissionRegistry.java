@@ -1,4 +1,4 @@
-package co.crystaldev.factions.api;
+package co.crystaldev.factions.api.registry;
 
 import co.crystaldev.factions.api.faction.permission.Permission;
 import org.bukkit.plugin.Plugin;

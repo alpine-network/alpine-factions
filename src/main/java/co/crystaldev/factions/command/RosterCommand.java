@@ -49,7 +49,7 @@ final class RosterCommand extends AlpineCommand implements Initializable {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        Faction senderFaction = Factions.get().factions().findOrDefault(sender);
+        Faction senderFaction = Factions.registry().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
@@ -119,7 +119,7 @@ final class RosterCommand extends AlpineCommand implements Initializable {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        Faction senderFaction = Factions.get().factions().findOrDefault(sender);
+        Faction senderFaction = Factions.registry().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
@@ -184,7 +184,7 @@ final class RosterCommand extends AlpineCommand implements Initializable {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        Faction senderFaction = Factions.get().factions().findOrDefault(sender);
+        Faction senderFaction = Factions.registry().findOrDefault(sender);
         Faction faction = targetFaction.orElse(senderFaction);
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
@@ -234,7 +234,7 @@ final class RosterCommand extends AlpineCommand implements Initializable {
             @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction faction = targetFaction.orElse(factions.findOrDefault(sender));
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,

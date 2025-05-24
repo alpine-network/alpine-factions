@@ -1,4 +1,4 @@
-package co.crystaldev.factions.api;
+package co.crystaldev.factions.api.registry;
 
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
 import com.google.common.collect.ImmutableList;

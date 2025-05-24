@@ -47,7 +47,7 @@ final class AccessAllCommand extends AlpineCommand {
             @Arg("access") boolean access,
             @Arg("target_faction") Optional<Faction> targetFaction
     ) {
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction target = targetFaction.orElse(factions.findOrDefault(sender));
         if (target.isWilderness()) {
             PermissionHelper.notify(sender, target, "grant access");
@@ -67,7 +67,7 @@ final class AccessAllCommand extends AlpineCommand {
             @Arg("access") boolean access,
             @Arg("target_faction") Optional<Faction> targetFaction
     ) {
-        Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
+        Faction target = targetFaction.orElse(Factions.registry().findOrDefault(sender));
         if (target.isWilderness()) {
             PermissionHelper.notify(sender, target, "grant access");
             return;
@@ -82,7 +82,7 @@ final class AccessAllCommand extends AlpineCommand {
                                   @NotNull Faction targetFaction, @NotNull Component formattedSubject,
                                   @NotNull Component subjectName) {
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
-        ClaimAccessor claims = Factions.get().claims();
+        ClaimAccessor claims = Factions.claims();
 
         // ensure the player has permission for the faction
         if (!targetFaction.isPermitted(sender, Permissions.MODIFY_ACCESS)) {

@@ -43,7 +43,7 @@ public final class PlayerState {
     private boolean overriding;
 
     public void onLogin() {
-        Faction faction = Factions.get().factions().findOrDefault(this.player);
+        Faction faction = Factions.registry().findOrDefault(this.player);
         Component motd = faction.getMotd();
 
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
@@ -69,7 +69,7 @@ public final class PlayerState {
     }
 
     public void onLogout() {
-        Faction faction = Factions.get().factions().findOrDefault(this.player);
+        Faction faction = Factions.registry().findOrDefault(this.player);
 
         if (!faction.isWilderness()) {
             MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
@@ -82,17 +82,17 @@ public final class PlayerState {
     }
 
     public void onMoveChunk(@NotNull Chunk oldChunk, @NotNull Chunk newChunk) {
-        FPlayer state = Factions.get().players().get(this.player);
+        FPlayer state = Factions.players().get(this.player);
 
         // player has entered into a new faction claim
-        ClaimAccessor claims = Factions.get().claims();
+        ClaimAccessor claims = Factions.claims();
         if (!claims.isSameClaim(oldChunk, newChunk)) {
             this.displayTerritorialTitle(state, newChunk);
         }
 
         // now we should attempt to claim/unclaim
         if (this.autoClaimState.isEnabled()) {
-            Faction actingFaction = Factions.get().factions().findOrDefault(this.player);
+            Faction actingFaction = Factions.registry().findOrDefault(this.player);
             AlpineFactions.schedule(() -> Claiming.one(this.player, actingFaction, this.autoClaimState.getFaction()));
         }
 
@@ -112,7 +112,7 @@ public final class PlayerState {
     }
 
     private void displayTerritorialTitle(@NotNull FPlayer state, @NotNull Chunk chunk) {
-        Faction faction = Factions.get().claims().getFactionOrDefault(chunk);
+        Faction faction = Factions.claims().getFactionOrDefault(chunk);
         TerritorialTitleMode mode = state.getTerritorialTitleMode();
 
         Component description = Optional.ofNullable(faction.getDescription()).orElse(Faction.DEFAULT_DESCRIPTION);

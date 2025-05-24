@@ -44,7 +44,7 @@ final class InviteCommand extends AlpineCommand {
             @Arg("player") @Async OfflinePlayer invitee
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction faction = factions.findOrDefault(player);
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
@@ -100,7 +100,7 @@ final class InviteCommand extends AlpineCommand {
             @Arg("player") @Async OfflinePlayer invitee
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction faction = factions.findOrDefault(player);
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
@@ -131,7 +131,7 @@ final class InviteCommand extends AlpineCommand {
             @Arg("faction") Optional<Faction> faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction resolvedFaction = faction.orElse(factions.findOrDefault(sender));
         Set<MemberInvitation> invitations = resolvedFaction.getInvitations();
 

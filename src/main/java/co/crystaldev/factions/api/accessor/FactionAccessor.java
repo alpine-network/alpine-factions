@@ -34,7 +34,7 @@ public interface FactionAccessor {
         return this.find(f -> f.getName().equalsIgnoreCase(name));
     }
 
-    @NotNull Collection<Faction> get();
+    @NotNull Collection<Faction> all();
 
     @NotNull Faction getWilderness();
 
