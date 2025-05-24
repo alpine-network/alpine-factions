@@ -3,6 +3,7 @@ package co.crystaldev.factions.util;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
+import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Member;
@@ -259,21 +260,21 @@ public final class RelationHelper {
     }
 
     private static @NotNull Faction getFaction(@Nullable Object relational) {
-        Factions factions = Factions.get();
+        FactionAccessor factions = Factions.registry();
         if (relational == null) {
-            return factions.factions().getWilderness();
+            return factions.getWilderness();
         }
         else if (relational instanceof Faction) {
             return (Faction) relational;
         }
         else if (relational instanceof OfflinePlayer) {
-            return factions.factions().findOrDefault((OfflinePlayer) relational);
+            return factions.findOrDefault((OfflinePlayer) relational);
         }
         else if (relational instanceof String) {
-            return factions.factions().getByIdOrDefault((String) relational);
+            return factions.getByIdOrDefault((String) relational);
         }
         else {
-            return factions.factions().getWilderness();
+            return factions.getWilderness();
         }
     }
 }

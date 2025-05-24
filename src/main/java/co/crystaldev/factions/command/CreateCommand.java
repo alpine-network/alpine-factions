@@ -35,7 +35,7 @@ final class CreateCommand extends AlpineCommand {
     ) {
         MessageConfig messageConfig = this.plugin.getConfiguration(MessageConfig.class);
         FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
 
         // ensure the player isn't already in a faction
         Faction faction = factions.find(player);

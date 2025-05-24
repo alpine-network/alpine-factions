@@ -64,7 +64,7 @@ final class TitleCommand extends AlpineCommand {
 
     private static void set(@NotNull CommandSender sender, @NotNull OfflinePlayer other, @Nullable Component title) {
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction faction = factions.findOrDefault(other);
 
         if (faction.isWilderness()) {

@@ -48,7 +48,7 @@ final class RelationCommand extends AlpineCommand {
             @Arg("relation") FactionRelation relation,
             @Arg("faction") Optional<Faction> faction
     ) {
-        setRelation(sender, target, faction.orElse(Factions.get().factions().findOrDefault(sender)), relation);
+        setRelation(sender, target, faction.orElse(Factions.registry().findOrDefault(sender)), relation);
     }
 
     @Execute(name = "list")
@@ -58,7 +58,7 @@ final class RelationCommand extends AlpineCommand {
             @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
+        Faction target = targetFaction.orElse(Factions.registry().findOrDefault(sender));
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, target,
                 Permissions.MODIFY_RELATIONS, "manage relations");
@@ -82,7 +82,7 @@ final class RelationCommand extends AlpineCommand {
             @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction target = targetFaction.orElse(Factions.get().factions().findOrDefault(sender));
+        Faction target = targetFaction.orElse(Factions.registry().findOrDefault(sender));
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, target,
                 Permissions.MODIFY_RELATIONS, "manage relations");
@@ -195,7 +195,7 @@ final class RelationCommand extends AlpineCommand {
                 @Arg("target_faction") Faction targetFaction,
                 @Arg("faction") Optional<Faction> actingFaction
         ) {
-            Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
+            Faction acting = actingFaction.orElse(Factions.registry().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.NEUTRAL);
         }
     }
@@ -213,7 +213,7 @@ final class RelationCommand extends AlpineCommand {
                 @Arg("target_faction") Faction targetFaction,
                 @Arg("faction") Optional<Faction> actingFaction
         ) {
-            Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
+            Faction acting = actingFaction.orElse(Factions.registry().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.ENEMY);
         }
     }
@@ -231,7 +231,7 @@ final class RelationCommand extends AlpineCommand {
                 @Arg("target_faction") Faction targetFaction,
                 @Arg("faction") Optional<Faction> actingFaction
         ) {
-            Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
+            Faction acting = actingFaction.orElse(Factions.registry().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.ALLY);
         }
     }
@@ -249,7 +249,7 @@ final class RelationCommand extends AlpineCommand {
                 @Arg("target_faction") Faction targetFaction,
                 @Arg("faction") Optional<Faction> actingFaction
         ) {
-            Faction acting = actingFaction.orElse(Factions.get().factions().findOrDefault(sender));
+            Faction acting = actingFaction.orElse(Factions.registry().findOrDefault(sender));
             setRelation(sender, targetFaction, acting, FactionRelation.TRUCE);
         }
     }

@@ -29,7 +29,7 @@ public final class PermissionHelper {
     }
 
     public static boolean isPermitted(@NotNull ServerOperator player, @NotNull Permission permission) {
-        return isPermitted(player, Factions.get().factions().findOrDefault(player), permission);
+        return isPermitted(player, Factions.registry().findOrDefault(player), permission);
     }
 
     public static boolean isPermitted(@NotNull ServerOperator player, @NotNull Chunk chunk,
@@ -46,8 +46,7 @@ public final class PermissionHelper {
         }
 
         // Bypass checking wilderness claims if requested
-        Factions factions = Factions.get();
-        ClaimAccessor claims = factions.claims();
+        ClaimAccessor claims = Factions.claims();
         boolean isWilderness = !claims.isClaimed(chunk) || claims.getFactionOrDefault(chunk).isWilderness();
         if (bypassWilderness && isWilderness) {
             return true;
@@ -56,7 +55,7 @@ public final class PermissionHelper {
         // Check the permission
         // Fallback to wilderness faction if chunk is not claimed
         Claim claim = claims.getClaim(chunk);
-        Faction wilderness = factions.factions().getWilderness();
+        Faction wilderness = Factions.registry().getWilderness();
         return claim == null ? wilderness.isPermitted(player, permission)
                 : claim.isPermitted((OfflinePlayer) player, permission);
     }
@@ -101,7 +100,7 @@ public final class PermissionHelper {
 
     public static boolean checkPermissionAndNotify(@NotNull ServerOperator player, @NotNull Permission permission,
                                                    @NotNull String message) {
-        return checkPermissionAndNotify(player, Factions.get().factions().findOrDefault(player), permission, message);
+        return checkPermissionAndNotify(player, Factions.registry().findOrDefault(player), permission, message);
     }
 
     public static boolean checkPermissionAndNotify(@NotNull ServerOperator player, @NotNull Chunk chunk,
@@ -109,7 +108,7 @@ public final class PermissionHelper {
                                                    boolean bypassWilderness) {
         boolean permitted = isPermitted(player, chunk, permission, bypassWilderness);
         if (!permitted) {
-            ClaimAccessor claims = Factions.get().claims();
+            ClaimAccessor claims = Factions.claims();
             notify(player, claims.getFactionOrDefault(chunk), message);
         }
         return permitted;

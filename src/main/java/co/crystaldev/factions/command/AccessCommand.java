@@ -76,8 +76,8 @@ final class AccessCommand extends AlpineCommand {
     public void show(@Context Player player) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        FactionAccessor factions = Factions.get().factions();
-        ClaimAccessor claims = Factions.get().claims();
+        FactionAccessor factions = Factions.registry();
+        ClaimAccessor claims = Factions.claims();
 
         Location location = player.getLocation();
         Claim claim = claims.getClaim(location);
@@ -119,8 +119,8 @@ final class AccessCommand extends AlpineCommand {
                                       @NotNull Component formattedSubject, @NotNull Component subjectName) {
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
 
-        FactionAccessor factions = Factions.get().factions();
-        ClaimAccessor claims = Factions.get().claims();
+        FactionAccessor factions = Factions.registry();
+        ClaimAccessor claims = Factions.claims();
 
         Location location = player.getLocation();
         Claim claim = claims.getClaim(location);

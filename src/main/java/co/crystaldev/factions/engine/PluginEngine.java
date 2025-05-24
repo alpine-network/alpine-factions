@@ -22,8 +22,8 @@ public final class PluginEngine extends AlpineEngine {
     @EventHandler
     private void onPluginDisable(PluginDisableEvent event) {
         AlpineFactions plugin = AlpineFactions.getInstance();
-        plugin.flagRegistry().unregister(event.getPlugin());
-        plugin.permissionRegistry().unregister(event.getPlugin());
+        plugin.flags().unregister(event.getPlugin());
+        plugin.permissions().unregister(event.getPlugin());
     }
 
     @EventHandler
