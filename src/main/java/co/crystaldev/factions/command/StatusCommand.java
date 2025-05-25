@@ -47,7 +47,7 @@ final class StatusCommand extends AlpineCommand {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction target = targetFaction.orElse(factions.findOrDefault(sender));
         Faction senderFaction = factions.findOrDefault(sender);
 
@@ -65,7 +65,7 @@ final class StatusCommand extends AlpineCommand {
         String command = "/f status " + target.getName() + " %page%";
         Component compiledPage = Formatting.page(title, members, command, page.orElse(1), 10, member -> {
             OfflinePlayer player = member.getOfflinePlayer();
-            FPlayer state = Factions.get().players().get(player);
+            FPlayer state = Factions.players().get(player);
 
             ConfigText text = member.isOnline() ? config.factionStatusOnlineEntry : config.factionStatusOfflineEntry;
             return text.build(
@@ -92,7 +92,7 @@ final class StatusCommand extends AlpineCommand {
             return;
         }
 
-        FPlayer state = Factions.get().players().get(target);
+        FPlayer state = Factions.players().get(target);
         Component title = messageConfig.memberStatusTitle.build(
                 "player", RelationHelper.formatLiteralPlayerName(sender, target),
                 "player_name", target.getName());

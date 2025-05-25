@@ -42,7 +42,7 @@ final class KickCommand extends AlpineCommand {
             @Arg("player") @Async OfflinePlayer other
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction faction = factions.findOrDefault(other);
         boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
 

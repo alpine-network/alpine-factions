@@ -40,7 +40,7 @@ final class SetPowerCommand extends AlpineCommand {
         MessageConfig messageConfig = this.plugin.getConfiguration(MessageConfig.class);
         FactionConfig factionConfig = this.plugin.getConfiguration(FactionConfig.class);
 
-        PlayerAccessor players = Factions.get().players();
+        PlayerAccessor players = Factions.players();
         FPlayer state = players.get(other);
         state.setPowerLevel(Math.max(0, Math.min(factionConfig.maxPlayerPower, power)));
         players.save(state);

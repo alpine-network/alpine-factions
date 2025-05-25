@@ -40,7 +40,7 @@ final class HomeCommand extends AlpineCommand {
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        Faction faction = targetFaction.orElse(Factions.get().factions().findOrDefault(player));
+        Faction faction = targetFaction.orElse(Factions.registry().findOrDefault(player));
         boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
                 Permissions.ACCESS_HOME, "teleport home");
         if (!permitted) {
@@ -57,7 +57,7 @@ final class HomeCommand extends AlpineCommand {
         }
 
         // ensure home is still in the faction's own territory
-        if (!Factions.get().claims().getFactionOrDefault(home).equals(faction)) {
+        if (!Factions.claims().getFactionOrDefault(home).equals(faction)) {
             FactionHomeUpdateEvent event = AlpineFactions.callEvent(new FactionHomeUpdateEvent(faction, player, null));
             if (!event.isCancelled()) {
                 faction.setHome(event.getLocation());

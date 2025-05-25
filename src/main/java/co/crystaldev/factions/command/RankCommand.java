@@ -54,7 +54,7 @@ final class RankCommand extends AlpineCommand {
             @Arg("player") @Async OfflinePlayer other
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = Factions.get().factions().findOrDefault(other);
+        Faction faction = Factions.registry().findOrDefault(other);
 
         config.memberRank.send(sender,
                 "faction", RelationHelper.formatLiteralFactionName(sender, faction),
@@ -70,7 +70,7 @@ final class RankCommand extends AlpineCommand {
         boolean overriding = PlayerHandler.getInstance().isOverriding(actor);
         UUID actorId = PlayerHelper.getId(actor);
 
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction senderFaction = factions.findOrDefault(actor);
         Faction targetFaction = factions.findOrDefault(other);
 
@@ -161,7 +161,7 @@ final class RankCommand extends AlpineCommand {
                 @Context CommandSender sender,
                 @Arg("player") @Async OfflinePlayer other
         ) {
-            Rank rank = Factions.get().factions().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
+            Rank rank = Factions.registry().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
             setRank(sender, other, rank.getNextRank());
         }
     }
@@ -178,7 +178,7 @@ final class RankCommand extends AlpineCommand {
                 @Context CommandSender sender,
                 @Arg("player") @Async OfflinePlayer other
         ) {
-            Rank rank = Factions.get().factions().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
+            Rank rank = Factions.registry().findOrDefault(other).getMemberRankOrDefault(other.getUniqueId());
             setRank(sender, other, rank.getPreviousRank());
         }
     }

@@ -63,7 +63,7 @@ public final class Member {
     }
 
     public @NotNull FPlayer getUser() {
-        return Factions.get().players().getById(this.id);
+        return Factions.players().getById(this.id);
     }
 
     private static final class MemberComparator implements Comparator<Member> {

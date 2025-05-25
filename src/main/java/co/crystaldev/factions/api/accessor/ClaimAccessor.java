@@ -118,7 +118,7 @@ public interface ClaimAccessor {
     default @Nullable Faction getFaction(@NotNull String worldName, int chunkX, int chunkZ) {
         Claim claim = this.getClaim(worldName, chunkX, chunkZ);
         if (claim != null) {
-            FactionAccessor factions = Factions.get().factions();
+            FactionAccessor factions = Factions.registry();
             return factions.getById(claim.getFactionId());
         }
         return null;
@@ -141,7 +141,7 @@ public interface ClaimAccessor {
     }
 
     default @NotNull Faction getFactionOrDefault(@NotNull String worldName, int chunkX, int chunkZ) {
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Claim claim = this.getClaim(worldName, chunkX, chunkZ);
         Faction fac = null;
         if (claim != null) {

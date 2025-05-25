@@ -49,7 +49,7 @@ final class WarpCommand extends AlpineCommand {
             @Arg("password") @Key(Args.ALPHANUMERIC) Optional<String> password
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction faction = factions.findOrDefault(player);
 
         // ensure player has access to warp
@@ -80,7 +80,7 @@ final class WarpCommand extends AlpineCommand {
         }
 
         // ensure warp is still in the faction's own territory
-        if (!Factions.get().claims().getFactionOrDefault(warpLocation).equals(faction)) {
+        if (!Factions.claims().getFactionOrDefault(warpLocation).equals(faction)) {
             FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(faction, player, warp, null));
             if (!event.isCancelled()) {
                 // delete warp and notify
@@ -115,8 +115,8 @@ final class WarpCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         Location location = player.getLocation();
-        Faction faction = Factions.get().claims().getFactionOrDefault(location);
-        Faction selfFaction = Factions.get().factions().findOrDefault(player);
+        Faction faction = Factions.claims().getFactionOrDefault(location);
+        Faction selfFaction = Factions.registry().findOrDefault(player);
 
         // ensure claim is not wilderness and player's faction
         if (faction.isWilderness() || !faction.isMember(player.getUniqueId())) {
@@ -172,7 +172,7 @@ final class WarpCommand extends AlpineCommand {
             @Arg("password") @Key(Args.ALPHANUMERIC) Optional<String> password
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = Factions.get().factions().findOrDefault(player);
+        Faction faction = Factions.registry().findOrDefault(player);
         Location warpLocation = warp.getLocation();
 
         // ensure player can modify warps
@@ -226,7 +226,7 @@ final class WarpCommand extends AlpineCommand {
             @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        FactionAccessor factions = Factions.get().factions();
+        FactionAccessor factions = Factions.registry();
         Faction faction = targetFaction.orElse(factions.findOrDefault(player));
 
         // ensure player has access to warps

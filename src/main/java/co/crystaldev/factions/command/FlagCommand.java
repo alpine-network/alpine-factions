@@ -5,7 +5,7 @@ import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
-import co.crystaldev.factions.api.FlagRegistry;
+import co.crystaldev.factions.api.registry.FlagRegistry;
 import co.crystaldev.factions.api.event.FactionFlagUpdateEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.flag.FactionFlag;
@@ -50,7 +50,7 @@ final class FlagCommand extends AlpineCommand {
             return;
         }
 
-        Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.registry().findOrDefault(sender));
         boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, resolvedFaction,
                 Permissions.MODIFY_FLAGS, "modify flags");
         if (!permitted) {
@@ -91,9 +91,9 @@ final class FlagCommand extends AlpineCommand {
             @Arg("page") Optional<Integer> page
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        FlagRegistry registry = AlpineFactions.getInstance().flagRegistry();
+        FlagRegistry registry = AlpineFactions.getInstance().flags();
 
-        Faction resolvedFaction = faction.orElse(Factions.get().factions().findOrDefault(sender));
+        Faction resolvedFaction = faction.orElse(Factions.registry().findOrDefault(sender));
         boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, resolvedFaction,
                 Permissions.MODIFY_FLAGS, "modify flags");
         if (!permitted) {
@@ -130,7 +130,7 @@ final class FlagCommand extends AlpineCommand {
             @Arg("page") Optional<Integer> page
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        FlagRegistry registry = AlpineFactions.getInstance().flagRegistry();
+        FlagRegistry registry = AlpineFactions.getInstance().flags();
 
         List<FactionFlag> flags = (List) registry.getAll(sender);
         String command = "/f flag list %page%";

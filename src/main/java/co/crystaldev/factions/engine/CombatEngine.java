@@ -133,8 +133,8 @@ public final class CombatEngine extends AlpineEngine {
 
     private static boolean shouldCancelDamage(@NotNull Player hurtPlayer, @NotNull Player attackingPlayer) {
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
-        FactionAccessor factions = Factions.get().factions();
-        ClaimAccessor claims = Factions.get().claims();
+        FactionAccessor factions = Factions.registry();
+        ClaimAccessor claims = Factions.claims();
 
         // allow overriding players to damage other players
         if (PlayerHandler.getInstance().isOverriding(attackingPlayer)) {
@@ -186,8 +186,8 @@ public final class CombatEngine extends AlpineEngine {
         }
 
         // allow friendly fire if toggled
-        FPlayer state = Factions.get().players().get(hurtPlayer);
-        FPlayer targetState = Factions.get().players().get(attackingPlayer);
+        FPlayer state = Factions.players().get(hurtPlayer);
+        FPlayer targetState = Factions.players().get(attackingPlayer);
         if (state.isFriendlyFire() && targetState.isFriendlyFire()) {
             return false;
         }

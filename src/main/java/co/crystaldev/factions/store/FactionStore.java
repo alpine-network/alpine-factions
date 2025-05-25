@@ -87,7 +87,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
     }
 
     @Override
-    public @NotNull Collection<Faction> get() {
+    public @NotNull Collection<Faction> all() {
         return this.registeredFactions.values();
     }
 
