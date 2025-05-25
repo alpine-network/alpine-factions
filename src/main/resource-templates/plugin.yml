@@ -1,7 +1,10 @@
 main: co.crystaldev.factions.Plugin
-name: ${pluginName}
-description: ${pluginDescription}
-version: ${pluginVersion}
+name: {{ pluginName }}
+
+description: {{ pluginDescription }}
+
+version: {{ version }}
+
 authors: [ BestBearr ]
 api-version: 1.13
 depend:

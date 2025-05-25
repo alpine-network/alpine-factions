@@ -1,13 +1,19 @@
 [versions]
-alpinecore = "0.4.10-SNAPSHOT"
-lombok = "1.18.36"
-placeholderapi = "2.11.5"
-shadow = "9.0.0-beta11"
+alpinecore = "0.4.10"
+blossom = "2.1.0"
+bukkit = "1.12.2-R0.1-SNAPSHOT"
+idea = "1.1.10"
+lombok = "1.18.38"
+placeholderapi = "2.11.6"
+shadow = "8.3.6"
 
 [libraries]
 alpinecore = { group = "co.crystaldev", name = "alpinecore", version.ref = "alpinecore"}
+bukkit = { group = "org.bukkit", name = "bukkit", version.ref = "bukkit"}
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 placeholderapi = { group = "me.clip", name = "placeholderapi", version.ref = "placeholderapi" }
 
 [plugins]
+blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
+idea = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "idea" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
