@@ -3,7 +3,7 @@ package co.crystaldev.factions.store;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.storage.AlpineStore;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.Constants;
 import co.crystaldev.factions.api.accessor.PlayerAccessor;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.FactionConfig;
@@ -17,7 +17,7 @@ import java.util.UUID;
 public final class PlayerStore extends AlpineStore<UUID, FPlayer> implements PlayerAccessor {
 
     PlayerStore(@NotNull AlpinePlugin plugin) {
-        super(plugin, ((AlpineFactions) plugin).buildPlayerStorageDriver(Reference.GSON));
+        super(plugin, ((AlpineFactions) plugin).buildPlayerStorageDriver(Constants.GSON));
     }
 
     @Override

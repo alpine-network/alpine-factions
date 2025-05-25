@@ -4,7 +4,7 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.command.AlpineCommand;
 import co.crystaldev.alpinecore.util.Messaging;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.Constants;
 import co.crystaldev.factions.util.ComponentHelper;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
@@ -28,7 +28,7 @@ final class VersionCommand extends AlpineCommand {
         Messaging.send(sender, ComponentHelper.mini(String.join("<br>",
                 "<info>.</info>",
                 "<info>|</info> This server is running <b><gradient:#00aaaa:#78cccc:#00aaaa>AlpineFactions</gradient></b>",
-                "<info>|</info> <emphasis>Version:</emphasis> v" + Reference.VERSION,
+                "<info>|</info> <emphasis>Version:</emphasis> v" + Constants.VERSION,
                 "<info>|</info> <emphasis>Authors:</emphasis> " + authors,
                 "<info>'</info>"
         )));

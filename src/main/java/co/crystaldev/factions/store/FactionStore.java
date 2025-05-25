@@ -3,7 +3,7 @@ package co.crystaldev.factions.store;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.storage.AlpineStore;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.Constants;
 import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
@@ -28,7 +28,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
     private final Map<String, Faction> registeredFactions = new ConcurrentHashMap<>();
 
     FactionStore(@NotNull AlpinePlugin plugin) {
-        super(plugin, ((AlpineFactions) plugin).buildFactionStorageDriver(Reference.GSON));
+        super(plugin, ((AlpineFactions) plugin).buildFactionStorageDriver(Constants.GSON));
 
         // load factions into memory
         try {
@@ -38,7 +38,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
             }
         }
         catch (Throwable ex) {
-            Reference.LOGGER.error("Unable to load factions", ex);
+            this.plugin.log("Unable to load factions from store", ex);
             throw new RuntimeException(ex);
         }
 
@@ -65,7 +65,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
 
     @Override
     public void register(@NotNull Faction faction) {
-        Reference.LOGGER.info("Registering faction (name={}, id={})", faction.getName(), faction.getId());
+        this.plugin.log(String.format("Registering faction (name=%s, id=%s)", faction.getName(), faction.getId()));
 
         this.registeredFactions.put(faction.getId(), faction);
         this.put(faction.getId(), faction);
@@ -74,7 +74,7 @@ public final class FactionStore extends AlpineStore<String, Faction> implements 
 
     @Override
     public void unregister(@NotNull Faction faction) {
-        Reference.LOGGER.info("Unregistering faction (name={}, id={})", faction.getName(), faction.getId());
+        this.plugin.log(String.format("Unregistering faction (name=%s, id=%s)", faction.getName(), faction.getId()));
 
         this.registeredFactions.remove(faction.getId());
         this.remove(faction.getId());

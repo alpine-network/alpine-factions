@@ -134,7 +134,7 @@ public final class InteractionEngine extends AlpineEngine {
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(
                 remover,
-                event.getEntity().getChunk(),
+                event.getEntity().getLocation().getChunk(),
                 Permissions.BUILD,
                 "edit the terrain",
                 true);

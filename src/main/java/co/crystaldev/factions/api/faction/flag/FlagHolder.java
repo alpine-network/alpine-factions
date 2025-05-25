@@ -1,7 +1,7 @@
 package co.crystaldev.factions.api.faction.flag;
 
 import co.crystaldev.alpinecore.util.ReflectionHelper;
-import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.Constants;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -32,7 +32,7 @@ public final class FlagHolder<T> {
             jsonWriter.name("type").value(flagHolder.getType().getName());
 
             jsonWriter.name("value");
-            Reference.GSON.toJson(flagHolder.getValue(), flagHolder.getType(), jsonWriter);
+            Constants.GSON.toJson(flagHolder.getValue(), flagHolder.getType(), jsonWriter);
 
             jsonWriter.endObject();
         }
@@ -55,7 +55,7 @@ public final class FlagHolder<T> {
                     }
                 }
                 else if ("value".equals(name)) {
-                    value = Reference.GSON.fromJson(jsonReader, type);
+                    value = Constants.GSON.fromJson(jsonReader, type);
                 }
             }
             jsonReader.endObject();

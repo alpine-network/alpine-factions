@@ -3,7 +3,7 @@ package co.crystaldev.factions.store.claim;
 import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.storage.AlpineStore;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.Constants;
 import co.crystaldev.factions.api.accessor.ClaimAccessor;
 import co.crystaldev.factions.api.faction.Claim;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
@@ -23,10 +23,10 @@ public final class ClaimStore extends AlpineStore<String, ClaimRegion> implement
     private final Map<String, ClaimRegion> claimStorage = new ConcurrentHashMap<>();
 
     ClaimStore(@NotNull AlpinePlugin plugin) {
-        super(plugin, ((AlpineFactions) plugin).buildClaimStorageDriver(Reference.GSON));
+        super(plugin, ((AlpineFactions) plugin).buildClaimStorageDriver(Constants.GSON));
 
         Collection<ClaimRegion> regions = this.loadAllEntries(ex -> {
-            Reference.LOGGER.info("Unable to read claim region", ex);
+            this.plugin.log("Unable to read claim region", ex);
         });
         for (ClaimRegion region : regions) {
             this.claimStorage.put(region.getKey(), region);

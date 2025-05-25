@@ -5,7 +5,7 @@ import co.crystaldev.alpinecore.framework.integration.AlpineIntegration;
 import co.crystaldev.alpinecore.framework.integration.AlpineIntegrationEngine;
 import co.crystaldev.alpinecore.util.Components;
 import co.crystaldev.factions.AlpineFactions;
-import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.Constants;
 import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
@@ -84,12 +84,12 @@ public final class PlaceholderAPIIntegration extends AlpineIntegration {
 
         @Override
         public @NotNull String getIdentifier() {
-            return Reference.ID;
+            return Constants.ID;
         }
 
         @Override
         public @NotNull String getVersion() {
-            return Reference.VERSION;
+            return Constants.VERSION;
         }
 
         @Override

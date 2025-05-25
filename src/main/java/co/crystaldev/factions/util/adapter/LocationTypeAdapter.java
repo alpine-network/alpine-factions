@@ -1,6 +1,6 @@
 package co.crystaldev.factions.util.adapter;
 
-import co.crystaldev.factions.Reference;
+import co.crystaldev.factions.Constants;
 import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
@@ -47,7 +47,7 @@ public final class LocationTypeAdapter extends TypeAdapter<Location> {
             return null;
         }
 
-        JsonObject obj = Reference.GSON.fromJson(jsonReader, JsonObject.class);
+        JsonObject obj = Constants.GSON.fromJson(jsonReader, JsonObject.class);
         String worldName = obj.has("world") ? obj.get("world").getAsString() : null;
         double x = obj.get("x").getAsDouble();
         double y = obj.get("y").getAsDouble();
