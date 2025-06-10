@@ -13,7 +13,7 @@ val pluginDescription: String by project.properties
 
 allprojects {
     group = "co.crystaldev"
-    version = "0.4.11"
+    version = "0.5.0" + (if (isSnapshot()) "-SNAPSHOT" else "")
 
     repositories {
         mavenCentral()
@@ -77,8 +77,8 @@ publishing {
     }
     repositories {
         maven {
-            name = "Alpine"
-            url = uri("https://lib.alpn.cloud/alpine-public/")
+            name = "AlpineCloud"
+            url = uri("https://lib.alpn.cloud" + if (isSnapshot()) "/snapshots" else "/alpine-public")
             credentials {
                 username = System.getenv("ALPINE_MAVEN_NAME")
                 password = System.getenv("ALPINE_MAVEN_SECRET")
@@ -91,9 +91,19 @@ tasks.withType<Jar>().configureEach {
     archiveBaseName.set(pluginName)
 }
 
+tasks.register("writeVersion") {
+    doLast {
+        File(".version").writeText(project.version.toString())
+    }
+}
+
 fun configureReplacements(set: TemplateSet) {
     set.property("artifactName", artifactName)
     set.property("pluginName", pluginName)
     set.property("pluginDescription", pluginDescription)
     set.property("version", project.version.toString())
+}
+
+fun isSnapshot(): Boolean {
+    return project.hasProperty("snapshot")
 }
