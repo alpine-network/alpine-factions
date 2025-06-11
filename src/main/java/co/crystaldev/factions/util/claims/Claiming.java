@@ -2,6 +2,7 @@ package co.crystaldev.factions.util.claims;
 
 import co.crystaldev.factions.AlpineFactions;
 import co.crystaldev.factions.api.Factions;
+import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,13 +26,13 @@ import java.util.Set;
 @UtilityClass
 public final class Claiming {
 
-    public static void mode(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
-                            @NotNull ClaimType type, int radius) {
+    public static Collection<ClaimedChunk> mode(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
+                                                @NotNull ClaimType type, int radius) {
         Chunk origin = actor.getLocation().getChunk();
 
         // is the player able to claim this land?
         if (ClaimHelper.shouldCancelClaim(actor, claimingFaction, claimingFaction != null)) {
-            return;
+            return Collections.emptySet();
         }
 
         // discover chunks to claim
@@ -51,10 +53,10 @@ public final class Claiming {
         }
 
         // attempt the claim
-        ClaimHelper.attemptClaim(actor, type.toString(), actingFaction, claimingFaction, chunks, origin, false);
+        return ClaimHelper.attemptClaim(actor, type.toString(), actingFaction, claimingFaction, chunks, origin, false);
     }
 
-    public static void fill(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
+    public static Collection<ClaimedChunk> fill(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
         MessageConfig config = AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
         Chunk origin = actor.getLocation().getChunk();
         Faction replacedFaction = Factions.claims().getFaction(origin);
@@ -63,35 +65,35 @@ public final class Claiming {
         boolean claiming = claimingFaction != null;
         if (!claiming && replacedFaction == null) {
             config.fillLimit.send(actor, "limit", AlpineFactions.getInstance().getConfiguration(FactionConfig.class).maxClaimFillVolume);
-            return;
+            return Collections.emptySet();
         }
 
         // is the player able to claim this land?
         if (ClaimHelper.shouldCancelClaim(actor, claimingFaction, claiming)) {
-            return;
+            return Collections.emptySet();
         }
 
         // discover chunks to claim
         Set<ChunkCoordinate> chunks = ClaimHelper.fill(origin);
         if (chunks == null) {
             config.fillLimit.send(actor, "limit", AlpineFactions.getInstance().getConfiguration(FactionConfig.class).maxClaimFillVolume);
-            return;
+            return Collections.emptySet();
         }
 
         // attempt to claim
-        ClaimHelper.attemptClaim(actor, "fill", actingFaction, claimingFaction, chunks, origin, true);
+        return ClaimHelper.attemptClaim(actor, "fill", actingFaction, claimingFaction, chunks, origin, true);
     }
 
-    public static void one(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
+    public static Collection<ClaimedChunk> one(@NotNull Player actor, @NotNull Faction actingFaction, @Nullable Faction claimingFaction) {
         Chunk origin = actor.getLocation().getChunk();
 
         // is the player able to claim this land?
         if (ClaimHelper.shouldCancelClaim(actor, claimingFaction, claimingFaction != null)) {
-            return;
+            return Collections.emptySet();
         }
 
         // attempt to claim
         Set<ChunkCoordinate> chunks = new HashSet<>(Collections.singleton(ChunkCoordinate.of(origin.getX(), origin.getZ())));
-        ClaimHelper.attemptClaim(actor, "square", actingFaction, claimingFaction, chunks, origin, false);
+        return ClaimHelper.attemptClaim(actor, "square", actingFaction, claimingFaction, chunks, origin, false);
     }
 }

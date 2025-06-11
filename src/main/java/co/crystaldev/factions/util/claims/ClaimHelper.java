@@ -35,7 +35,7 @@ import java.util.*;
 @UtilityClass @ApiStatus.Internal
 public final class ClaimHelper {
 
-    public static void attemptClaim(@NotNull Player player, @NotNull String action,
+    public static Collection<ClaimedChunk> attemptClaim(@NotNull Player player, @NotNull String action,
                                     @NotNull Faction actingFaction, @Nullable Faction claimingFaction,
                                     @NotNull Set<ChunkCoordinate> chunks, @NotNull Chunk origin,
                                     boolean higherLimit) {
@@ -53,7 +53,7 @@ public final class ClaimHelper {
 
         // ensure there are chunks to claim
         if (chunks.isEmpty()) {
-            return;
+            return Collections.emptySet();
         }
 
         // ensure wilderness is always null
@@ -66,13 +66,13 @@ public final class ClaimHelper {
             messageConfig.insufficientPower.send(player,
                     "faction", RelationHelper.formatFactionName(player, claimingFaction),
                     "faction_name", claimingFaction.getName());
-            return;
+            return Collections.emptySet();
         }
 
         // ensure that the claim limit hasn't been reached
         if (!overriding && chunks.size() > factionConfig.maxClaimFillVolume) {
             messageConfig.fillLimit.send(player, "limit", factionConfig.maxClaimFillVolume);
-            return;
+            return Collections.emptySet();
         }
 
         // iterate and validate chunks
@@ -86,7 +86,7 @@ public final class ClaimHelper {
 
             if (!overriding && LocationHelper.distance(next.getX(), next.getZ(), cx, cz) > maxClaimDistance) {
                 messageConfig.claimTooFar.send(player);
-                return;
+                return Collections.emptySet();
             }
 
             if (!LocationHelper.isChunkWithinBorder(border, next.getX(), next.getZ())) {
@@ -109,7 +109,7 @@ public final class ClaimHelper {
                     messageConfig.conquerFail.send(player,
                             "faction", RelationHelper.formatFactionName(player, faction),
                             "faction_name", faction.getName());
-                    return;
+                    return Collections.emptySet();
                 }
                 else if (!faction.equals(playerFaction)) {
                     // conquer the chunk
@@ -132,13 +132,13 @@ public final class ClaimHelper {
             messageConfig.landOwned.send(player,
                     "faction", RelationHelper.formatFactionName(player, claimingFaction),
                     "faction_name", claimingFaction.getName());
-            return;
+            return Collections.emptySet();
         }
 
         // ensure that the claims can be conquered
         if (conqueredChunkCount > 0 && !canConquer(conqueredFactions, world.getName(), claims)) {
             messageConfig.conquerFromEdge.send(player);
-            return;
+            return Collections.emptySet();
         }
 
         // call event
@@ -147,7 +147,7 @@ public final class ClaimHelper {
         FactionTerritoryUpdateEvent event = AlpineFactions.callEvent(new FactionTerritoryUpdateEvent(
                 actingFaction, player, world, type, chunks, conqueredFactions, !Bukkit.isPrimaryThread()));
         if (event.isCancelled() || chunks.isEmpty()) {
-            return;
+            return Collections.emptySet();
         }
 
         // claim/unclaim the land
@@ -208,6 +208,8 @@ public final class ClaimHelper {
                 });
             });
         }
+
+        return Collections.unmodifiableSet(claimedChunks);
     }
 
     public static boolean shouldCancelClaim(@NotNull Player player, @Nullable Faction claimingFaction, boolean claiming) {
