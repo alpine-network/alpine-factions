@@ -3,9 +3,6 @@ package co.crystaldev.factions.api.show;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Member;
 import co.crystaldev.factions.api.faction.member.Rank;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -13,16 +10,19 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @since 0.1.0
  */
-@AllArgsConstructor @ToString
 public final class ShowContext {
 
     private final CommandSender sender;
 
-    @Getter
     private final Faction faction;
 
-    @Getter
     private final Faction senderFaction;
+
+    public ShowContext(@NotNull CommandSender sender, @NotNull Faction faction, @NotNull Faction senderFaction) {
+        this.sender = sender;
+        this.faction = faction;
+        this.senderFaction = senderFaction;
+    }
 
     public boolean isSameFaction() {
         return this.faction.equals(this.senderFaction);
@@ -50,5 +50,17 @@ public final class ShowContext {
 
     public @NotNull Player getPlayer() {
         return (Player) this.sender;
+    }
+
+    public @NotNull Faction getFaction() {
+        return this.faction;
+    }
+
+    public @NotNull Faction getSenderFaction() {
+        return this.senderFaction;
+    }
+
+    public String toString() {
+        return "ShowContext(sender=" + this.getSender() + ", faction=" + this.faction + ", senderFaction=" + this.senderFaction + ")";
     }
 }

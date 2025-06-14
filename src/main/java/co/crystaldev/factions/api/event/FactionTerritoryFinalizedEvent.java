@@ -3,7 +3,6 @@ package co.crystaldev.factions.api.event;
 import co.crystaldev.factions.api.event.framework.FactionEntityEvent;
 import co.crystaldev.factions.api.faction.ClaimedChunk;
 import co.crystaldev.factions.api.faction.Faction;
-import lombok.Getter;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -15,7 +14,6 @@ import java.util.Set;
 /**
  * @since 0.4.0
  */
-@Getter
 public final class FactionTerritoryFinalizedEvent extends FactionEntityEvent<Player> {
 
     private final @NotNull World world;
@@ -27,6 +25,14 @@ public final class FactionTerritoryFinalizedEvent extends FactionEntityEvent<Pla
         super(faction, entity, async);
         this.world = world;
         this.claims = claims;
+    }
+
+    public @NotNull World getWorld() {
+        return this.world;
+    }
+
+    public @NotNull Set<ClaimedChunk> getClaims() {
+        return this.claims;
     }
 
     public boolean contains(@NotNull Location location) {

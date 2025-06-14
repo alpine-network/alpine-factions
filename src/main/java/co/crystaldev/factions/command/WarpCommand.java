@@ -60,7 +60,7 @@ final class WarpCommand extends AlpineCommand {
         }
 
         // if password is present, check for it
-        if (warp.hasPassword() && !(warp.isPasswordCorrect(password)) && faction.getMember(player) != faction.getOwner()) {
+        if (warp.hasPassword() && !(warp.isPasswordCorrect(password.orElse(null))) && faction.getMember(player) != faction.getOwner()) {
             config.warpInvalidPassword.send(player,
                     "faction", RelationHelper.formatFactionName(player, faction),
                     "faction_name", faction.getName(),
@@ -135,7 +135,7 @@ final class WarpCommand extends AlpineCommand {
 
         // call warp update event with new warp
         Warp oldWarp = faction.getWarpByName(warpName);
-        Warp warp = Warp.of(warpName, location, password.orElse(null), System.currentTimeMillis());
+        Warp warp = Warp.of(warpName, location, password.orElse(null));
 
         // oldWarp is null, if non-existent
         FactionWarpUpdateEvent event = AlpineFactions.callEvent(new FactionWarpUpdateEvent(selfFaction, player, oldWarp, warp));
@@ -183,7 +183,7 @@ final class WarpCommand extends AlpineCommand {
         }
 
         // if password is present, check for it
-        if (warp.hasPassword() && !(warp.isPasswordCorrect(password)) && faction.getMember(player) != faction.getOwner()) {
+        if (warp.hasPassword() && !(warp.isPasswordCorrect(password.orElse(null))) && faction.getMember(player) != faction.getOwner()) {
             config.warpInvalidPassword.send(player,
                     "faction", RelationHelper.formatFactionName(player, faction),
                     "faction_name", faction.getName(),

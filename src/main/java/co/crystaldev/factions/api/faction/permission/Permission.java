@@ -5,27 +5,62 @@ import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.handler.PlayerHandler;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 
 /**
  * @since 0.1.0
  */
-@Data
 public final class Permission {
-    private final String id;
-    private final String name;
-    private final String description;
-    private final String permission;
-    private final Set<Rank> defaultRankPermits;
-    private final Set<FactionRelation> defaultRelationPermits;
+    private final @NotNull String id;
+    private final @NotNull String name;
+    private final @NotNull String description;
+    private final @Nullable String permission;
+    private final @NotNull Set<Rank> defaultRankPermits;
+    private final @NotNull Set<FactionRelation> defaultRelationPermits;
+
+    public Permission(@NotNull String id, @NotNull String name,
+                      @NotNull String description, @Nullable String permission,
+                      @NotNull Set<Rank> defaultRankPermits,
+                      @NotNull Set<FactionRelation> defaultRelationPermits) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.permission = permission;
+        this.defaultRankPermits = defaultRankPermits;
+        this.defaultRelationPermits = defaultRelationPermits;
+    }
+
+    public @NotNull String getId() {
+        return this.id;
+    }
+
+    public @NotNull String getName() {
+        return this.name;
+    }
+
+    public @NotNull String getDescription() {
+        return this.description;
+    }
+
+    public @Nullable String getPermission() {
+        return this.permission;
+    }
+
+    public @NotNull Set<Rank> getDefaultRankPermits() {
+        return this.defaultRankPermits;
+    }
+
+    public @NotNull Set<FactionRelation> getDefaultRelationPermits() {
+        return this.defaultRelationPermits;
+    }
 
     public boolean isPermitted(@NotNull Permissible permissible) {
         if (permissible instanceof ConsoleCommandSender) {
@@ -39,6 +74,28 @@ public final class Permission {
         return this.permission == null || permissible.hasPermission(this.permission);
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Permission)) return false;
+        Permission that = (Permission) object;
+        return Objects.equals(this.getId(), that.getId())
+                && Objects.equals(this.getName(), that.getName())
+                && Objects.equals(this.getDescription(), that.getDescription())
+                && Objects.equals(this.getPermission(), that.getPermission())
+                && Objects.equals(this.getDefaultRankPermits(), that.getDefaultRankPermits())
+                && Objects.equals(this.getDefaultRelationPermits(), that.getDefaultRelationPermits());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getId(), this.getName(), this.getDescription(), this.getPermission(), this.getDefaultRankPermits(), this.getDefaultRelationPermits());
+    }
+
+    @Override
+    public String toString() {
+        return "Permission(id=" + this.getId() + ", name=" + this.getName() + ", description=" + this.getDescription() + ", permission=" + this.getPermission() + ", defaultRankPermits=" + this.getDefaultRankPermits() + ", defaultRelationPermits=" + this.getDefaultRelationPermits() + ")";
+    }
+
     public static @NotNull Builder builder(@NotNull String id) {
         return new Builder(id);
     }
@@ -46,7 +103,6 @@ public final class Permission {
     /**
      * @since 0.1.0
      */
-    @RequiredArgsConstructor
     public static final class Builder {
         private final String id;
         private String name;
@@ -54,6 +110,10 @@ public final class Permission {
         private String permission;
         private Set<Rank> defaultRankPermits;
         private Set<FactionRelation> defaultRelationPermits;
+
+        public Builder(String id) {
+            this.id = id;
+        }
 
         public @NotNull Builder name(@NotNull String name) {
             this.name = name;

@@ -5,20 +5,34 @@ import co.crystaldev.factions.Constants;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 /**
  * @since 0.1.0
  */
-@AllArgsConstructor @Getter @Setter
 public final class FlagHolder<T> {
 
-    private final Class<T> type;
-    private T value;
+    private final @NotNull Class<T> type;
+    private @NotNull T value;
+
+    public FlagHolder(@NotNull Class<T> type, @NotNull T value) {
+        this.type = type;
+        this.value = value;
+    }
+
+    public @NotNull Class<T> getType() {
+        return this.type;
+    }
+
+    public @NotNull T getValue() {
+        return this.value;
+    }
+
+    public void setValue(@NotNull T value) {
+        this.value = value;
+    }
 
     @Override
     public String toString() {
@@ -53,8 +67,7 @@ public final class FlagHolder<T> {
                     if (type == null) {
                         type = ReflectionHelper.getClass(ClassLoader.getSystemClassLoader(), className);
                     }
-                }
-                else if ("value".equals(name)) {
+                } else if ("value".equals(name)) {
                     value = Constants.GSON.fromJson(jsonReader, type);
                 }
             }

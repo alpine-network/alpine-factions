@@ -1,6 +1,5 @@
 package co.crystaldev.factions.api.faction.flag;
 
-import lombok.experimental.UtilityClass;
 import org.apache.commons.lang.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,7 +9,6 @@ import java.text.DecimalFormat;
 /**
  * @since 0.1.0
  */
-@UtilityClass
 public final class FlagAdapters {
 
     private static final DecimalFormat DECIMAL_FORMAT_FP = new DecimalFormat("#,###.##");
@@ -93,4 +91,8 @@ public final class FlagAdapters {
             return NumberUtils.isNumber(argument) ? Byte.parseByte(argument) : null;
         }
     };
+
+    private FlagAdapters() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 }

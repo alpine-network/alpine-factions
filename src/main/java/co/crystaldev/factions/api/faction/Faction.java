@@ -24,9 +24,6 @@ import co.crystaldev.factions.util.FactionHelper;
 import co.crystaldev.factions.util.PlayerHelper;
 import co.crystaldev.factions.util.RelationHelper;
 import com.google.common.collect.ImmutableSet;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -49,7 +46,6 @@ import java.util.stream.Collectors;
  * @since 0.1.0
  */
 @SuppressWarnings("unused")
-@ToString
 public final class Faction {
 
     public static final String WILDERNESS_ID = "factions_wilderness";
@@ -62,23 +58,19 @@ public final class Faction {
 
     public static final Component DEFAULT_MOTD = ComponentHelper.mini("<gray>No message of the day set");
 
-    /** The unique ID of this faction */
-    @Getter
-    private @NotNull final String id;
+    /**
+     * The unique ID of this faction
+     */
+    private final @NotNull String id;
 
-    @Getter
     private @NotNull String name;
 
-    @Getter
     private @Nullable Component description;
 
-    @Getter
     private @Nullable Component motd;
 
-    @Getter
     private @Nullable Location home;
 
-    @Getter
     private final long createdAt = System.currentTimeMillis();
 
     private final HashMap<UUID, MemberInvitation> invitees = new HashMap<>();
@@ -95,7 +87,6 @@ public final class Faction {
 
     private final Map<String, PermissionHolder> permissions = new HashMap<>();
 
-    @Getter @Setter
     private transient boolean dirty;
 
     @ApiStatus.Internal
@@ -106,7 +97,7 @@ public final class Faction {
     public Faction(@NotNull String id, @NotNull String name) {
         this.id = id;
         this.name = name;
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public Faction(@NotNull String name, @NotNull Player owner) {
@@ -117,7 +108,6 @@ public final class Faction {
     }
 
     // region State
-
     public boolean isMinimal() {
         return this.getFlagValueOrDefault(FactionFlags.MINIMAL_VISIBILITY);
     }
@@ -126,13 +116,25 @@ public final class Faction {
         return this.id.equals(WILDERNESS_ID);
     }
 
+    public @NotNull String getId() {
+        return this.id;
+    }
+
+    public @NotNull String getName() {
+        return this.name;
+    }
+
     public void setName(@NotNull String name) {
         if (name.equals(this.name)) {
             return;
         }
 
         this.name = name;
-        this.markDirty();
+        this.setDirty(true);
+    }
+
+    public @Nullable Component getDescription() {
+        return this.description;
     }
 
     public void setDescription(@Nullable Component description) {
@@ -141,7 +143,11 @@ public final class Faction {
         }
 
         this.description = description;
-        this.markDirty();
+        this.setDirty(true);
+    }
+
+    public @Nullable Component getMotd() {
+        return this.motd;
     }
 
     public void setMotd(@Nullable Component motd) {
@@ -150,7 +156,11 @@ public final class Faction {
         }
 
         this.motd = motd;
-        this.markDirty();
+        this.setDirty(true);
+    }
+
+    public @Nullable Location getHome() {
+        return this.home;
     }
 
     public void setHome(@Nullable Location home) {
@@ -163,7 +173,19 @@ public final class Faction {
         }
 
         this.home = home;
-        this.markDirty();
+        this.setDirty(true);
+    }
+
+    public long getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public boolean isDirty() {
+        return this.dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 
     public boolean canDisband() {
@@ -202,7 +224,6 @@ public final class Faction {
         // remove the faction from the registry
         factions.unregister(this);
     }
-
     // endregion State
 
     // region Warps
@@ -211,19 +232,19 @@ public final class Faction {
             // update existing warp
             if (existing.getName().equals(warp.getName())) {
                 existing.updateWarp(warp.getLocation(), warp.getPassword());
-                this.markDirty();
+                this.setDirty(true);
                 return;
             }
         }
 
         // add warp if non-existent
         this.facWarps.add(warp);
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public void delWarp(@NotNull Warp warp) {
         this.facWarps.remove(warp);
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public boolean hasWarp(@NotNull Warp warp) {
@@ -239,11 +260,9 @@ public final class Faction {
     public @NotNull Set<Warp> getWarps() {
         return this.facWarps;
     }
-
     // endregion Warps
 
     // region Territory
-
     public boolean hasInfinitePower() {
         return this.getFlagValueOrDefault(FactionFlags.INFINITE_POWER);
     }
@@ -300,11 +319,9 @@ public final class Faction {
     public boolean isConquerable() {
         return this.getClaimCount() > this.getPowerLevel();
     }
-
     // endregion Territory
 
     // region Relations
-
     public @NotNull FactionRelation relationTo(@Nullable Faction faction) {
         if (faction == null || this.isWilderness() || faction.isWilderness()) {
             return FactionRelation.NEUTRAL;
@@ -319,15 +336,12 @@ public final class Faction {
 
         if (relationToOther == relationToSelf) {
             return relationToOther;
-        }
-        else if (relationToOther == FactionRelation.ENEMY || relationToSelf == FactionRelation.ENEMY) {
+        } else if (relationToOther == FactionRelation.ENEMY || relationToSelf == FactionRelation.ENEMY) {
             // If either declares ENEMY, the other faction remains neutral
             return relationToOther == FactionRelation.ENEMY ? FactionRelation.ENEMY : FactionRelation.NEUTRAL;
-        }
-        else if (relationToOther.getWeight() > 1 && relationToSelf.getWeight() > 1) {
+        } else if (relationToOther.getWeight() > 1 && relationToSelf.getWeight() > 1) {
             return relationToOther.getWeight() < relationToSelf.getWeight() ? relationToOther : relationToSelf;
-        }
-        else {
+        } else {
             return FactionRelation.NEUTRAL;
         }
     }
@@ -363,7 +377,7 @@ public final class Faction {
     }
 
     public void setRelation(@NotNull Faction faction, @NotNull FactionRelation relation) {
-        this.markDirty();
+        this.setDirty(true);
 
         if (relation == FactionRelation.NEUTRAL) {
             this.relationRequests.remove(faction.getId());
@@ -436,15 +450,13 @@ public final class Faction {
 
         return ImmutableSet.copyOf(related);
     }
-
     // endregion Relations
 
     // region Permissions & Flags
-
     @SuppressWarnings("unchecked")
     public <T> @Nullable T getFlagValue(@NotNull FactionFlag<T> flag) {
         FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
-            this.markDirty();
+            this.setDirty(true);
             return flag.wrapDefaultValue();
         });
         return flagHolder.getValue();
@@ -453,14 +465,14 @@ public final class Faction {
     @SuppressWarnings("unchecked")
     public <T> @NotNull T getFlagValueOrDefault(@NotNull FactionFlag<T> flag) {
         FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> {
-            this.markDirty();
+            this.setDirty(true);
             return flag.wrapDefaultValue();
         });
 
         T value = flagHolder.getValue();
         if (value == null) {
             flagHolder.setValue(value = flag.getDefaultState());
-            this.markDirty();
+            this.setDirty(true);
         }
 
         return value;
@@ -470,7 +482,7 @@ public final class Faction {
     public <T> void setFlagValue(@NotNull FactionFlag<T> flag, @NotNull T value) {
         FlagHolder<T> flagHolder = (FlagHolder<T>) this.flags.computeIfAbsent(flag.getId(), id -> flag.wrapDefaultValue());
         flagHolder.setValue(value);
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public boolean isPermitted(@NotNull ServerOperator player, @NotNull Permission permission) {
@@ -488,8 +500,7 @@ public final class Faction {
 
         if (this.isMember(offlinePlayer.getUniqueId())) {
             return this.isPermitted(this.getMember(offlinePlayer).getRank(), permission);
-        }
-        else {
+        } else {
             Faction other = Factions.registry().find(player);
             return this.isPermitted(this.relationWishTo(other), permission);
         }
@@ -497,7 +508,7 @@ public final class Faction {
 
     public boolean isPermitted(@NotNull Rank rank, @NotNull Permission permission) {
         PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
-            this.markDirty();
+            this.setDirty(true);
             return new PermissionHolder(permission);
         });
         return permValue.isPermitted(rank);
@@ -505,7 +516,7 @@ public final class Faction {
 
     public boolean isPermitted(@NotNull FactionRelation relation, @NotNull Permission permission) {
         PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
-            this.markDirty();
+            this.setDirty(true);
             return new PermissionHolder(permission);
         });
         return permValue.isPermitted(relation);
@@ -514,19 +525,17 @@ public final class Faction {
     public void setPermission(@NotNull Permission permission, boolean permitted, @NotNull Relational relation) {
         PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> new PermissionHolder(permission));
         permValue.set(relation, permitted);
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public void setPermissionBulk(@NotNull Permission permission, boolean permitted, @NotNull Relational... relations) {
         PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> new PermissionHolder(permission));
         permValue.set(permitted, relations);
-        this.markDirty();
+        this.setDirty(true);
     }
-
     // endregion Permissions & Flags
 
     // region Roster
-
     public int getMemberLimit() {
         return AlpineFactions.getInstance().getConfiguration(FactionConfig.class).memberLimit + this.getFlagValueOrDefault(FactionFlags.MEMBER_LIMIT_MODIFIER);
     }
@@ -550,11 +559,9 @@ public final class Faction {
     public boolean isRosterFull() {
         return this.roster.size() >= this.getRosterLimit();
     }
-
     // endregion Roster
 
     // region Members
-
     public void wrapMember(@NotNull UUID member, @NotNull Consumer<@NotNull Member> consumer) {
         Member found = this.getMember(member);
         if (found == null) {
@@ -568,7 +575,7 @@ public final class Faction {
             this.roster.put(member, found);
         }
 
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public @NotNull Collection<Member> getMembers() {
@@ -665,8 +672,7 @@ public final class Faction {
             if (this.isInFaction(owner)) {
                 // replacement owner is in the faction already
                 this.setMemberRank(owner, Rank.LEADER);
-            }
-            else {
+            } else {
                 // move replacement owner into this faction
                 Faction faction = Factions.registry().find(owner);
                 if (faction != null) {
@@ -700,7 +706,7 @@ public final class Faction {
             resolved.setRank(rank);
         }
 
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public @NotNull Set<MemberInvitation> getInvitations() {
@@ -709,22 +715,22 @@ public final class Faction {
 
     public void addInvitation(@NotNull UUID player, @NotNull UUID inviter) {
         this.invitees.put(player, new MemberInvitation(player, inviter));
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public void removeInvitation(@NotNull UUID player) {
         this.invitees.remove(player);
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public void addMemberToRoster(@NotNull UUID player, @NotNull Rank rank) {
         this.roster.put(player, new Member(player, rank));
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public void removeMemberFromRoster(@NotNull UUID player) {
         this.roster.remove(player);
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public void addMember(@NotNull UUID player) {
@@ -744,13 +750,13 @@ public final class Faction {
         }
 
         // mark this faction for update
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public void removeMember(@NotNull UUID player) {
         this.members.remove(player);
         this.invitees.remove(player);
-        this.markDirty();
+        this.setDirty(true);
     }
 
     public boolean canJoin(@NotNull UUID player) {
@@ -792,8 +798,7 @@ public final class Faction {
         Member member = this.members.get(player.getUniqueId());
         if (member == null) {
             throw new NoSuchElementException(player.getName() + " is not a faction member");
-        }
-        else {
+        } else {
             return member;
         }
     }
@@ -824,11 +829,9 @@ public final class Faction {
         this.roster.get(player).setRank(rank);
         this.setDirty(true);
     }
-
     // endregion Members
 
     // region Audiences
-
     /**
      * Get an {@link Audience} that represents this faction.
      *
@@ -871,11 +874,11 @@ public final class Faction {
     /**
      * Get an {@link Audience} that represents this faction and its relations.
      *
-     * @param filter the filter to compare members against
+     * @param filter    the filter to compare members against
      * @param relations the faction relation types
      * @return the audience
      */
-    public Audience audience(@NotNull BiPredicate<Faction, Member> filter, @NotNull FactionRelation @NotNull... relations) {
+    public Audience audience(@NotNull BiPredicate<Faction, Member> filter, @NotNull FactionRelation @NotNull ... relations) {
         List<Faction> related = Arrays.stream(relations)
                 .map(this::getRelatedFactions)
                 .flatMap(Collection::stream)
@@ -898,12 +901,7 @@ public final class Faction {
             return false;
         });
     }
-
     // endregion Audiences
-
-    public void markDirty() {
-        this.dirty = true;
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -911,5 +909,9 @@ public final class Faction {
             return false;
         Faction other = (Faction) obj;
         return this.id.equals(other.getId());
+    }
+
+    public String toString() {
+        return "Faction(id=" + this.id + ", name=" + this.name + ", description=" + this.description + ", motd=" + this.motd + ", home=" + this.home + ", createdAt=" + this.createdAt + ", invitees=" + this.invitees + ", roster=" + this.getRoster() + ", members=" + this.getMembers() + ", relationRequests=" + this.relationRequests + ", facWarps=" + this.facWarps + ", flags=" + this.flags + ", permissions=" + this.permissions + ", dirty=" + this.dirty + ")";
     }
 }

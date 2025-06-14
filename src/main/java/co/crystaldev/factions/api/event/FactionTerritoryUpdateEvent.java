@@ -3,8 +3,6 @@ package co.crystaldev.factions.api.event;
 import co.crystaldev.factions.api.event.framework.FactionEntityEvent;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.util.ChunkCoordinate;
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -19,7 +17,6 @@ import java.util.Set;
 /**
  * @since 0.1.0
  */
-@Getter
 public final class FactionTerritoryUpdateEvent extends FactionEntityEvent<Player> implements Cancellable {
 
     private final @NotNull World world;
@@ -30,7 +27,6 @@ public final class FactionTerritoryUpdateEvent extends FactionEntityEvent<Player
 
     private final @NotNull Map<Faction, List<ChunkCoordinate>> conqueredChunks;
 
-    @Setter
     private boolean cancelled;
 
     public FactionTerritoryUpdateEvent(@NotNull Faction faction, @NotNull Player entity, @NotNull World world,
@@ -42,6 +38,22 @@ public final class FactionTerritoryUpdateEvent extends FactionEntityEvent<Player
         this.type = type;
         this.chunks = chunks;
         this.conqueredChunks = conqueredChunks;
+    }
+
+    public @NotNull World getWorld() {
+        return this.world;
+    }
+
+    public @NotNull Type getType() {
+        return this.type;
+    }
+
+    public @NotNull Set<ChunkCoordinate> getChunks() {
+        return this.chunks;
+    }
+
+    public @NotNull Map<Faction, List<ChunkCoordinate>> getConqueredChunks() {
+        return this.conqueredChunks;
     }
 
     public boolean contains(@NotNull Location location) {
@@ -73,6 +85,16 @@ public final class FactionTerritoryUpdateEvent extends FactionEntityEvent<Player
         }
 
         return false;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return this.cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
     }
 
     public enum Type {

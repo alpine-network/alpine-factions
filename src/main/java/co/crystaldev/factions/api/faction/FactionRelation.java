@@ -2,16 +2,14 @@ package co.crystaldev.factions.api.faction;
 
 import co.crystaldev.factions.api.Relational;
 import com.google.gson.annotations.SerializedName;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @since 0.1.0
  */
-@RequiredArgsConstructor @Getter
 public enum FactionRelation implements Relational {
     @SerializedName("self")
-    SELF(0, "self", true) {
+    SELF("self", 0, true) {
         @Override
         public boolean isValid() {
             return false;
@@ -19,20 +17,39 @@ public enum FactionRelation implements Relational {
     },
 
     @SerializedName("enemy")
-    ENEMY(0, "enemy", false),
+    ENEMY("enemy", 0, false),
 
     @SerializedName("neutral")
-    NEUTRAL(1, "neutral", false),
+    NEUTRAL("neutral", 1, false),
 
     @SerializedName("truce")
-    TRUCE(2, "truce", true),
+    TRUCE("truce", 2, true),
 
     @SerializedName("ally")
-    ALLY(3, "ally", true);
+    ALLY("ally", 3, true);
+
+    private final @NotNull String id;
 
     private final int weight;
 
-    private final String id;
-
     private final boolean friendly;
+
+    FactionRelation(@NotNull String id, int weight, boolean friendly) {
+        this.weight = weight;
+        this.id = id;
+        this.friendly = friendly;
+    }
+
+    @Override
+    public @NotNull String getId() {
+        return this.id;
+    }
+
+    public int getWeight() {
+        return this.weight;
+    }
+
+    public boolean isFriendly() {
+        return this.friendly;
+    }
 }

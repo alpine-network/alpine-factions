@@ -1,19 +1,12 @@
 package co.crystaldev.factions.api.faction;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 /**
  * @since 0.1.0
  */
-@Getter
-@AllArgsConstructor(staticName = "of") @NoArgsConstructor
 public final class Warp {
 
     private @NotNull String name;
@@ -24,12 +17,38 @@ public final class Warp {
 
     private final long createdAt = System.currentTimeMillis();
 
-    private long updatedAt;
+    private long updatedAt = System.currentTimeMillis();
+
+    private Warp(@NotNull String name, @NotNull Location location, @Nullable String password) {
+        this.name = name;
+        this.location = location;
+        this.password = password;
+    }
+
+    private Warp() {
+        // should only get here via Gson
+    }
 
     public void updateWarp(Location location, String password) {
         this.location = location;
         this.password = password;
         this.updatedAt = System.currentTimeMillis();
+    }
+
+    public @NotNull String getName() {
+        return this.name;
+    }
+
+    public @NotNull Location getLocation() {
+        return this.location;
+    }
+
+    public @Nullable String getPassword() {
+        return this.password;
+    }
+
+    public boolean hasPassword() {
+        return this.password != null;
     }
 
     public boolean isPasswordCorrect(String input) {
@@ -40,11 +59,15 @@ public final class Warp {
         return this.password.equals(input);
     }
 
-    public boolean isPasswordCorrect(Optional<String> input) {
-        return this.isPasswordCorrect(input.orElse(null));
+    public long getCreatedAt() {
+        return this.createdAt;
     }
 
-    public boolean hasPassword() {
-        return this.password != null;
+    public long getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public static Warp of(@NotNull String name, @NotNull Location location, @Nullable String password) {
+        return new Warp(name, location, password);
     }
 }

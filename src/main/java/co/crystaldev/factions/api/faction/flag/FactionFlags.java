@@ -1,12 +1,10 @@
 package co.crystaldev.factions.api.faction.flag;
 
 import co.crystaldev.factions.PermissionNodes;
-import lombok.experimental.UtilityClass;
 
 /**
  * @since 0.1.0
  */
-@UtilityClass
 public final class FactionFlags {
 
     public static final FactionFlag<Boolean> OPEN =
@@ -218,4 +216,8 @@ public final class FactionFlags {
             PERMANENT,
             VERBOSE
     };
+
+    private FactionFlags() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 }

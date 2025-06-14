@@ -11,7 +11,6 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import lombok.Getter;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +25,6 @@ import java.util.stream.Collectors;
  */
 public final class Claim {
 
-    @Getter
     @SerializedName("owner")
     private String factionId;
 
@@ -39,7 +37,6 @@ public final class Claim {
     @SerializedName("attribs")
     private final HashSet<String> attributes;
 
-    @Getter
     @SerializedName("created")
     private final long claimedAt = System.currentTimeMillis();
 
@@ -63,6 +60,14 @@ public final class Claim {
         this.factionId = factionId;
     }
 
+    public @NotNull String getFactionId() {
+        return this.factionId;
+    }
+
+    public long getClaimedAt() {
+        return this.claimedAt;
+    }
+
     public @NotNull Faction getFaction() {
         return Factions.registry().getByIdOrDefault(this.factionId);
     }
@@ -76,7 +81,6 @@ public final class Claim {
     }
 
     // region Attribute
-
     public boolean hasAttribute(@NotNull String attribute) {
         return this.attributes.contains(attribute);
     }
@@ -100,11 +104,9 @@ public final class Claim {
     public void clearAttributes() {
         this.attributes.clear();
     }
-
     // endregion Attribute
 
     // region Access
-
     public boolean modifiesAccess() {
         return this.accessedFactionIds != null && !this.accessedFactionIds.isEmpty()
                 || this.accessedPlayerIds != null && !this.accessedPlayerIds.isEmpty();
@@ -137,8 +139,7 @@ public final class Claim {
     public void setAccess(@NotNull Faction faction, boolean accessed) {
         if (accessed) {
             this.accessedFactionIds.add(faction.getId());
-        }
-        else {
+        } else {
             this.accessedFactionIds.remove(faction.getId());
         }
     }
@@ -146,8 +147,7 @@ public final class Claim {
     public void setAccess(@NotNull OfflinePlayer player, boolean accessed) {
         if (accessed) {
             this.accessedPlayerIds.add(player.getUniqueId());
-        }
-        else {
+        } else {
             this.accessedPlayerIds.remove(player.getUniqueId());
         }
     }
@@ -166,7 +166,6 @@ public final class Claim {
         this.accessedFactionIds.clear();
         this.accessedPlayerIds.clear();
     }
-
     // endregion Access
 
     public static final class Adapter extends TypeAdapter<Claim> {

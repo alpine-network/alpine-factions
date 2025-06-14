@@ -62,7 +62,7 @@ final class PermissionCommand extends AlpineCommand {
             return;
         }
 
-        boolean newValue = event.isValue();
+        boolean newValue = event.isAllowed();
         resolvedFaction.setPermission(permission, newValue, relational);
 
         FactionHelper.broadcast(resolvedFaction, sender, observer -> {

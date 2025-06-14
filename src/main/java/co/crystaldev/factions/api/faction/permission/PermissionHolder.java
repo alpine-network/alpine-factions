@@ -3,7 +3,6 @@ package co.crystaldev.factions.api.faction.permission;
 import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Rank;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -12,7 +11,6 @@ import java.util.Set;
 /**
  * @since 0.1.0
  */
-@NoArgsConstructor
 public final class PermissionHolder {
     private final HashSet<Rank> permittedRanks = new HashSet<>();
     private final HashSet<FactionRelation> permittedRelations = new HashSet<>();
@@ -20,6 +18,11 @@ public final class PermissionHolder {
     public PermissionHolder(@NotNull Permission permission) {
         this.permittedRanks.addAll(permission.getDefaultRankPermits());
         this.permittedRelations.addAll(permission.getDefaultRelationPermits());
+    }
+
+    private PermissionHolder() {
+        // should only get here via Gson
+        this(null);
     }
 
     public boolean isPermitted(@NotNull Relational relation) {

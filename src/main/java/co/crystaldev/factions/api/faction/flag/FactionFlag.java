@@ -2,33 +2,54 @@ package co.crystaldev.factions.api.faction.flag;
 
 import co.crystaldev.factions.handler.PlayerHandler;
 import com.google.common.base.Preconditions;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @since 0.1.0
  */
-@AllArgsConstructor(access = AccessLevel.PACKAGE) @Getter
 public final class FactionFlag<T> {
 
-    private final String id;
-    private final String name;
-    private final String description;
-    private final String stateDescriptionA;
-    private final String stateDescriptionB;
-    private final String permission;
+    private final @NotNull String id;
+    private final @NotNull String name;
+    private final @NotNull String description;
+    private final @NotNull String stateDescriptionA;
+    private final @Nullable String stateDescriptionB;
+    private final @Nullable String permission;
     private final boolean visible;
-    private final T defaultState;
-    private final Class<T> type;
-    private final FlagAdapter<T> adapter;
+    private final @NotNull T defaultState;
+    private final @NotNull Class<T> type;
+    private final @NotNull FlagAdapter<T> adapter;
 
-    public @NotNull FlagHolder<T> wrapDefaultValue() {
-        return new FlagHolder<>(this.type, this.defaultState);
+    FactionFlag(@NotNull String id, @NotNull String name, @NotNull String description,
+                @NotNull String stateDescriptionA, @Nullable String stateDescriptionB,
+                @Nullable String permission, boolean visible, @NotNull T defaultState,
+                @NotNull Class<T> type, @NotNull FlagAdapter<T> adapter) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.stateDescriptionA = stateDescriptionA;
+        this.stateDescriptionB = stateDescriptionB;
+        this.permission = permission;
+        this.visible = visible;
+        this.defaultState = defaultState;
+        this.type = type;
+        this.adapter = adapter;
+    }
+
+    public @NotNull String getId() {
+        return this.id;
+    }
+
+    public @NotNull String getName() {
+        return this.name;
+    }
+
+    public @NotNull String getDescription() {
+        return this.description;
     }
 
     public @NotNull String getStateDescription() {
@@ -37,6 +58,30 @@ public final class FactionFlag<T> {
 
     public @NotNull String getStateDescription(boolean state) {
         return state ? this.stateDescriptionA : this.stateDescriptionB;
+    }
+
+    public boolean isVisible() {
+        return this.visible;
+    }
+
+    public @NotNull T getDefaultState() {
+        return this.defaultState;
+    }
+
+    public @NotNull Class<T> getType() {
+        return this.type;
+    }
+
+    public @NotNull FlagAdapter<T> getAdapter() {
+        return this.adapter;
+    }
+
+    public @NotNull FlagHolder<T> wrapDefaultValue() {
+        return new FlagHolder<>(this.type, this.defaultState);
+    }
+
+    public @Nullable String getPermission() {
+        return this.permission;
     }
 
     public boolean isPermitted(@NotNull Permissible permissible) {

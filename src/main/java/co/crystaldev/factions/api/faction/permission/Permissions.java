@@ -3,12 +3,10 @@ package co.crystaldev.factions.api.faction.permission;
 import co.crystaldev.factions.PermissionNodes;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Rank;
-import lombok.experimental.UtilityClass;
 
 /**
  * @since 0.1.0
  */
-@UtilityClass
 public final class Permissions {
 
     public static final Permission MODIFY_NAME = Permission.builder("modify_name")
@@ -197,4 +195,8 @@ public final class Permissions {
             USE_PRESSURE_PLATES,
             USE_SWITCHES
     };
+
+    private Permissions() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 }

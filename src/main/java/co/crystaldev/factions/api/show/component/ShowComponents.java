@@ -12,7 +12,6 @@ import co.crystaldev.factions.config.MessageConfig;
 import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.Formatting;
 import co.crystaldev.factions.util.RelationHelper;
-import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 /**
  * @since 0.1.0
  */
-@UtilityClass
 public final class ShowComponents {
 
     public static final Predicate<ShowContext> MINIMAL_VISIBILITY_PREDICATE = ctx -> {
@@ -151,6 +149,10 @@ public final class ShowComponents {
             ID, DESCRIPTION, CREATED, JOINING, LAND_AND_POWER,
             ALLIES, TRUCES, ONLINE_MEMBERS, OFFLINE_MEMBERS
     };
+
+    private ShowComponents() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
     private static @NotNull MessageConfig conf() {
         return AlpineFactions.getInstance().getConfiguration(MessageConfig.class);
