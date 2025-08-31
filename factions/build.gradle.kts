@@ -1,6 +1,7 @@
 plugins {
     id("factions.blossom-conventions")
     id("factions.maven-conventions")
+    id("factions.spotless-conventions")
 }
 
 dependencies {

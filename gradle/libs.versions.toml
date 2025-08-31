@@ -8,6 +8,7 @@ placeholderapi = "2.11.6"           # https://github.com/PlaceholderAPI/Placehol
 blossom = "2.1.0"                   # https://github.com/KyoriPowered/blossom/releases
 ideaExt = "1.2"                     # https://github.com/jetbrains/gradle-idea-ext-plugin
 mavenPublish = "0.34.0"             # https://github.com/vanniktech/gradle-maven-publish-plugin/releases
+spotless = "7.2.1"                  # https://github.com/diffplug/spotless/releases
 
 # Javadocs - https://github.com/alpine-network/alpine-core/blob/master/gradle/libs.versions.toml
 adventure = "4.23.0"
@@ -23,3 +24,4 @@ placeholderapi = { group = "me.clip", name = "placeholderapi", version.ref = "pl
 blossom-plugin = { module = "net.kyori.blossom:net.kyori.blossom.gradle.plugin", version.ref = "blossom" }
 ideaExt-plugin = { module = "org.jetbrains.gradle.plugin.idea-ext:org.jetbrains.gradle.plugin.idea-ext.gradle.plugin", version.ref = "ideaExt" }
 mavenPublish-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
+spotless-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
