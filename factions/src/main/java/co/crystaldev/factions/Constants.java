@@ -17,8 +17,8 @@ import java.util.UUID;
  * @since 0.1.0
  */
 public final class Constants {
-    public static final String ID = "{{ artifactName }}";
-    public static final String VERSION = "{{ version }}";
+    public static final String ID = PluginInfo.ID;
+    public static final String VERSION = PluginInfo.VERSION;
     public static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(new TypeToken<FlagHolder<?>>(){}.getType(), new FlagHolder.Adapter())
             .registerTypeAdapter(Claim.class, new Claim.Adapter())
