@@ -32,7 +32,7 @@ public final class RelationHelper {
 
     // region Player
 
-    /**
+    /*
      * (BestBearr, BestBearr) -> <green>you
      * (BestBearr, xPenguinx) -> <red>**Karma xPenguinx
      */
@@ -48,7 +48,7 @@ public final class RelationHelper {
         }
     }
 
-    /**
+    /*
      * (BestBearr, BestBearr) -> <green>***[Leader] BestBearr
      * (BestBearr, xPenguinx) -> <red>**Karma xPenguinx
      */
@@ -74,7 +74,7 @@ public final class RelationHelper {
         }
     }
 
-    /**
+    /*
      * (BestBearr) -> ***[Leader] BestBearr
      */
     public static @NotNull Component formatPlayerName(@NotNull ServerOperator observer) {
@@ -88,7 +88,7 @@ public final class RelationHelper {
         return Components.join(prefix, playerName);
     }
 
-    /**
+    /*
      * (BestBearr, BestBearr) -> <green>BestBearr
      * (BestBearr, xPenguinx) -> <red>xPenguinx
      */
@@ -120,7 +120,7 @@ public final class RelationHelper {
 
     // region Faction
 
-    /**
+    /*
      * (Tide, Tide) -> <green>your faction
      * (Tide, Karma) -> <red>Karma
      */
@@ -135,7 +135,7 @@ public final class RelationHelper {
         return applyStyle(name, other, relation);
     }
 
-    /**
+    /*
      * (Tide, Tide) -> <green>Tide
      * (Tide, Karma) -> <red>Karma
      */
@@ -148,7 +148,7 @@ public final class RelationHelper {
         return applyStyle(getFactionName(other), other, relation);
     }
 
-    /**
+    /*
      * (BestBearr, Tide) -> <green>your faction
      * (BestBearr, Karma) -> <red>Karma
      */
@@ -159,7 +159,7 @@ public final class RelationHelper {
         return formatFactionName(getFaction(observer), factionOrPlayer);
     }
 
-    /**
+    /*
      * (BestBearr, Tide) -> <green>Tide
      * (BestBearr, Karma) -> <red>Karma
      */
