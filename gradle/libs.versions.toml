@@ -1,19 +1,25 @@
 [versions]
-alpinecore = "0.4.10"
-blossom = "2.1.0"
+alpinecore = "0.4.10-SNAPSHOT"      # https://github.com/alpine-network/alpine-core/releases
 bukkit = "1.12.2-R0.1-SNAPSHOT"
-idea = "1.1.10"
-lombok = "1.18.38"
-placeholderapi = "2.11.6"
-shadow = "8.3.6"
+lombok = "1.18.38"                  # https://projectlombok.org/changelog
+placeholderapi = "2.11.6"           # https://github.com/PlaceholderAPI/PlaceholderAPI/releases
+
+# Gradle
+blossom = "2.1.0"                   # https://github.com/KyoriPowered/blossom/releases
+ideaExt = "1.2"                     # https://github.com/jetbrains/gradle-idea-ext-plugin
+mavenPublish = "0.34.0"             # https://github.com/vanniktech/gradle-maven-publish-plugin/releases
+
+# Javadocs - https://github.com/alpine-network/alpine-core/blob/master/gradle/libs.versions.toml
+adventure = "4.23.0"
+annotations = "26.0.2"
 
 [libraries]
-alpinecore = { group = "co.crystaldev", name = "alpinecore", version.ref = "alpinecore"}
-bukkit = { group = "org.bukkit", name = "bukkit", version.ref = "bukkit"}
+alpinecore = { group = "co.crystaldev", name = "alpinecore", version.ref = "alpinecore" }
+bukkit = { group = "org.bukkit", name = "bukkit", version.ref = "bukkit" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 placeholderapi = { group = "me.clip", name = "placeholderapi", version.ref = "placeholderapi" }
 
-[plugins]
-blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
-idea = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "idea" }
-shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+# Gradle
+blossom-plugin = { module = "net.kyori.blossom:net.kyori.blossom.gradle.plugin", version.ref = "blossom" }
+ideaExt-plugin = { module = "org.jetbrains.gradle.plugin.idea-ext:org.jetbrains.gradle.plugin.idea-ext.gradle.plugin", version.ref = "ideaExt" }
+mavenPublish-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version.ref = "mavenPublish" }
