@@ -1,39 +1,14 @@
-plugins {
-    java
-    alias(libs.plugins.shadow)
-    alias(libs.plugins.blossom)
-}
-
-val pluginName: String by rootProject.properties
-
 dependencies {
-    implementation(rootProject)
-    compileOnly(libs.bukkit)
+    compileOnly("org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT")
+    compileOnly("co.crystaldev:alpinecore:0.4.+")
+    compileOnly("co.crystaldev:alpinefactions:0.4.+")
 }
 
-sourceSets {
-    main {
-        blossom {
-            resources {
-                property("version", project.version.toString())
-            }
-        }
+tasks {
+    jar {
+        archiveFileName.set("SimpleAlpineFactions-${project.version}.jar")
     }
-}
-
-tasks.shadowJar {
-    archiveBaseName.set("Simple${pluginName}")
-    archiveClassifier.set("")
-
-    dependencies {
-        include(dependency(rootProject))
+    processResources {
+        expand("version" to project.version)
     }
-}
-
-tasks.build {
-    dependsOn(tasks.shadowJar)
-}
-
-tasks.jar {
-    enabled = false
 }

@@ -1,0 +1,10 @@
+main: co.crystaldev.factions.Plugin
+name: AlpineFactions
+version: "${version}"
+description: "${description}"
+api-version: 1.13
+authors: [ BestBearr ]
+depend:
+  - AlpineCore
+softdepend:
+  - PlaceholderAPI

@@ -1,0 +1,10 @@
+main: co.crystaldev.factions.SimpleFactions
+name: SimpleFactions
+description: A barebones implementation of AlpineFactions.
+version: "${version}"
+authors: [ BestBearr ]
+api-version: 1.13
+depend:
+  - AlpineCore
+softdepend:
+  - PlaceholderAPI

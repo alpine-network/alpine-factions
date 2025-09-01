@@ -2,23 +2,62 @@
 
 A lightweight factions core for creating the ultimate Minecraft Factions server.
 
-> This plugin is currently in an early state of development and breaking changes **will** occur.
+> This plugin is currently in an early stage of development and breaking changes **will** occur.
 
 ### For Developers
-The library can be added as a dependency to your Gradle buildscript like so:
+To use AlpineFactions, you must add it as a dependency to your project:
 
+<details>
+<summary>Gradle (Kotlin DSL)</summary>
+
+```kotlin
+repositories {
+    maven("https://lib.alpn.cloud/releases")
+}
+
+dependencies {
+    compileOnly("co.crystaldev:alpinefactions:0.4.11")
+}
 ```
+</details>
+
+
+<details>
+<summary>Gradle (Groovy DSL)</summary>
+
+```groovy
 repositories {
     maven {
-        name 'Alpine Public'
-        url 'https://lib.alpn.cloud/alpine-public'
+        url 'https://lib.alpn.cloud/releases'
     }
 }
 
 dependencies {
-    compileOnly 'co.crystaldev:alpine-factions:0.4.9'
+    compileOnly 'co.crystaldev:alpinefactions:0.4.11'
 }
 ```
+</details>
+
+<details>
+<summary>Maven</summary>
+
+```xml
+<repositories>
+  <repository>
+    <name>Alpine Cloud</name>
+    <url>https://lib.alpn.cloud/releases</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>co.crystaldev</groupId>
+    <artifactId>alpinefactions</artifactId>
+    <version>0.4.11</version>
+  </dependency>
+</dependencies>
+```
+</details>
 
 All classes and methods that are part of the API should have Javadocs. If one does not, open an issue.
 
