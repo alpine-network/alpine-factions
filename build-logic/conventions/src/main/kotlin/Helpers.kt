@@ -36,6 +36,10 @@ fun ProcessResources.expandProperties(vararg files: String) {
     // see https://github.com/gradle/gradle/issues/23572
     val d = project.rootProject.description.toString()
     val v = project.rootProject.version.toString()
+
+    inputs.property("description", d)
+    inputs.property("version", v)
+
     filesMatching(files.toList()) {
         expand(
             "description" to d,
