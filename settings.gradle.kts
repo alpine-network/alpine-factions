@@ -24,9 +24,12 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
 }
 
-rootProject.name = "AlpineFactions"
+rootProject.name = "alpinefactions"
 
-include("alpinefactions")
-project(":alpinefactions").projectDir = file("factions")
+
+"factions".also {
+    include(it)
+    project(":$it").name = "${rootProject.name}-bukkit"
+}
 
 include("simple")

@@ -9,6 +9,10 @@ tasks {
         archiveFileName.set("SimpleAlpineFactions-${project.version}.jar")
     }
     processResources {
-        expand("version" to project.version)
+        val version = project.version
+        inputs.property("version", version)
+        filesMatching("plugin.yml") {
+            expand("version" to version)
+        }
     }
 }

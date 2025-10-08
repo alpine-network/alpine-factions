@@ -19,10 +19,5 @@ extensions.configure<SpotlessExtension> {
         targetExclude("**/generated/**")
         removeUnusedImports()
     }
-}
-
-tasks {
-    named("build") {
-        dependsOn(named("spotlessApply"))
-    }
+    isEnforceCheck = false
 }
