@@ -14,7 +14,7 @@ sourceSets {
     main {
         blossom {
             javaSources {
-                property("id", project.name)
+                property("id", project.rootProject.name)
                 property("version", project.version.toString())
             }
         }
@@ -25,8 +25,10 @@ tasks {
     named("build") {
         dependsOn("javadoc")
     }
+    named<Jar>("jar") {
+        archiveFileName.set("AlpineFactions-${project.version}.jar")
+    }
     withType<Jar>().configureEach {
-        archiveBaseName.set(rootProject.name)
         includeLicenseFile()
     }
     withType<ProcessResources>().configureEach {
