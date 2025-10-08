@@ -15,7 +15,6 @@ import org.gradle.external.javadoc.StandardJavadocDocletOptions
 import org.gradle.kotlin.dsl.expand
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.language.jvm.tasks.ProcessResources
-import kotlin.text.trim
 
 val Project.libs: LibrariesForLibs
     get() = rootProject.extensions.getByType()
