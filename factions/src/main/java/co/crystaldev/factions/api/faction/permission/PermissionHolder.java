@@ -12,6 +12,7 @@ import co.crystaldev.factions.api.Relational;
 import co.crystaldev.factions.api.faction.FactionRelation;
 import co.crystaldev.factions.api.faction.member.Rank;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,9 +24,11 @@ public final class PermissionHolder {
     private final HashSet<Rank> permittedRanks = new HashSet<>();
     private final HashSet<FactionRelation> permittedRelations = new HashSet<>();
 
-    public PermissionHolder(@NotNull Permission permission) {
-        this.permittedRanks.addAll(permission.getDefaultRankPermits());
-        this.permittedRelations.addAll(permission.getDefaultRelationPermits());
+    public PermissionHolder(@Nullable Permission permission) {
+        if (permission != null) {
+            this.permittedRanks.addAll(permission.getDefaultRankPermits());
+            this.permittedRelations.addAll(permission.getDefaultRelationPermits());
+        }
     }
 
     private PermissionHolder() {
