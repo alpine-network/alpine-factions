@@ -751,7 +751,6 @@ public final class Faction {
 
         // add the member to the member list
         Member member = this.roster.getOrDefault(player, new Member(player, rank));
-        member.setRank(rank);
         this.members.put(player, member);
         if (this.isOnRoster(player)) {
             this.roster.put(player, member);
