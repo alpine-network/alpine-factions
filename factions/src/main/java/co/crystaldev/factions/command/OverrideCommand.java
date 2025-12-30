@@ -33,9 +33,9 @@ final class OverrideCommand extends AlpineCommand {
 
     @Execute
     @Permission(PermissionNodes.ADMIN)
-    public void execute(@Context Player player) {
-        PlayerState state = PlayerHandler.getInstance().getPlayer(player);
+    public void execute(@Context Player sender) {
+        PlayerState state = PlayerHandler.getInstance().getPlayer(sender);
         state.setOverriding(!state.isOverriding());
-        this.plugin.getConfiguration(MessageConfig.class).stateChange.send(player, "subject", "Override Mode", "state", state.isOverriding());
+        this.plugin.getConfiguration(MessageConfig.class).stateChange.send(sender, "subject", "Override Mode", "state", state.isOverriding());
     }
 }

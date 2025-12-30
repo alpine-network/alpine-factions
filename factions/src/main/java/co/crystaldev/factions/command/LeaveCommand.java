@@ -44,66 +44,66 @@ final class LeaveCommand extends AlpineCommand {
     }
 
     @Execute
-    public void execute(@Context Player player) {
+    public void execute(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.registry();
-        Faction faction = factions.find(player);
+        Faction faction = factions.find(sender);
 
         // ensure the player is in a faction
         if (faction == null) {
-            config.notInFaction.send(player);
+            config.notInFaction.send(sender);
             return;
         }
 
         // ensure that the player can leave
         if (faction.canDisband()) {
-            if (faction.getMemberCount() > 1 && faction.getMemberRank(player.getUniqueId()) == Rank.LEADER) {
+            if (faction.getMemberCount() > 1 && faction.getMemberRank(sender.getUniqueId()) == Rank.LEADER) {
                 // the leader can't just leave the faction!
-                config.promoteLeader.send(player);
+                config.promoteLeader.send(sender);
                 return;
             }
             else if (faction.getMemberCount() == 1) {
                 // the leader was the only member, disband
 
                 // require a confirmation from the user
-                if (!this.confirmationMap.containsKey(player) || System.currentTimeMillis() - this.confirmationMap.get(player) > 10_000L) {
-                    this.confirmationMap.put(player, System.currentTimeMillis());
-                    config.confirm.send(player);
+                if (!this.confirmationMap.containsKey(sender) || System.currentTimeMillis() - this.confirmationMap.get(sender) > 10_000L) {
+                    this.confirmationMap.put(sender, System.currentTimeMillis());
+                    config.confirm.send(sender);
                     return;
                 }
 
                 // member confirmed, disband the faction
-                this.confirmationMap.remove(player);
-                faction.disband(player);
+                this.confirmationMap.remove(sender);
+                faction.disband(sender);
                 return;
             }
         }
 
         // call event
-        PlayerChangedFactionEvent event = AlpineFactions.callEvent(new PlayerChangedFactionEvent(factions.getWilderness(), faction, player));
+        PlayerChangedFactionEvent event = AlpineFactions.callEvent(new PlayerChangedFactionEvent(factions.getWilderness(), faction, sender));
         if (event.isCancelled()) {
-            config.operationCancelled.send(player);
+            config.operationCancelled.send(sender);
             return;
         }
 
         // notify the faction
         FactionHelper.broadcast(faction, observer -> {
-            if (observer.equals(player)) {
+            if (observer.equals(sender)) {
                 return null;
             }
 
             return config.memberLeave.build(
-                    "player", RelationHelper.formatPlayerName(observer, player),
-                    "player_name", player.getName());
+                    "player", RelationHelper.formatPlayerName(observer, sender),
+                    "player_name", sender.getName());
         });
 
         // notify the player
-        Messaging.send(player, config.leave.build(
-                "faction", RelationHelper.formatFactionName(player, faction),
+        Messaging.send(sender, config.leave.build(
+                "faction", RelationHelper.formatFactionName(sender, faction),
                 "faction_name", faction.getName()
         ));
 
         // remove the member
-        faction.removeMember(player.getUniqueId());
+        faction.removeMember(sender.getUniqueId());
     }
 }

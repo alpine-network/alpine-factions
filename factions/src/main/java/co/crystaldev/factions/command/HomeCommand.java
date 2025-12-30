@@ -43,13 +43,13 @@ final class HomeCommand extends AlpineCommand {
 
     @Execute
     public void execute(
-            @Context Player player,
+            @Context Player sender,
             @Arg("faction") Optional<Faction> targetFaction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        Faction faction = targetFaction.orElse(Factions.registry().findOrDefault(player));
-        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+        Faction faction = targetFaction.orElse(Factions.registry().findOrDefault(sender));
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
                 Permissions.ACCESS_HOME, "teleport home");
         if (!permitted) {
             return;
@@ -58,15 +58,15 @@ final class HomeCommand extends AlpineCommand {
         // ensure the faction has a home
         Location home = faction.getHome();
         if (home == null) {
-            config.noHome.send(player,
-                    "faction", RelationHelper.formatFactionName(player, faction),
+            config.noHome.send(sender,
+                    "faction", RelationHelper.formatFactionName(sender, faction),
                     "faction_name", faction.getName());
             return;
         }
 
         // ensure home is still in the faction's own territory
         if (!Factions.claims().getFactionOrDefault(home).equals(faction)) {
-            FactionHomeUpdateEvent event = AlpineFactions.callEvent(new FactionHomeUpdateEvent(faction, player, null));
+            FactionHomeUpdateEvent event = AlpineFactions.callEvent(new FactionHomeUpdateEvent(faction, sender, null));
             if (!event.isCancelled()) {
                 faction.setHome(event.getLocation());
                 if (event.getLocation() == null) {
@@ -76,12 +76,12 @@ final class HomeCommand extends AlpineCommand {
             }
         }
 
-        TeleportTask.builder(player, home)
+        TeleportTask.builder(sender, home)
                 .delay(5, TimeUnit.SECONDS)
                 .onApply(ctx -> {
                     ConfigText message = ctx.isInstant() ? config.homeInstant : config.home;
                     ctx.message(message.build(
-                            "faction", RelationHelper.formatLiteralFactionName(player, faction),
+                            "faction", RelationHelper.formatLiteralFactionName(sender, faction),
                             "faction_name", faction.getName(),
                             "seconds", ctx.timeUntilTeleport(TimeUnit.SECONDS)));
                 })

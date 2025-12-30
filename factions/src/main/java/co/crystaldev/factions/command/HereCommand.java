@@ -31,9 +31,9 @@ final class HereCommand extends AlpineCommand {
     }
 
     @Execute
-    public void execute(@Context Player player) {
-        Faction senderFaction = Factions.registry().findOrDefault(player);
-        Faction resolvedFaction = Factions.claims().getFactionOrDefault(player.getLocation());
-        Messaging.send(player, AlpineFactions.getInstance().showFormatter().build(player, resolvedFaction, senderFaction));
+    public void execute(@Context Player sender) {
+        Faction senderFaction = Factions.registry().findOrDefault(sender);
+        Faction resolvedFaction = Factions.claims().getFactionOrDefault(sender.getLocation());
+        Messaging.send(sender, AlpineFactions.getInstance().showFormatter().build(sender, resolvedFaction, senderFaction));
     }
 }

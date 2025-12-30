@@ -54,57 +54,57 @@ final class UnclaimCommand extends AlpineCommand {
 
     @Execute
     public void execute(
-            @Context Player player,
+            @Context Player sender,
             @Arg("type") ClaimType type,
             @OptionalArg("radius") Optional<Integer> rad
     ) {
-        Faction actingFaction = Factions.registry().findOrDefault(player);
-        Claiming.mode(player, actingFaction, null, type, Math.max(rad.orElse(1), 1));
+        Faction actingFaction = Factions.registry().findOrDefault(sender);
+        Claiming.mode(sender, actingFaction, null, type, Math.max(rad.orElse(1), 1));
     }
 
     @Execute(name = "fill", aliases = "f")  @Async
-    public void fill(@Context Player player) {
-        Faction actingFaction = Factions.registry().findOrDefault(player);
-        Claiming.fill(player, actingFaction, null);
+    public void fill(@Context Player sender) {
+        Faction actingFaction = Factions.registry().findOrDefault(sender);
+        Claiming.fill(sender, actingFaction, null);
     }
 
     @Execute(name = "one", aliases = "o")
-    public void one(@Context Player player) {
+    public void one(@Context Player sender) {
         FactionAccessor factions = Factions.registry();
-        Claiming.one(player, factions.findOrDefault(player), null);
+        Claiming.one(sender, factions.findOrDefault(sender), null);
     }
 
     @Execute(name = "auto", aliases = "a")
-    public void auto(@Context Player player) {
+    public void auto(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        PlayerState state = PlayerHandler.getInstance().getPlayer(player);
+        PlayerState state = PlayerHandler.getInstance().getPlayer(sender);
         AutoClaimState autoClaim = state.getAutoClaimState();
         autoClaim.toggle(null);
 
         if (autoClaim.isEnabled()) {
             Faction wilderness = Factions.registry().getWilderness();
-            config.enableAutoUnclaim.send(player,
-                    "faction", RelationHelper.formatFactionName(player, wilderness),
+            config.enableAutoUnclaim.send(sender,
+                    "faction", RelationHelper.formatFactionName(sender, wilderness),
                     "faction_name", wilderness.getName());
 
             // attempt to unclaim the chunk the player is standing in
-            this.one(player);
+            this.one(sender);
         }
         else {
-            config.disableAutoSetting.send(player);
+            config.disableAutoSetting.send(sender);
         }
     }
 
     @Execute(name = "all")
     public void all(
-            @Context Player player,
+            @Context Player sender,
             @Arg("world") WorldClaimType world,
             @Arg("faction") Faction faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
                 Permissions.MODIFY_TERRITORY, "modify territory");
         if (!permitted) {
             return;
@@ -124,7 +124,7 @@ final class UnclaimCommand extends AlpineCommand {
             worldName = "<red>all</red>";
         }
         else {
-            World w = player.getWorld();
+            World w = sender.getWorld();
             foundClaims = claims.getClaims(faction, w);
             message = config.landClaimWorld;
             worldName = w.getName();
@@ -135,11 +135,11 @@ final class UnclaimCommand extends AlpineCommand {
 
         // notify
         Faction wilderness = Factions.registry().getWilderness();
-        Faction playerFaction = Factions.registry().findOrDefault(player);
-        FactionHelper.broadcast(faction, player, observer -> {
+        Faction playerFaction = Factions.registry().findOrDefault(sender);
+        FactionHelper.broadcast(faction, sender, observer -> {
             return message.build(
-                    "actor", RelationHelper.formatPlayerName(observer, player),
-                    "actor_name", player.getName(),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
+                    "actor_name", sender.getName(),
 
                     "faction", RelationHelper.formatFactionName(observer, faction),
                     "faction_name", faction.getName(),

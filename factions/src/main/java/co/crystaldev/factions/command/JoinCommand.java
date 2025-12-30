@@ -43,68 +43,68 @@ final class JoinCommand extends AlpineCommand {
 
     @Execute
     public void execute(
-            @Context Player player,
+            @Context Player sender,
             @Arg("faction") Faction faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        boolean overriding = PlayerHandler.getInstance().isOverriding(player);
+        boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
 
         FactionAccessor factions = Factions.registry();
-        Faction otherFaction = factions.findOrDefault(player);
+        Faction otherFaction = factions.findOrDefault(sender);
 
         // ensure the player is not in a faction
         if (!otherFaction.isWilderness()) {
-            config.alreadyInFaction.send(player);
+            config.alreadyInFaction.send(sender);
             return;
         }
 
         // ensure the player is even invited
-        if (!overriding && !faction.canJoin(player.getUniqueId())) {
-            config.notInvited.send(player,
-                    "faction", RelationHelper.formatFactionName(player, faction),
+        if (!overriding && !faction.canJoin(sender.getUniqueId())) {
+            config.notInvited.send(sender,
+                    "faction", RelationHelper.formatFactionName(sender, faction),
                     "faction_name", faction.getName());
 
             // notify the faction of this attempt
             FactionHelper.broadcast(faction, observer -> config.attemptedMemberJoin.build(
-                    "player", RelationHelper.formatPlayerName(observer, player),
-                    "player_name", player.getName()
+                    "player", RelationHelper.formatPlayerName(observer, sender),
+                    "player_name", sender.getName()
             ));
             return;
         }
 
         // ensure the faction is not full
         if (!overriding && faction.getMemberCount() >= faction.getMemberLimit()) {
-            config.fullFaction.send(player,
-                    "faction", RelationHelper.formatFactionName(player, faction),
+            config.fullFaction.send(sender,
+                    "faction", RelationHelper.formatFactionName(sender, faction),
                     "faction_name", faction.getName(),
                     "limit", faction.getMemberLimit());
             return;
         }
 
         // call event
-        PlayerChangedFactionEvent event = AlpineFactions.callEvent(new PlayerChangedFactionEvent(faction, otherFaction, player));
+        PlayerChangedFactionEvent event = AlpineFactions.callEvent(new PlayerChangedFactionEvent(faction, otherFaction, sender));
         if (event.isCancelled()) {
-            config.operationCancelled.send(player);
+            config.operationCancelled.send(sender);
             return;
         }
 
         // add the member
-        faction.addMember(player.getUniqueId());
+        faction.addMember(sender.getUniqueId());
 
         // notify the faction
         FactionHelper.broadcast(faction, observer -> {
-            if (observer.equals(player)) {
+            if (observer.equals(sender)) {
                 return null;
             }
 
             return config.memberJoin.build(
-                    "player", RelationHelper.formatPlayerName(observer, player),
-                    "player_name", player.getName());
+                    "player", RelationHelper.formatPlayerName(observer, sender),
+                    "player_name", sender.getName());
         });
 
         // notify the new member
-        Messaging.send(player, config.join.build(
-                "faction", RelationHelper.formatLiteralFactionName(player, faction),
+        Messaging.send(sender, config.join.build(
+                "faction", RelationHelper.formatLiteralFactionName(sender, faction),
                 "faction_name", faction.getName()
         ));
     }
@@ -112,7 +112,7 @@ final class JoinCommand extends AlpineCommand {
     @Execute
     @Permission(PermissionNodes.ADMIN)
     public void execute(
-            @Context Player player,
+            @Context Player sender,
             @Arg("faction") Faction faction,
             @Arg("player") @Async OfflinePlayer joiningPlayer
     ) {
@@ -120,46 +120,46 @@ final class JoinCommand extends AlpineCommand {
 
         FactionAccessor factions = Factions.registry();
         Faction otherFaction = factions.find(joiningPlayer);
-        Faction actingFaction = factions.findOrDefault(player);
+        Faction actingFaction = factions.findOrDefault(sender);
         Faction wilderness = factions.getWilderness();
 
         // require player to be overriding
-        if (!PlayerHandler.getInstance().isOverriding(player)) {
+        if (!PlayerHandler.getInstance().isOverriding(sender)) {
             return;
         }
 
         // ensure the player is not in a faction
         if (otherFaction != null) {
-            config.playerAlreadyInFaction.send(player,
-                    "player", RelationHelper.formatPlayerName(player, joiningPlayer),
+            config.playerAlreadyInFaction.send(sender,
+                    "player", RelationHelper.formatPlayerName(sender, joiningPlayer),
                     "player_name", joiningPlayer.getName());
             return;
         }
 
         // ensure the player is even invited
         if (!faction.canJoin(joiningPlayer.getUniqueId())) {
-            config.playerNotInvited.send(player,
-                    "player", RelationHelper.formatPlayerName(player, joiningPlayer),
+            config.playerNotInvited.send(sender,
+                    "player", RelationHelper.formatPlayerName(sender, joiningPlayer),
                     "player_name", joiningPlayer.getName(),
 
-                    "faction", RelationHelper.formatLiteralFactionName(player, faction),
+                    "faction", RelationHelper.formatLiteralFactionName(sender, faction),
                     "faction_name", faction.getName());
             return;
         }
 
         // ensure the faction is not full
         if (faction.getMemberCount() >= faction.getMemberLimit()) {
-            config.fullFaction.send(player,
-                    "faction", RelationHelper.formatFactionName(player, faction),
+            config.fullFaction.send(sender,
+                    "faction", RelationHelper.formatFactionName(sender, faction),
                     "faction_name", faction.getName(),
                     "limit", faction.getMemberLimit());
             return;
         }
 
         // call event
-        PlayerChangedFactionEvent event = AlpineFactions.callEvent(new PlayerChangedFactionEvent(faction, factions.getWilderness(), player));
+        PlayerChangedFactionEvent event = AlpineFactions.callEvent(new PlayerChangedFactionEvent(faction, factions.getWilderness(), sender));
         if (event.isCancelled()) {
-            config.operationCancelled.send(player);
+            config.operationCancelled.send(sender);
             return;
         }
 
@@ -167,14 +167,14 @@ final class JoinCommand extends AlpineCommand {
         faction.addMember(joiningPlayer.getUniqueId());
 
         // notify the faction
-        FactionHelper.broadcast(faction, player, observer -> {
+        FactionHelper.broadcast(faction, sender, observer -> {
             if (observer.getUniqueId().equals(joiningPlayer.getUniqueId())) {
                 return null;
             }
 
             return config.memberForceJoin.build(
-                    "inviter", RelationHelper.formatPlayerName(observer, player),
-                    "inviter_name", player.getName(),
+                    "inviter", RelationHelper.formatPlayerName(observer, sender),
+                    "inviter_name", sender.getName(),
 
                     "player", RelationHelper.formatPlayerName(observer, joiningPlayer),
                     "player_name", joiningPlayer.getName());
@@ -182,8 +182,8 @@ final class JoinCommand extends AlpineCommand {
 
         // notify the new member
         Messaging.attemptSend(joiningPlayer, config.forceJoin.build(
-                "actor", RelationHelper.formatPlayerName(joiningPlayer, player),
-                "actor_name", player.getName(),
+                "actor", RelationHelper.formatPlayerName(joiningPlayer, sender),
+                "actor_name", sender.getName(),
 
                 "faction", RelationHelper.formatLiteralFactionName(joiningPlayer, faction),
                 "faction_name", faction.getName()

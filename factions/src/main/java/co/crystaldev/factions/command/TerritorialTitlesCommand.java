@@ -32,14 +32,14 @@ final class TerritorialTitlesCommand extends AlpineCommand {
     }
 
     @Execute
-    public void execute(@Context Player player) {
+    public void execute(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         PlayerAccessor players = Factions.players();
-        players.wrap(player, state -> {
+        players.wrap(sender, state -> {
             state.setTerritorialTitleMode(next(state.getTerritorialTitleMode()));
 
-            config.stateChange.send(player,
+            config.stateChange.send(sender,
                     "subject", "Territorial Titles",
                     "state", state.getTerritorialTitleMode().getName());
         });

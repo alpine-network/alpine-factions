@@ -37,28 +37,28 @@ final class SetHomeCommand extends AlpineCommand {
     }
 
     @Execute
-    public void execute(@Context Player player) {
+    public void execute(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        Location location = player.getLocation();
+        Location location = sender.getLocation();
         Faction faction = Factions.claims().getFactionOrDefault(location);
-        Faction selfFaction = Factions.registry().findOrDefault(player);
-        if (faction.isWilderness() || !faction.isMember(player.getUniqueId())) {
-            config.outsideTerritory.send(player,
-                    "faction", RelationHelper.formatLiteralFactionName(player, selfFaction),
+        Faction selfFaction = Factions.registry().findOrDefault(sender);
+        if (faction.isWilderness() || !faction.isMember(sender.getUniqueId())) {
+            config.outsideTerritory.send(sender,
+                    "faction", RelationHelper.formatLiteralFactionName(sender, selfFaction),
                     "faction_name", faction.getName());
             return;
         }
 
-        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
                 Permissions.MODIFY_HOME, "modify home");
         if (!permitted) {
             return;
         }
 
-        FactionHomeUpdateEvent event = AlpineFactions.callEvent(new FactionHomeUpdateEvent(selfFaction, player, location));
+        FactionHomeUpdateEvent event = AlpineFactions.callEvent(new FactionHomeUpdateEvent(selfFaction, sender, location));
         if (event.isCancelled()) {
-            config.operationCancelled.send(player);
+            config.operationCancelled.send(sender);
             return;
         }
 
@@ -72,9 +72,9 @@ final class SetHomeCommand extends AlpineCommand {
 
         FactionHelper.broadcast(faction, observer -> {
             return config.setHome.build(
-                    "actor", RelationHelper.formatPlayerName(observer, player),
-                    "actor_name", player.getName(),
-                    "world", player.getWorld().getName(),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
+                    "actor_name", sender.getName(),
+                    "world", sender.getWorld().getName(),
                     "x", newLocation.getBlockX(),
                     "y", newLocation.getBlockY(),
                     "z", newLocation.getBlockZ());

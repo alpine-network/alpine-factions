@@ -48,14 +48,14 @@ final class InviteCommand extends AlpineCommand {
 
     @Execute(name = "add")
     public void add(
-            @Context Player player,
+            @Context Player sender,
             @Arg("player") @Async OfflinePlayer invitee
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.registry();
-        Faction faction = factions.findOrDefault(player);
+        Faction faction = factions.findOrDefault(sender);
 
-        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
                 Permissions.INVITE_MEMBERS, "invite members");
         if (!permitted) {
             return;
@@ -63,29 +63,29 @@ final class InviteCommand extends AlpineCommand {
 
         // you can't invite an existing member!
         if (faction.isMember(invitee.getUniqueId())) {
-            config.inviteFail.send(player,
-                    "player", RelationHelper.formatPlayerName(player, invitee),
+            config.inviteFail.send(sender,
+                    "player", RelationHelper.formatPlayerName(sender, invitee),
                     "player_name", invitee.getName(),
-                    "faction", RelationHelper.formatFactionName(player, faction),
+                    "faction", RelationHelper.formatFactionName(sender, faction),
                     "faction_name", faction.getName());
             return;
         }
 
         // invite the member
         boolean previouslyInvited = faction.isInvited(invitee.getUniqueId());
-        faction.addInvitation(invitee.getUniqueId(), player.getUniqueId());
+        faction.addInvitation(invitee.getUniqueId(), sender.getUniqueId());
 
         // notify the faction
         FactionHelper.broadcast(faction, observer -> {
-            if (previouslyInvited && !player.equals(observer)) {
+            if (previouslyInvited && !sender.equals(observer)) {
                 // if the member was already invited, do not send broadcast to the
                 // rest of the faction, only to the sender
                 return null;
             }
 
             return config.invite.build(
-                    "actor", RelationHelper.formatPlayerName(observer, player),
-                    "actor_name", player.getName(),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
+                    "actor_name", sender.getName(),
 
                     "invitee", RelationHelper.formatPlayerName(observer, invitee),
                     "invitee_name", invitee.getName()
@@ -94,8 +94,8 @@ final class InviteCommand extends AlpineCommand {
 
         // notify the invitee
         Messaging.attemptSend(invitee, config.invited.build(
-                "actor", RelationHelper.formatPlayerName(invitee, player),
-                "actor_name", player.getName(),
+                "actor", RelationHelper.formatPlayerName(invitee, sender),
+                "actor_name", sender.getName(),
 
                 "faction", RelationHelper.formatLiteralFactionName(invitee, faction),
                 "faction_name", faction.getName()
@@ -104,14 +104,14 @@ final class InviteCommand extends AlpineCommand {
 
     @Execute(name = "remove")
     public void remove(
-            @Context Player player,
+            @Context Player sender,
             @Arg("player") @Async OfflinePlayer invitee
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.registry();
-        Faction faction = factions.findOrDefault(player);
+        Faction faction = factions.findOrDefault(sender);
 
-        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
                 Permissions.INVITE_MEMBERS, "invite members");
         if (!permitted) {
             return;
@@ -123,8 +123,8 @@ final class InviteCommand extends AlpineCommand {
         // notify the faction
         FactionHelper.broadcast(faction, observer -> {
             return config.inviteRevoke.build(
-                    "actor", RelationHelper.formatPlayerName(observer, player),
-                    "actor_name", player.getName(),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
+                    "actor_name", sender.getName(),
 
                     "invitee", RelationHelper.formatPlayerName(observer, invitee),
                     "invitee_name", invitee.getName()

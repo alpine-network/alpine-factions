@@ -36,23 +36,23 @@ final class LocationCommand extends AlpineCommand {
     }
 
     @Execute
-    public void execute(@Context Player player) {
+    public void execute(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
-        Faction faction = Factions.registry().findOrDefault(player);
+        Faction faction = Factions.registry().findOrDefault(sender);
 
-        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
                 Permissions.BROADCAST_LOCATION, "broadcast location");
         if (!permitted) {
             return;
         }
 
-        Location location = player.getLocation();
+        Location location = sender.getLocation();
 
         FactionHelper.broadcast(faction, observer -> {
             return config.locationBroadcast.build(
-                    "player", RelationHelper.formatLiteralPlayerName(observer, player),
-                    "world", player.getWorld().getName(),
+                    "player", RelationHelper.formatLiteralPlayerName(observer, sender),
+                    "world", sender.getWorld().getName(),
                     "x", location.getBlockX(),
                     "y", location.getBlockY(),
                     "z", location.getBlockZ());

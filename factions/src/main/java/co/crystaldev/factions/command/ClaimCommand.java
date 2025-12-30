@@ -42,61 +42,61 @@ final class ClaimCommand extends AlpineCommand {
 
     @Execute
     public void execute(
-            @Context Player player,
+            @Context Player sender,
             @Arg("type") ClaimType type,
             @Arg("radius") Optional<Integer> rad,
             @Arg("faction") Optional<Faction> faction
     ) {
         FactionAccessor factions = Factions.registry();
-        Faction claimingFaction = faction.orElse(factions.find(player));
-        Faction actingFaction = faction.orElse(factions.findOrDefault(player));
-        Claiming.mode(player, actingFaction, claimingFaction, type, Math.max(rad.orElse(1), 1));
+        Faction claimingFaction = faction.orElse(factions.find(sender));
+        Faction actingFaction = faction.orElse(factions.findOrDefault(sender));
+        Claiming.mode(sender, actingFaction, claimingFaction, type, Math.max(rad.orElse(1), 1));
     }
 
     @Execute(name = "fill", aliases = "f") @Async
     public void fill(
-            @Context Player player,
+            @Context Player sender,
             @Arg("faction") Optional<Faction> faction
     ) {
         FactionAccessor factions = Factions.registry();
-        Faction claimingFaction = faction.orElse(factions.find(player));
-        Faction actingFaction = faction.orElse(factions.findOrDefault(player));
-        Claiming.fill(player, actingFaction, claimingFaction);
+        Faction claimingFaction = faction.orElse(factions.find(sender));
+        Faction actingFaction = faction.orElse(factions.findOrDefault(sender));
+        Claiming.fill(sender, actingFaction, claimingFaction);
     }
 
     @Execute(name = "one", aliases = "o")
     public void one(
-            @Context Player player,
+            @Context Player sender,
             @Arg("faction") Optional<Faction> faction
     ) {
         FactionAccessor factions = Factions.registry();
-        Faction claimingFaction = faction.orElse(factions.find(player));
-        Faction actingFaction = faction.orElse(factions.findOrDefault(player));
-        Claiming.one(player, actingFaction, claimingFaction);
+        Faction claimingFaction = faction.orElse(factions.find(sender));
+        Faction actingFaction = faction.orElse(factions.findOrDefault(sender));
+        Claiming.one(sender, actingFaction, claimingFaction);
     }
 
     @Execute(name = "auto", aliases = "a")
     public void auto(
-            @Context Player player,
+            @Context Player sender,
             @Arg("faction") Optional<Faction> faction
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction claimingFaction = faction.orElse(Factions.registry().findOrDefault(player));
+        Faction claimingFaction = faction.orElse(Factions.registry().findOrDefault(sender));
 
-        PlayerState state = PlayerHandler.getInstance().getPlayer(player);
+        PlayerState state = PlayerHandler.getInstance().getPlayer(sender);
         AutoClaimState autoClaim = state.getAutoClaimState();
         autoClaim.toggle(claimingFaction);
 
         if (autoClaim.isEnabled()) {
-            config.enableAutoClaim.send(player,
-                    "faction", RelationHelper.formatFactionName(player, claimingFaction),
+            config.enableAutoClaim.send(sender,
+                    "faction", RelationHelper.formatFactionName(sender, claimingFaction),
                     "faction_name", claimingFaction.getName());
 
             // attempt to claim the chunk the player is standing in
-            this.one(player, Optional.of(claimingFaction));
+            this.one(sender, Optional.of(claimingFaction));
         }
         else {
-            config.disableAutoSetting.send(player);
+            config.disableAutoSetting.send(sender);
         }
     }
 }

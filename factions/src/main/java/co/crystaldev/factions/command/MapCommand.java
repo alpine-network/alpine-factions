@@ -32,28 +32,28 @@ final class MapCommand extends AlpineCommand {
     }
 
     @Execute
-    public void execute(@Context Player player) {
-        Messaging.send(player, AsciiFactionMap.create(player, false));
+    public void execute(@Context Player sender) {
+        Messaging.send(sender, AsciiFactionMap.create(sender, false));
     }
 
     @Execute(name = "on")
-    public void on(@Context Player player) {
-        PlayerState state = PlayerHandler.getInstance().getPlayer(player);
+    public void on(@Context Player sender) {
+        PlayerState state = PlayerHandler.getInstance().getPlayer(sender);
         state.setAutoFactionMap(true);
 
         // send the status message
-        this.plugin.getConfiguration(MessageConfig.class).stateChange.send(player, "subject", "Faction Map", "state", true);
+        this.plugin.getConfiguration(MessageConfig.class).stateChange.send(sender, "subject", "Faction Map", "state", true);
 
         // send the map to the player
-        Messaging.send(player, AsciiFactionMap.create(player, true));
+        Messaging.send(sender, AsciiFactionMap.create(sender, true));
     }
 
     @Execute(name = "off")
-    public void off(@Context Player player) {
-        PlayerState state = PlayerHandler.getInstance().getPlayer(player);
+    public void off(@Context Player sender) {
+        PlayerState state = PlayerHandler.getInstance().getPlayer(sender);
         state.setAutoFactionMap(false);
 
         // send the status message
-        this.plugin.getConfiguration(MessageConfig.class).stateChange.send(player, "subject", "Faction Map", "state", false);
+        this.plugin.getConfiguration(MessageConfig.class).stateChange.send(sender, "subject", "Faction Map", "state", false);
     }
 }

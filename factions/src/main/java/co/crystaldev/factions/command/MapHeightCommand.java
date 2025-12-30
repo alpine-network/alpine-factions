@@ -37,7 +37,7 @@ public final class MapHeightCommand extends AlpineCommand {
 
     @Execute
     public void execute(
-            @Context Player player,
+            @Context Player sender,
             @Arg("size") int size
     ) {
         // Do not allow lower than minimal map height, or higher than actual /f map
@@ -46,11 +46,11 @@ public final class MapHeightCommand extends AlpineCommand {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         PlayerAccessor players = Factions.players();
-        FPlayer state = players.get(player);
+        FPlayer state = players.get(sender);
 
         state.setAutoMapHeight(size);
 
-        config.mapHeightChange.send(player,
+        config.mapHeightChange.send(sender,
                 "size", size);
     }
 }

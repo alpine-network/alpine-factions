@@ -38,7 +38,7 @@ final class CreateCommand extends AlpineCommand {
 
     @Execute
     public void execute(
-            @Context Player player,
+            @Context Player sender,
             @Arg("name") @Key(Args.ALPHANUMERIC) String name
     ) {
         MessageConfig messageConfig = this.plugin.getConfiguration(MessageConfig.class);
@@ -46,41 +46,41 @@ final class CreateCommand extends AlpineCommand {
         FactionAccessor factions = Factions.registry();
 
         // ensure the player isn't already in a faction
-        Faction faction = factions.find(player);
+        Faction faction = factions.find(sender);
         if (faction != null) {
-            messageConfig.alreadyInFaction.send(player);
+            messageConfig.alreadyInFaction.send(sender);
             return;
         }
 
         // ensure no other faction has the same name
         faction = factions.getByName(name);
         if (faction != null) {
-            messageConfig.factionWithName.send(player, "faction_name", name);
+            messageConfig.factionWithName.send(sender, "faction_name", name);
             return;
         }
 
         // ensure the name is long enough
         if (name.length() < factionConfig.minNameLength) {
-            messageConfig.nameTooShort.send(player, "length", factionConfig.minNameLength);
+            messageConfig.nameTooShort.send(sender, "length", factionConfig.minNameLength);
             return;
         }
 
         // ensure the name isn't too long
         if (name.length() > factionConfig.maxNameLength) {
-            messageConfig.nameTooLong.send(player, "length", factionConfig.maxNameLength);
+            messageConfig.nameTooLong.send(sender, "length", factionConfig.maxNameLength);
             return;
         }
 
         // call event
-        faction = new Faction(name, player);
-        CreateFactionEvent event = AlpineFactions.callEvent(new CreateFactionEvent(faction, player));
+        faction = new Faction(name, sender);
+        CreateFactionEvent event = AlpineFactions.callEvent(new CreateFactionEvent(faction, sender));
         if (event.isCancelled()) {
-            messageConfig.operationCancelled.send(player);
+            messageConfig.operationCancelled.send(sender);
             return;
         }
 
         // register the faction
         factions.register(faction);
-        messageConfig.create.send(player, "faction_name", name);
+        messageConfig.create.send(sender, "faction_name", name);
     }
 }

@@ -56,38 +56,38 @@ final class AccessCommand extends AlpineCommand {
 
     @Execute(name = "player", aliases = "p")
     public void player(
-            @Context Player player,
+            @Context Player sender,
             @Arg("faction") @Async OfflinePlayer other,
             @Arg("access") boolean access,
             @Arg("type") Optional<ClaimType> optionalType,
             @Arg("radius") Optional<Integer> optionalRadius
     ) {
-        setAccess(player, other, access, optionalType, optionalRadius,
-                RelationHelper.formatLiteralPlayerName(player, other),
+        setAccess(sender, other, access, optionalType, optionalRadius,
+                RelationHelper.formatLiteralPlayerName(sender, other),
                 Component.text(other.getName()));
     }
 
     @Execute(name = "faction", aliases = "f")
     public void faction(
-            @Context Player player,
+            @Context Player sender,
             @Arg("faction") Faction faction,
             @Arg("access") boolean access,
             @Arg("type") Optional<ClaimType> optionalType,
             @Arg("radius") Optional<Integer> optionalRadius
     ) {
-        setAccess(player, faction, access, optionalType, optionalRadius,
-                RelationHelper.formatLiteralFactionName(player, faction),
+        setAccess(sender, faction, access, optionalType, optionalRadius,
+                RelationHelper.formatLiteralFactionName(sender, faction),
                 Component.text(faction.getName()));
     }
 
     @Execute(name = "show", aliases = { "s", "view", "v" })
-    public void show(@Context Player player) {
+    public void show(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         FactionAccessor factions = Factions.registry();
         ClaimAccessor claims = Factions.claims();
 
-        Location location = player.getLocation();
+        Location location = sender.getLocation();
         Claim claim = claims.getClaim(location);
 
         Faction claimedFaction = claim == null ? factions.getWilderness() : claim.getFaction();
@@ -106,17 +106,17 @@ final class AccessCommand extends AlpineCommand {
         }
         else {
             compiledFactions = permittedFactions.stream()
-                    .map(v -> RelationHelper.formatLiteralFactionName(player, v))
+                    .map(v -> RelationHelper.formatLiteralFactionName(sender, v))
                     .collect(Component.toComponent(Component.text(", ")));
         }
 
-        Messaging.send(player, Components.joinNewLines(
+        Messaging.send(sender, Components.joinNewLines(
                 Formatting.title(config.accessViewTitle.build(
                         "world", location.getWorld().getName(),
                         "chunk_x", location.getBlockX() >> 4,
                         "chunk_z", location.getBlockZ() >> 4)),
                 config.accessViewBody.build(
-                        "faction", RelationHelper.formatLiteralFactionName(player, claimedFaction),
+                        "faction", RelationHelper.formatLiteralFactionName(sender, claimedFaction),
                         "players", compiledPlayers,
                         "factions", compiledFactions)
         ));

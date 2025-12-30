@@ -39,14 +39,14 @@ final class MOTDCommand extends AlpineCommand {
 
     @Execute
     public void set(
-            @Context Player player,
+            @Context Player sender,
             @Join("name") String motd
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = Factions.registry().findOrDefault(player);
+        Faction faction = Factions.registry().findOrDefault(sender);
 
         // ensure the user has permission
-        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
                 Permissions.MODIFY_MOTD, "modify motd");
         if (!permitted) {
             return;
@@ -57,34 +57,34 @@ final class MOTDCommand extends AlpineCommand {
         faction.setMotd(formatted);
 
         // notify the faction
-        FactionHelper.broadcast(faction, player, observer -> {
+        FactionHelper.broadcast(faction, sender, observer -> {
             return config.motd.build(
-                    "actor", RelationHelper.formatPlayerName(observer, player),
-                    "actor_name", player.getName(),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
+                    "actor_name", sender.getName(),
                     "motd", formatted);
         });
     }
 
     @Execute
-    public void view(@Context Player player) {
+    public void view(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = Factions.registry().findOrDefault(player);
+        Faction faction = Factions.registry().findOrDefault(sender);
 
         Component motd = Optional.ofNullable(faction.getMotd()).orElse(Faction.DEFAULT_MOTD);
         Component title = config.motdTitle.build(
-                "faction", RelationHelper.formatLiteralFactionName(player, faction),
+                "faction", RelationHelper.formatLiteralFactionName(sender, faction),
                 "faction_name", faction.getName());
 
-        Messaging.send(player, Components.joinNewLines(Formatting.title(title), motd));
+        Messaging.send(sender, Components.joinNewLines(Formatting.title(title), motd));
     }
 
     @Execute(name = "clear")
-    public void clear(@Context Player player) {
+    public void clear(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = Factions.registry().findOrDefault(player);
+        Faction faction = Factions.registry().findOrDefault(sender);
 
         // ensure the user has permission
-        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
                 Permissions.MODIFY_MOTD, "modify motd");
         if (!permitted) {
             return;
@@ -94,10 +94,10 @@ final class MOTDCommand extends AlpineCommand {
         faction.setMotd(null);
 
         // notify the faction
-        FactionHelper.broadcast(faction, player, observer -> {
+        FactionHelper.broadcast(faction, sender, observer -> {
             return config.motd.build(
-                    "actor", RelationHelper.formatPlayerName(observer, player),
-                    "actor_name", player.getName(),
+                    "actor", RelationHelper.formatPlayerName(observer, sender),
+                    "actor_name", sender.getName(),
                     "motd", Faction.DEFAULT_MOTD);
         });
     }

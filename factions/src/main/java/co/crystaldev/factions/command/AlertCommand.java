@@ -41,13 +41,13 @@ final class AlertCommand extends AlpineCommand {
 
     @Execute
     public void execute(
-            @Context Player player,
+            @Context Player sender,
             @Join("message") String message
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
-        Faction faction = Factions.registry().findOrDefault(player);
+        Faction faction = Factions.registry().findOrDefault(sender);
 
-        boolean permitted = PermissionHelper.checkPermissionAndNotify(player, faction,
+        boolean permitted = PermissionHelper.checkPermissionAndNotify(sender, faction,
                 Permissions.ALERT, "alert");
         if (!permitted) {
             return;
@@ -60,8 +60,8 @@ final class AlertCommand extends AlpineCommand {
             XSound.ENTITY_PLAYER_LEVELUP.play(observer);
 
             return config.alertMessage.build(
-                    "actor", RelationHelper.formatLiteralPlayerName(observer, player),
-                    "actor_name", player.getName(),
+                    "actor", RelationHelper.formatLiteralPlayerName(observer, sender),
+                    "actor_name", sender.getName(),
                     "alert", parsedAlert
             );
         });
@@ -72,8 +72,8 @@ final class AlertCommand extends AlpineCommand {
             Player observer = member.getPlayer();
             if (observer != null) {
                 Component subtitle = config.alertSubtitle.build(
-                        "actor", RelationHelper.formatLiteralPlayerName(observer, player),
-                        "actor_name", player.getName(),
+                        "actor", RelationHelper.formatLiteralPlayerName(observer, sender),
+                        "actor_name", sender.getName(),
                         "alert", parsedAlert
                 );
                 Messaging.title(observer, title, subtitle);

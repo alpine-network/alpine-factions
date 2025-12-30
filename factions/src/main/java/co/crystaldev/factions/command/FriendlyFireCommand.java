@@ -30,14 +30,14 @@ final class FriendlyFireCommand extends AlpineCommand {
     }
 
     @Execute
-    public void execute(@Context Player player) {
+    public void execute(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         PlayerAccessor players = Factions.players();
-        players.wrap(player, state -> {
+        players.wrap(sender, state -> {
             state.setFriendlyFire(!state.isFriendlyFire());
 
-            config.stateChange.send(player,
+            config.stateChange.send(sender,
                     "subject", "Friendly Fire",
                     "state", state.isFriendlyFire());
         });
