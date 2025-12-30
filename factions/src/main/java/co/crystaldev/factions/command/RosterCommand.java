@@ -89,7 +89,7 @@ final class RosterCommand extends AlpineCommand implements Initializable {
         // ensure the player is able to add this rank
         Rank parsedRank = rank.orElse(Rank.getDefault());
         boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
-        if (!overriding && !parsedRank.isSuperiorOrMatching(faction.getMemberRankOrDefault(PlayerHelper.getId(sender)))) {
+        if (!overriding && parsedRank.isSuperiorOrMatching(faction.getMemberRankOrDefault(PlayerHelper.getId(sender)))) {
             config.rankTooHigh.send(sender, "rank", parsedRank.getId());
             return;
         }
