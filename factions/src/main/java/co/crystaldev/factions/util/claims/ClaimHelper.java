@@ -184,9 +184,10 @@ public final class ClaimHelper {
         if (chunkCount > 0) {
             Faction oldFaction = claimingFaction == null ? actingFaction : wilderness;
             Faction newFaction = claimingFaction == null ? wilderness : actingFaction;
+            Faction broadcastFaction = claimingFaction == null ? actingFaction : claimingFaction;
 
             Component claimAction = (claimingFaction == null ? messageConfig.unclaimed : messageConfig.claimed).build();
-            FactionHelper.broadcast(actingFaction, player, observer -> {
+            FactionHelper.broadcast(broadcastFaction, player, observer -> {
                 ConfigText message = chunkCount == 1 ? messageConfig.landClaimSingle : messageConfig.landClaim;
                 return buildClaimMessage(observer, player, message, origin, action, claimAction,
                         chunkCount, oldFaction, newFaction);
