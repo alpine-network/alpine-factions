@@ -24,13 +24,13 @@ import org.bukkit.command.CommandSender;
  * @since 0.1.0
  */
 @Command(name = "factions version")
-@Description("Display plugin versioning information.")
 final class VersionCommand extends AlpineCommand {
     public VersionCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Display factions plugin versioning information")
     public void execute(@Context CommandSender sender) {
         String authors = String.join(", ", AlpineFactions.getInstance().getDescription().getAuthors());
         Messaging.send(sender, ComponentHelper.mini(String.join("<br>",

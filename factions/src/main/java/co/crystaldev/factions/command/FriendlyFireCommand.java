@@ -23,13 +23,13 @@ import org.bukkit.entity.Player;
  * @since 0.1.0
  */
 @Command(name = "factions friendlyfire", aliases = { "factions friendlyfire", "factions fr" })
-@Description("Toggle friendly fire.")
 final class FriendlyFireCommand extends AlpineCommand {
     public FriendlyFireCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Toggle friendly fire")
     public void execute(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 

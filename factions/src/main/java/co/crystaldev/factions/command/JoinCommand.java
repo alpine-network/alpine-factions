@@ -35,13 +35,13 @@ import org.bukkit.entity.Player;
  * @since 0.1.0
  */
 @Command(name = "factions join")
-@Description("Join a faction.")
 final class JoinCommand extends AlpineCommand {
     public JoinCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Join a faction")
     public void execute(
             @Context Player sender,
             @Arg("faction") Faction faction
@@ -111,6 +111,7 @@ final class JoinCommand extends AlpineCommand {
 
     @Execute
     @Permission(PermissionNodes.ADMIN)
+    @Description("Force add a player to a faction")
     public void execute(
             @Context Player sender,
             @Arg("faction") Faction faction,

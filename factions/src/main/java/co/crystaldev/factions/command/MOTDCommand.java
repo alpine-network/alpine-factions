@@ -31,13 +31,13 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions motd")
-@Description("Modify your faction's message of the day.")
 final class MOTDCommand extends AlpineCommand {
     public MOTDCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Set the faction's message of the day")
     public void set(
             @Context Player sender,
             @Join("name") String motd
@@ -66,6 +66,7 @@ final class MOTDCommand extends AlpineCommand {
     }
 
     @Execute
+    @Description("View the faction's message of the day")
     public void view(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = Factions.registry().findOrDefault(sender);
@@ -79,6 +80,7 @@ final class MOTDCommand extends AlpineCommand {
     }
 
     @Execute(name = "clear")
+    @Description("Clear the faction's message of the day")
     public void clear(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         Faction faction = Factions.registry().findOrDefault(sender);

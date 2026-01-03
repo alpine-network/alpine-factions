@@ -46,13 +46,13 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions unclaim")
-@Description("Unclaim faction territory.")
 final class UnclaimCommand extends AlpineCommand {
     public UnclaimCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Unclaim faction territory")
     public void execute(
             @Context Player sender,
             @Arg("type") ClaimType type,
@@ -63,18 +63,21 @@ final class UnclaimCommand extends AlpineCommand {
     }
 
     @Execute(name = "fill", aliases = "f")  @Async
+    @Description("Unclaim all connected faction territory")
     public void fill(@Context Player sender) {
         Faction actingFaction = Factions.registry().findOrDefault(sender);
         Claiming.fill(sender, actingFaction, null);
     }
 
     @Execute(name = "one", aliases = "o")
+    @Description("Unclaim all single chunk of faction territory")
     public void one(@Context Player sender) {
         FactionAccessor factions = Factions.registry();
         Claiming.one(sender, factions.findOrDefault(sender), null);
     }
 
     @Execute(name = "auto", aliases = "a")
+    @Description("Toggle automatic faction territory unclaim")
     public void auto(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
@@ -97,6 +100,7 @@ final class UnclaimCommand extends AlpineCommand {
     }
 
     @Execute(name = "all")
+    @Description("Unclaim all faction territory")
     public void all(
             @Context Player sender,
             @Arg("world") WorldClaimType world,

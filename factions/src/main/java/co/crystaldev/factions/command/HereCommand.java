@@ -24,13 +24,13 @@ import org.bukkit.entity.Player;
  * @since 0.1.0
  */
 @Command(name = "factions here", aliases = { "factions h" })
-@Description("Display information on a the faction who owns the chunk you're in.")
 final class HereCommand extends AlpineCommand {
     public HereCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Display faction information on the current chunk")
     public void execute(@Context Player sender) {
         Faction senderFaction = Factions.registry().findOrDefault(sender);
         Faction resolvedFaction = Factions.claims().getFactionOrDefault(sender.getLocation());

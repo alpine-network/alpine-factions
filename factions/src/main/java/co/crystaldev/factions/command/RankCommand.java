@@ -38,7 +38,6 @@ import java.util.UUID;
  * @since 0.1.0
  */
 @Command(name = "factions rank")
-@Description("Manage faction ranks.")
 final class RankCommand extends AlpineCommand {
 
     private static final Map<CommandSender, Long> CONFIRMATION_MAP = new HashMap<>();
@@ -48,6 +47,7 @@ final class RankCommand extends AlpineCommand {
     }
 
     @Execute(name = "set")
+    @Description("Set a players faction rank")
     public void set(
             @Context CommandSender sender,
             @Arg("player") @Async OfflinePlayer other,
@@ -57,6 +57,7 @@ final class RankCommand extends AlpineCommand {
     }
 
     @Execute(name = "show")
+    @Description("View a players faction rank")
     public void show(
             @Context CommandSender sender,
             @Arg("player") @Async OfflinePlayer other

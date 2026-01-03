@@ -42,13 +42,13 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions accessall")
-@Description("Manage chunk access.")
 final class AccessAllCommand extends AlpineCommand {
     public AccessAllCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute(name = "player", aliases = "p")
+    @Description("Manage a player access to faction")
     public void player(
             @Context CommandSender sender,
             @Arg("faction") @Async OfflinePlayer other,
@@ -69,6 +69,7 @@ final class AccessAllCommand extends AlpineCommand {
     }
 
     @Execute(name = "faction", aliases = "f")
+    @Description("Manage a faction access to faction")
     public void faction(
             @Context CommandSender sender,
             @Arg("faction") Faction faction,

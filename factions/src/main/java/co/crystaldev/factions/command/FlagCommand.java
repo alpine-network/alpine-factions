@@ -36,13 +36,13 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions flag")
-@Description("Modify faction flags.")
 final class FlagCommand extends AlpineCommand {
     public FlagCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute(name = "set")
+    @Description("Set a faction flag")
     public void set(
             @Context CommandSender sender,
             @Arg("flag") FactionFlag flag,
@@ -93,6 +93,7 @@ final class FlagCommand extends AlpineCommand {
     }
 
     @Execute(name = "show")
+    @Description("View a list of faction flags")
     public void show(
             @Context CommandSender sender,
             @Arg("faction") Optional<Faction> faction,
@@ -133,6 +134,7 @@ final class FlagCommand extends AlpineCommand {
     }
 
     @Execute(name = "list")
+    @Description("View a list of faction flags")
     public void list(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page

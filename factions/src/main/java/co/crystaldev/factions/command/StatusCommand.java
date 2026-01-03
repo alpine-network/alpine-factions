@@ -41,13 +41,13 @@ import java.util.*;
  * @since 0.1.0
  */
 @Command(name = "factions status")
-@Description("View the status of your faction's members.")
 final class StatusCommand extends AlpineCommand {
     public StatusCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute(name = "faction")
+    @Description("View the status of your faction's members")
     public void faction(
             @Context CommandSender sender,
             @Arg("faction") Optional<Faction> targetFaction,
@@ -88,6 +88,7 @@ final class StatusCommand extends AlpineCommand {
     }
 
     @Execute(name = "member")
+    @Description("View the status of a faction member")
     public void member(
             @Context CommandSender sender,
             @Arg("player") @Async Optional<OfflinePlayer> targetPlayer

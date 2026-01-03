@@ -34,13 +34,13 @@ import org.jetbrains.annotations.Nullable;
  * @since 0.1.0
  */
 @Command(name = "factions description", aliases = "factions desc")
-@Description("Modify your faction's description.")
 final class DescriptionCommand extends AlpineCommand {
     public DescriptionCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Modify the faction's description.")
     public void execute(
             @Context CommandSender sender,
             @Join("name") String description
@@ -49,6 +49,7 @@ final class DescriptionCommand extends AlpineCommand {
     }
 
     @Execute(name = "clear")
+    @Description("Clear the faction's description.")
     public void clear(@Context CommandSender sender) {
         set(Factions.registry().findOrDefault(sender), sender, null);
     }

@@ -27,13 +27,13 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions show", aliases = { "factions faction", "factions who", "factions f" })
-@Description("Display information on a specific faction.")
 final class ShowCommand extends AlpineCommand {
     public ShowCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Display information on a specific faction")
     public void execute(
             @Context CommandSender sender,
             @Arg("faction") Optional<Faction> faction

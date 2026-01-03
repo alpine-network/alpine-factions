@@ -25,13 +25,13 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.1.0
  */
 @Command(name = "factions territorialtitles", aliases = { "factions territorialtitle", "factions tt" })
-@Description("Switch between territorial title modes.")
 final class TerritorialTitlesCommand extends AlpineCommand {
     public TerritorialTitlesCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Switch between territorial title modes")
     public void execute(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 

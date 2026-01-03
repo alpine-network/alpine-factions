@@ -40,13 +40,13 @@ import java.util.Set;
  * @since 0.1.0
  */
 @Command(name = "factions invite", aliases = "factions inv")
-@Description("Manage faction membership invitations.")
 final class InviteCommand extends AlpineCommand {
     public InviteCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute(name = "add")
+    @Description("Add a faction membership invitation")
     public void add(
             @Context Player sender,
             @Arg("player") @Async OfflinePlayer invitee
@@ -103,6 +103,7 @@ final class InviteCommand extends AlpineCommand {
     }
 
     @Execute(name = "remove")
+    @Description("Remove a faction membership invitation")
     public void remove(
             @Context Player sender,
             @Arg("player") @Async OfflinePlayer invitee
@@ -133,6 +134,7 @@ final class InviteCommand extends AlpineCommand {
     }
 
     @Execute(name = "list")
+    @Description("View a list of outgoing faction membership invitations")
     public void list(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page,

@@ -35,13 +35,14 @@ import java.util.concurrent.TimeUnit;
  * @since 0.1.0
  */
 @Command(name = "factions home")
-@Description("Warp to the faction home.")
+@Description("Teleport to the faction home")
 final class HomeCommand extends AlpineCommand {
     public HomeCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Teleport to the faction home")
     public void execute(
             @Context Player sender,
             @Arg("faction") Optional<Faction> targetFaction

@@ -39,7 +39,6 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions name")
-@Description("Rename your faction.")
 final class NameCommand extends AlpineCommand {
 
     private final Map<CommandSender, Long> confirmationMap = new HashMap<>();
@@ -49,6 +48,7 @@ final class NameCommand extends AlpineCommand {
     }
 
     @Execute
+    @Description("Change the name of a faction")
     public void execute(
             @Context CommandSender sender,
             @Arg("name") @Key(Args.ALPHANUMERIC) String name,

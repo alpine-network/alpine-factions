@@ -32,7 +32,6 @@ import org.bukkit.command.CommandSender;
  * @since 0.1.0
  */
 @Command(name = "factions powerboost")
-@Description("Modify a player powerboost.")
 final class PowerBoostCommand extends AlpineCommand {
     public PowerBoostCommand(AlpinePlugin plugin) {
         super(plugin);
@@ -40,6 +39,7 @@ final class PowerBoostCommand extends AlpineCommand {
 
     @Execute
     @Permission(PermissionNodes.ADMIN)
+    @Description("Set a player's powerboost")
     public void execute(
             @Context CommandSender sender,
             @Arg("player") @Async OfflinePlayer other,

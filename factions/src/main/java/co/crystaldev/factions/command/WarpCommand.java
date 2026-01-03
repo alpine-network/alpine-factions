@@ -44,13 +44,13 @@ import java.util.concurrent.TimeUnit;
  * @since 0.1.0
  */
 @Command(name = "factions warp")
-@Description("Warp to the faction warp.")
 final class WarpCommand extends AlpineCommand {
     public WarpCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Teleport to the faction warp")
     public void teleport(
             @Context Player sender,
             @Arg("warp") Warp warp,
@@ -115,6 +115,7 @@ final class WarpCommand extends AlpineCommand {
 
     @Execute(name = "add")
     @Shortcut({ "factions setwarp" })
+    @Description("Set a new faction warp")
     public void add(
             @Context Player sender,
             @Arg("name") @Key(Args.ALPHANUMERIC) String warpName,
@@ -174,6 +175,7 @@ final class WarpCommand extends AlpineCommand {
 
     @Execute(name = "remove")
     @Shortcut({ "factions delwarp" })
+    @Description("Delete an existing faction warp")
     public void remove(
             @Context Player sender,
             @Arg("warp") Warp warp,

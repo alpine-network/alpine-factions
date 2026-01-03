@@ -33,13 +33,13 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions list")
-@Description("List all factions.")
 final class ListCommand extends AlpineCommand {
     public ListCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("View the list of all factions")
     public void execute(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> humanPage

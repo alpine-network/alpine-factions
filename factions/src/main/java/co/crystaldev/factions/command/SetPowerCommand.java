@@ -32,7 +32,6 @@ import org.bukkit.command.CommandSender;
  * @since 0.1.0
  */
 @Command(name = "factions setpower")
-@Description("Modify a player power.")
 final class SetPowerCommand extends AlpineCommand {
     public SetPowerCommand(AlpinePlugin plugin) {
         super(plugin);
@@ -40,6 +39,7 @@ final class SetPowerCommand extends AlpineCommand {
 
     @Execute
     @Permission(PermissionNodes.ADMIN)
+    @Description("Modify a player's power")
     public void execute(
             @Context CommandSender sender,
             @Arg("player") @Async OfflinePlayer other,

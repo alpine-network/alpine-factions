@@ -31,7 +31,6 @@ import java.util.Map;
  * @since 0.1.0
  */
 @Command(name = "factions disband")
-@Description("Disband your faction.")
 final class DisbandCommand extends AlpineCommand {
 
     private final Map<CommandSender, Long> confirmationMap = new HashMap<>();
@@ -41,6 +40,7 @@ final class DisbandCommand extends AlpineCommand {
     }
 
     @Execute
+    @Description("Disbands the faction")
     public void execute(
             @Context CommandSender sender,
             @Arg("faction") Faction faction

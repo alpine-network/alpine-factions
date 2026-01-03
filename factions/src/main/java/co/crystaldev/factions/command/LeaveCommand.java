@@ -34,7 +34,6 @@ import java.util.Map;
  * @since 0.1.0
  */
 @Command(name = "factions leave")
-@Description("Leave your faction.")
 final class LeaveCommand extends AlpineCommand {
 
     private final Map<CommandSender, Long> confirmationMap = new HashMap<>();
@@ -44,6 +43,7 @@ final class LeaveCommand extends AlpineCommand {
     }
 
     @Execute
+    @Description("Leave your current faction")
     public void execute(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
         FactionAccessor factions = Factions.registry();

@@ -43,13 +43,13 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions relation")
-@Description("Manage faction relations.")
 final class RelationCommand extends AlpineCommand {
     public RelationCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute(name = "set")
+    @Description("Set the faction relations")
     public void set(
             @Context CommandSender sender,
             @Arg("target_faction") Faction target,
@@ -60,6 +60,7 @@ final class RelationCommand extends AlpineCommand {
     }
 
     @Execute(name = "list")
+    @Description("View a list of the faction relations")
     public void list(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page,
@@ -84,6 +85,7 @@ final class RelationCommand extends AlpineCommand {
     }
 
     @Execute(name = "wishes")
+    @Description("View a list of the faction relation wishes")
     public void wishes(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page,

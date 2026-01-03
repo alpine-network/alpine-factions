@@ -48,13 +48,13 @@ import java.util.stream.Collectors;
  * @since 0.1.0
  */
 @Command(name = "factions access")
-@Description("Manage chunk access.")
 final class AccessCommand extends AlpineCommand {
     public AccessCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute(name = "player", aliases = "p")
+    @Description("Manage a players chunk access to chunk")
     public void player(
             @Context Player sender,
             @Arg("faction") @Async OfflinePlayer other,
@@ -68,6 +68,7 @@ final class AccessCommand extends AlpineCommand {
     }
 
     @Execute(name = "faction", aliases = "f")
+    @Description("Manage a factions chunk access to chunk")
     public void faction(
             @Context Player sender,
             @Arg("faction") Faction faction,
@@ -81,6 +82,7 @@ final class AccessCommand extends AlpineCommand {
     }
 
     @Execute(name = "show", aliases = { "s", "view", "v" })
+    @Description("View a chunks access")
     public void show(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 

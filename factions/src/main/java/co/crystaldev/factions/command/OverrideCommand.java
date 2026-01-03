@@ -25,7 +25,6 @@ import org.bukkit.entity.Player;
  * @since 0.1.0
  */
 @Command(name = "factions override", aliases = "factions admin")
-@Description("Override factions permission checks.")
 final class OverrideCommand extends AlpineCommand {
     public OverrideCommand(AlpinePlugin plugin) {
         super(plugin);
@@ -33,6 +32,7 @@ final class OverrideCommand extends AlpineCommand {
 
     @Execute
     @Permission(PermissionNodes.ADMIN)
+    @Description("Toggle the factions override mode")
     public void execute(@Context Player sender) {
         PlayerState state = PlayerHandler.getInstance().getPlayer(sender);
         state.setOverriding(!state.isOverriding());

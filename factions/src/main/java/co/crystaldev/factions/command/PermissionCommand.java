@@ -39,13 +39,13 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions permission", aliases = { "factions perm" })
-@Description("Manage faction permissions.")
 final class PermissionCommand extends AlpineCommand {
     public PermissionCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute(name = "set")
+    @Description("Set the faction permission")
     public void set(
             @Context CommandSender sender,
             @Arg("permission") Permission permission,
@@ -88,6 +88,7 @@ final class PermissionCommand extends AlpineCommand {
     }
 
     @Execute(name = "show")
+    @Description("View a list of faction permissions")
     public void show(
             @Context CommandSender sender,
             @Arg("faction") Optional<Faction> faction
@@ -136,6 +137,7 @@ final class PermissionCommand extends AlpineCommand {
     }
 
     @Execute(name = "list")
+    @Description("View a formatted list of faction permissions")
     public void list(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page

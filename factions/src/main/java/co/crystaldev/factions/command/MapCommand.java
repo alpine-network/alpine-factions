@@ -25,18 +25,19 @@ import org.bukkit.entity.Player;
  * @since 0.1.0
  */
 @Command(name = "factions map", aliases = "factions ma")
-@Description("Display the factions map.")
 final class MapCommand extends AlpineCommand {
     public MapCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("View the factions map")
     public void execute(@Context Player sender) {
         Messaging.send(sender, AsciiFactionMap.create(sender, false));
     }
 
     @Execute(name = "on")
+    @Description("Enable automatic display of the factions map")
     public void on(@Context Player sender) {
         PlayerState state = PlayerHandler.getInstance().getPlayer(sender);
         state.setAutoFactionMap(true);
@@ -49,6 +50,7 @@ final class MapCommand extends AlpineCommand {
     }
 
     @Execute(name = "off")
+    @Description("Disable automatic display of factions map")
     public void off(@Context Player sender) {
         PlayerState state = PlayerHandler.getInstance().getPlayer(sender);
         state.setAutoFactionMap(false);

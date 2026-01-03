@@ -30,13 +30,13 @@ import org.bukkit.entity.Player;
  * @since 0.1.0
  */
 @Command(name = "factions create")
-@Description("Create a new faction.")
 final class CreateCommand extends AlpineCommand {
     public CreateCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Creates a new faction")
     public void execute(
             @Context Player sender,
             @Arg("name") @Key(Args.ALPHANUMERIC) String name

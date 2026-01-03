@@ -37,13 +37,13 @@ import org.jetbrains.annotations.Nullable;
  * @since 0.1.0
  */
 @Command(name = "factions title")
-@Description("Modify a member title.")
 final class TitleCommand extends AlpineCommand {
     public TitleCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Modify a faction member title")
     public void execute(
             @Context CommandSender sender,
             @Arg("player") @Async OfflinePlayer other,
@@ -63,6 +63,7 @@ final class TitleCommand extends AlpineCommand {
     }
 
     @Execute(name = "clear")
+    @Description("Clear a faction member title.")
     public void clear(
             @Context CommandSender sender,
             @Arg("player") @Async OfflinePlayer other

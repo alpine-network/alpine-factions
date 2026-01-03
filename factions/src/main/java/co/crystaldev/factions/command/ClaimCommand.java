@@ -34,13 +34,13 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions claim")
-@Description("Claim faction territory.")
 final class ClaimCommand extends AlpineCommand {
     public ClaimCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Claim faction territory")
     public void execute(
             @Context Player sender,
             @Arg("type") ClaimType type,
@@ -54,6 +54,7 @@ final class ClaimCommand extends AlpineCommand {
     }
 
     @Execute(name = "fill", aliases = "f") @Async
+    @Description("Claim missing claims in a connected claim outline")
     public void fill(
             @Context Player sender,
             @Arg("faction") Optional<Faction> faction
@@ -65,6 +66,7 @@ final class ClaimCommand extends AlpineCommand {
     }
 
     @Execute(name = "one", aliases = "o")
+    @Description("Claim a single chunk of faction territory")
     public void one(
             @Context Player sender,
             @Arg("faction") Optional<Faction> faction
@@ -76,6 +78,7 @@ final class ClaimCommand extends AlpineCommand {
     }
 
     @Execute(name = "auto", aliases = "a")
+    @Description("Toggle automatic faction territory claiming")
     public void auto(
             @Context Player sender,
             @Arg("faction") Optional<Faction> faction

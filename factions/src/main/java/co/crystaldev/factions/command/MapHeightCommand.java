@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
  * @since 0.4.5
  */
 @Command(name = "factions mapheight", aliases = { "factions mapsize" })
-@Description("Set the height of the map when Auto Map is enabled")
 public final class MapHeightCommand extends AlpineCommand {
     MapHeightCommand(@NotNull AlpinePlugin plugin) {
         super(plugin);
@@ -36,6 +35,7 @@ public final class MapHeightCommand extends AlpineCommand {
     private static final int MINIMAL_MAP_HEIGHT = 8;
 
     @Execute
+    @Description("Set the height of the factions map")
     public void execute(
             @Context Player sender,
             @Arg("size") int size

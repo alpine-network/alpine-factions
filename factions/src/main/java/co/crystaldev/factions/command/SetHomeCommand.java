@@ -30,13 +30,13 @@ import org.bukkit.entity.Player;
  * @since 0.1.0
  */
 @Command(name = "factions sethome")
-@Description("Set the faction home to your current location.")
 final class SetHomeCommand extends AlpineCommand {
     public SetHomeCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Set the faction home to your current location")
     public void execute(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 

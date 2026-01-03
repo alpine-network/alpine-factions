@@ -33,13 +33,13 @@ import org.bukkit.entity.Player;
  * @since 0.1.0
  */
 @Command(name = "factions alert")
-@Description("Notify the faction.")
 final class AlertCommand extends AlpineCommand {
     public AlertCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Send an alert to the faction")
     public void execute(
             @Context Player sender,
             @Join("message") String message

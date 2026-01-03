@@ -37,7 +37,6 @@ import java.util.Optional;
  * @since 0.1.0
  */
 @Command(name = "factions roster")
-@Description("Manage the faction roster.")
 final class RosterCommand extends AlpineCommand implements Initializable {
     public RosterCommand(AlpinePlugin plugin) {
         super(plugin);
@@ -49,6 +48,7 @@ final class RosterCommand extends AlpineCommand implements Initializable {
     }
 
     @Execute(name = "add")
+    @Description("Add a player to the faction roster")
     public void add(
             @Context CommandSender sender,
             @Arg("player") @Async OfflinePlayer other,
@@ -120,6 +120,7 @@ final class RosterCommand extends AlpineCommand implements Initializable {
     }
 
     @Execute(name = "remove")
+    @Description("Remove a player from the faction roster")
     public void remove(
             @Context CommandSender sender,
             @Arg("player") @Async OfflinePlayer other,
@@ -184,6 +185,7 @@ final class RosterCommand extends AlpineCommand implements Initializable {
     }
 
     @Execute(name = "setrank")
+    @Description("Set a player's rank in the faction roster")
     public void setRank(
             @Context CommandSender sender,
             @Arg("player") @Async OfflinePlayer other,
@@ -236,6 +238,7 @@ final class RosterCommand extends AlpineCommand implements Initializable {
     }
 
     @Execute(name = "list")
+    @Description("View a list of the faction's roster")
     public void list(
             @Context CommandSender sender,
             @Arg("page") Optional<Integer> page,

@@ -25,17 +25,16 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**
- * @author slides <puqqera@gmail.com>
- * @since 09/20/2024
+ * @since 0.1.0
  */
 @Command(name = "factions location", aliases = { "factions loc", "factions coordinates", "factions coord" })
-@Description("Send current location to faction members.")
 final class LocationCommand extends AlpineCommand {
     public LocationCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Send current location to faction members")
     public void execute(@Context Player sender) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 

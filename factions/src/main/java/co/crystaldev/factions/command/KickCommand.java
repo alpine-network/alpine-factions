@@ -38,13 +38,13 @@ import org.bukkit.entity.Player;
  * @since 0.1.0
  */
 @Command(name = "factions kick")
-@Description("Remove a member from the faction.")
 final class KickCommand extends AlpineCommand {
     public KickCommand(AlpinePlugin plugin) {
         super(plugin);
     }
 
     @Execute
+    @Description("Remove a member from the faction")
     public void execute(
             @Context CommandSender sender,
             @Arg("player") @Async OfflinePlayer other
