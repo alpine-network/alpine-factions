@@ -81,48 +81,36 @@ public final class MaterialMapping {
             XMaterial.COPPER_BULB
     );
 
-    public static final MappedMaterial CONTAINERS = MappedMaterial.of(
-            XMaterial.CHEST, // MC Legacy
-            XMaterial.TRAPPED_CHEST, // MC Legacy
-            XMaterial.FURNACE, // MC Legacy
-            XMaterial.JUKEBOX, // MC Legacy
-            XMaterial.DISPENSER, // MC B1.8
-            XMaterial.BREWING_STAND, // MC 1.0
-            XMaterial.ENCHANTING_TABLE, // MC 1.0
-            XMaterial.ANVIL, // MC 1.4
-            XMaterial.CHIPPED_ANVIL, // MC 1.4
-            XMaterial.DAMAGED_ANVIL, // MC 1.4
-            XMaterial.BEACON, // MC 1.4
-            XMaterial.HOPPER, // MC 1.5
-            XMaterial.DROPPER, // MC 1.5
-            XMaterial.BARREL, // MC 1.14
-            XMaterial.CARTOGRAPHY_TABLE, // MC 1.14
-            XMaterial.SMITHING_TABLE, // MC 1.14
-            XMaterial.LOOM, // MC 1.14
-            XMaterial.GRINDSTONE, // MC 1.14
-            XMaterial.LECTERN, // MC 1.14
-            XMaterial.BLAST_FURNACE, // MC 1.14
-            XMaterial.SMOKER, // MC 1.14
-            XMaterial.CHISELED_BOOKSHELF, // MC 1.20
-
-            XMaterial.SHULKER_BOX,
-            XMaterial.WHITE_SHULKER_BOX,
-            XMaterial.LIGHT_GRAY_SHULKER_BOX,
-            XMaterial.GRAY_SHULKER_BOX,
-            XMaterial.BLACK_SHULKER_BOX,
-            XMaterial.BROWN_SHULKER_BOX,
-            XMaterial.RED_SHULKER_BOX,
-            XMaterial.ORANGE_SHULKER_BOX,
-            XMaterial.YELLOW_SHULKER_BOX,
-            XMaterial.LIME_SHULKER_BOX,
-            XMaterial.GREEN_SHULKER_BOX,
-            XMaterial.CYAN_SHULKER_BOX,
-            XMaterial.LIGHT_BLUE_SHULKER_BOX,
-            XMaterial.BLUE_SHULKER_BOX,
-            XMaterial.PURPLE_SHULKER_BOX,
-            XMaterial.MAGENTA_SHULKER_BOX,
-            XMaterial.PINK_SHULKER_BOX
-    );
+    public static final MappedMaterial CONTAINERS = MappedMaterial.builder()
+            .add(types -> types.filter(m -> m.name().endsWith("SHULKER_BOX"))) // MC 1.9
+            .add(types -> types.filter(m -> m.name().endsWith("COPPER_CHEST"))) // MC 1.21.9
+            .add(types -> types.filter(m -> m.name().endsWith("_SHELF"))) // MC 1.21.9
+            .add(
+                    XMaterial.CHEST, // MC Legacy
+                    XMaterial.TRAPPED_CHEST, // MC Legacy
+                    XMaterial.FURNACE, // MC Legacy
+                    XMaterial.JUKEBOX, // MC Legacy
+                    XMaterial.DISPENSER, // MC B1.8
+                    XMaterial.BREWING_STAND, // MC 1.0
+                    XMaterial.ENCHANTING_TABLE, // MC 1.0
+                    XMaterial.ANVIL, // MC 1.4
+                    XMaterial.CHIPPED_ANVIL, // MC 1.4
+                    XMaterial.DAMAGED_ANVIL, // MC 1.4
+                    XMaterial.BEACON, // MC 1.4
+                    XMaterial.HOPPER, // MC 1.5
+                    XMaterial.DROPPER, // MC 1.5
+                    XMaterial.BARREL, // MC 1.14
+                    XMaterial.CARTOGRAPHY_TABLE, // MC 1.14
+                    XMaterial.SMITHING_TABLE, // MC 1.14
+                    XMaterial.LOOM, // MC 1.14
+                    XMaterial.GRINDSTONE, // MC 1.14
+                    XMaterial.LECTERN, // MC 1.14
+                    XMaterial.BLAST_FURNACE, // MC 1.14
+                    XMaterial.SMOKER, // MC 1.14
+                    XMaterial.CHISELED_BOOKSHELF, // MC 1.20
+                    XMaterial.CRAFTER // MC 1.21
+            )
+            .build();
 
     // https://github.com/MassiveCraft/Factions/blob/master/src/com/massivecraft/factions/util/EnumerationUtil.java
     public static final MappedMaterial MATERIAL_EDIT_TOOLS = MappedMaterial.builder()
