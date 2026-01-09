@@ -595,7 +595,7 @@ public final class Faction {
     }
 
     public @NotNull Collection<Member> getOnlineMembers() {
-        List<Member> members = new ArrayList<>();
+        List<Member> members = new ArrayList<>(this.members.size() / 2);
 
         for (Member member : this.members.values()) {
             if (member.isOnline() && member.hasJoinedServer()) {
@@ -607,7 +607,7 @@ public final class Faction {
     }
 
     public @NotNull Collection<Member> getOfflineMembers() {
-        List<Member> members = new ArrayList<>();
+        List<Member> members = new ArrayList<>(this.members.size() / 2);
 
         for (Member member : this.members.values()) {
             if (!member.isOnline() && member.hasJoinedServer()) {

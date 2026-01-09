@@ -62,7 +62,7 @@ public final class Member {
 
     public boolean hasJoinedServer() {
         OfflinePlayer player = this.getOfflinePlayer();
-        return player.hasPlayedBefore();
+        return player.hasPlayedBefore() || player.isOnline();
     }
 
     public @NotNull UUID getId() {
