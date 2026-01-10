@@ -514,20 +514,12 @@ public final class Faction {
         }
     }
 
-    public boolean isPermitted(@NotNull Rank rank, @NotNull Permission permission) {
+    public boolean isPermitted(@NotNull Relational relational, @NotNull Permission permission) {
         PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
             this.setDirty(true);
             return new PermissionHolder(permission);
         });
-        return permValue.isPermitted(rank);
-    }
-
-    public boolean isPermitted(@NotNull FactionRelation relation, @NotNull Permission permission) {
-        PermissionHolder permValue = this.permissions.computeIfAbsent(permission.getId(), id -> {
-            this.setDirty(true);
-            return new PermissionHolder(permission);
-        });
-        return permValue.isPermitted(relation);
+        return permValue.isPermitted(relational);
     }
 
     public void setPermission(@NotNull Permission permission, boolean permitted, @NotNull Relational relation) {
