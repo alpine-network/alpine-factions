@@ -23,6 +23,7 @@ import co.crystaldev.factions.api.faction.member.Rank;
 import co.crystaldev.factions.api.faction.permission.Permission;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.MessageConfig;
+import co.crystaldev.factions.handler.PlayerHandler;
 import co.crystaldev.factions.util.*;
 import dev.rollczi.litecommands.annotations.argument.Arg;
 import dev.rollczi.litecommands.annotations.command.Command;
@@ -60,6 +61,16 @@ final class PermissionCommand extends AlpineCommand {
                 Permissions.MODIFY_PERMS, "modify permissions");
         if (!permitted) {
             return;
+        }
+
+        if (relational instanceof Rank) {
+            Rank rank = (Rank) relational;
+            boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
+
+            if (!overriding && rank.isSuperiorOrMatching(resolvedFaction.getMemberRankOrDefault(PlayerHelper.getId(sender)))) {
+                config.rankTooHigh.send(sender, "rank", rank.getId());
+                return;
+            }
         }
 
         // call event
