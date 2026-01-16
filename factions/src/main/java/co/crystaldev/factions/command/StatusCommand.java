@@ -70,7 +70,7 @@ final class StatusCommand extends AlpineCommand {
         Component title = config.factionStatusTitle.build(
                 "faction", RelationHelper.formatLiteralFactionName(sender, target),
                 "faction_name", target.getName());
-        String command = "/f status " + target.getName() + " %page%";
+        String command = "/f status faction " + target.getName() + " %page%";
         Component compiledPage = Formatting.page(title, members, command, page.orElse(1), 10, member -> {
             OfflinePlayer player = member.getOfflinePlayer();
             FPlayer state = Factions.players().get(player);
