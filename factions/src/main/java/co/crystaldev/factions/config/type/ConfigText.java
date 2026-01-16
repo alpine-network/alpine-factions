@@ -16,6 +16,7 @@ import de.exlll.configlib.Configuration;
 import de.exlll.configlib.SerializeWith;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.Component;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +41,10 @@ public final class ConfigText extends ConfigMessage {
 
     public @NotNull Component build(@NotNull Object... placeholders) {
         return super.build(AlpineFactions.getInstance(), placeholders);
+    }
+
+    public @NotNull Component build(@NotNull OfflinePlayer target, @NotNull Object... placeholders) {
+        return super.build(AlpineFactions.getInstance(), target, placeholders);
     }
 
     public @NotNull String buildString(@NotNull Object... placeholders) {

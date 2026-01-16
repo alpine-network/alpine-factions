@@ -76,7 +76,7 @@ final class StatusCommand extends AlpineCommand {
             FPlayer state = Factions.players().get(player);
 
             ConfigText text = member.isOnline() ? config.factionStatusOnlineEntry : config.factionStatusOfflineEntry;
-            return text.build(
+            return text.build(player,
                     "player", RelationHelper.formatLiteralPlayerName(sender, player),
                     "player_name", player.getName(),
                     "power_boost", state.getPowerBoost(),
@@ -102,10 +102,10 @@ final class StatusCommand extends AlpineCommand {
         }
 
         FPlayer state = Factions.players().get(target);
-        Component title = messageConfig.memberStatusTitle.build(
+        Component title = messageConfig.memberStatusTitle.build(target,
                 "player", RelationHelper.formatLiteralPlayerName(sender, target),
                 "player_name", target.getName());
-        Component body = messageConfig.memberStatusBody.build(
+        Component body = messageConfig.memberStatusBody.build(target,
                 "power_indicator", Formatting.progress(state.getEffectivePower() / (double) factionConfig.maxPlayerPower),
                 "power", state.getEffectivePower(),
                 "maxpower", factionConfig.maxPlayerPower + state.getPowerBoost(),
