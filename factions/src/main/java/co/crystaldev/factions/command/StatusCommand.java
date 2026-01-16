@@ -16,6 +16,7 @@ import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.accessor.FactionAccessor;
 import co.crystaldev.factions.api.faction.Faction;
 import co.crystaldev.factions.api.faction.member.Member;
+import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.api.player.FPlayer;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.config.MessageConfig;
@@ -50,27 +51,28 @@ final class StatusCommand extends AlpineCommand {
     @Description("View the status of your faction's members")
     public void faction(
             @Context CommandSender sender,
-            @Arg("faction") Optional<Faction> targetFaction,
+            @Arg("faction") Optional<Faction> faction,
             @Arg("page") Optional<Integer> page
     ) {
         MessageConfig config = this.plugin.getConfiguration(MessageConfig.class);
 
         FactionAccessor factions = Factions.registry();
-        Faction target = targetFaction.orElse(factions.findOrDefault(sender));
-        Faction senderFaction = factions.findOrDefault(sender);
+        Faction targetFaction = faction.orElse(factions.findOrDefault(sender));
+        boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
 
-        if (!PlayerHandler.getInstance().isOverriding(sender) && !Objects.equals(target, senderFaction)) {
-            PermissionHelper.notify(sender, target, "view member statuses");
+        boolean permitted = overriding || PermissionHelper.checkPermissionAndNotify(sender, targetFaction,
+                Permissions.STATUS, "view member statuses");
+        if (!permitted) {
             return;
         }
 
-        List<Member> members = new LinkedList<>(target.getMembers());
+        List<Member> members = new LinkedList<>(targetFaction.getMembers());
         members.sort(Comparator.comparing(Member::isOnline));
 
         Component title = config.factionStatusTitle.build(
-                "faction", RelationHelper.formatLiteralFactionName(sender, target),
-                "faction_name", target.getName());
-        String command = "/f status faction " + target.getName() + " %page%";
+                "faction", RelationHelper.formatLiteralFactionName(sender, targetFaction),
+                "faction_name", targetFaction.getName());
+        String command = "/f status faction " + targetFaction.getName() + " %page%";
         Component compiledPage = Formatting.page(title, members, command, page.orElse(1), 10, member -> {
             OfflinePlayer player = member.getOfflinePlayer();
             FPlayer state = Factions.players().get(player);
@@ -98,6 +100,15 @@ final class StatusCommand extends AlpineCommand {
 
         OfflinePlayer target = targetPlayer.orElse(sender instanceof Player ? (Player) sender : null);
         if (target == null) {
+            return;
+        }
+
+        boolean overriding = PlayerHandler.getInstance().isOverriding(sender);
+        Faction targetFaction = Factions.registry().findOrDefault(target);
+
+        boolean permitted = overriding || PermissionHelper.checkPermissionAndNotify(sender, targetFaction,
+                Permissions.STATUS, "view member statuses");
+        if (!permitted) {
             return;
         }
 
