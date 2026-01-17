@@ -12,6 +12,7 @@ import co.crystaldev.alpinecore.AlpinePlugin;
 import co.crystaldev.alpinecore.framework.engine.AlpineEngine;
 import co.crystaldev.alpinecore.util.ItemHelper;
 import co.crystaldev.alpinecore.util.MaterialHelper;
+import co.crystaldev.factions.api.Factions;
 import co.crystaldev.factions.api.faction.permission.Permissions;
 import co.crystaldev.factions.config.FactionConfig;
 import co.crystaldev.factions.util.MaterialMapping;
@@ -73,14 +74,18 @@ public final class InteractionEngine extends AlpineEngine {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event) {
-        if (this.plugin.getConfiguration(FactionConfig.class).silkSpawnerIgnoreTerritory
-                && MaterialMapping.SPAWNERS.test(event.getBlock())) {
+        Block block = event.getBlock();
+
+        boolean ignoreSpawnerTerritory = this.plugin.getConfiguration(FactionConfig.class).silkSpawnerIgnoreTerritory
+                && MaterialMapping.SPAWNERS.test(block)
+                && !Factions.claims().getFactionOrDefault(block).isSystemFaction();
+        if (ignoreSpawnerTerritory) {
             return;
         }
 
         boolean permitted = PermissionHelper.checkPermissionAndNotify(
                 event.getPlayer(),
-                event.getBlock().getChunk(),
+                block.getChunk(),
                 Permissions.BUILD,
                 "edit the terrain",
                 true);
@@ -91,8 +96,12 @@ public final class InteractionEngine extends AlpineEngine {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockDamage(BlockDamageEvent event) {
-        if (this.plugin.getConfiguration(FactionConfig.class).silkSpawnerIgnoreTerritory
-                && MaterialMapping.SPAWNERS.test(event.getBlock())) {
+        Block block = event.getBlock();
+
+        boolean ignoreSpawnerTerritory = this.plugin.getConfiguration(FactionConfig.class).silkSpawnerIgnoreTerritory
+                && MaterialMapping.SPAWNERS.test(block)
+                && !Factions.claims().getFactionOrDefault(block).isSystemFaction();
+        if (ignoreSpawnerTerritory) {
             return;
         }
 

@@ -124,6 +124,10 @@ public final class Faction {
         return this.id.equals(WILDERNESS_ID);
     }
 
+    public boolean isSystemFaction() {
+        return this.id.equals(SAFEZONE_ID) || this.id.equals(WARZONE_ID);
+    }
+
     public @NotNull String getId() {
         return this.id;
     }
