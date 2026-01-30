@@ -183,7 +183,7 @@ public final class ClaimHelper {
         int chunkCount = chunks.size() - conqueredChunkCount;
         if (chunkCount > 0) {
             Faction oldFaction = claimingFaction == null ? actingFaction : wilderness;
-            Faction newFaction = claimingFaction == null ? wilderness : actingFaction;
+            Faction newFaction = claimingFaction == null ? wilderness : claimingFaction;
             Faction broadcastFaction = claimingFaction == null ? actingFaction : claimingFaction;
 
             Component claimAction = (claimingFaction == null ? messageConfig.unclaimed : messageConfig.claimed).build();
@@ -211,7 +211,7 @@ public final class ClaimHelper {
                 });
 
                 // notify the new faction
-                FactionHelper.broadcast(actingFaction, player, observer -> {
+                FactionHelper.broadcast(newFaction, player, observer -> {
                     return buildClaimMessage(observer, player, message, chunk, action, claimAction,
                             conquered.size(), faction, newFaction);
                 });
