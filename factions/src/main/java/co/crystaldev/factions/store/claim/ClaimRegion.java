@@ -79,11 +79,12 @@ public final class ClaimRegion {
         }
 
         Claim claim = this.getClaim(chunkX, chunkZ);
+        // claim was overclaimed
         if (claim != null) {
-            // claim was overclaimed
-
             // reduce the claim count for the previous owner
             this.modifyCount(claim.getFactionId(), -1);
+            // increment the claim count for the new owner
+            this.modifyCount(factionId, 1);
 
             // replace the faction
             claim.setFaction(factionId);
